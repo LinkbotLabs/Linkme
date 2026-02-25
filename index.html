@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tagshop – The Simplest Affiliate Wall Builder</title>
 <link rel="stylesheet" href="uniform-dark-glass.css">
+
 <style>
 :root {
   --glass: rgba(0,0,0,0.35);
@@ -12,6 +13,8 @@
   --text:#fff;
   --muted:#cfcfcf;
   --accent:#ffe169;
+  --success:#38d996;
+  --danger:#ff5f5f;
 }
 
 body {
@@ -46,12 +49,13 @@ h1 {
 
 input {
   width:100%;
-  padding:10px;
+  padding:12px;
   border-radius:8px;
   border:1px solid var(--stroke);
   background: rgba(255,255,255,0.06);
   color:#fff;
-  margin-top:8px;
+  margin-top:10px;
+  font-size:14px;
 }
 
 button {
@@ -60,9 +64,12 @@ button {
   border-radius:10px;
   padding:12px 18px;
   font-weight:700;
-  margin-top:12px;
+  margin-top:14px;
   font-size:14px;
+  transition:0.2s;
 }
+
+button:hover { opacity:0.9; }
 
 .primary {
   background:var(--accent);
@@ -74,6 +81,15 @@ button {
   color:var(--accent);
   border:1px solid var(--accent);
 }
+
+.notice {
+  margin-top:10px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.success { color:var(--success); }
+.error { color:var(--danger); }
 
 .how {
   display:grid;
@@ -99,19 +115,23 @@ button {
 <div class="card">
   <h2>How It Works</h2>
   <div class="how">
-    <div class="step">1️⃣ Paste your product links</div>
-    <div class="step">2️⃣ Add your affiliate IDs</div>
-    <div class="step">3️⃣ Share one clean wall link</div>
+    <div class="step">1️⃣ Paste your product link</div>
+    <div class="step">2️⃣ We auto-clean & optimise it</div>
+    <div class="step">3️⃣ Share your wall link</div>
   </div>
 </div>
 
 <!-- ADD PRODUCT -->
 <div class="card">
   <h2>Add Product</h2>
+
   <input type="text" id="product-link" placeholder="Paste product URL (Amazon, Temu, DHGate, etc.)" />
-  <input type="text" id="product-title" placeholder="Optional: Custom title" />
-  <input type="text" id="product-image" placeholder="Optional: Image URL" />
+  <input type="text" id="product-title" placeholder="Optional: Custom title (auto if blank)" />
+  <input type="text" id="product-image" placeholder="Optional: Image URL (auto if blank)" />
+
   <button class="primary" onclick="addManualProduct()">Add to My Wall</button>
+
+  <div id="status" class="notice"></div>
 </div>
 
 <!-- WALL BUTTON -->
@@ -124,16 +144,62 @@ button {
 </div>
 
 <script>
+
+// ===== AUTO AMAZON CLEAN LINK =====
+function cleanAmazonLink(url) {
+  try {
+    const parsed = new URL(url);
+    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]+)/i);
+
+    if (dpMatch) {
+      const asin = dpMatch[1];
+      const tag = localStorage.getItem("amazonTag") || "";
+      let clean = `https://www.amazon.com/dp/${asin}`;
+      if (tag) clean += `?tag=${tag}`;
+      return clean;
+    }
+  } catch {}
+  return url;
+}
+
+// ===== AUTO AMAZON IMAGE FROM ASIN =====
+function getAmazonImage(url) {
+  const match = url.match(/\/dp\/([A-Z0-9]+)/i);
+  if (match) {
+    const asin = match[1];
+    return `https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg`;
+  }
+  return null;
+}
+
+// ===== ADD PRODUCT FUNCTION =====
 function addManualProduct(){
-  const link = document.getElementById("product-link").value.trim();
+
+  const status = document.getElementById("status");
+  status.innerHTML = "";
+
+  let link = document.getElementById("product-link").value.trim();
   let title = document.getElementById("product-title").value.trim();
   let thumb = document.getElementById("product-image").value.trim();
 
   if(!link){
-    alert("Please paste a product link.");
+    status.innerHTML = "<span class='error'>Please paste a product link.</span>";
     return;
   }
 
+  // Clean Amazon
+  if(link.includes("amazon.")){
+    link = cleanAmazonLink(link);
+  }
+
+  // Prevent duplicates
+  const wall = JSON.parse(localStorage.getItem("productWall")||"[]");
+  if(wall.some(p => p.link === link)){
+    status.innerHTML = "<span class='error'>This product is already on your wall.</span>";
+    return;
+  }
+
+  // Auto title
   if(!title){
     try {
       const url = new URL(link);
@@ -143,19 +209,27 @@ function addManualProduct(){
     }
   }
 
+  // Auto image
   if(!thumb){
-    thumb = "https://via.placeholder.com/150";
+    const autoAmazon = getAmazonImage(link);
+    thumb = autoAmazon || "https://via.placeholder.com/300x300?text=Product";
   }
 
-  const wall = JSON.parse(localStorage.getItem("productWall")||"[]");
   wall.push({title, thumb, link});
   localStorage.setItem("productWall", JSON.stringify(wall));
 
-  alert("Added to wall!");
+  status.innerHTML = "<span class='success'>Product added successfully!</span>";
+
   document.getElementById("product-link").value = "";
   document.getElementById("product-title").value = "";
   document.getElementById("product-image").value = "";
 }
+
+// ===== OPTIONAL: SAVE AMAZON TAG =====
+function saveAmazonTag(tag){
+  localStorage.setItem("amazonTag", tag);
+}
+
 </script>
 
 </body>
