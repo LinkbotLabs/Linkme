@@ -1,0 +1,261 @@
+/* ---------------- ROOT VARIABLES ---------------- */
+:root {
+  --bg-black: #0d0d0d;
+  --glass-bg: rgba(0, 0, 0, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --muted: #c9d1d9;
+  --accent: #58a6ff;       /* blue */
+  --accent-strong: #1f6feb; /* strong blue */
+  --warning: #ff7b72;      /* orange/red */
+  --success: #3fb950;      /* green */
+  --purple: #d2a8ff;
+  --yellow: #f9e2af;
+  --skyblue: #56d4ff;
+  --radius-md: 12px;
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.5);
+  --color-white: #ffffff;
+  --color-black: #0d0d0d;
+  --color-day-bg: #f5f5f5;
+  --color-day-text: #111111;
+  --glass-day-bg: rgba(255, 255, 255, 0.85);
+  --code-font: "Fira Code", monospace;
+}
+
+/* ---------------- FULL SCREEN & BODY ---------------- */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-black);
+  color: var(--muted);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ---------------- DAY MODE ---------------- */
+body.day-mode {
+  background: var(--color-day-bg);
+  color: var(--color-day-text);
+}
+
+body.day-mode .glass-panel,
+body.day-mode .contact,
+body.day-mode .category-box {
+  background: var(--glass-day-bg);
+  border-color: rgba(0,0,0,0.1);
+  color: var(--color-day-text);
+}
+
+/* ---------------- LINKS ---------------- */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+body.day-mode a {
+  color: #1a73e8;
+}
+
+/* ---------------- LOGO ---------------- */
+.logo-banner {
+  max-width: 100px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 
+}
+
+/* ---------------- GLASS PANELS ---------------- */
+.glass-panel,
+.contact,
+.category-box {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin: 16px auto;
+  color: var(--color-white);
+  box-shadow: var(--shadow-soft);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* ---------------- CATEGORY & CONTAINER WIDTH ---------------- */
+.flash-sale, .intro, .categories, .category-box {
+  max-width: 1200px;
+  width: 90%;
+  margin: 16px auto;
+}
+
+/* ---------------- BUTTONS ---------------- */
+.join-btn {
+  display: inline-block;
+  background: linear-gradient(45deg, var(--accent), var(--accent-strong));
+  color: var(--color-white);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.join-btn:hover {
+  box-shadow: 0 0 18px var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ---------------- TEXT COLORS ---------------- */
+.text-blue { color: var(--accent); }
+.text-orange { color: var(--warning); }
+.text-green { color: var(--success); }
+.text-purple { color: var(--purple); }
+.text-yellow { color: var(--yellow); }
+.text-skyblue { color: var(--skyblue); }
+.text-white { color: var(--color-white); }
+.text-muted { color: var(--muted); }
+.text-black { color: var(--color-black); }
+.bold { font-weight: bold; }
+
+/* ---------------- HEADINGS ---------------- */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-white);
+  margin-bottom: 12px;
+}
+
+body.day-mode h1, body.day-mode h2, body.day-mode h3,
+body.day-mode h4, body.day-mode h5, body.day-mode h6 {
+  color: var(--color-day-text);
+}
+
+/* ---------------- PARAGRAPHS ---------------- */
+p {
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* ---------------- CONTACT FORM ---------------- */
+.contact label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.contact input,
+.contact textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--color-white);
+  font-family: var(--code-font);
+  transition: background 0.3s, color 0.3s;
+}
+
+.contact input::placeholder,
+.contact textarea::placeholder {
+  color: var(--muted);
+}
+
+/* ---------------- FOOTER ---------------- */
+footer {
+  text-align: center;
+  font-size: 0.8em;
+  margin-top: 40px;
+}
+
+.social-footer a {
+  margin: 0 10px;
+  color: var(--accent);
+}
+
+.social-footer a:hover {
+  color: var(--accent-strong);
+}
+
+/* ---------------- GOOGLE CUSTOM SEARCH (CSE) ---------------- */
+.gsc-control-cse {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 16px !important;
+  box-shadow: var(--shadow-soft) !important;
+  color: var(--muted) !important;
+}
+
+.gsc-input-box {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--color-white) !important;
+}
+
+input.gsc-input {
+  background: transparent !important;
+  color: var(--color-white) !important;
+}
+
+.gsc-search-button-v2 {
+  background: linear-gradient(45deg, var(--accent), var(--accent-strong)) !important;
+  border-radius: var(--radius-md) !important;
+  border: none !important;
+  color: var(--color-white) !important;
+}
+
+.gsc-result {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px !important;
+  margin: 10px 0 !important;
+  color: var(--color-white) !important;
+}
+
+.gs-title a {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+}
+.gs-title a:hover {
+  color: var(--accent-strong) !important;
+  text-decoration: underline !important;
+}
+
+.gs-bidi-start-align {
+  color: var(--muted) !important;
+}
+
+/* Thumbnails */
+.gsc-thumbnail {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+}
+.gsc-thumbnail img {
+  max-width: 100% !important;
+  border-radius: var(--radius-md) !important;
+  display: block !important;
+  margin: auto !important;
+}
+
+/* ---------------- DAY MODE OVERRIDES FOR CSE ---------------- */
+body.day-mode .gsc-control-cse,
+body.day-mode .gsc-result {
+  background: var(--glass-day-bg) !important;
+  color: var(--color-day-text) !important;
+}
+
+body.day-mode input.gsc-input {
+  color: var(--color-day-text) !important;
+}
+
+body.day-mode .gs-title a {
+  color: #1a73e8 !important;
+}
