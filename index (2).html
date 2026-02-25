@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tagshop - Free Affiliate Wall Builder</title>
+<link rel="stylesheet" href="uniform-dark-glass.css">
+<style>
+:root { --glass: rgba(0,0,0,0.35); --stroke: rgba(255,255,255,0.12); --text:#fff; --muted:#cfcfcf; --accent:#ffe169; }
+body { font-family: system-ui; background:#000; color:#fff; padding:20px; transition: background 0.3s, color 0.3s;}
+body.light { background:#f0f0f0; color:#000; }
+h1 { text-align:center; margin-bottom:10px; }
+button { cursor:pointer; border:none; border-radius:6px; padding:8px 12px; font-weight:700; background:#000; color:#fff; margin-top:6px; font-size:12px; }
+.card { background: var(--glass); border:1px solid var(--stroke); border-radius:12px; padding:12px; margin-bottom:20px; }
+.output, #search-results, #aiai-out { background: rgba(255,255,255,0.04); border:1px solid var(--stroke); border-radius:10px; padding:10px; max-height:300px; overflow-y:auto; margin-top:10px; white-space:pre-wrap; }
+.hint { font-size:12px; color:var(--muted); margin-top:6px; }
+.grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap:12px; }
+.product { border:1px solid var(--stroke); border-radius:8px; padding:6px; text-align:center; background:rgba(0,0,0,0.25); cursor:pointer; }
+.product img { max-width:100%; border-radius:6px; transition: transform 0.2s; }
+.product.expanded img { transform: scale(2); z-index:2; position:relative; }
+input, select, textarea { width:100%; padding:8px; border-radius:6px; border:1px solid var(--stroke); background: rgba(255,255,255,0.06); color: var(--text); margin-top:6px; }
+.product-btns { display:flex; justify-content:center; gap:4px; margin-top:4px; }
+.product-btns button { padding:4px 6px; border-radius:12px; font-size:11px; background:#000; color:#fff; }
+
+/* New unlimited banner style */
+.unlimited-banner {
+  background: linear-gradient(135deg, #1fc27e, #39ff14);
+  color: #000;
+  padding: 16px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 18px;
+  border-radius: 12px;
+  margin: 10px 0 25px;
+  box-shadow: 0 0 20px rgba(31,194,126,0.6);
+}
+</style>
+</head>
+<body>
+
+<h1>Tagshop</h1>
+
+<!-- NEW UNLIMITED BANNER -->
+<div class="unlimited-banner">
+  ✅ UNLIMITED PRODUCTS FOR EVERYONE!<br>
+  <span style="font-size:15px;">Password on My Wall: <strong>tagshopme</strong> (enter once)</span>
+</div>
+
+<button onclick="window.location.href='ai-free.html'"
+  style="margin:10px auto; display:block; background:#ffe169; color:#000; font-weight:800;">
+  🚀 Free AI Tools
+</button>  
+<button id="toggle-theme">Toggle Light/Dark</button>
+
+<!-- SEARCH CARD -->
+<div class="card">
+  <h2>Product Search</h2>
+  <div class="hint">Search products using Google Custom Search.</div>
+  <input type="text" id="search-query" placeholder="Search products..." />
+  <button id="search-run">Search</button>
+  <button id="toggle-search">Collapse/Expand Results</button>
+  <div class="output" id="search-results"></div>
+</div>
+
+<!-- AI CHAT CARD -->
+<div class="card">
+  <h2>AI Chat / Q&A</h2>
+  <div class="hint">Ask anything. Choose a model.</div>
+  <select id="chat-model">
+    <option value="gpt-4.1-nano" selected>GPT-4.1-nano</option>
+    <option value="gpt-4.1">GPT-4.1</option>
+    <option value="gpt-4o">GPT-4o</option>
+    <option value="gpt-5-mini">GPT-5-mini</option>
+    <option value="o3-mini">o3-mini</option>
+  </select>
+  <textarea id="chat-prompt" placeholder="Ask a question..."></textarea>
+  <button id="chat-run">Run</button>
+  <div class="output" id="chat-out"></div>
+</div>
+
+<!-- AIAI CHAT CARD -->
+<div class="card">
+  <h2>AIAI Streaming Chat</h2>
+  <textarea id="aiai-prompt" placeholder="Ask Kimi K2..."></textarea>
+  <button id="aiai-run">Run</button>
+  <div class="output" id="aiai-out"></div>
+</div>
+
+<!-- CONSOLE LOGS -->
+<div class="card">
+  <h2>Console Logs</h2>
+  <button id="toggle-log">Toggle Logs</button>
+  <div class="output" id="console-log" style="display:none;"></div>
+</div>
+
+<!-- AFFILIATE + SUPPORT + QR -->
+<div class="card" style="background: linear-gradient(135deg, #ffe169, #ff5f6d); color: #000; text-align:center; font-weight:700; padding:20px; border-radius:14px; margin-top:30px; box-shadow:0 0 15px rgba(255,255,255,0.6);">
+  <h2 style="margin-bottom:10px;">Affiliate Partners</h2>
+  <p style="font-size:15px; margin-bottom:16px; line-height:1.6;">
+    If you are an affiliate of <strong>Amazon</strong>, <strong>Temu</strong>, <strong>AliExpress</strong>, 
+    <strong>DHgate</strong>, or <strong>Lazada</strong> — use this tool to <br>
+    <span style="background:#000; color:#ffe169; padding:3px 8px; border-radius:6px;">build and showcase your shop!</span>
+  </p>
+  <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:12px;">
+    <a href="https://www.buymeacoffee.com/yourusername" target="_blank" style="display:inline-block; background:#000; color:#ffe169; padding:12px 20px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:700; box-shadow:0 0 8px rgba(0,0,0,0.4);" onmouseover="this.style.background='#ffe169'; this.style.color='#000';" onmouseout="this.style.background='#000'; this.style.color='#ffe169';">Buy Me a Coffee</a>
+    <a href="https://wise.com/pay/me/davids14542" target="_blank" style="display:inline-block; background:#1fc27e; color:#000; padding:12px 20px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:700; box-shadow:0 0 8px rgba(0,0,0,0.4);" onmouseover="this.style.background='#000'; this.style.color='#1fc27e';" onmouseout="this.style.background='#1fc27e'; this.style.color='#000';">Support via Wise</a>
+  </div>
+  <div style="margin-top:20px;">
+    <p style="font-size:13px; margin-bottom:6px;">Scan to pay with Wise</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://wise.com/pay/me/davids14542" 
+         alt="Wise Payment QR Code" id="wiseQR" style="border-radius:10px; border:2px solid #000; box-shadow:0 0 6px rgba(0,0,0,0.5); background:#fff; padding:4px; cursor:pointer;" title="Click to enlarge">
+  </div>
+</div>
+
+<!-- QR MODAL -->
+<div id="qrModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:2000;">
+  <div style="position:relative; text-align:center;">
+    <span id="closeQR" style="position:absolute; top:-40px; right:-10px; font-size:28px; font-weight:bold; color:#ffe169; cursor:pointer;">×</span>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=https://wise.com/pay/me/davids14542" alt="Wise Payment QR Code Large" style="border-radius:10px; border:3px solid #ffe169; background:#fff; padding:6px; box-shadow:0 0 12px rgba(255,255,255,0.6);">
+    <p style="color:#ffe169; margin-top:10px; font-size:14px;">Scan to support via Wise</p>
+  </div>
+</div>
+
+<!-- Floating My Wall button -->
+<button onclick="window.location.href='mywall.html'" style="position:fixed; bottom:20px; right:20px; background:#000; color:#ffe169; border:none; border-radius:16px; padding:10px 14px; font-weight:700; cursor:pointer; z-index:1000; box-shadow:0 0 8px rgba(255,225,105,0.7);">My Wall</button>
+
+<script src="https://js.puter.com/v2/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<script>
+/* ---------- CONFIG ---------- */
+const API_KEY = "AIzaSyB9YwW8EVXQJsVwSMbJrk-NU9B9ZrzzkGs";
+const CSE_ID = "f7e219616fe1d4629";
+
+/* ---------- LOG HELPER ---------- */
+function log(msg){ 
+  console.log(msg); 
+  const logEl = document.getElementById("console-log"); 
+  logEl.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}<br>`; 
+}
+
+/* ---------- LIGHT/DARK TOGGLE ---------- */
+document.getElementById("toggle-theme").addEventListener("click", ()=>{
+  document.body.classList.toggle("light");
+  log("Toggled light/dark mode.");
+});
+
+/* ---------- PRODUCT SEARCH ---------- */
+const searchResults = document.getElementById("search-results");
+document.getElementById("search-run").addEventListener("click", async ()=>{
+  const query = document.getElementById("search-query").value.trim();
+  if(!query){ searchResults.innerHTML="Enter a search term."; return; }
+  searchResults.innerHTML="Searching...";
+  log(`Searching: ${query}`);
+
+  try{
+    const res = await fetch(`https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CSE_ID}&q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    searchResults.innerHTML="";
+    const grid = document.createElement("div");
+    grid.className="grid";
+    if(data.items?.length){
+      data.items.forEach(item=>{
+        const thumb = item.pagemap?.cse_image?.[0]?.src || 'https://via.placeholder.com/100';
+        const div = document.createElement("div");
+        div.className="product";
+        div.innerHTML = `
+          <img src="${thumb}" onclick="window.open('${item.link}','_blank')" />
+          <div style="font-size:12px; margin-top:4px;">${item.title}</div>
+          <div class="product-btns">
+            <button onclick="addToWall('${item.title}','${thumb}','${item.link}')">Add to Wall</button>
+            <button onclick="viewWall()">View Wall</button>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+      searchResults.appendChild(grid);
+      log(`Found ${data.items.length} results.`);
+    }else{
+      searchResults.innerHTML="No results found.";
+      log("No results found.");
+    }
+  }catch(e){
+    searchResults.innerHTML="Search error.";
+    log("Search error: "+e.message);
+  }
+});
+
+document.getElementById("toggle-search").addEventListener("click", ()=>{
+  searchResults.style.display = searchResults.style.display==="none"?"block":"none";
+});
+
+/* ---------- WALL HANDLING ---------- */
+function addToWall(title, thumb, link){
+  const wall = JSON.parse(localStorage.getItem("productWall")||"[]");
+  wall.push({title, thumb, link});
+  localStorage.setItem("productWall", JSON.stringify(wall));
+  log(`Added to wall: ${title}`);
+}
+function viewWall(){ window.location.href = "mywall.html"; }
+
+/* ---------- AI CHAT ---------- */
+function putText(el, text){ el.innerHTML = text ?? ''; }
+function appendText(el, text){ el.innerHTML += text ?? ''; }
+function normalizeNonStream(resp){
+  if (!resp) return "";
+  if (typeof resp === "string") return resp;
+  if (resp.output_text) return resp.output_text;
+  if (resp.text) return resp.text;
+  if (resp.message?.content) return resp.message.content;
+  if (Array.isArray(resp) && resp[0]?.message?.content) return resp[0].message.content;
+  return "";
+}
+
+document.getElementById("chat-run").addEventListener("click", async ()=>{
+  const model = document.getElementById("chat-model").value;
+  const prompt = document.getElementById("chat-prompt").value.trim();
+  const out = document.getElementById("chat-out");
+  if(!prompt){ putText(out,"Enter prompt."); return; }
+  putText(out,"Thinking...");
+  log(`PromptRun: ${prompt}`);
+  try{
+    const resp = await puter.ai.chat(prompt, { model });
+    putText(out, normalizeNonStream(resp));
+    log("AI response received.");
+  }catch(e){
+    putText(out,"Error: "+(e?.message??e));
+    log("AI error: "+(e?.message??e));
+  }
+});
+
+/* ---------- AIAI CHAT ---------- */
+document.getElementById("aiai-run").addEventListener("click", async ()=>{
+  const prompt = document.getElementById("aiai-prompt").value.trim();
+  const out = document.getElementById("aiai-out");
+  if(!prompt){ out.innerHTML="Enter prompt."; return; }
+  out.innerHTML="";
+  log(`AIAI PromptRun: ${prompt}`);
+  try{
+    const response = await puter.ai.chat(prompt, { model: 'moonshotai/kimi-k2:free', stream:true });
+    for await(const part of response){
+      if(part?.text){ out.innerHTML += part.text; }
+    }
+    log("AIAI response received.");
+  }catch(e){
+    out.innerHTML="Error: "+(e?.message??e);
+    log("AIAI error: "+(e?.message??e));
+  }
+});
+
+/* ---------- TOGGLE LOGS ---------- */
+document.getElementById("toggle-log").addEventListener("click", ()=>{
+  const el = document.getElementById("console-log");
+  el.style.display = el.style.display==="none"?"block":"none";
+});
+
+/* ---------- QR MODAL ---------- */
+const qrImg = document.getElementById("wiseQR");
+const modal = document.getElementById("qrModal");
+const closeQR = document.getElementById("closeQR");
+qrImg.addEventListener("click", ()=>{ modal.style.display = "flex"; });
+closeQR.addEventListener("click", ()=>{ modal.style.display = "none"; });
+modal.addEventListener("click", (e)=>{ if(e.target === modal) modal.style.display = "none"; });
+
+/* ---------- POPUP + DONATION INTEGRATION (UPDATED) ---------- */
+(function(){
+  const AGREE_KEY = "tagshopUserAgreed";
+  const SECRET_PASSWORD = "tagshopme";
+  let actionCount = 0, MAX_ACTIONS = 3;
+
+  document.body.addEventListener("click", e=>{
+    if(e.target.tagName==="BUTTON" || e.target.closest("button")){
+      actionCount++;
+      if(actionCount >= MAX_ACTIONS && !localStorage.getItem(AGREE_KEY)){
+        showPopup();
+      }
+    }
+  });
+
+  function showPopup(){
+    const overlay = document.createElement("div");
+    overlay.style = `position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;justify-content:center;align-items:center;z-index:9999;color:#fff;padding:20px;`;
+    const box = document.createElement("div");
+    box.style = `background:rgba(20,20,20,0.95);border:2px solid #ffe169;border-radius:16px;max-width:420px;width:90%;padding:20px;text-align:center;font-family:system-ui;box-shadow:0 0 15px rgba(255,255,255,0.3);`;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    box.innerHTML = `
+      <h2 style="color:#ffe169;margin-bottom:8px;">Welcome to Tagshop</h2>
+      <p style="font-size:14px;margin-bottom:10px;">
+        Build your affiliate wall and earn commissions from every sale.
+      </p>
+      <div style="font-size:13px;text-align:left;margin-bottom:12px;line-height:1.5;">
+        <strong>How it works</strong><br>
+        • Add <strong>unlimited products</strong> to your wall.<br>
+        • Your Amazon, Temu & DHgate affiliate tags auto-apply.<br>
+        • Share a beautiful link + QR code.<br>
+        • Earn when your visitors buy.<br><br>
+        <strong>Password for unlimited access:</strong> <span style="background:#000;color:#ffe169;padding:2px 6px;border-radius:4px;">tagshopme</span><br>
+        (Enter once on My Wall)
+      </div>
+      <button id="agreeBtn" style="background:#ffe169;color:#000;border:none;border-radius:8px;font-weight:700;padding:10px 18px;cursor:pointer;">Agree & Continue</button>
+    `;
+
+    box.querySelector("#agreeBtn").addEventListener("click", ()=>{
+      localStorage.setItem(AGREE_KEY,"true");
+      overlay.remove();
+      showDonation();
+    });
+  }
+
+  function showDonation(){
+    // (your original donation popup code - unchanged)
+    const overlay = document.createElement("div");
+    overlay.style = `position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;justify-content:center;align-items:center;z-index:9999;color:#fff;padding:20px;`;
+    const box = document.createElement("div");
+    box.style = `background:rgba(20,20,20,0.95);border:2px solid #1fc27e;border-radius:16px;max-width:400px;width:90%;padding:20px;text-align:center;font-family:system-ui;box-shadow:0 0 15px rgba(0,255,0,0.3);`;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    box.innerHTML = `
+      <h2 style="color:#1fc27e;margin-bottom:10px;">Support Tagshop</h2>
+      <p style="font-size:14px;margin-bottom:10px;">Optional donation helps keep tools free.</p>
+      <div style="display:flex;justify-content:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+        <button data-amt="usd" style="background:#000;color:#ffe169;border-radius:6px;padding:6px 10px;">$5 USD</button>
+        <button data-amt="gbp" style="background:#000;color:#ffe169;border-radius:6px;padding:6px 10px;">£8 GBP</button>
+        <button data-amt="thb" style="background:#000;color:#ffe169;border-radius:6px;padding:6px 10px;">฿200 THB</button>
+      </div>
+      <canvas id="qrCanvas" width="180" height="180" style="margin:10px auto;display:block;"></canvas>
+      <p style="font-size:12px;margin-top:6px;">or unlock with password:</p>
+      <input type="password" id="unlockPass" placeholder="Enter password" style="width:80%;padding:6px;border-radius:6px;border:1px solid #444;background:#111;color:#fff;"><br>
+      <button id="unlockBtn" style="background:#1fc27e;color:#000;border:none;border-radius:6px;padding:6px 10px;margin-top:8px;">Unlock</button>
+      <div id="msg" style="margin-top:10px;font-size:13px;color:#1fc27e;"></div>
+    `;
+
+    const qr = new QRious({ element: document.getElementById("qrCanvas"), size:180, value:"https://wise.com/pay/me/davids14542/5usd" });
+
+    box.querySelectorAll("[data-amt]").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        const v = btn.dataset.amt;
+        const urls = { usd:"https://wise.com/pay/me/davids14542/5usd", gbp:"https://wise.com/pay/me/davids14542/8gbp", thb:"https://wise.com/pay/me/davids14542/200thb" };
+        qr.set({value: urls[v]});
+        box.querySelector("#msg").innerText = `QR updated for ${btn.innerText}`;
+      });
+    });
+
+    box.querySelector("#unlockBtn").addEventListener("click", ()=>{
+      const val = box.querySelector("#unlockPass").value.trim();
+      if(val === SECRET_PASSWORD){
+        overlay.remove();
+        const note = document.createElement("div");
+        note.textContent = "Tagshop unlocked. Thank you!";
+        note.style = "position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1fc27e;color:#000;padding:8px 14px;border-radius:8px;font-weight:700;";
+        document.body.appendChild(note);
+        setTimeout(()=>note.remove(),3000);
+      } else {
+        box.querySelector("#msg").innerText = "Incorrect password.";
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
