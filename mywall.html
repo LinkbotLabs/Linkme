@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tagshop Wall – Free Unlimited Affiliate Showcase</title>
+<title>Tagshop Wall – Free Affiliate Showcase</title>
 
 <link rel="stylesheet" href="uniform-dark-glass.css">
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
 <style>
-:root { --accent:#ffa500; --glow:#00FFFF; --text:#fff; --bg:#000; }
+:root { --accent:#ffe169; --text:#fff; --bg:#000; }
 
 html,body{
   margin:0;
@@ -21,61 +21,112 @@ html,body{
   padding-bottom:160px;
 }
 
-h1{text-align:center;color:#ffe169;margin-bottom:10px;}
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  padding:20px 10px 10px;
+}
+
+.header h1{
+  margin:0;
+  color:var(--accent);
+}
+
+.back-btn{
+  position:absolute;
+  left:15px;
+  top:20px;
+  background:#000;
+  color:var(--accent);
+  border:2px solid var(--accent);
+  border-radius:30px;
+  padding:6px 14px;
+  font-weight:700;
+  text-decoration:none;
+  font-size:14px;
+}
 
 .unlimited-banner{
   background:linear-gradient(135deg,#1fc27e,#39ff14);
   color:#000;
-  padding:16px;
+  padding:14px;
   text-align:center;
-  font-weight:900;
-  font-size:18px;
+  font-weight:800;
   border-radius:12px;
   margin:10px 5% 20px;
+  font-size:15px;
 }
 
 #affiliateIdDisplay{
   text-align:center;
-  font-weight:900;
-  margin:20px auto 30px;
-  font-size:20px;
+  font-weight:800;
+  margin:20px auto 25px;
+  font-size:16px;
   cursor:pointer;
-  padding:14px 20px;
+  padding:12px;
   border:2px solid var(--accent);
-  border-radius:16px;
+  border-radius:14px;
   max-width:95%;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(100px,1fr));
-  gap:8px;
-  padding:0 10px 80px;
+  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:10px;
+  padding:0 12px 80px;
 }
 
 .card{
-  background:rgba(255,255,255,0.05);
+  background:rgba(255,255,255,0.06);
   border-radius:12px;
-  padding:6px;
+  padding:8px;
   text-align:center;
 }
 
 .card img{
   max-width:100%;
-  border-radius:6px;
+  border-radius:8px;
 }
 
-.card-title{font-weight:bold;font-size:12px;}
-.card-buy{color:var(--accent);font-size:11px;text-decoration:none;}
+.card-title{
+  font-weight:bold;
+  font-size:12px;
+  margin-top:6px;
+}
+
+.card-buy{
+  display:block;
+  margin-top:6px;
+  color:var(--accent);
+  font-size:12px;
+  text-decoration:none;
+  font-weight:700;
+}
+
 .card-remove-btn{
+  margin-top:6px;
   background:#ff4444;
   color:#fff;
   border:none;
   border-radius:6px;
-  font-size:10px;
+  font-size:11px;
   padding:4px 8px;
-  margin-top:4px;
   cursor:pointer;
+}
+
+#shareWallBtn{
+  display:block;
+  margin:30px auto;
+  padding:14px 28px;
+  font-size:16px;
+  background:var(--accent);
+  border:none;
+  border-radius:16px;
+  font-weight:900;
+  cursor:pointer;
+  color:#000;
 }
 
 #affiliateToggle{
@@ -122,36 +173,7 @@ h1{text-align:center;color:#ffe169;margin-bottom:10px;}
   border:none;
   background:var(--accent);
   font-weight:900;
-}
-
-#shareWallBtn{
-  display:block;
-  margin:30px auto;
-  padding:14px 28px;
-  font-size:16px;
-  background:var(--accent);
-  border:none;
-  border-radius:16px;
-  font-weight:900;
-  cursor:pointer;
-}
-
-#unlockOverlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.95);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:2000;
-}
-
-#unlockBox{
-  background:#111;
-  padding:20px;
-  border-radius:16px;
-  text-align:center;
-  width:300px;
+  color:#000;
 }
 
 #shareModal{
@@ -182,19 +204,26 @@ h1{text-align:center;color:#ffe169;margin-bottom:10px;}
   margin:16px 0;
 }
 
-button{cursor:pointer;}
+.empty-state{
+  text-align:center;
+  color:#777;
+  margin-top:40px;
+  font-size:14px;
+}
 </style>
 </head>
 <body>
 
-<h1>Tagshop Wall</h1>
-
-<div class="unlimited-banner">
-  ✅ UNLIMITED PRODUCTS FOR EVERYONE<br>
-  <span style="font-size:14px;">Password: <strong>tagshopme</strong></span>
+<div class="header">
+  <a href="index.html" class="back-btn">⬅ Builder</a>
+  <h1>Tagshop Wall</h1>
 </div>
 
-<div id="affiliateIdDisplay"></div>
+<div class="unlimited-banner">
+  Unlimited products. Share instantly.
+</div>
+
+<div id="affiliateIdDisplay">💰 Set Affiliate Tags</div>
 <div class="grid" id="wallGrid"></div>
 
 <button id="shareWallBtn">🔗 Share Wall</button>
@@ -205,14 +234,6 @@ button{cursor:pointer;}
   <input id="temuAffiliate" placeholder="Temu tag">
   <input id="dhgateAffiliate" placeholder="DHGate ID">
   <button id="saveAffiliate">Save</button>
-</div>
-
-<div id="unlockOverlay">
-  <div id="unlockBox">
-    <h3>50 Item Limit</h3>
-    <input type="password" id="unlockPassword" placeholder="Password">
-    <button id="unlockBtn">Unlock</button>
-  </div>
 </div>
 
 <div id="shareModal">
@@ -231,6 +252,10 @@ const toggleBtn=document.getElementById("affiliateToggle");
 const affiliateDisplay=document.getElementById("affiliateIdDisplay");
 const wallGrid=document.getElementById("wallGrid");
 
+const amazonInput=document.getElementById("amazonAffiliate");
+const temuInput=document.getElementById("temuAffiliate");
+const dhgateInput=document.getElementById("dhgateAffiliate");
+
 toggleBtn.onclick=()=>popup.style.display=popup.style.display==="block"?"none":"block";
 affiliateDisplay.onclick=toggleBtn.onclick;
 
@@ -240,72 +265,55 @@ function updateAffiliateDisplay(){
   if(tags.amazon)active.push("Amazon");
   if(tags.temu)active.push("Temu");
   if(tags.dhgate)active.push("DHGate");
-  affiliateDisplay.innerHTML=active.length?
+  affiliateDisplay.textContent=active.length?
     "✅ Active: "+active.join(" + "):
     "💰 Set Affiliate Tags";
+  amazonInput.value=tags.amazon||"";
+  temuInput.value=tags.temu||"";
+  dhgateInput.value=tags.dhgate||"";
 }
 
 document.getElementById("saveAffiliate").onclick=()=>{
   const tags={
-    amazon:amazonAffiliate.value.trim(),
-    temu:temuAffiliate.value.trim(),
-    dhgate:dhgateAffiliate.value.trim()
+    amazon:amazonInput.value.trim(),
+    temu:temuInput.value.trim(),
+    dhgate:dhgateInput.value.trim()
   };
   localStorage.setItem("userAffiliateTags",JSON.stringify(tags));
   updateAffiliateDisplay();
   popup.style.display="none";
 };
 
-function getSharedData(){
-  const hash=location.hash.substring(1);
-  if(hash.startsWith("data=")){
-    try{
-      const data=LZString.decompressFromEncodedURIComponent(hash.substring(5));
-      return JSON.parse(data);
-    }catch{}
-  }
-  return null;
-}
-
 function buildAffiliateLink(link,tags){
-  if(!link)return "#";
-  let url;
-  try{url=new URL(link);}catch{return link;}
-  if(tags.amazon&&url.hostname.includes("amazon"))
-    url.searchParams.set("tag",tags.amazon);
-  if(tags.temu&&url.hostname.includes("temu"))
-    url.searchParams.set("aff_id",tags.temu);
-  if(tags.dhgate&&url.hostname.includes("dhgate"))
-    url.searchParams.set("affid",tags.dhgate);
-  return url.toString();
-}
-
-function loadData(){
-  const shared=getSharedData();
-  if(shared)return{wall:shared.wall||[],tags:shared.tags||{},shared:true};
-  return{
-    wall:JSON.parse(localStorage.getItem("productWall")||"[]"),
-    tags:JSON.parse(localStorage.getItem("userAffiliateTags")||"{}"),
-    shared:false
-  };
+  try{
+    const url=new URL(link);
+    if(tags.amazon&&url.hostname.includes("amazon"))
+      url.searchParams.set("tag",tags.amazon);
+    if(tags.temu&&url.hostname.includes("temu"))
+      url.searchParams.set("aff_id",tags.temu);
+    if(tags.dhgate&&url.hostname.includes("dhgate"))
+      url.searchParams.set("affid",tags.dhgate);
+    return url.toString();
+  }catch{return link;}
 }
 
 function renderWall(){
-  const data=loadData();
+  const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
+  const tags=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
   wallGrid.innerHTML="";
-  if(!data.wall.length){
-    wallGrid.innerHTML="<p style='text-align:center;color:#888;'>Wall empty</p>";
+  if(!wall.length){
+    wallGrid.innerHTML="<div class='empty-state'>Your wall is empty.<br>Add products from the builder.</div>";
     return;
   }
-  data.wall.forEach((item,i)=>{
+  wall.forEach((item,i)=>{
     const div=document.createElement("div");
     div.className="card";
-    const aff=buildAffiliateLink(item.link,data.shared?data.tags:JSON.parse(localStorage.getItem("userAffiliateTags")||"{}"));
+    const aff=buildAffiliateLink(item.link,tags);
     div.innerHTML=`
       ${item.thumb?`<img src="${item.thumb}">`:""}
       <div class="card-title">${item.title}</div>
       <a class="card-buy" href="${aff}" target="_blank">Buy</a>
-      ${!data.shared?`<button class="card-remove-btn" onclick="removeItem(${i})">Remove</button>`:""}
+      <button class="card-remove-btn" onclick="removeItem(${i})">Remove</button>
     `;
     wallGrid.appendChild(div);
   });
@@ -318,39 +326,25 @@ window.removeItem=function(i){
   renderWall();
 };
 
-window.addToWall=function(title,thumb,link){
+document.getElementById("shareWallBtn").onclick=()=>{
   const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
-  if(wall.length>=50&&!localStorage.getItem("wallUnlocked")){
-    unlockOverlay.style.display="flex";
-    return;
-  }
-  wall.push({title,thumb,link});
-  localStorage.setItem("productWall",JSON.stringify(wall));
-  renderWall();
-};
-
-unlockBtn.onclick=()=>{
-  if(unlockPassword.value==="tagshopme"){
-    localStorage.setItem("wallUnlocked","true");
-    unlockOverlay.style.display="none";
-  }
-};
-
-shareWallBtn.onclick=()=>{
-  const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
-  if(!wall.length)return alert("Add products first");
+  if(!wall.length)return alert("Add products first.");
   const tags=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
   const compressed=LZString.compressToEncodedURIComponent(JSON.stringify({wall,tags}));
   const url=location.origin+location.pathname+"#data="+compressed;
-  shareLinkDisplay.textContent=url;
-  qrcode.innerHTML="";
-  new QRCode(qrcode,{text:url,width:200,height:200});
-  shareModal.style.display="flex";
+  document.getElementById("shareLinkDisplay").textContent=url;
+  document.getElementById("qrcode").innerHTML="";
+  new QRCode(document.getElementById("qrcode"),{text:url,width:200,height:200});
+  document.getElementById("shareModal").style.display="flex";
 };
 
-copyBtn.onclick=()=>navigator.clipboard.writeText(shareLinkDisplay.textContent);
-closeShareBtn.onclick=()=>shareModal.style.display="none";
-shareModal.onclick=e=>{if(e.target===shareModal)shareModal.style.display="none";};
+document.getElementById("copyBtn").onclick=()=>{
+  navigator.clipboard.writeText(document.getElementById("shareLinkDisplay").textContent);
+};
+
+document.getElementById("closeShareBtn").onclick=()=>{
+  document.getElementById("shareModal").style.display="none";
+};
 
 updateAffiliateDisplay();
 renderWall();
