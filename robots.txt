@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://linkmetagshop.vercel.app/sitemap.xml
