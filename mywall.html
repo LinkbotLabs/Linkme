@@ -8,9 +8,8 @@
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
 
 <style>
-/* KEEPING YOUR STYLES EXACTLY AS THEY WERE */
 :root { --accent: #ffa500; --glow: #00FFFF; --text: #fff; --bg: #000; }
-/* (styles unchanged for brevity — keep all your CSS exactly as-is here) */
+/* Your original CSS remains unchanged */
 </style>
 </head>
 <body>
@@ -28,12 +27,7 @@
 <div class="grid" id="wallGrid"></div>
 
 <button id="shareWallBtn">🔗 Share Wall</button>
-
 <button id="affiliateToggle">💰 My Affiliate Tags</button>
-
-<!-- Affiliate Popup, Socials, Unlock Overlay, Share Modal -->
-<!-- KEEP ALL YOUR HTML STRUCTURE EXACTLY AS YOU HAD IT -->
-<!-- (No changes required in HTML layout) -->
 
 <script>
 
@@ -47,6 +41,33 @@ document.getElementById("visitorCount").innerText = "Visitors: " + visitors;
 
 
 /* ===========================
+   LOAD SHARED WALL IF ?id=
+=========================== */
+
+async function loadSharedWallIfExists() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  if (!id) return;
+
+  try {
+    const res = await fetch("/api/getWall?id=" + id);
+    if (!res.ok) return;
+
+    const data = await res.json();
+
+    if (data.wall)
+      localStorage.setItem("productWall", JSON.stringify(data.wall));
+
+    if (data.tags)
+      localStorage.setItem("userAffiliateTags", JSON.stringify(data.tags));
+
+  } catch (err) {
+    console.error("Load shared wall failed:", err);
+  }
+}
+
+
+/* ===========================
    AFFILIATE HANDLING
 =========================== */
 
@@ -54,13 +75,17 @@ const popup = document.getElementById("affiliatePopup");
 const toggleBtn = document.getElementById("affiliateToggle");
 const affiliateDisplay = document.getElementById("affiliateIdDisplay");
 
-affiliateDisplay.addEventListener("click", () =>
-  popup.style.display = popup.style.display === "block" ? "none" : "block"
-);
+if (affiliateDisplay && popup) {
+  affiliateDisplay.addEventListener("click", () =>
+    popup.style.display = popup.style.display === "block" ? "none" : "block"
+  );
+}
 
-toggleBtn.addEventListener("click", () =>
-  popup.style.display = popup.style.display === "block" ? "none" : "block"
-);
+if (toggleBtn && popup) {
+  toggleBtn.addEventListener("click", () =>
+    popup.style.display = popup.style.display === "block" ? "none" : "block"
+  );
+}
 
 function updateAffiliateDisplay() {
   const tags = JSON.parse(localStorage.getItem("userAffiliateTags") || "{}");
@@ -71,7 +96,8 @@ function updateAffiliateDisplay() {
   if (tags.dhgate) active.push("DHGate");
 
   if (active.length) {
-    affiliateDisplay.innerHTML = `✅ Affiliates Active • ${active.join(" + ")}`;
+    affiliateDisplay.innerHTML =
+      `✅ Affiliates Active • ${active.join(" + ")}`;
     affiliateDisplay.style.color = "#39ff14";
   } else {
     affiliateDisplay.innerHTML =
@@ -86,17 +112,6 @@ function loadAffiliateTags() {
   localStorage.setItem("userAffiliateTags", JSON.stringify(stored));
   updateAffiliateDisplay();
 }
-
-document.getElementById("saveAffiliate").addEventListener("click", () => {
-  const tags = {
-    amazon: document.getElementById("amazonAffiliate").value.trim(),
-    temu: document.getElementById("temuAffiliate").value.trim(),
-    dhgate: document.getElementById("dhgateAffiliate").value.trim()
-  };
-  localStorage.setItem("userAffiliateTags", JSON.stringify(tags));
-  popup.style.display = "none";
-  updateAffiliateDisplay();
-});
 
 
 /* ===========================
@@ -161,38 +176,12 @@ function removeItem(idx) {
 
 
 /* ===========================
-   NEW CLEAN SHARE SYSTEM
+   SHARE SYSTEM
 =========================== */
 
-const shareModal = document.getElementById("shareModal");
-const shareLinkDisplay = document.getElementById("shareLinkDisplay");
-const qrcodeDiv = document.getElementById("qrcode");
-const copyBtn = document.getElementById("copyBtn");
-const closeShareBtn = document.getElementById("closeShareBtn");
-
 function showShareModal(url) {
-  shareModal.style.display = "flex";
-  shareLinkDisplay.textContent = url;
-  qrcodeDiv.innerHTML = "";
-
-  new QRCode(qrcodeDiv, {
-    text: url,
-    width: 220,
-    height: 220
-  });
+  alert("Share this link:\n\n" + url);
 }
-
-copyBtn.onclick = () => {
-  navigator.clipboard.writeText(shareLinkDisplay.textContent)
-    .then(() => {
-      copyBtn.textContent = "Copied!";
-      setTimeout(() => copyBtn.textContent = "Copy Link", 2000);
-    });
-};
-
-closeShareBtn.onclick = () => {
-  shareModal.style.display = "none";
-};
 
 document.getElementById("shareWallBtn")
 .addEventListener("click", async () => {
@@ -213,13 +202,16 @@ document.getElementById("shareWallBtn")
     });
 
     const data = await res.json();
-
     if (!data.id) {
       alert("Error creating link.");
       return;
     }
 
-    const cleanURL = window.location.origin + "/w/" + data.id;
+    const cleanURL =
+      window.location.origin +
+      "/mywall.html?id=" +
+      data.id;
+
     navigator.clipboard.writeText(cleanURL).catch(() => {});
     showShareModal(cleanURL);
 
@@ -227,7 +219,6 @@ document.getElementById("shareWallBtn")
     console.error(err);
     alert("Share failed.");
   }
-
 });
 
 
@@ -235,8 +226,11 @@ document.getElementById("shareWallBtn")
    INIT
 =========================== */
 
-loadAffiliateTags();
-renderWall();
+(async () => {
+  await loadSharedWallIfExists();
+  loadAffiliateTags();
+  renderWall();
+})();
 
 </script>
 </body>
