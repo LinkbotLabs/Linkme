@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="go
-<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
 <title>Tagshop - Free Affiliate Wall Builder</title>
 <link rel="stylesheet" href="uniform-dark-glass.css">
+
 <style>
 :root { --glass: rgba(0,0,0,0.35); --stroke: rgba(255,255,255,0.12); --text:#fff; --muted:#cfcfcf; --accent:#ffe169; }
 body { font-family: system-ui; background:#000; color:#fff; padding:20px; transition: background 0.3s, color 0.3s;}
@@ -66,7 +67,6 @@ My Wall
 </button>
 
 <script>
-/* ---------- LOG HELPER ---------- */
 function log(msg){
   console.log(msg);
   const box = document.getElementById("console-log");
@@ -75,13 +75,11 @@ function log(msg){
   }
 }
 
-/* ---------- THEME TOGGLE ---------- */
 document.getElementById("toggle-theme").addEventListener("click", ()=>{
   document.body.classList.toggle("light");
   log("Theme toggled.");
 });
 
-/* ---------- SEARCH ---------- */
 const searchResults = document.getElementById("search-results");
 
 document.getElementById("search-run").addEventListener("click", async ()=>{
@@ -99,7 +97,6 @@ document.getElementById("search-run").addEventListener("click", async ()=>{
   try {
     for(let page=0; page<5; page++){
       const start = page*10+1;
-
       const res = await fetch("/api/search?q=" + encodeURIComponent(query) + "&start=" + start);
       const data = await res.json();
 
@@ -163,7 +160,6 @@ document.getElementById("search-run").addEventListener("click", async ()=>{
   }
 });
 
-/* ---------- TOGGLES ---------- */
 document.getElementById("toggle-search").addEventListener("click", ()=>{
   searchResults.style.display =
     searchResults.style.display==="none" ? "block":"none";
@@ -174,7 +170,6 @@ document.getElementById("toggle-log").addEventListener("click", ()=>{
   box.style.display = box.style.display==="none"?"block":"none";
 });
 
-/* ---------- WALL ---------- */
 function addToWall(title,thumb,link){
   const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
   wall.push({title,thumb,link});
