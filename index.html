@@ -4,38 +4,38 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<!-- Google Verification -->
 <meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
 
+<!-- SEO Core -->
 <title>Free Affiliate Wall Builder – Create & Share Product Pages | Tagshop</title>
-<meta name="description" content="Build a free affiliate wall in minutes. Add Amazon, DHgate or Temu products and share your custom storefront instantly." />
+<meta name="description" content="Build a free affiliate wall in minutes. Add Amazon, DHgate or Temu products and share your custom storefront instantly. Unlimited products. No coding required." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://linkmetagshop.vercel.app" />
+
+<!-- Social Sharing -->
+<meta property="og:title" content="Tagshop – Free Affiliate Wall Builder" />
+<meta property="og:description" content="Create and share your own affiliate product wall in minutes. Unlimited products. Free to use." />
+<meta property="og:url" content="https://linkmetagshop.vercel.app" />
+<meta property="og:type" content="website" />
 
 <link rel="stylesheet" href="uniform-dark-glass.css">
 
 <style>
 :root { --glass: rgba(0,0,0,0.35); --stroke: rgba(255,255,255,0.12); --text:#fff; --muted:#cfcfcf; --accent:#ffe169; }
-body { font-family: system-ui; background:#000; color:#fff; padding:20px; }
+body { font-family: system-ui; background:#000; color:#fff; padding:20px; transition: background 0.3s, color 0.3s;}
+body.light { background:#f0f0f0; color:#000; }
 h1 { text-align:center; margin-bottom:10px; }
-button { cursor:pointer; border:none; border-radius:6px; padding:6px 10px; font-weight:700; background:#000; color:#fff; font-size:12px; }
+button { cursor:pointer; border:none; border-radius:6px; padding:8px 12px; font-weight:700; background:#000; color:#fff; margin-top:6px; font-size:12px; }
 .card { background: var(--glass); border:1px solid var(--stroke); border-radius:12px; padding:12px; margin-bottom:20px; }
-.grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
-.product { border:1px solid var(--stroke); border-radius:10px; padding:10px; background:rgba(0,0,0,0.25); }
-.product img { width:100%; border-radius:6px; cursor:pointer; }
-.product-title { font-size:13px; margin-top:6px; font-weight:600; }
-.product-btns { display:flex; justify-content:center; gap:6px; margin-top:6px; flex-wrap:wrap; }
-
-.details {
-  display:none;
-  margin-top:8px;
-  padding:8px;
-  border-top:1px solid var(--stroke);
-  font-size:12px;
-  text-align:left;
-  line-height:1.4;
-}
-
-.details strong { color: var(--accent); }
+.output { background: rgba(255,255,255,0.04); border:1px solid var(--stroke); border-radius:10px; padding:10px; max-height:400px; overflow-y:auto; margin-top:10px; white-space:pre-wrap; }
+.hint { font-size:12px; color:var(--muted); margin-top:6px; }
+.grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(120px,1fr)); gap:12px; }
+.product { border:1px solid var(--stroke); border-radius:8px; padding:6px; text-align:center; background:rgba(0,0,0,0.25); }
+.product img { max-width:100%; border-radius:6px; cursor:pointer; }
+input, select, textarea { width:100%; padding:8px; border-radius:6px; border:1px solid var(--stroke); background: rgba(255,255,255,0.06); color: var(--text); margin-top:6px; }
+.product-btns { display:flex; justify-content:center; gap:4px; margin-top:4px; }
+.product-btns button { padding:4px 6px; border-radius:12px; font-size:11px; }
 
 .unlimited-banner {
   background: linear-gradient(135deg, #1fc27e, #39ff14);
@@ -58,21 +58,41 @@ button { cursor:pointer; border:none; border-radius:6px; padding:6px 10px; font-
   <span style="font-size:15px;">Password on My Wall: <strong>tagshopme</strong></span>
 </div>
 
+<button id="toggle-theme">Toggle Light/Dark</button>
+
 <div class="card">
   <h2>Search Products to Add to Your Affiliate Wall</h2>
+  <div class="hint">Up to 50 results</div>
   <input type="text" id="search-query" placeholder="Search Amazon, DHgate, Temu products..." />
   <button id="search-run">Search</button>
-  <div id="search-results"></div>
+  <button id="toggle-search">Collapse/Expand</button>
+  <div class="output" id="search-results"></div>
+</div>
+
+<div class="card">
+  <h2>Console Logs</h2>
+  <button id="toggle-log">Toggle Logs</button>
+  <div class="output" id="console-log" style="display:none;"></div>
 </div>
 
 <button onclick="window.location.href='mywall.html'" 
-style="position:fixed; bottom:20px; right:20px; background:#000; color:#ffe169; border-radius:16px; padding:10px 14px;">
+style="position:fixed; bottom:20px; right:20px; background:#000; color:#ffe169; border-radius:16px; padding:10px 14px; font-weight:700;">
 My Wall
 </button>
 
 <script>
+function log(msg){
+  console.log(msg);
+  const box = document.getElementById("console-log");
+  if(box){
+    box.innerHTML += "[" + new Date().toLocaleTimeString() + "] " + msg + "<br>";
+  }
+}
 
-function log(msg){ console.log(msg); }
+document.getElementById("toggle-theme").addEventListener("click", ()=>{
+  document.body.classList.toggle("light");
+  log("Theme toggled.");
+});
 
 const searchResults = document.getElementById("search-results");
 
@@ -84,6 +104,7 @@ document.getElementById("search-run").addEventListener("click", async ()=>{
   }
 
   searchResults.innerHTML = "<strong>Loading results...</strong>";
+  log("Searching: " + query);
 
   let allItems = [];
 
@@ -92,9 +113,12 @@ document.getElementById("search-run").addEventListener("click", async ()=>{
       const start = page*10+1;
       const res = await fetch("/api/search?q=" + encodeURIComponent(query) + "&start=" + start);
       const data = await res.json();
+
       if(data.items && data.items.length>0){
         allItems = allItems.concat(data.items);
-      } else break;
+      } else {
+        break;
+      }
     }
 
     if(allItems.length===0){
@@ -102,79 +126,70 @@ document.getElementById("search-run").addEventListener("click", async ()=>{
       return;
     }
 
-    searchResults.innerHTML="";
-    const grid=document.createElement("div");
-    grid.className="grid";
+    searchResults.innerHTML = "";
+    const grid = document.createElement("div");
+    grid.className = "grid";
 
     allItems.forEach(item=>{
-      const thumb=item.pagemap?.cse_image?.[0]?.src || "https://via.placeholder.com/200";
+      const thumb = item.pagemap?.cse_image?.[0]?.src || "https://via.placeholder.com/100";
 
-      const card=document.createElement("div");
-      card.className="product";
+      const card = document.createElement("div");
+      card.className = "product";
 
-      const img=document.createElement("img");
-      img.src=thumb;
-      img.onclick=()=>window.open(item.link,"_blank");
+      const img = document.createElement("img");
+      img.src = thumb;
+      img.onclick = ()=>window.open(item.link,"_blank");
 
-      const title=document.createElement("div");
-      title.className="product-title";
-      title.textContent=item.title;
+      const title = document.createElement("div");
+      title.textContent = item.title;
+      title.style.fontSize="12px";
+      title.style.marginTop="4px";
 
-      const btnWrap=document.createElement("div");
+      const btnWrap = document.createElement("div");
       btnWrap.className="product-btns";
 
-      const details=document.createElement("div");
-      details.className="details";
-      details.innerHTML=`
-        <strong>Why this product?</strong><br>
-        Popular option in the "${query}" category with strong marketplace visibility.<br><br>
-        <strong>Best for:</strong>
-        <ul>
-          <li>Budget buyers</li>
-          <li>Everyday use</li>
-          <li>Gift ideas</li>
-        </ul>
-        <strong>Buying Tips:</strong><br>
-        ✔ Check recent reviews<br>
-        ✔ Compare shipping times<br>
-        ✔ Look for bundles or discounts<br><br>
-      `;
-
-      const viewBtn=document.createElement("button");
-      viewBtn.textContent="View Details";
-      viewBtn.onclick=()=>{
-        details.style.display=
-          details.style.display==="block"?"none":"block";
-      };
-
-      const addBtn=document.createElement("button");
-      addBtn.textContent="Add To Wall";
+      const addBtn = document.createElement("button");
+      addBtn.textContent="Add to Wall";
       addBtn.onclick=()=>addToWall(item.title,thumb,item.link);
 
-      btnWrap.appendChild(viewBtn);
+      const viewBtn = document.createElement("button");
+      viewBtn.textContent="View Wall";
+      viewBtn.onclick=()=>window.location.href="mywall.html";
+
       btnWrap.appendChild(addBtn);
+      btnWrap.appendChild(viewBtn);
 
       card.appendChild(img);
       card.appendChild(title);
       card.appendChild(btnWrap);
-      card.appendChild(details);
       grid.appendChild(card);
     });
 
     searchResults.appendChild(grid);
+    log("Loaded "+allItems.length+" results.");
 
   } catch(err){
     searchResults.innerHTML="Search error.";
+    log("Error: "+err.message);
   }
+});
+
+document.getElementById("toggle-search").addEventListener("click", ()=>{
+  searchResults.style.display =
+    searchResults.style.display==="none" ? "block":"none";
+});
+
+document.getElementById("toggle-log").addEventListener("click", ()=>{
+  const box=document.getElementById("console-log");
+  box.style.display = box.style.display==="none"?"block":"none";
 });
 
 function addToWall(title,thumb,link){
   const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
   wall.push({title,thumb,link});
   localStorage.setItem("productWall",JSON.stringify(wall));
-  alert("Added to your wall!");
+  log("Added to wall: "+title);
 }
-
 </script>
 
 </body>
