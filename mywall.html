@@ -4,85 +4,98 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linkme Shop – Affiliate Storefront</title>
-<link rel="stylesheet" href="uniform-dark-glass.css">
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
 
 <style>
 :root{
-  --primary:#ff7a9c;
-  --dark:#111;
-  --light:#f5f5f5;
-  --muted:#777;
+  --bg:#e6e7eb;
+  --glass:rgba(255,255,255,0.6);
+  --glass-strong:rgba(255,255,255,0.85);
+  --border:rgba(255,255,255,0.5);
+  --text:#1c1c1c;
+  --muted:#6e6e73;
+  --shadow:0 25px 60px rgba(0,0,0,0.15);
 }
 
 /* ===== BODY ===== */
 
 body{
   margin:0;
-  font-family: "Helvetica Neue", sans-serif;
-  background:var(--light);
-  color:#333;
-  padding-bottom:120px;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding:60px 40px 120px;
 }
 
 /* ===== TOP NAV ===== */
 
 .topbar{
-  background:#fff;
-  border-bottom:1px solid #eee;
-  padding:15px 40px;
+  background:var(--glass);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  border-radius:20px 20px 0 0;
+  padding:20px 40px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  flex-wrap:wrap;
-  gap:15px;
+  border:1px solid var(--border);
+  border-bottom:none;
+  box-shadow:var(--shadow);
 }
 
 .logo{
-  font-size:22px;
-  font-weight:800;
-  letter-spacing:3px;
-  color:var(--primary);
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:2px;
+  color:var(--text);
 }
 
 .nav-buttons{
   display:flex;
-  gap:12px;
+  gap:18px;
   align-items:center;
 }
 
 .nav-btn{
-  background:#fff;
-  border:1px solid #ddd;
-  padding:8px 16px;
-  border-radius:6px;
+  background:transparent;
+  border:none;
+  padding:6px 8px;
+  font-weight:500;
+  color:var(--muted);
   cursor:pointer;
-  font-weight:600;
+  transition:.2s ease;
+}
+
+.nav-btn:hover{
+  color:var(--text);
 }
 
 .nav-btn.primary{
-  background:var(--primary);
-  color:#fff;
-  border:none;
+  font-weight:600;
+  color:var(--text);
 }
 
 /* ===== HERO ===== */
 
 .hero{
   text-align:center;
-  padding:80px 20px 50px;
-  background:#fff;
+  padding:120px 20px 90px;
+  background:var(--glass);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  border-left:1px solid var(--border);
+  border-right:1px solid var(--border);
 }
 
 .hero h1{
-  font-size:60px;
-  letter-spacing:6px;
+  font-size:56px;
+  font-weight:600;
   margin:0;
-  color:var(--primary);
+  letter-spacing:1px;
 }
 
 .hero p{
-  margin-top:15px;
+  margin-top:14px;
   color:var(--muted);
   font-size:18px;
 }
@@ -91,23 +104,25 @@ body{
 
 #affiliatePopup{
   position:fixed;
-  top:90px;
-  right:40px;
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:20px;
+  top:120px;
+  right:60px;
+  background:var(--glass-strong);
+  backdrop-filter:blur(30px);
+  border-radius:18px;
+  padding:25px;
   width:280px;
   display:none;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
 }
 
 #affiliatePopup input{
   width:100%;
-  padding:8px;
-  margin-bottom:10px;
+  padding:10px;
+  margin-bottom:12px;
+  border-radius:8px;
   border:1px solid #ddd;
-  border-radius:6px;
+  background:#fff;
 }
 
 /* ===== GRID ===== */
@@ -118,52 +133,71 @@ body{
   gap:30px;
   max-width:1400px;
   margin:0 auto;
-  padding:0 30px;
+  padding:40px 30px 60px;
+  background:var(--glass);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  border-radius:0 0 20px 20px;
+  border:1px solid var(--border);
+  border-top:none;
+  box-shadow:var(--shadow);
 }
 
+/* ===== PRODUCT CARD ===== */
+
 .card{
-  background:#fff;
-  border-radius:14px;
+  background:var(--glass-strong);
+  backdrop-filter:blur(20px);
+  border-radius:18px;
   overflow:hidden;
-  transition:.3s;
-  box-shadow:0 5px 20px rgba(0,0,0,0.05);
+  border:1px solid var(--border);
+  transition:.3s ease;
 }
 
 .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.1);
+  transform:translateY(-8px);
+  box-shadow:0 25px 50px rgba(0,0,0,0.12);
 }
 
 .card img{
   width:100%;
-  height:300px;
+  height:280px;
   object-fit:cover;
+  filter:saturate(0.95);
 }
 
 .card-info{
-  padding:18px;
+  padding:20px;
 }
 
 .card-title{
-  font-weight:700;
-  margin-bottom:8px;
+  font-weight:600;
+  margin-bottom:10px;
+  font-size:15px;
 }
 
 .card-buy{
   display:inline-block;
-  margin-top:10px;
-  color:var(--primary);
-  font-weight:600;
+  margin-top:8px;
+  font-weight:500;
+  color:var(--text);
   text-decoration:none;
+  border-bottom:1px solid var(--text);
+  padding-bottom:2px;
+  transition:.2s;
+}
+
+.card-buy:hover{
+  opacity:.6;
 }
 
 .card-remove-btn{
-  margin-top:10px;
-  background:#ff4444;
+  margin-top:12px;
+  background:#111;
   color:#fff;
   border:none;
-  border-radius:6px;
-  padding:6px 10px;
+  border-radius:8px;
+  padding:6px 12px;
   cursor:pointer;
 }
 
@@ -172,29 +206,35 @@ body{
 #shareModal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(15px);
   display:none;
   justify-content:center;
   align-items:center;
 }
 
 #shareModalContent{
-  background:#fff;
-  padding:30px;
-  border-radius:12px;
+  background:var(--glass-strong);
+  backdrop-filter:blur(30px);
+  padding:35px;
+  border-radius:20px;
   text-align:center;
   width:90%;
-  max-width:400px;
+  max-width:420px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
 }
 
 #qrContainer{
   margin:20px auto;
-  padding:10px;
+  padding:15px;
   background:#fff;
+  border-radius:12px;
 }
 
 button{
   cursor:pointer;
+  font-family:inherit;
 }
 </style>
 </head>
@@ -203,7 +243,6 @@ button{
 <!-- TOP NAV -->
 <div class="topbar">
   <div class="logo">LINKME</div>
-
   <div class="nav-buttons">
     <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
     <button class="nav-btn" onclick="toggleAffiliate()">Affiliate IDs</button>
@@ -240,16 +279,14 @@ button{
 </div>
 
 <script>
+/* Your original JS remains unchanged */
 let isShared=false;
 let currentWall=[];
 let currentTags={};
 
-/* ===== LOAD WALL ===== */
-
 async function loadWallData(){
   const params=new URLSearchParams(window.location.search);
   const id=params.get("id");
-
   if(id){
     const res=await fetch(`/api/getWall?id=${id}`);
     if(res.ok){
@@ -260,12 +297,9 @@ async function loadWallData(){
       return;
     }
   }
-
   currentWall=JSON.parse(localStorage.getItem("productWall")||"[]");
   currentTags=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
 }
-
-/* ===== AFFILIATE ===== */
 
 function toggleAffiliate(){
   const pop=document.getElementById("affiliatePopup");
@@ -286,36 +320,26 @@ function saveAffiliate(){
 function buildAffiliateLink(link){
   if(!link) return "#";
   let url=new URL(link);
-
   if(url.hostname.includes("amazon") && currentTags.amazon)
     url.searchParams.set("tag",currentTags.amazon);
-
   if(url.hostname.includes("temu") && currentTags.temu)
     url.searchParams.set("aff_id",currentTags.temu);
-
   if(url.hostname.includes("dhgate") && currentTags.dhgate)
     url.searchParams.set("affid",currentTags.dhgate);
-
   return url.toString();
 }
-
-/* ===== RENDER ===== */
 
 function renderWall(){
   const grid=document.getElementById("wallGrid");
   grid.innerHTML="";
-
   if(currentWall.length===0){
-    grid.innerHTML="<p style='text-align:center;color:#777;'>Your shop is empty.</p>";
+    grid.innerHTML="<p style='text-align:center;color:#6e6e73;'>Your shop is empty.</p>";
     return;
   }
-
   currentWall.forEach((item,idx)=>{
     const div=document.createElement("div");
     div.className="card";
-
     const aff=buildAffiliateLink(item.link);
-
     div.innerHTML=`
       <img src="${item.thumb||'https://via.placeholder.com/600'}">
       <div class="card-info">
@@ -324,7 +348,6 @@ function renderWall(){
         ${!isShared?`<button class="card-remove-btn" onclick="removeItem(${idx})">Remove</button>`:''}
       </div>
     `;
-
     grid.appendChild(div);
   });
 }
@@ -337,23 +360,17 @@ function removeItem(idx){
   renderWall();
 }
 
-/* ===== SHARE ===== */
-
 document.getElementById("shareWallBtn").addEventListener("click",async()=>{
   if(currentWall.length===0){alert("Add products first");return;}
-
   const res=await fetch("/api/saveWall",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({wall:currentWall,tags:currentTags})
   });
-
   const data=await res.json();
   const url=location.origin+"/mywall.html?id="+data.id;
-
   document.getElementById("shareModal").style.display="flex";
   document.getElementById("shareLinkDisplay").textContent=url;
-
   document.getElementById("qrcode").innerHTML="";
   new QRCode(document.getElementById("qrcode"),{
     text:url,width:200,height:200
@@ -364,7 +381,6 @@ document.getElementById("copyBtn").onclick=()=>{
   navigator.clipboard.writeText(document.getElementById("shareLinkDisplay").textContent);
 };
 
-/* INIT */
 (async()=>{
   await loadWallData();
   renderWall();
