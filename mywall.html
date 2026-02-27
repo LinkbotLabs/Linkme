@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Linkme Shop</title>
+
 <link rel="stylesheet" href="uniform-dark-glass.css">
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
 
@@ -23,19 +24,37 @@ body{
   padding-bottom:120px;
 }
 
-#wallTitle{
+/* Shop Title */
+.title-wrap{
   text-align:center;
+  margin-top:30px;
+}
+
+#wallTitle{
   font-size:28px;
   font-weight:900;
-  margin:30px 0 10px;
   outline:none;
   border-bottom:2px dashed var(--accent);
   display:inline-block;
   padding:6px 12px;
 }
 
-.title-wrap{
-  text-align:center;
+/* Affiliate Box */
+#affiliateBox{
+  max-width:600px;
+  margin:20px auto;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:20px;
+  border-radius:14px;
+}
+
+#affiliateBox input{
+  width:100%;
+  margin-bottom:10px;
+  padding:8px;
+  border-radius:6px;
+  border:none;
 }
 
 .grid{
@@ -50,7 +69,6 @@ body{
   border:1px solid rgba(255,255,255,0.15);
   border-radius:14px;
   padding:12px;
-  position:relative;
 }
 
 .card img{
@@ -73,7 +91,6 @@ body{
 
 .card-actions{
   display:flex;
-  justify-content:space-between;
   flex-wrap:wrap;
   gap:6px;
   margin-top:10px;
@@ -138,6 +155,14 @@ body{
   <h1 id="wallTitle" contenteditable="true">My Linkme Shop</h1>
 </div>
 
+<div id="affiliateBox">
+  <h3>Affiliate IDs</h3>
+  <input id="amazonTag" placeholder="Amazon Associate Tag (e.g. yourtag-21)">
+  <input id="dhgateTag" placeholder="DHgate Affiliate ID">
+  <input id="temuTag" placeholder="Temu Affiliate ID">
+  <button onclick="saveAffiliateTags()" class="btn btn-buy">Save Affiliate IDs</button>
+</div>
+
 <div class="grid" id="wallGrid"></div>
 
 <button id="publishBtn">🔥 Publish My Shop</button>
@@ -179,42 +204,63 @@ const sharedId=urlParams.get("id");
 /* Affiliate Injection */
 function buildAffiliateLink(url){
   try{
-    if(url.includes("amazon.")){
-      const tag=currentTags.amazon||"";
-      if(tag) return url+(url.includes("?")?"&":"?")+"tag="+tag;
-    }
-    if(url.includes("dhgate.")){
-      const tag=currentTags.dhgate||"";
-      if(tag) return url+(url.includes("?")?"&":"?")+"f="+tag;
-    }
-    if(url.includes("temu.")){
-      const tag=currentTags.temu||"";
-      if(tag) return url+(url.includes("?")?"&":"?")+"af="+tag;
-    }
+    if(url.includes("amazon.") && currentTags.amazon)
+      return url+(url.includes("?")?"&":"?")+"tag="+currentTags.amazon;
+
+    if(url.includes("dhgate.") && currentTags.dhgate)
+      return url+(url.includes("?")?"&":"?")+"f="+currentTags.dhgate;
+
+    if(url.includes("temu.") && currentTags.temu)
+      return url+(url.includes("?")?"&":"?")+"af="+currentTags.temu;
+
     return url;
   }catch{ return url; }
+}
+
+/* Load Affiliate Tags */
+function loadAffiliateTags(){
+  const saved=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
+  currentTags=saved;
+  document.getElementById("amazonTag").value=saved.amazon||"";
+  document.getElementById("dhgateTag").value=saved.dhgate||"";
+  document.getElementById("temuTag").value=saved.temu||"";
+}
+
+function saveAffiliateTags(){
+  const tags={
+    amazon:document.getElementById("amazonTag").value.trim(),
+    dhgate:document.getElementById("dhgateTag").value.trim(),
+    temu:document.getElementById("temuTag").value.trim()
+  };
+  localStorage.setItem("userAffiliateTags",JSON.stringify(tags));
+  currentTags=tags;
+  alert("Affiliate IDs saved!");
 }
 
 /* Load Wall */
 async function loadWall(){
   if(sharedId){
     isShared=true;
+    document.getElementById("affiliateBox").style.display="none";
+
     const res=await fetch("/api/getWall?id="+sharedId);
     const data=await res.json();
+
     currentWall=data.wall||[];
     currentTags=data.tags||{};
     currentShopName=data.shopName||"Shared Shop";
+
     document.getElementById("wallTitle").innerText=currentShopName;
     document.getElementById("wallTitle").contentEditable=false;
   }else{
     currentWall=JSON.parse(localStorage.getItem("productWall")||"[]");
-    currentTags=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
     currentShopName=localStorage.getItem("shopName")||"My Linkme Shop";
     document.getElementById("wallTitle").innerText=currentShopName;
   }
   renderWall();
 }
 
+/* Save Shop Name */
 document.getElementById("wallTitle").addEventListener("input",e=>{
   if(!isShared){
     currentShopName=e.target.innerText.trim();
@@ -222,7 +268,7 @@ document.getElementById("wallTitle").addEventListener("input",e=>{
   }
 });
 
-/* Render */
+/* Render Products */
 function renderWall(){
   wallGrid.innerHTML="";
   if(currentWall.length===0){
@@ -256,7 +302,6 @@ function removeItem(i){
   renderWall();
 }
 
-/* Preview */
 function openPreview(i){
   const item=currentWall[i];
   document.getElementById("previewImage").src=item.thumb;
@@ -265,26 +310,23 @@ function openPreview(i){
   document.getElementById("previewBuy").href=buildAffiliateLink(item.link);
   document.getElementById("previewModal").style.display="flex";
 }
+
 function closePreview(){
   document.getElementById("previewModal").style.display="none";
 }
 
-/* Share Product */
 function shareProduct(i){
-  const url=buildAffiliateLink(currentWall[i].link);
-  navigator.clipboard.writeText(url);
+  navigator.clipboard.writeText(buildAffiliateLink(currentWall[i].link));
   alert("Product link copied!");
 }
 
-/* Share to Grok */
 function shareToGrok(i){
   const item=currentWall[i];
-  const text=`Create a viral product image and short promo video script for this product:\n\nTitle: ${item.title}\nWhy I picked it: ${item.customWhy||""}\nLink: ${buildAffiliateLink(item.link)}`;
+  const text=`Create a viral product image and short promo video script for:\n\nTitle: ${item.title}\nWhy I picked it: ${item.customWhy||""}\nLink: ${buildAffiliateLink(item.link)}`;
   navigator.clipboard.writeText(text);
   window.open("https://grok.com","_blank");
 }
 
-/* Publish Shop */
 document.getElementById("publishBtn").addEventListener("click",async()=>{
   if(currentWall.length===0) return alert("Add products first.");
 
@@ -315,11 +357,13 @@ document.getElementById("publishBtn").addEventListener("click",async()=>{
 function closeShare(){
   document.getElementById("shareModal").style.display="none";
 }
+
 function copyLink(){
   navigator.clipboard.writeText(document.getElementById("shareLink").innerText);
   alert("Copied!");
 }
 
+loadAffiliateTags();
 loadWall();
 </script>
 
