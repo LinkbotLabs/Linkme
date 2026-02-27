@@ -17,8 +17,6 @@
   --shadow:0 25px 60px rgba(0,0,0,0.15);
 }
 
-/* ===== BODY ===== */
-
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
@@ -32,7 +30,6 @@ body{
 .topbar{
   background:var(--glass);
   backdrop-filter:blur(30px);
-  -webkit-backdrop-filter:blur(30px);
   border-radius:20px 20px 0 0;
   padding:20px 40px;
   display:flex;
@@ -47,7 +44,6 @@ body{
   font-size:18px;
   font-weight:600;
   letter-spacing:2px;
-  color:var(--text);
 }
 
 .nav-buttons{
@@ -66,14 +62,8 @@ body{
   transition:.2s ease;
 }
 
-.nav-btn:hover{
-  color:var(--text);
-}
-
-.nav-btn.primary{
-  font-weight:600;
-  color:var(--text);
-}
+.nav-btn:hover{ color:var(--text); }
+.nav-btn.primary{ font-weight:600; color:var(--text); }
 
 /* ===== HERO ===== */
 
@@ -82,25 +72,14 @@ body{
   padding:120px 20px 90px;
   background:var(--glass);
   backdrop-filter:blur(30px);
-  -webkit-backdrop-filter:blur(30px);
   border-left:1px solid var(--border);
   border-right:1px solid var(--border);
 }
 
-.hero h1{
-  font-size:56px;
-  font-weight:600;
-  margin:0;
-  letter-spacing:1px;
-}
+.hero h1{ font-size:56px; margin:0; }
+.hero p{ margin-top:14px; color:var(--muted); }
 
-.hero p{
-  margin-top:14px;
-  color:var(--muted);
-  font-size:18px;
-}
-
-/* ===== AFFILIATE BOX ===== */
+/* ===== AFFILIATE POPUP ===== */
 
 #affiliatePopup{
   position:fixed;
@@ -136,7 +115,6 @@ body{
   padding:40px 30px 60px;
   background:var(--glass);
   backdrop-filter:blur(30px);
-  -webkit-backdrop-filter:blur(30px);
   border-radius:0 0 20px 20px;
   border:1px solid var(--border);
   border-top:none;
@@ -163,34 +141,17 @@ body{
   width:100%;
   height:280px;
   object-fit:cover;
-  filter:saturate(0.95);
 }
 
-.card-info{
-  padding:20px;
-}
-
-.card-title{
-  font-weight:600;
-  margin-bottom:10px;
-  font-size:15px;
-}
-
+.card-info{ padding:20px; }
+.card-title{ font-weight:600; margin-bottom:10px; }
 .card-buy{
   display:inline-block;
   margin-top:8px;
-  font-weight:500;
-  color:var(--text);
   text-decoration:none;
   border-bottom:1px solid var(--text);
-  padding-bottom:2px;
-  transition:.2s;
+  color:var(--text);
 }
-
-.card-buy:hover{
-  opacity:.6;
-}
-
 .card-remove-btn{
   margin-top:12px;
   background:#111;
@@ -215,14 +176,12 @@ body{
 
 #shareModalContent{
   background:var(--glass-strong);
-  backdrop-filter:blur(30px);
   padding:35px;
   border-radius:20px;
   text-align:center;
   width:90%;
   max-width:420px;
   box-shadow:var(--shadow);
-  border:1px solid var(--border);
 }
 
 #qrContainer{
@@ -232,31 +191,88 @@ body{
   border-radius:12px;
 }
 
-button{
+/* ===== APPLE STYLE UNLOCK ===== */
+
+#unlockModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+  backdrop-filter:blur(20px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s ease;
+}
+
+#unlockModal.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.unlock-card{
+  background:var(--glass-strong);
+  border-radius:28px;
+  padding:50px 40px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,0.25);
+  transform:scale(.9);
+  opacity:0;
+  transition:all .4s cubic-bezier(.22,1,.36,1);
+}
+
+#unlockModal.active .unlock-card{
+  transform:scale(1);
+  opacity:1;
+}
+
+.unlock-icon{
+  font-size:42px;
+  margin-bottom:20px;
+}
+
+.unlock-btn{
+  width:100%;
+  background:#111;
+  color:#fff;
+  border:none;
+  padding:14px;
+  border-radius:14px;
+  font-weight:500;
+  transition:.2s;
+}
+
+.unlock-btn:hover{ transform:translateY(-2px); }
+.unlock-btn:active{ transform:scale(.97); }
+
+.unlock-later{
+  margin-top:18px;
+  background:none;
+  border:none;
+  color:var(--muted);
   cursor:pointer;
-  font-family:inherit;
 }
 </style>
 </head>
 <body>
 
-<!-- TOP NAV -->
 <div class="topbar">
   <div class="logo">LINKME</div>
   <div class="nav-buttons">
     <button class="nav-btn" onclick="window.location.href='index.html'">Home</button>
     <button class="nav-btn" onclick="toggleAffiliate()">Affiliate IDs</button>
-    <button class="nav-btn primary" id="shareWallBtn">Share Shop</button>
+    <button class="nav-btn primary" id="shareWallBtn">🔒 Share Shop</button>
   </div>
 </div>
 
-<!-- HERO -->
 <section class="hero">
   <h1>LINKME</h1>
   <p>Curated viral finds & must-haves</p>
 </section>
 
-<!-- AFFILIATE POPUP -->
 <div id="affiliatePopup">
   <input type="text" id="amazonAffiliate" placeholder="Amazon tag">
   <input type="text" id="temuAffiliate" placeholder="Temu tag">
@@ -264,10 +280,8 @@ button{
   <button onclick="saveAffiliate()">Save</button>
 </div>
 
-<!-- GRID -->
 <div class="grid" id="wallGrid"></div>
 
-<!-- SHARE MODAL -->
 <div id="shareModal">
   <div id="shareModalContent">
     <h2>Share Your Shop</h2>
@@ -278,8 +292,19 @@ button{
   </div>
 </div>
 
+<!-- UNLOCK MODAL -->
+<div id="unlockModal">
+  <div class="unlock-card">
+    <div class="unlock-icon">🔒</div>
+    <h2>Unlock Sharing</h2>
+    <p>One-time developer coffee.<br>Free forever after.</p>
+    <button class="unlock-btn" onclick="unlockShare()">☕ Buy Developer Coffee</button>
+    <button class="unlock-later" onclick="closeUnlock()">Maybe later</button>
+  </div>
+</div>
+
 <script>
-/* Your original JS remains unchanged */
+/* ===== ORIGINAL JS ===== */
 let isShared=false;
 let currentWall=[];
 let currentTags={};
@@ -360,15 +385,37 @@ function removeItem(idx){
   renderWall();
 }
 
+/* ===== SHARE WITH LOCK ===== */
+
+function unlockShare(){
+  window.open("https://wise.com/pay/me/davids14542","_blank");
+  localStorage.setItem("shareUnlocked","true");
+  closeUnlock();
+  document.getElementById("shareWallBtn").innerHTML="✅ Share Shop";
+}
+
+function closeUnlock(){
+  document.getElementById("unlockModal").classList.remove("active");
+}
+
 document.getElementById("shareWallBtn").addEventListener("click",async()=>{
+
+  if(!localStorage.getItem("shareUnlocked")){
+    document.getElementById("unlockModal").classList.add("active");
+    return;
+  }
+
   if(currentWall.length===0){alert("Add products first");return;}
+
   const res=await fetch("/api/saveWall",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({wall:currentWall,tags:currentTags})
   });
+
   const data=await res.json();
   const url=location.origin+"/mywall.html?id="+data.id;
+
   document.getElementById("shareModal").style.display="flex";
   document.getElementById("shareLinkDisplay").textContent=url;
   document.getElementById("qrcode").innerHTML="";
@@ -376,6 +423,10 @@ document.getElementById("shareWallBtn").addEventListener("click",async()=>{
     text:url,width:200,height:200
   });
 });
+
+if(localStorage.getItem("shareUnlocked")){
+  document.getElementById("shareWallBtn").innerHTML="✅ Share Shop";
+}
 
 document.getElementById("copyBtn").onclick=()=>{
   navigator.clipboard.writeText(document.getElementById("shareLinkDisplay").textContent);
