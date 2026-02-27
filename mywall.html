@@ -199,14 +199,22 @@ details button{
 </head>
 <body>
 
-<div class="hero">
-  <div id="bannerPreview"></div>
-  <div class="avatar"></div>
-  <h1 id="shopName" contenteditable="true">My Linkme Shop</h1>
-  <p id="shopBio" contenteditable="true">Curated viral finds ✨</p>
-  <br>
-  <input type="file" id="bannerUpload" accept="image/*">
-</div>
+<section class="shop-hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="avatar-wrap">
+      <img id="shopAvatar" src="https://via.placeholder.com/100" />
+    </div>
+
+    <div class="hero-text">
+      <h1 id="shopNameDisplay">My Shop</h1>
+      <p id="shopBioDisplay">Curated finds I actually recommend ✨</p>
+
+      <button id="editShopBtn" class="edit-btn">Edit Shop</button>
+    </div>
+  </div>
+</section>
 
 <details id="affiliateBox">
   <summary>⚙ Affiliate Settings</summary>
