@@ -163,6 +163,17 @@ input[type="text"]::placeholder { color: var(--muted); }
   padding: 4px 12px;
   border-radius: 12px;
 }
+.why-like {
+  font-size: 0.85rem;
+  color: #d0d0ff;
+  line-height: 1.45;
+  margin-top: 10px;
+  font-style: italic;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .added {
   background: var(--success) !important;
   color: #000 !important;
@@ -180,7 +191,6 @@ input[type="text"]::placeholder { color: var(--muted); }
   z-index: 100;
 }
 #my-wall-btn:hover { transform: scale(1.08); }
-
 /* CATEGORIES – 2026 futuristic look */
 .categories-container {
   max-width: 1280px;
@@ -204,18 +214,6 @@ input[type="text"]::placeholder { color: var(--muted); }
 }
 @media (min-width: 640px) { .category-grid { column-count: 3; } }
 @media (min-width: 1024px) { .category-grid { column-count: 4; } }
-
-/* Rich snippet in cards */
-.card-body .snippet {
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.35;
-  margin-top: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
 </style>
 </head>
 <body>
@@ -227,7 +225,6 @@ input[type="text"]::placeholder { color: var(--muted); }
     <span style="font-size:0.9rem;">Password for My Wall: <strong>tagshopme</strong></span>
   </div>
 </div>
-
 <div class="search-card">
   <input type="text" id="search-query" placeholder="Search Amazon, Temu, DHgate products (e.g. wireless earbuds)" autofocus />
   <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
@@ -236,10 +233,8 @@ input[type="text"]::placeholder { color: var(--muted); }
   </div>
   <div id="search-results"></div>
 </div>
-
 <!-- 2026 CATEGORIES SECTION – PRE-POPULATED VIA PSE -->
 <div id="categories-container" class="categories-container"></div>
-
 <!-- Quick value props -->
 <div class="features" style="max-width:900px;margin:0 auto 80px;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;">
   <div class="feature-card" style="background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:24px;text-align:center;">
@@ -255,7 +250,6 @@ input[type="text"]::placeholder { color: var(--muted); }
     <p>Auto-adds your tags for commissions on Amazon/Temu/DHgate.</p>
   </div>
 </div>
-
 <button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
 <button id="toggle-theme" style="position:fixed; top:20px; right:20px; background:rgba(0,0,0,0.5); color:var(--accent); border:1px solid var(--accent); padding:8px 14px; border-radius:12px; z-index:10;">
   🌙 / ☀️
@@ -279,10 +273,15 @@ document.getElementById("toggle-theme").addEventListener("click", () => {
 
 // ==================== REUSABLE RICH PRODUCT CARD ====================
 function createProductCard(item) {
-  const thumb = item.pagemap?.cse_image?.[0]?.src || "https://via.placeholder.com/300x300?text=No+Image";
+  const thumb = item.pagemap?.cse_image?.[0]?.src || "";
+  // Filter out bad/no real images
+  if (!thumb || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.includes('default') || thumb.length < 40) {
+    return null; // skip this card
+  }
+
   const title = item.title || "Untitled Product";
   const link = item.link;
-  const snippet = item.snippet || "";
+  const snippet = item.snippet || "Trending favorite – check it out!";
   let price = null;
   if (item.pagemap?.metatags?.[0]) {
     price = item.pagemap.metatags[0]["og:price:amount"] ||
@@ -304,7 +303,7 @@ function createProductCard(item) {
   html += `
     <div class="card-body">
       <div style="font-weight:600; font-size:0.95rem; line-height:1.3; min-height:2.8em; overflow:hidden;">${title}</div>
-      ${snippet ? `<div class="snippet">${snippet.substring(0, 115)}${snippet.length > 115 ? '...' : ''}</div>` : ''}
+      <div class="why-like">Why we love it: ${snippet.substring(0, 140)}${snippet.length > 140 ? '...' : ''}</div>
     </div>`;
 
   const btn = document.createElement("button");
@@ -316,7 +315,9 @@ function createProductCard(item) {
       alert("Already added!");
       return;
     }
-    addToWall(title, thumb, link);
+    // Hybrid: prompt for custom why + fallback to snippet
+    let whyLike = prompt("Why do you like / recommend this? (optional – shows on your wall)", "");
+    addToWall(title, thumb, link, snippet, price, whyLike);
     addedItems.add(title);
     btn.textContent = "Added ✓";
     btn.classList.add("added");
@@ -328,12 +329,12 @@ function createProductCard(item) {
   return card;
 }
 
-// ==================== RENDER GRID (used by search + categories) ====================
+// ==================== RENDER GRID ====================
 function renderProductGrid(items, container) {
   container.innerHTML = "";
   items.forEach(item => {
     const card = createProductCard(item);
-    container.appendChild(card);
+    if (card) container.appendChild(card); // only add if valid image
   });
 }
 
@@ -344,10 +345,8 @@ document.getElementById("search-run").addEventListener("click", async () => {
     searchResults.innerHTML = "<p style='text-align:center;color:#ff6b6b;'>Please enter a search term.</p>";
     return;
   }
-
   currentSearchTitle = `Results for "${query}"`;
   searchResults.innerHTML = "<p style='text-align:center;color:var(--muted);'>Searching across Amazon, Temu & DHgate...</p>";
-
   let allItems = [];
   try {
     for (let page = 0; page < 5; page++) {
@@ -360,25 +359,19 @@ document.getElementById("search-run").addEventListener("click", async () => {
         break;
       }
     }
-
     if (allItems.length === 0) {
       searchResults.innerHTML = "<p style='text-align:center;color:var(--muted);'>No results found. Try a different keyword.</p>";
       return;
     }
-
     searchResults.innerHTML = "";
-    
-    // Header
     const header = document.createElement("h3");
     header.style = "text-align:center;color:var(--accent);margin:30px 0 20px;font-size:1.8rem;";
     header.textContent = currentSearchTitle;
     searchResults.appendChild(header);
-
     const grid = document.createElement("div");
     grid.className = "masonry-grid";
     renderProductGrid(allItems, grid);
     searchResults.appendChild(grid);
-
   } catch (err) {
     searchResults.innerHTML = "<p style='text-align:center;color:#ff6b6b;'>Search error. Please try again.</p>";
   }
@@ -388,17 +381,23 @@ document.getElementById("toggle-search").addEventListener("click", () => {
   searchResults.style.display = searchResults.style.display === "none" ? "block" : "none";
 });
 
-// ==================== CATEGORIES – AUTO-POPULATED VIA PSE ====================
+// ==================== CATEGORIES – 10 VIRAL ONES ====================
 async function loadPopularCategories() {
   const categories = [
-    { id: "beauty", name: "Face Creams & Skincare", query: "face cream skincare anti-aging moisturizer" },
-    { id: "audio", name: "Wireless Earbuds & Headphones", query: "wireless earbuds bluetooth noise cancelling" },
-    { id: "fitness", name: "Yoga Mats & Fitness Gear", query: "yoga mat exercise mat workout" },
-    { id: "kitchen", name: "Coffee Makers & Kitchen Gadgets", query: "coffee maker espresso machine" }
+    { id: "skincare", name: "Face Creams & Skincare 💆‍♀️", query: "face cream skincare anti-aging moisturizer" },
+    { id: "audio", name: "Wireless Earbuds & Headphones 🎧", query: "wireless earbuds bluetooth noise cancelling" },
+    { id: "ledbeauty", name: "Glow Skin & LED Beauty Tech ✨", query: "LED face mask red light therapy electric gua sha" },
+    { id: "viralskincare", name: "Viral Skincare Serums & Masks 🌿", query: "snail mucin peptide serum kojic acid basil mask" },
+    { id: "winterheater", name: "Portable Heaters & Cozy Gadgets 🔥", query: "indoor portable heater mini space heater desk heater" },
+    { id: "viralkitchen", name: "Mini Viral Kitchen Gadgets 🍳", query: "mini waffle maker portable blender cloud bread machine egg bite maker" },
+    { id: "posture", name: "Posture Correctors & Spine Relief 🧘", query: "posture corrector neck hammock back stretcher zero gravity cushion" },
+    { id: "roomlights", name: "Aesthetic Room Lights & Projectors 🌌", query: "galaxy projector sunset lamp aurora projector corner floor lamp" },
+    { id: "pettech", name: "Pet Tech & Cute Accessories 🐾", query: "automatic pet feeder interactive laser toy pet camera cooling mat" },
+    { id: "wellness", name: "Wellness Supplements & Nootropics 🧠", query: "citicoline ashwagandha nitric oxide gummies collagen peptides" }
   ];
 
   const container = document.getElementById("categories-container");
-  container.innerHTML = `<h2 style="text-align:center;color:var(--accent);margin-bottom:50px;font-size:2.4rem;">Popular Categories • Powered by PSE</h2>`;
+  container.innerHTML = `<h2 style="text-align:center;color:var(--accent);margin-bottom:50px;font-size:2.4rem;">Trending 2026 Categories • Powered by PSE</h2>`;
 
   for (const cat of categories) {
     const section = document.createElement("div");
@@ -412,7 +411,6 @@ async function loadPopularCategories() {
     `;
     container.appendChild(section);
 
-    // Pre-populate with 10 rich results (1 page)
     try {
       const res = await fetch(`/api/search?q=${encodeURIComponent(cat.query)}&start=1`);
       const data = await res.json();
@@ -430,20 +428,26 @@ function searchCategory(query, catName) {
   currentSearchTitle = catName;
   document.getElementById("search-query").value = query;
   document.getElementById("search-run").click();
-  // Scroll to results
   setTimeout(() => {
     searchResults.scrollIntoView({ behavior: "smooth" });
   }, 800);
 }
 
-// ==================== ADD TO WALL ====================
-function addToWall(title, thumb, link) {
+// ==================== ENHANCED ADD TO WALL (hybrid: snippet + optional prompt) ====================
+function addToWall(title, thumb, link, snippet = "", price = null, whyLike = "") {
   let wall = JSON.parse(localStorage.getItem("productWall") || "[]");
   if (wall.length >= 50 && !localStorage.getItem("wallUnlocked")) {
     alert("50-item limit reached. Unlock unlimited with password 'tagshopme' on My Wall.");
     return;
   }
-  wall.push({ title, thumb, link });
+  wall.push({ 
+    title, 
+    thumb, 
+    link, 
+    snippet: snippet || "Trending favorite!", 
+    price, 
+    whyLike: whyLike || undefined  // custom overrides snippet on wall
+  });
   localStorage.setItem("productWall", JSON.stringify(wall));
   alert(`Added to your wall: ${title}`);
 }
