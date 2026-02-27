@@ -3,188 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linkme Shop – Editorial Storefront</title>
+<title>Linkme Shop – Editorial</title>
 
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
 
 <style>
 :root{
-  --accent:#ffe169;
-  --glow:#7f5af0;
-  --bg:#0a0a15;
-  --text:#fff;
-  --muted:#aaa;
+  --bg:#f4f4f4;
+  --card-bg:#ffffff;
+  --accent:#ff7a9c;
+  --text:#333;
+  --muted:#777;
+  --soft-border:#e8e8e8;
 }
-
-/* ===== ANIMATED BACKGROUND ===== */
 
 body{
   margin:0;
-  font-family:system-ui,sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
+  background:var(--bg);
   color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-  background:linear-gradient(-45deg,#0a0a15,#14002c,#1c0038,#0f001f);
-  background-size:400% 400%;
-  animation:gradientShift 18s ease infinite;
 }
 
-@keyframes gradientShift{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
+/* ===== HEADER + NAV ===== */
+
+.header{
+  background:#fff;
+  border-bottom:1px solid var(--soft-border);
+  padding:20px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-/* ===== HERO ===== */
-
-.shop-header{
-  text-align:center;
-  padding:100px 20px 70px;
-}
-
-.creator-name{
-  font-size:3.2rem;
-  font-weight:800;
+.logo{
+  font-size:28px;
+  font-weight:700;
   color:var(--accent);
-  text-shadow:0 0 40px rgba(255,225,105,0.4);
 }
 
-.creator-tagline{
-  margin-top:14px;
-  font-size:1.3rem;
+.nav-tabs{
+  display:flex;
+  gap:30px;
+}
+
+.nav-tabs span{
+  cursor:pointer;
+  font-weight:500;
   color:var(--muted);
+  transition:.3s;
+}
+
+.nav-tabs span:hover{
+  color:var(--accent);
 }
 
 /* ===== GRID ===== */
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:40px;
-  max-width:1500px;
-  margin:0 auto 120px;
-  padding:0 40px;
+  column-count:3;
+  column-gap:30px;
+  padding:50px 60px;
 }
+
+@media(max-width:1100px){ .grid{ column-count:2; } }
+@media(max-width:700px){ .grid{ column-count:1; } }
 
 /* ===== CARD ===== */
 
 .card{
-  position:relative;
+  background:var(--card-bg);
+  margin-bottom:30px;
+  display:inline-block;
+  width:100%;
+  border-radius:10px;
   overflow:hidden;
-  border-radius:20px;
-  background:#111;
-  cursor:pointer;
-  transform:translateY(40px);
-  opacity:0;
-  animation:fadeUp .8s forwards;
+  box-shadow:0 5px 20px rgba(0,0,0,0.05);
+  transition:.3s;
 }
 
-.card:nth-child(odd){ animation-delay:.1s }
-.card:nth-child(even){ animation-delay:.2s }
-
-@keyframes fadeUp{
-  to{ transform:translateY(0); opacity:1 }
+.card:hover{
+  transform:translateY(-5px);
 }
 
 .card img{
   width:100%;
-  height:420px;
-  object-fit:cover;
-  transition:.6s;
+  display:block;
 }
 
-.card:hover img{
-  transform:scale(1.08);
-}
-
-.card-overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.8));
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:30px;
+.card-content{
+  padding:20px;
 }
 
 .card-title{
-  font-size:1.6rem;
-  font-weight:700;
-  color:#fff;
-  margin-bottom:10px;
+  font-size:18px;
+  font-weight:600;
+  margin-bottom:8px;
 }
 
 .card-why{
-  font-size:1rem;
-  color:#ddd;
-  margin-bottom:18px;
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:15px;
 }
 
 .card-actions{
   display:flex;
-  gap:12px;
+  gap:10px;
 }
 
 .card-shop-link{
   background:var(--accent);
-  color:#000;
-  padding:10px 20px;
-  border-radius:12px;
-  font-weight:700;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:5px;
   text-decoration:none;
+  font-size:13px;
 }
 
 .card-share-single{
-  border:1px solid #fff;
-  background:transparent;
-  color:#fff;
-  padding:10px 20px;
-  border-radius:12px;
+  border:1px solid var(--accent);
+  background:#fff;
+  color:var(--accent);
+  padding:8px 14px;
+  border-radius:5px;
+  font-size:13px;
   cursor:pointer;
 }
 
-.platform-badge{
-  position:absolute;
-  top:16px;
-  left:16px;
-  background:rgba(0,0,0,0.6);
-  padding:6px 14px;
-  border-radius:20px;
-  font-size:.8rem;
-  font-weight:700;
-}
-
-/* Buttons */
-
-#shareWallBtn,#affiliateToggle,#homeBtn{
-  position:fixed;
-  bottom:25px;
-  border:none;
-  border-radius:50px;
-  padding:14px 28px;
-  font-weight:800;
-  cursor:pointer;
-}
-
-#shareWallBtn{ right:200px; background:var(--accent); color:#000; }
-#affiliateToggle{ right:25px; background:#7f5af0; color:#fff; }
-#homeBtn{ left:25px; background:#000; color:#fff; border:1px solid #444; }
+/* ===== SHARE MODAL ===== */
 
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.85);
+  background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
   align-items:center;
-  z-index:2000;
 }
 
 .modal-box{
-  background:#111;
-  border:1px solid var(--accent);
+  background:#fff;
   padding:40px;
-  border-radius:20px;
+  border-radius:10px;
   width:90%;
   max-width:500px;
 }
@@ -192,25 +152,24 @@ body{
 </head>
 <body>
 
-<header class="shop-header">
-  <div class="creator-name" id="storeNameDisplay">My Linkme Shop</div>
-  <div class="creator-tagline" id="storeTaglineDisplay">
-    Curated viral finds & must-haves
+<div class="header">
+  <div class="logo" id="storeNameDisplay">My Linkme Shop</div>
+  <div class="nav-tabs">
+    <span>Home</span>
+    <span>Fashion</span>
+    <span>Beauty</span>
+    <span>Travel</span>
+    <span>Shop</span>
   </div>
-</header>
+</div>
 
 <div class="grid" id="wallGrid"></div>
-
-<button id="shareWallBtn">Share Shop</button>
-<button id="affiliateToggle">Affiliate Tags</button>
-<button id="homeBtn" onclick="window.location.href='index.html'">Home</button>
 
 <div id="singleShareModal" class="modal">
   <div class="modal-box">
     <h2>Share Product</h2>
     <div id="singleQrcode"></div>
     <div id="singleShareLinkDisplay" style="margin:20px 0;"></div>
-    <button id="singleCopyBtn">Copy Link</button>
     <button onclick="document.getElementById('singleShareModal').style.display='none'">Close</button>
   </div>
 </div>
@@ -220,66 +179,34 @@ let currentWall=[];
 let currentTags={};
 let isShared=false;
 
-/* LOAD */
-
 async function loadWall(){
-  const params=new URLSearchParams(location.search);
-  const id=params.get("id");
-
-  if(id){
-    const res=await fetch(`/api/getWall?id=${id}`);
-    if(res.ok){
-      const data=await res.json();
-      currentWall=data.wall||[];
-      currentTags=data.tags||{};
-      isShared=true;
-      return;
-    }
-  }
-
   currentWall=JSON.parse(localStorage.getItem("productWall")||"[]");
   currentTags=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
 }
 
-/* AFFILIATE */
-
 function buildAffiliateLink(link){
   if(!link) return "#";
   let url=new URL(link);
-
   if(url.hostname.includes("amazon") && currentTags.amazon)
     url.searchParams.set("tag",currentTags.amazon);
-
-  if(url.hostname.includes("temu") && currentTags.temu)
-    url.searchParams.set("aff_id",currentTags.temu);
-
-  if(url.hostname.includes("dhgate") && currentTags.dhgate)
-    url.searchParams.set("affid",currentTags.dhgate);
-
   return url.toString();
 }
-
-/* RENDER */
 
 function renderWall(){
   const grid=document.getElementById("wallGrid");
   grid.innerHTML="";
-
   currentWall.forEach((item,idx)=>{
+    const aff=buildAffiliateLink(item.link);
     const card=document.createElement("div");
     card.className="card";
-
-    const aff=buildAffiliateLink(item.link);
-
     card.innerHTML=`
-      <img src="${item.thumb||'https://via.placeholder.com/800x420'}">
-      <div class="platform-badge">${item.platform||'Store'}</div>
-      <div class="card-overlay">
+      <img src="${item.thumb||'https://via.placeholder.com/600'}">
+      <div class="card-content">
         <div class="card-title">${item.customTitle||item.title}</div>
         <div class="card-why">${item.whyLike||item.snippet||''}</div>
         <div class="card-actions">
           <a href="${aff}" target="_blank" class="card-shop-link">Shop</a>
-          ${!isShared?`<button class="card-share-single" onclick="shareSingle(${idx})">Share</button>`:''}
+          <button class="card-share-single" onclick="shareSingle(${idx})">Share</button>
         </div>
       </div>
     `;
@@ -287,18 +214,14 @@ function renderWall(){
   });
 }
 
-/* SHARE */
-
 function shareSingle(idx){
   const item=currentWall[idx];
   const link=buildAffiliateLink(item.link);
-
   document.getElementById("singleShareLinkDisplay").textContent=link;
   document.getElementById("singleQrcode").innerHTML="";
   new QRCode(document.getElementById("singleQrcode"),{
     text:link,width:200,height:200
   });
-
   document.getElementById("singleShareModal").style.display="flex";
 }
 
