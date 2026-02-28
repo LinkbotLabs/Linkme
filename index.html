@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Linkme – Free Affiliate Storefront Builder</title>
+<title>Linkme – Curated Affiliate Storefront</title>
 
 <style>
 :root{
-  --bg:#f5f5f7;
+  --bg:#f8f8f8;
   --card:#ffffff;
-  --text:#1d1d1f;
+  --text:#111;
   --muted:#6e6e73;
-  --border:#e5e5e7;
+  --border:#e8e8ed;
   --accent:#000;
   --success:#34c759;
 }
@@ -23,39 +23,43 @@ body{
   color:var(--text);
 }
 
-/* HERO */
 .hero{
   text-align:center;
-  padding:80px 20px 40px;
+  padding:90px 20px 50px;
 }
 .hero h1{
   font-size:3rem;
-  margin-bottom:10px;
+  font-weight:700;
 }
 .hero p{
   color:var(--muted);
-  font-size:1.2rem;
+  font-size:1.1rem;
+  max-width:600px;
+  margin:auto;
 }
 
-/* CATEGORY */
-.category{
-  max-width:1200px;
-  margin:60px auto;
-  padding:0 20px;
-}
-.category h2{
-  font-size:2rem;
-  margin-bottom:24px;
+.section{
+  max-width:1300px;
+  margin:70px auto;
+  padding:0 30px;
 }
 
-/* GRID */
+.section h2{
+  font-size:1.8rem;
+  margin-bottom:30px;
+  letter-spacing:-0.3px;
+}
+
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:24px;
+  gap:28px;
 }
 
-/* CARD */
+@media (min-width:0px){ .grid{grid-template-columns:1fr;} }
+@media (min-width:640px){ .grid{grid-template-columns:repeat(2,1fr);} }
+@media (min-width:1024px){ .grid{grid-template-columns:repeat(3,1fr);} }
+@media (min-width:1280px){ .grid{grid-template-columns:repeat(4,1fr);} }
+
 .card{
   background:var(--card);
   border:1px solid var(--border);
@@ -64,8 +68,8 @@ body{
   transition:.3s;
 }
 .card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  transform:translateY(-6px);
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
 }
 .card img{
   width:100%;
@@ -73,41 +77,42 @@ body{
   object-fit:cover;
 }
 .card-body{
-  padding:16px;
+  padding:18px;
+}
+.platform{
+  font-size:.75rem;
+  color:var(--muted);
+  margin-bottom:6px;
 }
 .title{
   font-weight:600;
   font-size:1rem;
-  margin-bottom:6px;
+  margin-bottom:8px;
 }
-.snippet{
-  font-size:.9rem;
-  color:var(--muted);
+.price{
+  font-weight:700;
   margin-bottom:12px;
-  min-height:40px;
 }
-
-/* BUTTONS */
-.button-row{
+.buttons{
   display:flex;
   gap:10px;
 }
-.visit-btn{
+.visit{
   flex:1;
   text-align:center;
   padding:10px;
   border-radius:10px;
-  background:#eaeaea;
+  background:#f2f2f2;
   text-decoration:none;
   color:#000;
   font-weight:600;
 }
-.add-btn{
+.add{
   flex:1;
   padding:10px;
   border:none;
   border-radius:10px;
-  background:var(--accent);
+  background:black;
   color:white;
   font-weight:600;
   cursor:pointer;
@@ -116,11 +121,10 @@ body{
   background:var(--success)!important;
 }
 
-/* MY WALL BUTTON */
-#myWallBtn{
+#wallBtn{
   position:fixed;
-  bottom:24px;
-  right:24px;
+  bottom:25px;
+  right:25px;
   background:black;
   color:white;
   padding:16px 28px;
@@ -128,7 +132,6 @@ body{
   font-weight:700;
   border:none;
   cursor:pointer;
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 </style>
 </head>
@@ -137,108 +140,92 @@ body{
 
 <div class="hero">
   <h1>Linkme</h1>
-  <p>Instant affiliate storefronts. Amazon • Temu • DHgate</p>
+  <p>Carefully selected products worth sharing. Build your own curated storefront.</p>
 </div>
 
-<div id="categoriesContainer"></div>
+<div id="sections"></div>
 
-<button id="myWallBtn" onclick="location.href='mywall.html'">
+<button id="wallBtn" onclick="location.href='mywall.html'">
 → My Shop (0)
 </button>
 
 <script>
-// ====================== GROUPS ======================
-const allGroups = [
-  { heading: "Hot Today 🔥", query: "tiktok viral products 2026" },
-  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026" },
-  { heading: "Glow Up Factory ✨", queries: ["LED face mask red light therapy", "snail mucin peptide serum", "collagen peptide sheet mask"] },
-  { heading: "Cozy Girl Winter Haven 🔥", queries: ["indoor portable heater mini", "galaxy projector sunset lamp", "white noise machine sleep"] },
-  { heading: "TikTok Kitchen Chaos 🍳", queries: ["mini waffle maker viral", "portable usb blender", "egg bite maker cloud bread"] },
-  { heading: "Soft Life Wellness 🧘‍♀️", queries: ["posture corrector neck hammock", "back stretcher spine decompressor", "ashwagandha gummies nootropic"] },
-  { heading: "Aesthetic Tech Setup 📱", queries: ["wireless earbuds noise cancelling", "solar power bank portable", "magnetic phone car mount"] },
-  { heading: "Pet Bestie Club 🐾", queries: ["automatic pet feeder camera", "interactive laser toy cat", "jellycat plush keychain"] },
-  { heading: "Strong Girl Era 🏋️", queries: ["rucking vest weighted", "pilates board home workout"] },
-  { heading: "Travel Main Character ✈️", queries: ["anti-theft crossbody bag", "rfid blocking wallet", "hanging toiletry bag"] }
+const groups=[
+  {heading:"Hot Today 🔥",query:"tiktok viral products 2026"},
+  {heading:"Glow Up Essentials ✨",queries:["LED face mask red light therapy","snail mucin serum","collagen sheet mask"]},
+  {heading:"Aesthetic Tech 📱",queries:["wireless earbuds noise cancelling","solar power bank","magnetic car mount"]},
+  {heading:"Travel Smart ✈️",queries:["anti theft crossbody bag","rfid wallet","hanging toiletry bag"]}
 ];
 
-function getDailyGroups() {
-  const day = new Date().getDate();
-  const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]];
-  for (let i = 0; i < 8; i++) {
-    selected.push(allGroups[(start + i + 2) % allGroups.length]);
-  }
-  return selected;
-}
-
-// ====================== HELPERS ======================
-function updateWallCount(){
-  const wall = JSON.parse(localStorage.getItem("productWall") || "[]");
-  document.getElementById("myWallBtn").textContent =
-    `→ My Shop (${wall.length})`;
+function updateCount(){
+  const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
+  document.getElementById("wallBtn").textContent=`→ My Shop (${wall.length})`;
 }
 
 function addToWall(product){
-  let wall = JSON.parse(localStorage.getItem("productWall") || "[]");
-  if(wall.length >= 50 && !localStorage.getItem("wallUnlocked")){
-    alert("50 item limit. Unlock inside My Shop with password: linkme");
+  let wall=JSON.parse(localStorage.getItem("productWall")||"[]");
+  if(wall.some(p=>p.link===product.link)){
+    alert("Already added.");
     return;
   }
   wall.push(product);
-  localStorage.setItem("productWall", JSON.stringify(wall));
-  updateWallCount();
+  localStorage.setItem("productWall",JSON.stringify(wall));
+  updateCount();
 }
 
-// ====================== CARD ======================
+function getPlatform(link){
+  if(link.includes("amazon")) return "Amazon";
+  if(link.includes("temu")) return "Temu";
+  if(link.includes("dhgate")) return "DHgate";
+  return "Store";
+}
+
 function createCard(item){
-  const thumb = item.pagemap?.cse_image?.[0]?.src;
-  if(!thumb) return null;
+  const img=item.pagemap?.cse_image?.[0]?.src;
+  if(!img) return null;
 
-  const card = document.createElement("div");
+  const price=item.pagemap?.metatags?.[0]?.["og:price:amount"]||"";
+  const platform=getPlatform(item.link);
+
+  const card=document.createElement("div");
   card.className="card";
-
   card.innerHTML=`
-    <img src="${thumb}">
+    <img src="${img}">
     <div class="card-body">
+      <div class="platform">${platform}</div>
       <div class="title">${item.title}</div>
-      <div class="snippet">${item.snippet || ""}</div>
-      <div class="button-row">
-        <a class="visit-btn" href="${item.link}" target="_blank">Visit Store</a>
-        <button class="add-btn">Add</button>
+      ${price?`<div class="price">$${price}</div>`:""}
+      <div class="buttons">
+        <a href="${item.link}" target="_blank" class="visit">Visit</a>
+        <button class="add">Add</button>
       </div>
     </div>
   `;
 
-  card.querySelector(".add-btn").onclick=()=>{
-    addToWall({
-      title:item.title,
-      thumb,
-      link:item.link,
-      snippet:item.snippet
-    });
-    const btn=card.querySelector(".add-btn");
+  card.querySelector(".add").onclick=()=>{
+    addToWall({title:item.title,thumb:img,link:item.link});
+    const btn=card.querySelector(".add");
     btn.textContent="Added ✓";
-    btn.disabled=true;
     btn.classList.add("added");
+    btn.disabled=true;
   };
 
   return card;
 }
 
-// ====================== RENDER GROUP ======================
-async function renderGroup(group){
-  const container=document.getElementById("categoriesContainer");
+async function render(){
+  updateCount();
+  const container=document.getElementById("sections");
 
-  const section=document.createElement("div");
-  section.className="category";
-  section.innerHTML=`<h2>${group.heading}</h2><div class="grid"></div>`;
-  container.appendChild(section);
+  for(const group of groups){
+    const section=document.createElement("div");
+    section.className="section";
+    section.innerHTML=`<h2>${group.heading}</h2><div class="grid"></div>`;
+    container.appendChild(section);
 
-  const grid=section.querySelector(".grid");
+    const grid=section.querySelector(".grid");
+    const query=group.query||group.queries[Math.floor(Math.random()*group.queries.length)];
 
-  const query = group.query || group.queries[Math.floor(Math.random()*group.queries.length)];
-
-  try{
     const res=await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
     const data=await res.json();
 
@@ -246,20 +233,10 @@ async function renderGroup(group){
       const card=createCard(item);
       if(card) grid.appendChild(card);
     });
-  }catch(e){
-    grid.innerHTML="<p>Loading failed</p>";
   }
 }
 
-// ====================== INIT ======================
-window.onload=async()=>{
-  updateWallCount();
-  const groups=getDailyGroups();
-  for(const g of groups){
-    await renderGroup(g);
-  }
-};
+window.onload=render;
 </script>
-
 </body>
 </html>
