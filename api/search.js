@@ -1,8 +1,18 @@
+const cache = {};
+
 export default async function handler(req, res) {
   const { q, start = 1 } = req.query;
 
   if (!q) {
     return res.status(400).json({ error: "Missing query parameter" });
+  }
+
+  const ONE_DAY = 1000 * 60 * 60 * 24;
+  const cacheKey = `${q}_${start}`;
+
+  // ✅ If cached and less than 24h old → return cached
+  if (cache[cacheKey] && (Date.now() - cache[cacheKey].time < ONE_DAY)) {
+    return res.status(200).json(cache[cacheKey].data);
   }
 
   try {
@@ -18,9 +28,17 @@ export default async function handler(req, res) {
       });
     }
 
-    return res.status(200).json({
+    const formatted = {
       items: data.items || []
-    });
+    };
+
+    // ✅ Store in cache
+    cache[cacheKey] = {
+      data: formatted,
+      time: Date.now()
+    };
+
+    return res.status(200).json(formatted);
 
   } catch (error) {
     return res.status(500).json({
