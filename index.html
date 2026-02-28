@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Linkme – Curated Affiliate Storefront</title>
+<title>Linkme – Discover Viral Finds</title>
 
 <style>
 :root{
-  --bg:#f8f8f8;
+  --bg:#fafafa;
   --card:#ffffff;
   --text:#111;
   --muted:#6e6e73;
-  --border:#e8e8ed;
+  --border:#ececec;
   --accent:#000;
   --success:#34c759;
 }
@@ -23,93 +23,152 @@ body{
   color:var(--text);
 }
 
+/* ================= HERO ================= */
+
 .hero{
   text-align:center;
-  padding:90px 20px 50px;
+  padding:100px 20px 70px;
+  background:linear-gradient(to bottom,#ffffff,#f5f5f7);
 }
+
 .hero h1{
-  font-size:3rem;
-  font-weight:700;
+  font-size:3.2rem;
+  font-weight:800;
+  letter-spacing:-1px;
+  margin-bottom:20px;
 }
+
 .hero p{
   color:var(--muted);
-  font-size:1.1rem;
-  max-width:600px;
+  font-size:1.2rem;
+  max-width:650px;
   margin:auto;
+  margin-bottom:35px;
 }
+
+.hero-cta{
+  display:inline-block;
+  padding:14px 28px;
+  background:black;
+  color:white;
+  border-radius:12px;
+  font-weight:600;
+  text-decoration:none;
+  transition:.2s;
+}
+.hero-cta:hover{
+  transform:translateY(-3px);
+}
+
+/* ================= SECTIONS ================= */
 
 .section{
   max-width:1300px;
-  margin:70px auto;
+  margin:80px auto;
   padding:0 30px;
 }
 
 .section h2{
-  font-size:1.8rem;
-  margin-bottom:30px;
-  letter-spacing:-0.3px;
+  font-size:1.9rem;
+  margin-bottom:8px;
+  letter-spacing:-0.4px;
 }
+
+.section-sub{
+  color:var(--muted);
+  margin-bottom:35px;
+}
+
+/* ================= GRID ================= */
 
 .grid{
   display:grid;
-  gap:28px;
+  gap:30px;
 }
 
 @media (min-width:0px){ .grid{grid-template-columns:1fr;} }
 @media (min-width:640px){ .grid{grid-template-columns:repeat(2,1fr);} }
 @media (min-width:1024px){ .grid{grid-template-columns:repeat(3,1fr);} }
-@media (min-width:1280px){ .grid{grid-template-columns:repeat(4,1fr);} }
+@media (min-width:1400px){ .grid{grid-template-columns:repeat(4,1fr);} }
+
+/* ================= CARD ================= */
 
 .card{
   background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
+  border-radius:20px;
   overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,0.04);
   transition:.3s;
+  position:relative;
 }
+
 .card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+  transform:translateY(-8px);
+  box-shadow:0 18px 45px rgba(0,0,0,0.08);
 }
+
 .card img{
   width:100%;
   aspect-ratio:1/1;
   object-fit:cover;
 }
+
 .card-body{
-  padding:18px;
+  padding:20px;
 }
-.platform{
-  font-size:.75rem;
-  color:var(--muted);
-  margin-bottom:6px;
-}
-.title{
-  font-weight:600;
-  font-size:1rem;
-  margin-bottom:8px;
-}
-.price{
+
+.badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  background:black;
+  color:white;
+  font-size:.7rem;
   font-weight:700;
-  margin-bottom:12px;
+  padding:6px 10px;
+  border-radius:10px;
 }
+
+.platform{
+  display:inline-block;
+  font-size:.75rem;
+  background:#f3f3f3;
+  padding:6px 10px;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+.title{
+  font-weight:700;
+  font-size:1rem;
+  margin-bottom:10px;
+  line-height:1.4;
+}
+
+.price{
+  font-weight:800;
+  margin-bottom:16px;
+}
+
 .buttons{
   display:flex;
   gap:10px;
 }
+
 .visit{
   flex:1;
   text-align:center;
-  padding:10px;
+  padding:11px;
   border-radius:10px;
   background:#f2f2f2;
   text-decoration:none;
   color:#000;
   font-weight:600;
 }
+
 .add{
   flex:1;
-  padding:10px;
+  padding:11px;
   border:none;
   border-radius:10px;
   background:black;
@@ -117,9 +176,12 @@ body{
   font-weight:600;
   cursor:pointer;
 }
+
 .added{
   background:var(--success)!important;
 }
+
+/* ================= FLOAT BUTTON ================= */
 
 #wallBtn{
   position:fixed;
@@ -132,6 +194,7 @@ body{
   font-weight:700;
   border:none;
   cursor:pointer;
+  box-shadow:0 8px 25px rgba(0,0,0,0.2);
 }
 </style>
 </head>
@@ -139,27 +202,29 @@ body{
 <body>
 
 <div class="hero">
-  <h1>Linkme</h1>
-  <p>Carefully selected products worth sharing. Build your own curated storefront.</p>
+  <h1>Discover Viral Internet Finds</h1>
+  <p>Curated Amazon, Temu & DHgate products updated daily. No clutter. Just what’s trending.</p>
+  <a href="#sections" class="hero-cta">Explore Today’s Drops</a>
 </div>
 
 <div id="sections"></div>
 
 <button id="wallBtn" onclick="location.href='mywall.html'">
-→ My Shop (0)
+→ My Curated Shop (0)
 </button>
 
 <script>
+
 const groups=[
-  {heading:"Hot Today 🔥",query:"tiktok viral products 2026"},
-  {heading:"Glow Up Essentials ✨",queries:["LED face mask red light therapy","snail mucin serum","collagen sheet mask"]},
-  {heading:"Aesthetic Tech 📱",queries:["wireless earbuds noise cancelling","solar power bank","magnetic car mount"]},
-  {heading:"Travel Smart ✈️",queries:["anti theft crossbody bag","rfid wallet","hanging toiletry bag"]}
+  {heading:"Hot Today 🔥",sub:"What’s blowing up right now.",query:"tiktok viral products 2026",hot:true},
+  {heading:"Glow Up Essentials ✨",sub:"Self-care products people swear by.",queries:["LED face mask red light therapy","snail mucin serum","collagen sheet mask"]},
+  {heading:"Aesthetic Tech 📱",sub:"Tech that looks good and works better.",queries:["wireless earbuds noise cancelling","solar power bank","magnetic car mount"]},
+  {heading:"Travel Smart ✈️",sub:"Essentials that make travel effortless.",queries:["anti theft crossbody bag","rfid wallet","hanging toiletry bag"]}
 ];
 
 function updateCount(){
   const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
-  document.getElementById("wallBtn").textContent=`→ My Shop (${wall.length})`;
+  document.getElementById("wallBtn").textContent=`→ My Curated Shop (${wall.length})`;
 }
 
 function addToWall(product){
@@ -180,7 +245,7 @@ function getPlatform(link){
   return "Store";
 }
 
-function createCard(item){
+function createCard(item,hot=false,index=0){
   const img=item.pagemap?.cse_image?.[0]?.src;
   if(!img) return null;
 
@@ -189,15 +254,17 @@ function createCard(item){
 
   const card=document.createElement("div");
   card.className="card";
+
   card.innerHTML=`
+    ${hot && index<2?`<div class="badge">🔥 Trending</div>`:""}
     <img src="${img}">
     <div class="card-body">
       <div class="platform">${platform}</div>
       <div class="title">${item.title}</div>
       ${price?`<div class="price">$${price}</div>`:""}
       <div class="buttons">
-        <a href="${item.link}" target="_blank" class="visit">Visit</a>
-        <button class="add">Add</button>
+        <a href="${item.link}" target="_blank" class="visit">Visit Store</a>
+        <button class="add">Add to Shop</button>
       </div>
     </div>
   `;
@@ -220,7 +287,11 @@ async function render(){
   for(const group of groups){
     const section=document.createElement("div");
     section.className="section";
-    section.innerHTML=`<h2>${group.heading}</h2><div class="grid"></div>`;
+    section.innerHTML=`
+      <h2>${group.heading}</h2>
+      <div class="section-sub">${group.sub}</div>
+      <div class="grid"></div>
+    `;
     container.appendChild(section);
 
     const grid=section.querySelector(".grid");
@@ -229,8 +300,8 @@ async function render(){
     const res=await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
     const data=await res.json();
 
-    data.items?.slice(0,8).forEach(item=>{
-      const card=createCard(item);
+    data.items?.slice(0,8).forEach((item,i)=>{
+      const card=createCard(item,group.hot,i);
       if(card) grid.appendChild(card);
     });
   }
