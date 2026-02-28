@@ -12,6 +12,8 @@
   --text:#1d1d1f;
   --muted:#6e6e73;
   --border:#e5e5e7;
+  --accent:#000;
+  --success:#34c759;
   --danger:#ff3b30;
 }
 
@@ -24,17 +26,55 @@ body{
 
 .header{
   text-align:center;
-  padding:60px 20px 30px;
+  padding:60px 20px 20px;
 }
 
 .header h1{
   font-size:2.5rem;
+  margin-bottom:10px;
+}
+
+.sub{
+  color:var(--muted);
+  font-size:.95rem;
 }
 
 .container{
   max-width:1100px;
   margin:auto;
-  padding:20px 20px 100px;
+  padding:20px 20px 120px;
+}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+input{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+
+button{
+  padding:10px 16px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.primary{
+  background:var(--accent);
+  color:white;
+}
+
+.success{
+  background:var(--success);
+  color:white;
 }
 
 .grid{
@@ -79,22 +119,17 @@ body{
 
 .actions{
   display:flex;
-  justify-content:space-between;
   gap:10px;
 }
 
-a{
-  text-decoration:none;
-  flex:1;
-}
-
 .visit-btn{
+  flex:1;
   background:black;
   color:white;
   padding:10px;
   border-radius:10px;
   text-align:center;
-  font-weight:600;
+  text-decoration:none;
 }
 
 .remove-btn{
@@ -103,24 +138,6 @@ a{
   border:none;
   border-radius:10px;
   padding:10px;
-  cursor:pointer;
-}
-
-.unlock{
-  text-align:center;
-  margin-bottom:30px;
-}
-
-input{
-  padding:8px;
-  border-radius:8px;
-  border:1px solid var(--border);
-}
-button{
-  padding:8px 14px;
-  border-radius:8px;
-  border:none;
-  cursor:pointer;
 }
 </style>
 </head>
@@ -129,12 +146,19 @@ button{
 
 <div class="header">
   <h1>My Shop</h1>
+  <div class="sub">Set your affiliate ID & share your storefront</div>
 </div>
 
 <div class="container">
 
-<div class="unlock">
-  <input type="password" id="unlockInput" placeholder="Enter unlock password">
+<div class="controls">
+  <input type="text" id="affiliateInput" placeholder="Enter your affiliate ID">
+  <button class="primary" onclick="saveAffiliate()">Save</button>
+  <button onclick="copyShareLink()">Copy Share Link</button>
+</div>
+
+<div class="controls">
+  <input type="password" id="unlockInput" placeholder="Unlock password">
   <button onclick="unlockWall()">Unlock</button>
 </div>
 
@@ -143,11 +167,34 @@ button{
 </div>
 
 <script>
+let affiliateId = localStorage.getItem("affiliateId") || "";
+document.getElementById("affiliateInput").value = affiliateId;
+
+function saveAffiliate(){
+  affiliateId = document.getElementById("affiliateInput").value.trim();
+  localStorage.setItem("affiliateId", affiliateId);
+  alert("Affiliate ID saved.");
+}
+
+function appendAffiliate(link){
+  if(!affiliateId) return link;
+  const url = new URL(link);
+  url.searchParams.set("ref", affiliateId);
+  return url.toString();
+}
+
+function copyShareLink(){
+  const base = window.location.origin + window.location.pathname;
+  const shareUrl = affiliateId ? `${base}?ref=${affiliateId}` : base;
+  navigator.clipboard.writeText(shareUrl);
+  alert("Share link copied!");
+}
+
 function unlockWall(){
   const val=document.getElementById("unlockInput").value.trim();
   if(val==="linkme"){
     localStorage.setItem("wallUnlocked","true");
-    alert("Unlocked unlimited items.");
+    alert("Unlimited items unlocked.");
   }else{
     alert("Wrong password.");
   }
@@ -156,7 +203,6 @@ function unlockWall(){
 function renderWall(){
   const grid=document.getElementById("wallGrid");
   grid.innerHTML="";
-
   let wall=JSON.parse(localStorage.getItem("productWall")||"[]");
 
   if(wall.length===0){
@@ -168,15 +214,15 @@ function renderWall(){
     const card=document.createElement("div");
     card.className="card";
 
+    const finalLink = appendAffiliate(item.link);
+
     card.innerHTML=`
       <img src="${item.thumb}">
       <div class="card-body">
         <div class="title">${item.title}</div>
         <div class="snippet">${item.snippet || ""}</div>
         <div class="actions">
-          <a href="${item.link}" target="_blank">
-            <div class="visit-btn">Visit</div>
-          </a>
+          <a href="${finalLink}" target="_blank" class="visit-btn">Visit</a>
           <button class="remove-btn">X</button>
         </div>
       </div>
@@ -192,7 +238,14 @@ function renderWall(){
   });
 }
 
+// Auto-detect shared affiliate
+const params = new URLSearchParams(window.location.search);
+if(params.get("ref")){
+  affiliateId = params.get("ref");
+}
+
 window.onload=renderWall;
 </script>
+
 </body>
 </html>
