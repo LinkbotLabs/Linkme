@@ -281,44 +281,7 @@ function getDailyGroups() {
 }
 
 // ====================== RICH PRODUCT CARD ======================
-function createProductCard(item) {
-  const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if (!thumb || thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.length < 50) return null;
 
-  const title = item.title || "Untitled";
-  const link = item.link;
-  const snippet = item.snippet || "Trending favorite!";
-  let price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
-  const platform = getPlatform(link);
-
-  const isViral = snippet.toLowerCase().includes('viral') || title.toLowerCase().includes('viral') || title.toLowerCase().includes('tiktok');
-
-  const card = document.createElement("div");
-  card.className = "product-card";
-
-  let html = `<img src="${thumb}" alt="${title}" loading="lazy">`;
-  if (price) html += `<div class="price-badge">$${price}</div>`;
-  html += `<div class="platform-badge">${platform}</div>`;
-  if (isViral) html += `<div class="viral-badge">FYP Viral 🔥</div>`;
-
-  html += `
-    <div class="card-content">
-      <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0, 100)}${snippet.length > 100 ? '...' : ''}</div>
-      <button class="add-btn">Add to Wall</button>
-    </div>`;
-
-  card.innerHTML = html;
-
-  card.querySelector(".add-btn").onclick = () => {
-    let customWhy = prompt("Why do you like this? (optional – shows on your wall)", "");
-    addToWall(title, thumb, link, snippet, price, customWhy);
-    card.querySelector(".add-btn").textContent = "Added ✓";
-    card.querySelector(".add-btn").disabled = true;
-  };
-
-  return card;
-}
 
 // ====================== RENDER GROUP ======================
 async function renderGroup(group, container) {
