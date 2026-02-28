@@ -37,11 +37,25 @@ export default async function handler(req, res) {
       return res.status(200).json({ items: [] });
     }
 
+    // ✅ Clean + Normalize Items
+    const formattedItems = data.items.map(item => {
+      const image =
+        item.pagemap?.cse_thumbnail?.[0]?.src ||
+        item.pagemap?.cse_image?.[0]?.src ||
+        "https://via.placeholder.com/600x600?text=LinkMe+Pick";
+
+      return {
+        title: item.title,
+        link: item.link,
+        image
+      };
+    });
+
     const formatted = {
-      items: data.items
+      items: formattedItems
     };
 
-    // ✅ Only cache valid results
+    // ✅ Cache valid formatted results
     cache[cacheKey] = {
       data: formatted,
       time: Date.now()
