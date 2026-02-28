@@ -1,172 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>My Curated Shop</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Storefront</title>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
 <style>
 :root{
-  --bg:#f8f8f8;
-  --card:#fff;
-  --text:#111;
-  --muted:#6e6e73;
-  --border:#e8e8ed;
-  --accent:#000;
-  --danger:#ff3b30;
+  --bg:#ffffff;
+  --text:#111111;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --card:#ffffff;
+  --shadow:0 6px 18px rgba(0,0,0,0.06);
+  --primary:#2f2f2f;
+  --primary-hover:#1f1f1f;
 }
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  background:var(--bg);
-  color:var(--text);
+
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+
+body{background:var(--bg);color:var(--text);}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 28px;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  background:#fff;
+  z-index:10;
 }
-.header{
+
+header h1{
+  font-size:20px;
+  font-weight:600;
   text-align:center;
-  padding:80px 20px 40px;
+  flex:1;
 }
-.header h1{font-size:2.5rem;}
-.controls{
-  text-align:center;
-  margin-bottom:40px;
-}
-input{
-  padding:10px;
+
+.nav-btn{
+  background:var(--primary);
+  color:#fff;
+  padding:8px 14px;
   border-radius:8px;
-  border:1px solid var(--border);
-}
-button{
-  padding:10px 14px;
-  border-radius:8px;
+  text-decoration:none;
+  font-size:14px;
   border:none;
   cursor:pointer;
 }
-.primary{background:black;color:white;}
 
-.grid{
+.nav-btn:hover{background:var(--primary-hover);}
+
+.container{
   max-width:1200px;
   margin:auto;
-  padding:0 30px 80px;
-  display:grid;
-  gap:30px;
+  padding:40px 20px;
 }
 
-@media(min-width:0px){.grid{grid-template-columns:1fr;}}
-@media(min-width:768px){.grid{grid-template-columns:repeat(2,1fr);}}
+.section-title{
+  font-size:22px;
+  font-weight:600;
+  margin:40px 0 20px;
+}
+
+.grid{
+  column-count:1;
+  column-gap:20px;
+}
+
+@media(min-width:600px){.grid{column-count:2;}}
+@media(min-width:900px){.grid{column-count:3;}}
+@media(min-width:1200px){.grid{column-count:4;}}
 
 .card{
-  display:flex;
-  gap:20px;
+  break-inside:avoid;
   background:var(--card);
-  border:1px solid var(--border);
+  margin-bottom:20px;
   border-radius:16px;
-  padding:20px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  border:1px solid var(--border);
 }
+
 .card img{
-  width:150px;
-  height:150px;
-  object-fit:cover;
-  border-radius:12px;
+  width:100%;
+  display:block;
 }
-.info{
-  flex:1;
+
+.card-body{
+  padding:16px;
 }
-.title{
+
+.card h3{
+  font-size:15px;
   font-weight:600;
   margin-bottom:6px;
 }
-.why{
+
+.badge{
+  display:inline-block;
+  font-size:12px;
+  background:#f3f4f6;
+  padding:4px 8px;
+  border-radius:6px;
+  margin-bottom:8px;
+}
+
+.note{
+  font-size:13px;
   color:var(--muted);
-  font-size:.9rem;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
-.actions{
+
+.card-buttons{
   display:flex;
-  gap:10px;
+  flex-wrap:wrap;
+  gap:8px;
 }
-.visit{
+
+.card-buttons button,
+.card-buttons a{
   flex:1;
-  background:black;
-  color:white;
-  padding:10px;
-  text-align:center;
+  font-size:12px;
+  padding:8px;
   border-radius:8px;
+  border:none;
+  cursor:pointer;
+  text-align:center;
   text-decoration:none;
 }
-.remove{
-  background:var(--danger);
-  color:white;
+
+.primary-btn{
+  background:var(--primary);
+  color:#fff;
+}
+
+.primary-btn:hover{
+  background:var(--primary-hover);
+}
+
+.secondary-btn{
+  background:#f3f4f6;
+  color:#111;
+}
+
+.center{
+  text-align:center;
+  margin-top:40px;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:50;
+  display:none;
+}
+
+.modal-content{
+  background:#fff;
+  padding:24px;
+  border-radius:12px;
+  width:90%;
+  max-width:400px;
+}
+
+.modal input, .modal textarea{
+  width:100%;
   padding:10px;
+  margin-bottom:12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+}
+
+.qr-container{
+  margin-top:20px;
+  text-align:center;
 }
 </style>
 </head>
-
 <body>
 
-<div class="header">
-  <h1>My Curated Shop</h1>
+<header>
+  <a href="/" class="nav-btn">Home</a>
+  <h1 id="storeTitle">My Store</h1>
+  <button id="shareBtn" class="nav-btn">Share</button>
+</header>
+
+<div class="container">
+
+  <div id="affiliateSettings" class="center"></div>
+
+  <div id="content"></div>
+
+  <div id="sharePanel" class="center"></div>
+
 </div>
 
-<div class="controls">
-  <input id="affiliate" placeholder="Affiliate ID">
-  <button class="primary" onclick="saveAffiliate()">Save</button>
-  <button onclick="copyLink()">Copy Share Link</button>
+<div id="storeModal" class="modal">
+  <div class="modal-content">
+    <h3>Name Your Store</h3>
+    <input id="storeNameInput" placeholder="e.g. David’s Finds" />
+    <button class="nav-btn" onclick="saveStoreName()">Save</button>
+  </div>
 </div>
-
-<div class="grid" id="grid"></div>
 
 <script>
-let affiliate=localStorage.getItem("affiliateId")||"";
-document.getElementById("affiliate").value=affiliate;
 
-function saveAffiliate(){
-  affiliate=document.getElementById("affiliate").value.trim();
-  localStorage.setItem("affiliateId",affiliate);
-  alert("Saved.");
+let currentWall = [];
+let affiliate = {};
+let storeName = "";
+let wallId = new URLSearchParams(location.search).get("id");
+let ownerMode = !wallId;
+
+function getPlatform(link){
+  if(link.includes("amazon")) return "Amazon";
+  if(link.includes("dhgate")) return "DHgate";
+  if(link.includes("temu")) return "Temu";
+  return "Store";
 }
 
-function append(link){
-  if(!affiliate) return link;
-  const url=new URL(link);
-  url.searchParams.set("ref",affiliate);
+function injectAffiliate(link){
+  const url = new URL(link);
+  const platform = getPlatform(link);
+
+  if(platform==="Amazon" && affiliate.amazon){
+    url.searchParams.set("tag", affiliate.amazon);
+  }
+  if(platform==="DHgate" && affiliate.dhgate){
+    url.searchParams.set("f", "bm|" + affiliate.dhgate);
+  }
+  if(platform==="Temu" && affiliate.temu){
+    url.searchParams.set("refer", affiliate.temu);
+  }
   return url.toString();
 }
 
-function copyLink(){
-  const base=location.origin+location.pathname;
-  navigator.clipboard.writeText(base+(affiliate?`?ref=${affiliate}`:""));
-  alert("Copied.");
-}
+function renderWall(){
+  const content = document.getElementById("content");
+  content.innerHTML="";
 
-function render(){
-  const grid=document.getElementById("grid");
-  grid.innerHTML="";
-  const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
+  if(currentWall.length===0){
+    content.innerHTML="<div class='center'>No products yet.</div>";
+    return;
+  }
 
-  wall.forEach((item,i)=>{
+  const grid=document.createElement("div");
+  grid.className="grid";
+
+  currentWall.forEach((item,idx)=>{
     const card=document.createElement("div");
     card.className="card";
+
     card.innerHTML=`
       <img src="${item.thumb}">
-      <div class="info">
-        <div class="title">${item.title}</div>
-        <div class="why">A curated pick worth considering.</div>
-        <div class="actions">
-          <a href="${append(item.link)}" target="_blank" class="visit">Visit Store</a>
-          <button class="remove">Remove</button>
+      <div class="card-body">
+        <h3>${item.title}</h3>
+        <div class="badge">${getPlatform(item.link)}</div>
+        <div class="note">${item.note||""}</div>
+        <div class="card-buttons">
+          <a class="primary-btn" href="${injectAffiliate(item.link)}" target="_blank">Visit Store</a>
+          <button class="secondary-btn" onclick="shareProduct(${idx})">Share</button>
+          <button class="secondary-btn" onclick="shareToGrok(${idx})">Grok</button>
+          ${ownerMode?`<button class="secondary-btn" onclick="editItem(${idx})">Edit</button>`:""}
+          ${ownerMode?`<button class="secondary-btn" onclick="removeItem(${idx})">Remove</button>`:""}
         </div>
       </div>
     `;
-    card.querySelector(".remove").onclick=()=>{
-      wall.splice(i,1);
-      localStorage.setItem("productWall",JSON.stringify(wall));
-      render();
-    };
     grid.appendChild(card);
   });
+
+  content.appendChild(grid);
 }
 
-render();
+function shareProduct(i){
+  const url=injectAffiliate(currentWall[i].link);
+  if(navigator.share){
+    navigator.share({url});
+  }else{
+    navigator.clipboard.writeText(url);
+    alert("Link copied");
+  }
+}
+
+function shareToGrok(i){
+  const url=encodeURIComponent(injectAffiliate(currentWall[i].link));
+  window.open("https://grok.com/?q="+url,"_blank");
+}
+
+function editItem(i){
+  const note=prompt("Edit recommendation:",currentWall[i].note||"");
+  if(note!==null){
+    currentWall[i].note=note;
+    renderWall();
+  }
+}
+
+function removeItem(i){
+  currentWall.splice(i,1);
+  renderWall();
+}
+
+async function shareWall(){
+  const res=await fetch("/api/saveWall",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      wall:currentWall,
+      affiliate,
+      meta:{storeName,createdAt:Date.now(),version:2}
+    })
+  });
+  const data=await res.json();
+  const url=location.origin+"/mywall.html?id="+data.id;
+
+  if(navigator.share){
+    navigator.share({title:storeName,url});
+  }else{
+    navigator.clipboard.writeText(url);
+    alert("Shop link copied");
+  }
+
+  showSharePanel(url);
+}
+
+function showSharePanel(url){
+  const panel=document.getElementById("sharePanel");
+  panel.innerHTML=`
+    <div class="section-title">Share Your Store</div>
+    <div>
+      <a class="secondary-btn" href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank">Facebook</a>
+      <a class="secondary-btn" href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}" target="_blank">X</a>
+      <a class="secondary-btn" href="https://wa.me/?text=${encodeURIComponent(url)}" target="_blank">WhatsApp</a>
+    </div>
+    <div class="qr-container">
+      <canvas id="qr"></canvas>
+    </div>
+  `;
+  QRCode.toCanvas(document.getElementById("qr"),url);
+}
+
+document.getElementById("shareBtn").addEventListener("click",shareWall);
+
+function saveStoreName(){
+  storeName=document.getElementById("storeNameInput").value;
+  document.getElementById("storeTitle").innerText=storeName;
+  document.getElementById("storeModal").style.display="none";
+}
+
+async function init(){
+  if(ownerMode){
+    const stored=JSON.parse(localStorage.getItem("productWall")||"[]");
+    affiliate=JSON.parse(localStorage.getItem("affiliateSettings")||"{}");
+    currentWall=stored;
+    storeName=localStorage.getItem("storeName")||"My Store";
+    document.getElementById("storeTitle").innerText=storeName;
+    if(!localStorage.getItem("storeName")){
+      document.getElementById("storeModal").style.display="flex";
+    }
+  }else{
+    const res=await fetch("/api/getWall?id="+wallId);
+    const data=await res.json();
+    currentWall=data.wall||[];
+    affiliate=data.affiliate||{};
+    storeName=data.meta?.storeName||"Store";
+    document.getElementById("storeTitle").innerText=storeName;
+    document.getElementById("shareBtn").style.display="none";
+  }
+  renderWall();
+}
+
+init();
+
 </script>
+
 </body>
 </html>
