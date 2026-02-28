@@ -197,7 +197,7 @@ body{
 
 /* BUTTONS */
 .add-btn{
-  margin:12px auto;
+  margin:12px auto 0;
   display:block;
   padding:12px 28px;
   background:var(--text);
@@ -207,6 +207,7 @@ body{
   font-weight:700;
   cursor:pointer;
   transition:.3s;
+  width:fit-content;
 }
 
 .add-btn:hover{
@@ -231,6 +232,8 @@ body{
   box-shadow:0 15px 40px rgba(0,0,0,0.15);
   z-index:100;
   animation:pulse 2s infinite alternate;
+  border:none;
+  cursor:pointer;
 }
 
 @keyframes pulse{
@@ -244,16 +247,15 @@ body{
 
 <div class="hero">
   <h1>Linkme</h1>
-  <p>Instant affiliate storefronts.  Amazon • Temu • DHgate </p>
+  <p>Instant affiliate storefronts. Amazon • Temu • DHgate</p>
   <div class="unlimited-banner">
     ✅ Choose your niche<br>
-    
   </div>
 </div>
 
 <div id="categories-container" class="categories-container"></div>
 
-<button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
+<button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Shop (0 items)</button>
 
 <script>
 // ====================== DAILY ROTATION & GROUPS ======================
@@ -273,30 +275,45 @@ const allGroups = [
 function getDailyGroups() {
   const day = new Date().getDate();
   const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]]; // Hot Today + Game Changers always first
+  const selected = [allGroups[0], allGroups[1]];
   for (let i = 0; i < 8; i++) {
     selected.push(allGroups[(start + i + 2) % allGroups.length]);
   }
   return selected;
 }
 
+// ====================== HELPERS ======================
+function getPlatform(link) {
+  if (link.includes('amazon')) return 'Amazon';
+  if (link.includes('temu')) return 'Temu';
+  if (link.includes('dhgate')) return 'DHgate';
+  return 'Store';
+}
+
 // ====================== RICH PRODUCT CARD ======================
 function createProductCard(item) {
-  const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if (!thumb || thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.length < 50) return null;
+  const thumb = item.pagemap?.cse_image?.[0]?.src || "https://via.placeholder.com/300x300/eeeeee/cccccc?text=No+Image";
+  if (thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.length < 50) {
+    return null;
+  }
 
-  const title = item.title || "Untitled";
+  const title = item.title || "Untitled Product";
   const link = item.link;
-  const snippet = item.snippet || "Trending favorite!";
-  let price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
+  const snippet = item.snippet || "Trending favorite – check it out!";
+  let price = null;
+  if (item.pagemap?.metatags?.[0]) {
+    price = item.pagemap.metatags[0]["og:price:amount"] ||
+            item.pagemap.metatags[0]["product:price:amount"] ||
+            item.pagemap.metatags[0]["og:price"] || null;
+  }
   const platform = getPlatform(link);
-
   const isViral = snippet.toLowerCase().includes('viral') || title.toLowerCase().includes('viral') || title.toLowerCase().includes('tiktok');
 
   const card = document.createElement("div");
   card.className = "product-card";
 
   let html = `<img src="${thumb}" alt="${title}" loading="lazy">`;
+
   if (price) html += `<div class="price-badge">$${price}</div>`;
   html += `<div class="platform-badge">${platform}</div>`;
   if (isViral) html += `<div class="viral-badge">FYP Viral 🔥</div>`;
@@ -304,20 +321,47 @@ function createProductCard(item) {
   html += `
     <div class="card-content">
       <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0, 100)}${snippet.length > 100 ? '...' : ''}</div>
-      <button class="add-btn">Add to Wall</button>
+      <div class="why-buy">Why buy this: ${snippet.substring(0, 120)}${snippet.length > 120 ? '...' : ''}</div>
+      <button class="add-btn">Add to Shop</button>
     </div>`;
 
   card.innerHTML = html;
 
   card.querySelector(".add-btn").onclick = () => {
-    let customWhy = prompt("Why do you like this? (optional – shows on your wall)", "");
+    let customWhy = prompt("Why do you like / recommend this? (optional – shows on your shop)", "");
     addToWall(title, thumb, link, snippet, price, customWhy);
-    card.querySelector(".add-btn").textContent = "Added ✓";
-    card.querySelector(".add-btn").disabled = true;
+    const btn = card.querySelector(".add-btn");
+    btn.textContent = "Added ✓";
+    btn.disabled = true;
+    btn.classList.add("added");
+    updateWallButtonCount();
   };
 
   return card;
+}
+
+// ====================== WALL STORAGE ======================
+function addToWall(title, thumb, link, snippet = "", price = null, whyLike = "") {
+  let wall = JSON.parse(localStorage.getItem("productWall") || "[]");
+  if (wall.length >= 50 && !localStorage.getItem("wallUnlocked")) {
+    alert("50-item limit reached. Unlock with password 'linkme' on My Shop.");
+    return;
+  }
+  wall.push({ title, thumb, link, snippet, price, whyLike: whyLike || undefined });
+  localStorage.setItem("productWall", JSON.stringify(wall));
+
+  const toast = document.createElement("div");
+  toast.textContent = `Added: ${title}`;
+  toast.style = "position:fixed;bottom:100px;right:30px;background:var(--success);color:#000;padding:16px 32px;border-radius:20px;z-index:1000;box-shadow:0 10px 30px rgba(0,0,0,0.5);font-weight:700;";
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+
+  updateWallButtonCount();
+}
+
+function updateWallButtonCount() {
+  const count = JSON.parse(localStorage.getItem("productWall") || "[]").length;
+  document.getElementById("my-wall-btn").textContent = `→ My Shop (${count} items)`;
 }
 
 // ====================== RENDER GROUP ======================
@@ -338,6 +382,8 @@ async function renderGroup(group, container) {
         const card = createProductCard(item);
         if (card) grid.appendChild(card);
       });
+    } else {
+      grid.innerHTML = '<p style="text-align:center;color:#ff6b6b;">No products found</p>';
     }
   } catch (e) {
     grid.innerHTML = '<p style="text-align:center;color:#ff6b6b;">Loading...</p>';
@@ -348,6 +394,8 @@ async function renderGroup(group, container) {
 window.addEventListener('load', async () => {
   const container = document.getElementById("categories-container");
   const dailyGroups = getDailyGroups();
+
+  updateWallButtonCount(); // initial count
 
   for (const group of dailyGroups) {
     await renderGroup(group, container);
