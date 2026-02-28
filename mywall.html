@@ -1,142 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>My Shop – Linkme</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Curated Shop</title>
 
 <style>
 :root{
-  --bg:#f5f5f7;
-  --card:#ffffff;
-  --text:#1d1d1f;
+  --bg:#f8f8f8;
+  --card:#fff;
+  --text:#111;
   --muted:#6e6e73;
-  --border:#e5e5e7;
+  --border:#e8e8ed;
   --accent:#000;
-  --success:#34c759;
   --danger:#ff3b30;
 }
-
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
   background:var(--bg);
   color:var(--text);
 }
-
 .header{
   text-align:center;
-  padding:60px 20px 20px;
+  padding:80px 20px 40px;
 }
-
-.header h1{
-  font-size:2.5rem;
-  margin-bottom:10px;
-}
-
-.sub{
-  color:var(--muted);
-  font-size:.95rem;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:20px 20px 120px;
-}
-
+.header h1{font-size:2.5rem;}
 .controls{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  justify-content:center;
-  margin-bottom:30px;
+  text-align:center;
+  margin-bottom:40px;
 }
-
 input{
   padding:10px;
-  border-radius:10px;
+  border-radius:8px;
   border:1px solid var(--border);
 }
-
 button{
-  padding:10px 16px;
+  padding:10px 14px;
+  border-radius:8px;
   border:none;
-  border-radius:10px;
   cursor:pointer;
-  font-weight:600;
 }
-
-.primary{
-  background:var(--accent);
-  color:white;
-}
-
-.success{
-  background:var(--success);
-  color:white;
-}
+.primary{background:black;color:white;}
 
 .grid{
+  max-width:1200px;
+  margin:auto;
+  padding:0 30px 80px;
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:24px;
+  gap:30px;
 }
+
+@media(min-width:0px){.grid{grid-template-columns:1fr;}}
+@media(min-width:768px){.grid{grid-template-columns:repeat(2,1fr);}}
 
 .card{
+  display:flex;
+  gap:20px;
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:18px;
-  overflow:hidden;
-  transition:.3s;
+  border-radius:16px;
+  padding:20px;
 }
-
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-
 .card img{
-  width:100%;
-  aspect-ratio:1/1;
+  width:150px;
+  height:150px;
   object-fit:cover;
+  border-radius:12px;
 }
-
-.card-body{
-  padding:16px;
+.info{
+  flex:1;
 }
-
 .title{
   font-weight:600;
   margin-bottom:6px;
 }
-
-.snippet{
-  font-size:.9rem;
+.why{
   color:var(--muted);
+  font-size:.9rem;
   margin-bottom:10px;
 }
-
 .actions{
   display:flex;
   gap:10px;
 }
-
-.visit-btn{
+.visit{
   flex:1;
   background:black;
   color:white;
   padding:10px;
-  border-radius:10px;
   text-align:center;
+  border-radius:8px;
   text-decoration:none;
 }
-
-.remove-btn{
+.remove{
   background:var(--danger);
   color:white;
-  border:none;
-  border-radius:10px;
   padding:10px;
 }
 </style>
@@ -145,107 +104,69 @@ button{
 <body>
 
 <div class="header">
-  <h1>My Shop</h1>
-  <div class="sub">Set your affiliate ID & share your storefront</div>
+  <h1>My Curated Shop</h1>
 </div>
 
-<div class="container">
-
 <div class="controls">
-  <input type="text" id="affiliateInput" placeholder="Enter your affiliate ID">
+  <input id="affiliate" placeholder="Affiliate ID">
   <button class="primary" onclick="saveAffiliate()">Save</button>
-  <button onclick="copyShareLink()">Copy Share Link</button>
+  <button onclick="copyLink()">Copy Share Link</button>
 </div>
 
-<div class="controls">
-  <input type="password" id="unlockInput" placeholder="Unlock password">
-  <button onclick="unlockWall()">Unlock</button>
-</div>
-
-<div class="grid" id="wallGrid"></div>
-
-</div>
+<div class="grid" id="grid"></div>
 
 <script>
-let affiliateId = localStorage.getItem("affiliateId") || "";
-document.getElementById("affiliateInput").value = affiliateId;
+let affiliate=localStorage.getItem("affiliateId")||"";
+document.getElementById("affiliate").value=affiliate;
 
 function saveAffiliate(){
-  affiliateId = document.getElementById("affiliateInput").value.trim();
-  localStorage.setItem("affiliateId", affiliateId);
-  alert("Affiliate ID saved.");
+  affiliate=document.getElementById("affiliate").value.trim();
+  localStorage.setItem("affiliateId",affiliate);
+  alert("Saved.");
 }
 
-function appendAffiliate(link){
-  if(!affiliateId) return link;
-  const url = new URL(link);
-  url.searchParams.set("ref", affiliateId);
+function append(link){
+  if(!affiliate) return link;
+  const url=new URL(link);
+  url.searchParams.set("ref",affiliate);
   return url.toString();
 }
 
-function copyShareLink(){
-  const base = window.location.origin + window.location.pathname;
-  const shareUrl = affiliateId ? `${base}?ref=${affiliateId}` : base;
-  navigator.clipboard.writeText(shareUrl);
-  alert("Share link copied!");
+function copyLink(){
+  const base=location.origin+location.pathname;
+  navigator.clipboard.writeText(base+(affiliate?`?ref=${affiliate}`:""));
+  alert("Copied.");
 }
 
-function unlockWall(){
-  const val=document.getElementById("unlockInput").value.trim();
-  if(val==="linkme"){
-    localStorage.setItem("wallUnlocked","true");
-    alert("Unlimited items unlocked.");
-  }else{
-    alert("Wrong password.");
-  }
-}
-
-function renderWall(){
-  const grid=document.getElementById("wallGrid");
+function render(){
+  const grid=document.getElementById("grid");
   grid.innerHTML="";
-  let wall=JSON.parse(localStorage.getItem("productWall")||"[]");
+  const wall=JSON.parse(localStorage.getItem("productWall")||"[]");
 
-  if(wall.length===0){
-    grid.innerHTML="<p>Your shop is empty.</p>";
-    return;
-  }
-
-  wall.forEach((item,index)=>{
+  wall.forEach((item,i)=>{
     const card=document.createElement("div");
     card.className="card";
-
-    const finalLink = appendAffiliate(item.link);
-
     card.innerHTML=`
       <img src="${item.thumb}">
-      <div class="card-body">
+      <div class="info">
         <div class="title">${item.title}</div>
-        <div class="snippet">${item.snippet || ""}</div>
+        <div class="why">A curated pick worth considering.</div>
         <div class="actions">
-          <a href="${finalLink}" target="_blank" class="visit-btn">Visit</a>
-          <button class="remove-btn">X</button>
+          <a href="${append(item.link)}" target="_blank" class="visit">Visit Store</a>
+          <button class="remove">Remove</button>
         </div>
       </div>
     `;
-
-    card.querySelector(".remove-btn").onclick=()=>{
-      wall.splice(index,1);
+    card.querySelector(".remove").onclick=()=>{
+      wall.splice(i,1);
       localStorage.setItem("productWall",JSON.stringify(wall));
-      renderWall();
+      render();
     };
-
     grid.appendChild(card);
   });
 }
 
-// Auto-detect shared affiliate
-const params = new URLSearchParams(window.location.search);
-if(params.get("ref")){
-  affiliateId = params.get("ref");
-}
-
-window.onload=renderWall;
+render();
 </script>
-
 </body>
 </html>
