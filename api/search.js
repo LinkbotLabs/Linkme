@@ -10,8 +10,11 @@ export default async function handler(req, res) {
   const ONE_DAY = 1000 * 60 * 60 * 24;
   const cacheKey = `${q}_${start}`;
 
-  // ✅ If cached and less than 24h old → return cached
-  if (cache[cacheKey] && (Date.now() - cache[cacheKey].time < ONE_DAY)) {
+  // ✅ Serve from cache if valid
+  if (
+    cache[cacheKey] &&
+    Date.now() - cache[cacheKey].time < ONE_DAY
+  ) {
     return res.status(200).json(cache[cacheKey].data);
   }
 
@@ -22,17 +25,23 @@ export default async function handler(req, res) {
 
     const data = await googleRes.json();
 
+    // ❌ If Google returned error (like 429), do NOT cache
     if (!googleRes.ok) {
       return res.status(googleRes.status).json({
         error: data.error?.message || "Google API error"
       });
     }
 
+    // ❌ If no items returned, do NOT cache
+    if (!data.items || data.items.length === 0) {
+      return res.status(200).json({ items: [] });
+    }
+
     const formatted = {
-      items: data.items || []
+      items: data.items
     };
 
-    // ✅ Store in cache
+    // ✅ Only cache valid results
     cache[cacheKey] = {
       data: formatted,
       time: Date.now()
