@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,196 +12,204 @@
 <meta property="og:description" content="Instant affiliate walls for Amazon, Temu, DHgate. Unlimited products, one-click share, earn commissions. Free forever." />
 <meta property="og:url" content="https://linkmetagshop.vercel.app" />
 <meta property="og:type" content="website" />
-<link rel="stylesheet" href="uniform-dark-glass.css">
+
 <style>
-:root {
-  --accent: #ffe169;
-  --glow: #00ffff;
-  --glass: rgba(20,20,35,0.85);
-  --stroke: rgba(255,255,255,0.18);
-  --text: #ffffff;
-  --muted: #d0d0ff;
-  --success: #39ff14;
-  --viral: #ff3366;
+:root{
+  --bg:#e6e7eb;
+  --glass:rgba(255,255,255,0.6);
+  --glass-strong:rgba(255,255,255,0.85);
+  --stroke:rgba(255,255,255,0.5);
+  --text:#1c1c1c;
+  --muted:#6e6e73;
+  --accent:#1c1c1c;
+  --success:#34c759;
+  --viral:#ff3b30;
 }
-body {
-  font-family: system-ui, sans-serif;
-  background: linear-gradient(135deg, #000 0%, #0a0015 100%);
-  color: var(--text);
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
+
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  margin:0;
+  min-height:100vh;
 }
-.hero {
-  text-align: center;
-  padding: 80px 20px 40px;
-  background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(30,0,60,0.5));
+
+.hero{
+  text-align:center;
+  padding:80px 20px 40px;
 }
-.hero h1 {
-  font-size: 3.5rem;
-  margin: 0 0 16px;
-  color: var(--accent);
-  text-shadow: 0 0 30px rgba(255,225,105,0.6);
+
+.hero h1{
+  font-size:3.5rem;
+  margin:0 0 16px;
 }
-.hero p {
-  font-size: 1.35rem;
-  max-width: 700px;
-  margin: 0 auto 32px;
-  color: var(--muted);
+
+.hero p{
+  font-size:1.35rem;
+  max-width:700px;
+  margin:0 auto 32px;
+  color:var(--muted);
 }
-.unlimited-banner {
-  background: linear-gradient(135deg, #1fc27e, #39ff14);
-  color: #000;
-  padding: 18px 24px;
-  font-weight: 900;
-  font-size: 1.25rem;
-  border-radius: 20px;
-  margin: 0 auto 40px;
-  max-width: 90%;
-  box-shadow: 0 10px 40px rgba(57,255,20,0.5);
+
+.unlimited-banner{
+  background:var(--glass-strong);
+  backdrop-filter:blur(20px);
+  padding:18px 24px;
+  font-weight:700;
+  font-size:1.1rem;
+  border-radius:20px;
+  margin:0 auto 40px;
+  max-width:90%;
+  border:1px solid var(--stroke);
+  box-shadow:0 20px 40px rgba(0,0,0,0.08);
 }
-.categories-container {
-  max-width: 1280px;
-  margin: 0 auto 80px;
-  padding: 0 20px;
+
+.categories-container{
+  max-width:1280px;
+  margin:0 auto 80px;
+  padding:0 20px;
 }
-.category-section {
-  margin-bottom: 100px;
+
+.category-section{
+  margin-bottom:100px;
 }
-.category-section h2 {
-  font-size: 2.8rem;
-  color: var(--accent);
-  text-align: center;
-  margin-bottom: 32px;
-  text-shadow: 0 0 30px rgba(255,225,105,0.5);
-  position: relative;
+
+.category-section h2{
+  font-size:2.3rem;
+  text-align:center;
+  margin-bottom:32px;
 }
-.category-section h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 5px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  border-radius: 5px;
+
+.category-grid{
+  column-count:2;
+  column-gap:20px;
 }
-.category-grid {
-  column-count: 2;
-  column-gap: 20px;
+
+@media (min-width:640px){
+  .category-grid{column-count:3;}
 }
-@media (min-width: 640px) { .category-grid { column-count: 3; } }
-@media (min-width: 1024px) { .category-grid { column-count: 4; } }
-.product-card {
-  break-inside: avoid;
-  margin-bottom: 24px;
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--stroke);
-  border-radius: 24px;
-  overflow: hidden;
-  transition: all 0.4s;
-  box-shadow: 0 15px 50px rgba(0,0,0,0.6);
-  position: relative;
+@media (min-width:1024px){
+  .category-grid{column-count:4;}
 }
-.product-card:hover {
-  transform: translateY(-12px) scale(1.04);
-  box-shadow: 0 30px 80px rgba(255,165,0,0.35);
+
+.product-card{
+  break-inside:avoid;
+  margin-bottom:24px;
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--stroke);
+  border-radius:24px;
+  overflow:hidden;
+  transition:.4s;
+  box-shadow:0 15px 40px rgba(0,0,0,0.1);
+  position:relative;
 }
-.product-card img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  transition: transform 0.6s;
+
+.product-card:hover{
+  transform:translateY(-8px) scale(1.03);
+  box-shadow:0 25px 60px rgba(0,0,0,0.15);
 }
-.product-card:hover img { transform: scale(1.09); }
-.card-content {
-  padding: 20px;
+
+.product-card img{
+  width:100%;
+  height:300px;
+  object-fit:cover;
+  transition:transform .6s;
 }
-.card-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  margin: 0 0 8px;
-  color: #ffe169;
+
+.product-card:hover img{
+  transform:scale(1.05);
 }
-.why-buy {
-  font-size: 0.95rem;
-  color: var(--muted);
-  line-height: 1.5;
-  margin: 8px 0 16px;
-  font-style: italic;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+
+.card-content{
+  padding:20px;
 }
-.price-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: #39ff14;
-  color: #000;
-  padding: 8px 16px;
-  border-radius: 14px;
-  font-weight: 800;
-  box-shadow: 0 0 20px rgba(57,255,20,0.5);
+
+.card-title{
+  font-size:1.2rem;
+  font-weight:700;
+  margin-bottom:8px;
 }
-.platform-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(0,0,0,0.75);
-  color: var(--accent);
-  padding: 8px 16px;
-  border-radius: 14px;
-  font-weight: 800;
+
+.why-buy{
+  font-size:0.95rem;
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:16px;
+  font-style:italic;
 }
-.viral-badge {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  background: var(--viral);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 800;
+
+.price-badge{
+  position:absolute;
+  top:16px;
+  left:16px;
+  background:white;
+  padding:8px 14px;
+  border-radius:14px;
+  font-weight:800;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
-.add-btn {
-  margin: 12px auto;
-  display: block;
-  padding: 12px 28px;
-  background: var(--accent);
-  color: #000;
-  border: none;
-  border-radius: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s;
+
+.platform-badge{
+  position:absolute;
+  top:16px;
+  right:16px;
+  background:rgba(255,255,255,0.9);
+  padding:8px 14px;
+  border-radius:14px;
+  font-weight:800;
 }
-.add-btn:hover { background: #ffd14d; transform: translateY(-2px); }
-.added { background: var(--success) !important; color: #000 !important; }
-#my-wall-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--accent);
-  color: #000;
-  padding: 16px 32px;
-  border-radius: 50px;
-  font-weight: 900;
-  box-shadow: 0 10px 40px rgba(255,225,105,0.5);
-  z-index: 100;
-  animation: pulse 2s infinite alternate;
+
+.viral-badge{
+  position:absolute;
+  bottom:16px;
+  left:16px;
+  background:var(--viral);
+  color:white;
+  padding:6px 12px;
+  border-radius:12px;
+  font-size:0.85rem;
+  font-weight:800;
 }
-@keyframes pulse {
-  from { box-shadow: 0 10px 40px rgba(255,225,105,0.5); }
-  to { box-shadow: 0 10px 60px rgba(255,225,105,0.8); }
+
+.add-btn{
+  display:block;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:16px;
+  font-weight:700;
+  background:var(--text);
+  color:white;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.add-btn:hover{
+  opacity:.85;
+}
+
+.added{
+  background:var(--success)!important;
+}
+
+#my-wall-btn{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  background:var(--text);
+  color:white;
+  padding:16px 32px;
+  border-radius:50px;
+  font-weight:900;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  z-index:100;
 }
 </style>
 </head>
+
 <body>
+
 <div class="hero">
   <h1>Linkme</h1>
   <p>Instant affiliate storefronts. Unlimited Amazon • Temu • DHgate products. Earn commissions — free forever, no limits, no code.</p>
@@ -213,14 +220,12 @@ body {
 </div>
 
 <div id="categories-container" class="categories-container"></div>
-
 <button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
 
 <script>
-// ====================== DAILY ROTATION & GROUPS ======================
 const allGroups = [
-  { heading: "Hot Today 🔥", query: "tiktok viral products 2026", isHot: true },
-  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026", isGameChanger: true },
+  { heading: "Hot Today 🔥", query: "tiktok viral products 2026" },
+  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026" },
   { heading: "Glow Up Factory ✨", queries: ["LED face mask red light therapy", "snail mucin peptide serum", "collagen peptide sheet mask"] },
   { heading: "Cozy Girl Winter Haven 🔥", queries: ["indoor portable heater mini", "galaxy projector sunset lamp", "white noise machine sleep"] },
   { heading: "TikTok Kitchen Chaos 🍳", queries: ["mini waffle maker viral", "portable usb blender", "egg bite maker cloud bread"] },
@@ -231,89 +236,101 @@ const allGroups = [
   { heading: "Travel Main Character ✈️", queries: ["anti-theft crossbody bag", "rfid blocking wallet", "hanging toiletry bag"] }
 ];
 
-function getDailyGroups() {
+function getDailyGroups(){
   const day = new Date().getDate();
   const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]]; // Hot Today + Game Changers always first
-  for (let i = 0; i < 8; i++) {
+  const selected = [allGroups[0], allGroups[1]];
+  for(let i=0;i<8;i++){
     selected.push(allGroups[(start + i + 2) % allGroups.length]);
   }
   return selected;
 }
 
-// ====================== RICH PRODUCT CARD ======================
-function createProductCard(item) {
+function getPlatform(link){
+  if(link.includes("amazon")) return "Amazon";
+  if(link.includes("temu")) return "Temu";
+  if(link.includes("dhgate")) return "DHgate";
+  return "Shop";
+}
+
+function addToWall(title,img,link,snippet,price,customWhy){
+  const saved = JSON.parse(localStorage.getItem("wallItems")||"[]");
+  saved.push({title,img,link,snippet,price,customWhy});
+  localStorage.setItem("wallItems",JSON.stringify(saved));
+}
+
+function createProductCard(item){
   const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if (!thumb || thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.length < 50) return null;
+  if(!thumb || thumb.length<50) return null;
 
   const title = item.title || "Untitled";
   const link = item.link;
-  const snippet = item.snippet || "Trending favorite!";
-  let price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
+  const snippet = item.snippet || "";
+  const price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
   const platform = getPlatform(link);
 
-  const isViral = snippet.toLowerCase().includes('viral') || title.toLowerCase().includes('viral') || title.toLowerCase().includes('tiktok');
+  const isViral = snippet.toLowerCase().includes("viral") || title.toLowerCase().includes("tiktok");
 
-  const card = document.createElement("div");
-  card.className = "product-card";
+  const card=document.createElement("div");
+  card.className="product-card";
 
-  let html = `<img src="${thumb}" alt="${title}" loading="lazy">`;
-  if (price) html += `<div class="price-badge">$${price}</div>`;
-  html += `<div class="platform-badge">${platform}</div>`;
-  if (isViral) html += `<div class="viral-badge">FYP Viral 🔥</div>`;
+  let html=`<img src="${thumb}" loading="lazy">`;
+  if(price) html+=`<div class="price-badge">$${price}</div>`;
+  html+=`<div class="platform-badge">${platform}</div>`;
+  if(isViral) html+=`<div class="viral-badge">FYP Viral 🔥</div>`;
 
-  html += `
+  html+=`
     <div class="card-content">
       <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0, 100)}${snippet.length > 100 ? '...' : ''}</div>
+      <div class="why-buy">Why this slaps: ${snippet.substring(0,100)}</div>
       <button class="add-btn">Add to Wall</button>
-    </div>`;
+    </div>
+  `;
 
-  card.innerHTML = html;
+  card.innerHTML=html;
 
-  card.querySelector(".add-btn").onclick = () => {
-    let customWhy = prompt("Why do you like this? (optional – shows on your wall)", "");
-    addToWall(title, thumb, link, snippet, price, customWhy);
-    card.querySelector(".add-btn").textContent = "Added ✓";
-    card.querySelector(".add-btn").disabled = true;
+  card.querySelector(".add-btn").onclick=()=>{
+    let customWhy=prompt("Why do you like this?","");
+    addToWall(title,thumb,link,snippet,price,customWhy);
+    card.querySelector(".add-btn").textContent="Added ✓";
+    card.querySelector(".add-btn").classList.add("added");
+    card.querySelector(".add-btn").disabled=true;
   };
 
   return card;
 }
 
-// ====================== RENDER GROUP ======================
-async function renderGroup(group, container) {
-  const section = document.createElement("div");
-  section.className = "category-section";
-  section.innerHTML = `<h2>${group.heading}</h2><div class="category-grid" id="grid-${group.heading.replace(/\s/g,'')}"></div>`;
+async function renderGroup(group,container){
+  const section=document.createElement("div");
+  section.className="category-section";
+  section.innerHTML=`<h2>${group.heading}</h2><div class="category-grid"></div>`;
   container.appendChild(section);
 
-  const grid = section.querySelector(".category-grid");
+  const grid=section.querySelector(".category-grid");
 
-  try {
-    const query = group.query || group.queries[Math.floor(Math.random() * group.queries.length)];
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
-    const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      data.items.slice(0, 12).forEach(item => {
-        const card = createProductCard(item);
-        if (card) grid.appendChild(card);
+  try{
+    const query = group.query || group.queries[Math.floor(Math.random()*group.queries.length)];
+    const res=await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
+    const data=await res.json();
+    if(data.items){
+      data.items.slice(0,12).forEach(item=>{
+        const card=createProductCard(item);
+        if(card) grid.appendChild(card);
       });
     }
-  } catch (e) {
-    grid.innerHTML = '<p style="text-align:center;color:#ff6b6b;">Loading...</p>';
+  }catch(e){
+    grid.innerHTML="<p style='text-align:center;color:#999;'>Loading...</p>";
   }
 }
 
-// ====================== MAIN INIT ======================
-window.addEventListener('load', async () => {
-  const container = document.getElementById("categories-container");
-  const dailyGroups = getDailyGroups();
-
-  for (const group of dailyGroups) {
-    await renderGroup(group, container);
+window.addEventListener("load",async()=>{
+  const container=document.getElementById("categories-container");
+  const groups=getDailyGroups();
+  for(const group of groups){
+    await renderGroup(group,container);
   }
 });
 </script>
+
 </body>
 </html>
