@@ -3,334 +3,272 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
-<title>Linkme – Free Unlimited Affiliate Storefront Builder</title>
-<meta name="description" content="Linkme: Build & share unlimited affiliate storefronts with Amazon, Temu & DHgate products. Earn commissions instantly — no limits, no coding." />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://linkmetagshop.vercel.app" />
-<meta property="og:title" content="Linkme – Free Affiliate Storefront Builder" />
-<meta property="og:description" content="Instant affiliate walls for Amazon, Temu, DHgate. Unlimited products, one-click share, earn commissions. Free forever." />
-<meta property="og:url" content="https://linkmetagshop.vercel.app" />
-<meta property="og:type" content="website" />
+<title>LinkMe – Discover</title>
 
 <style>
 :root{
-  --bg:#e6e7eb;
-  --glass:rgba(255,255,255,0.6);
-  --glass-strong:rgba(255,255,255,0.85);
-  --stroke:rgba(255,255,255,0.5);
-  --text:#1c1c1c;
-  --muted:#6e6e73;
-  --accent:#1c1c1c;
-  --success:#34c759;
-  --viral:#ff3b30;
+  --bg:#1c1c1e;
+  --card:#2c2c2e;
+  --accent:#0a84ff;
+  --text:#f5f5f7;
+  --muted:#9a9a9e;
 }
 
 body{
-  font-family:system-ui,-apple-system,sans-serif;
-  background:var(--bg);
-  color:var(--text);
   margin:0;
-  min-height:100vh;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  color:var(--text);
 }
 
-.hero{
-  text-align:center;
-  padding:80px 20px 40px;
-}
+/* HEADER */
 
-.hero h1{
-  font-size:3.5rem;
-  margin:0 0 16px;
-}
-
-.hero p{
-  font-size:1.35rem;
-  max-width:700px;
-  margin:0 auto 32px;
-  color:var(--muted);
-}
-
-.unlimited-banner{
-  background:var(--glass-strong);
-  backdrop-filter:blur(20px);
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   padding:18px 24px;
-  font-weight:700;
-  font-size:1.1rem;
-  border-radius:20px;
-  margin:0 auto 40px;
-  max-width:90%;
-  border:1px solid var(--stroke);
-  box-shadow:0 20px 40px rgba(0,0,0,0.08);
+  background:#141416;
+  border-bottom:1px solid #2c2c2e;
 }
 
-.categories-container{
-  max-width:1280px;
-  margin:0 auto 80px;
-  padding:0 20px;
+header h1{
+  font-size:20px;
+  font-weight:600;
 }
 
-.category-section{
-  margin-bottom:100px;
-}
-
-.category-section h2{
-  font-size:2.3rem;
-  text-align:center;
-  margin-bottom:32px;
-}
-
-.category-grid{
-  column-count:2;
-  column-gap:20px;
-}
-
-@media (min-width:640px){
-  .category-grid{column-count:3;}
-}
-@media (min-width:1024px){
-  .category-grid{column-count:4;}
-}
-
-.product-card{
-  break-inside:avoid;
-  margin-bottom:24px;
-  background:var(--glass);
-  backdrop-filter:blur(20px);
-  border:1px solid var(--stroke);
-  border-radius:24px;
-  overflow:hidden;
-  transition:.4s;
-  box-shadow:0 15px 40px rgba(0,0,0,0.1);
-  position:relative;
-}
-
-.product-card:hover{
-  transform:translateY(-8px) scale(1.03);
-  box-shadow:0 25px 60px rgba(0,0,0,0.15);
-}
-
-.product-card img{
-  width:100%;
-  height:300px;
-  object-fit:cover;
-  transition:transform .6s;
-}
-
-.product-card:hover img{
-  transform:scale(1.05);
-}
-
-.card-content{
-  padding:20px;
-}
-
-.card-title{
-  font-size:1.2rem;
-  font-weight:700;
-  margin-bottom:8px;
-}
-
-.why-buy{
-  font-size:0.95rem;
-  color:var(--muted);
-  line-height:1.5;
-  margin-bottom:16px;
-  font-style:italic;
-}
-
-.price-badge{
-  position:absolute;
-  top:16px;
-  left:16px;
-  background:white;
-  padding:8px 14px;
-  border-radius:14px;
-  font-weight:800;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
-
-.platform-badge{
-  position:absolute;
-  top:16px;
-  right:16px;
-  background:rgba(255,255,255,0.9);
-  padding:8px 14px;
-  border-radius:14px;
-  font-weight:800;
-}
-
-.viral-badge{
-  position:absolute;
-  bottom:16px;
-  left:16px;
-  background:var(--viral);
-  color:white;
-  padding:6px 12px;
-  border-radius:12px;
-  font-size:0.85rem;
-  font-weight:800;
-}
-
-.add-btn{
-  display:block;
-  width:100%;
-  padding:12px;
+header button{
+  background:var(--accent);
   border:none;
-  border-radius:16px;
-  font-weight:700;
-  background:var(--text);
+  padding:10px 16px;
+  border-radius:10px;
   color:white;
   cursor:pointer;
-  transition:.3s;
 }
 
-.add-btn:hover{
-  opacity:.85;
+/* SECTIONS */
+
+.section{
+  padding:40px 30px 10px;
+}
+
+.section h2{
+  margin-bottom:20px;
+  font-size:18px;
+}
+
+/* GRID */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+  padding:0 30px 50px;
+}
+
+/* CARD */
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 8px 30px rgba(0,0,0,0.3);
+  transition:0.2s;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+}
+
+.card img{
+  width:100%;
+  border-radius:14px;
+  margin-bottom:14px;
+}
+
+.card h3{
+  margin:0 0 14px 0;
+  font-size:15px;
+}
+
+.card-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:auto;
+}
+
+.card-buttons a,
+.card-buttons button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.card-buttons a{
+  background:#3a3a3c;
+  color:white;
+  text-align:center;
+  text-decoration:none;
+}
+
+.card-buttons button{
+  background:var(--accent);
+  color:white;
 }
 
 .added{
-  background:var(--success)!important;
+  background:#30d158 !important;
 }
 
-#my-wall-btn{
+/* FLOAT BUTTON */
+
+#wallBtn{
   position:fixed;
-  bottom:24px;
-  right:24px;
-  background:var(--text);
+  bottom:30px;
+  right:30px;
+  background:var(--accent);
   color:white;
-  padding:16px 32px;
+  padding:16px 24px;
   border-radius:50px;
-  font-weight:900;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
-  z-index:100;
+  font-weight:600;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 8px 25px rgba(0,0,0,0.5);
 }
 </style>
 </head>
 
 <body>
 
-<div class="hero">
-  <h1>Linkme</h1>
-  <p>Instant affiliate storefronts. Unlimited Amazon • Temu • DHgate products. Earn commissions — free forever, no limits, no code.</p>
-  <div class="unlimited-banner">
-    ✅ UNLIMITED PRODUCTS FOR EVERYONE!<br>
-    <span style="font-size:0.95rem;">Password for My Wall: <strong>linkme</strong></span>
-  </div>
-</div>
+<header>
+  <h1>🛍 Discover Products</h1>
+  <button onclick="location.href='mywall.html'">My Wall</button>
+</header>
 
-<div id="categories-container" class="categories-container"></div>
-<button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
+<div id="sections"></div>
+
+<button id="wallBtn" onclick="location.href='mywall.html'">
+My Curated Wall (0)
+</button>
 
 <script>
-const allGroups = [
-  { heading: "Hot Today 🔥", query: "tiktok viral products 2026" },
-  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026" },
-  { heading: "Glow Up Factory ✨", queries: ["LED face mask red light therapy", "snail mucin peptide serum", "collagen peptide sheet mask"] },
-  { heading: "Cozy Girl Winter Haven 🔥", queries: ["indoor portable heater mini", "galaxy projector sunset lamp", "white noise machine sleep"] },
-  { heading: "TikTok Kitchen Chaos 🍳", queries: ["mini waffle maker viral", "portable usb blender", "egg bite maker cloud bread"] },
-  { heading: "Soft Life Wellness 🧘‍♀️", queries: ["posture corrector neck hammock", "back stretcher spine decompressor", "ashwagandha gummies nootropic"] },
-  { heading: "Aesthetic Tech Setup 📱", queries: ["wireless earbuds noise cancelling", "solar power bank portable", "magnetic phone car mount"] },
-  { heading: "Pet Bestie Club 🐾", queries: ["automatic pet feeder camera", "interactive laser toy cat", "jellycat plush keychain"] },
-  { heading: "Strong Girl Era 🏋️", queries: ["rucking vest weighted", "pilates board home workout"] },
-  { heading: "Travel Main Character ✈️", queries: ["anti-theft crossbody bag", "rfid blocking wallet", "hanging toiletry bag"] }
+
+const groups=[
+  {heading:"🔥 Hot Today",query:"tiktok viral products"},
+  {heading:"✨ Glow Up",query:"self care trending products"},
+  {heading:"📱 Tech Finds",query:"aesthetic tech gadgets"},
+  {heading:"✈️ Travel Picks",query:"travel essentials trending"}
 ];
 
-function getDailyGroups(){
-  const day = new Date().getDate();
-  const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]];
-  for(let i=0;i<8;i++){
-    selected.push(allGroups[(start + i + 2) % allGroups.length]);
-  }
-  return selected;
+let seenLinks = new Set();
+let seenImages = new Set();
+let seenTitles = new Set();
+
+function normalize(text){
+  return text.toLowerCase().replace(/[^a-z0-9]/g,"");
+}
+
+function updateCount(){
+  const wall=JSON.parse(localStorage.getItem("linkme_wall")||"[]");
+  document.getElementById("wallBtn").textContent=
+    `My Curated Wall (${wall.length})`;
 }
 
 function getPlatform(link){
-  if(link.includes("amazon")) return "Amazon";
-  if(link.includes("temu")) return "Temu";
-  if(link.includes("dhgate")) return "DHgate";
-  return "Shop";
+  if(link.includes("amazon")) return "amazon";
+  if(link.includes("dhgate")) return "dhgate";
+  if(link.includes("temu")) return "temu";
+  return "other";
 }
 
-function addToWall(title,img,link,snippet,price,customWhy){
-  const saved = JSON.parse(localStorage.getItem("wallItems")||"[]");
-  saved.push({title,img,link,snippet,price,customWhy});
-  localStorage.setItem("wallItems",JSON.stringify(saved));
+function addToWall(product){
+  let wall=JSON.parse(localStorage.getItem("linkme_wall")||"[]");
+
+  if(wall.some(p=>p.link===product.link)) return;
+
+  wall.push(product);
+  localStorage.setItem("linkme_wall",JSON.stringify(wall));
+  updateCount();
 }
 
-function createProductCard(item){
-  const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if(!thumb || thumb.length<50) return null;
+function createCard(item){
 
-  const title = item.title || "Untitled";
-  const link = item.link;
-  const snippet = item.snippet || "";
-  const price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
-  const platform = getPlatform(link);
+  const cleanTitle = normalize(item.title);
 
-  const isViral = snippet.toLowerCase().includes("viral") || title.toLowerCase().includes("tiktok");
+  if(
+    seenLinks.has(item.link) ||
+    seenImages.has(item.image) ||
+    seenTitles.has(cleanTitle)
+  ){
+    return null;
+  }
+
+  seenLinks.add(item.link);
+  seenImages.add(item.image);
+  seenTitles.add(cleanTitle);
 
   const card=document.createElement("div");
-  card.className="product-card";
+  card.className="card";
 
-  let html=`<img src="${thumb}" loading="lazy">`;
-  if(price) html+=`<div class="price-badge">$${price}</div>`;
-  html+=`<div class="platform-badge">${platform}</div>`;
-  if(isViral) html+=`<div class="viral-badge">FYP Viral 🔥</div>`;
-
-  html+=`
-    <div class="card-content">
-      <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0,100)}</div>
-      <button class="add-btn">Add to Wall</button>
+  card.innerHTML=`
+    <img src="${item.image}">
+    <h3>${item.title}</h3>
+    <div class="card-buttons">
+      <a href="${item.link}" target="_blank">Visit</a>
+      <button>Add</button>
     </div>
   `;
 
-  card.innerHTML=html;
+  const btn=card.querySelector("button");
 
-  card.querySelector(".add-btn").onclick=()=>{
-    let customWhy=prompt("Why do you like this?","");
-    addToWall(title,thumb,link,snippet,price,customWhy);
-    card.querySelector(".add-btn").textContent="Added ✓";
-    card.querySelector(".add-btn").classList.add("added");
-    card.querySelector(".add-btn").disabled=true;
+  btn.onclick=()=>{
+    addToWall({
+      title:item.title,
+      image:item.image,
+      link:item.link,
+      platform:getPlatform(item.link)
+    });
+
+    btn.textContent="Added ✓";
+    btn.classList.add("added");
+    btn.disabled=true;
   };
 
   return card;
 }
 
-async function renderGroup(group,container){
-  const section=document.createElement("div");
-  section.className="category-section";
-  section.innerHTML=`<h2>${group.heading}</h2><div class="category-grid"></div>`;
-  container.appendChild(section);
+async function render(){
+  updateCount();
+  const container=document.getElementById("sections");
 
-  const grid=section.querySelector(".category-grid");
+  for(const group of groups){
 
-  try{
-    const query = group.query || group.queries[Math.floor(Math.random()*group.queries.length)];
-    const res=await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
+    const section=document.createElement("div");
+    section.className="section";
+    section.innerHTML=`<h2>${group.heading}</h2>`;
+    container.appendChild(section);
+
+    const grid=document.createElement("div");
+    grid.className="grid";
+    container.appendChild(grid);
+
+    const res=await fetch(`/api/search?q=${encodeURIComponent(group.query)}`);
     const data=await res.json();
-    if(data.items){
-      data.items.slice(0,12).forEach(item=>{
-        const card=createProductCard(item);
-        if(card) grid.appendChild(card);
-      });
-    }
-  }catch(e){
-    grid.innerHTML="<p style='text-align:center;color:#999;'>Loading...</p>";
+
+    (data.items||[]).forEach(item=>{
+      const card=createCard(item);
+      if(card) grid.appendChild(card);
+    });
   }
 }
 
-window.addEventListener("load",async()=>{
-  const container=document.getElementById("categories-container");
-  const groups=getDailyGroups();
-  for(const group of groups){
-    await renderGroup(group,container);
-  }
-});
-</script>
+window.onload=render;
 
+</script>
 </body>
 </html>
