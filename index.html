@@ -238,6 +238,12 @@ const categoryPool = [
   { name: "🪞 AR Makeup Mirrors", query: "smart makeup mirror ar virtual try on" }
 
 ];
+  /* ========== PICK DAILY CATEGORIES ========== */
+function shuffle(array) {
+  return array.sort(() => rng() - 0.5);
+}
+
+const categories = shuffle([...categoryPool]).slice(0, 6);
 
 /* ========== FETCH PRODUCTS ========== */
 async function fetchProducts(query) {
