@@ -22,10 +22,7 @@
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-}
+body{background:var(--bg);color:var(--text);}
 
 header{
   padding:24px 32px;
@@ -39,44 +36,21 @@ header{
   z-index:10;
 }
 
-header h1{
-  font-size:20px;
-  font-weight:600;
-  letter-spacing:.5px;
-}
+header h1{font-size:20px;font-weight:600;}
 
 .nav-btn{
   background:#2a2f36;
-  border:none;
   color:white;
   padding:10px 16px;
   border-radius:12px;
-  cursor:pointer;
-  font-size:14px;
-  transition:.2s ease;
   text-decoration:none;
+  font-size:14px;
 }
 
-.nav-btn:hover{
-  background:#3a3f47;
-}
+.container{max-width:1200px;margin:auto;padding:50px 20px;}
 
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:50px 20px;
-}
-
-.category{
-  margin-bottom:80px;
-}
-
-.category h2{
-  font-size:32px;
-  font-weight:600;
-  margin-bottom:28px;
-  letter-spacing:.3px;
-}
+.category{margin-bottom:80px;}
+.category h2{font-size:32px;margin-bottom:28px;}
 
 .grid{
   display:grid;
@@ -94,82 +68,36 @@ header h1{
   flex-direction:column;
 }
 
-.card:hover{
-  transform:translateY(-4px);
-  background:var(--hover);
-}
+.card:hover{transform:translateY(-4px);background:var(--hover);}
 
-.card img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-}
+.card img{width:100%;height:220px;object-fit:cover;}
 
-.card-body{
-  padding:18px;
-  display:flex;
-  flex-direction:column;
-  flex:1;
-}
+.card-body{padding:18px;display:flex;flex-direction:column;flex:1;}
 
-.card h3{
-  font-size:15px;
-  font-weight:600;
-  margin-bottom:6px;
-}
+.card h3{font-size:15px;margin-bottom:6px;}
 
-.badge{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:6px;
-}
+.badge{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.rating{font-size:13px;margin-bottom:10px;}
+.why{font-size:13px;color:var(--muted);margin-bottom:16px;}
 
-.rating{
-  font-size:13px;
-  margin-bottom:10px;
-}
-
-.why{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.6;
-  margin-bottom:16px;
-}
-
-.card-buttons{
-  margin-top:auto;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-
-.card-buttons button,
-.card-buttons a{
-  padding:10px;
-  border-radius:12px;
-  border:none;
-  font-size:13px;
-  cursor:pointer;
-  text-align:center;
-  text-decoration:none;
-}
+.card-buttons{margin-top:auto;display:flex;flex-direction:column;gap:8px;}
 
 .primary{
-  background:#ffffff;
+  background:#fff;
   color:#000;
-}
-
-.primary:hover{
-  opacity:.9;
+  padding:10px;
+  border-radius:12px;
+  text-align:center;
+  text-decoration:none;
 }
 
 .secondary{
   background:#2a2f36;
   color:#fff;
-}
-
-.secondary:hover{
-  background:#3a3f47;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
 }
 </style>
 </head>
@@ -184,7 +112,7 @@ header h1{
 
 <script>
 
-/* -------- FULL HOT POOL -------- */
+/* -------- HOT POOL -------- */
 
 const hotPool = [
 {title:"Jellycat Plush Keychain 🧸",query:"jellycat plush keychain phone charm"},
@@ -206,13 +134,13 @@ const hotPool = [
 {title:"AR Makeup Mirror 💄",query:"smart makeup mirror ar virtual try on"}
 ];
 
-/* -------- DAILY STABLE SHUFFLE -------- */
+/* -------- DAILY ROTATION -------- */
 
 function seededShuffle(array, seed){
-  let result = [...array];
-  let random = mulberry32(seed);
+  let result=[...array];
+  let random=mulberry32(seed);
   for(let i=result.length-1;i>0;i--){
-    const j=Math.floor(random()* (i+1));
+    const j=Math.floor(random()*(i+1));
     [result[i],result[j]]=[result[j],result[i]];
   }
   return result;
@@ -227,10 +155,10 @@ function mulberry32(a){
   }
 }
 
-const todaySeed = parseInt(new Date().toISOString().slice(0,10).replace(/-/g,''),10);
-const rotatedPool = seededShuffle(hotPool, todaySeed);
+const todaySeed=parseInt(new Date().toISOString().slice(0,10).replace(/-/g,''),10);
+const rotatedPool=seededShuffle(hotPool,todaySeed);
 
-let usedTitles = new Set();
+let usedTitles=new Set();
 
 function getItems(count){
   const items=[];
@@ -244,50 +172,51 @@ function getItems(count){
   return items;
 }
 
-/* -------- WHY BUY GENERATOR -------- */
+/* -------- IMAGE CACHE (FRONTEND) -------- */
 
-function generateWhy(title){
-  return `Designed to elevate your daily routine with thoughtful functionality and modern style. ✨ 
-It delivers noticeable results while keeping things simple and intentional. 
-A refined upgrade that feels practical, polished, and genuinely worth it.`;
+async function fetchImage(query){
+
+  const cacheKey="img_"+query;
+  const cached=localStorage.getItem(cacheKey);
+
+  if(cached) return cached;
+
+  try{
+    const res=await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+    if(!res.ok) return null;
+
+    const data=await res.json();
+    const image=data.items?.[0]?.image;
+
+    if(image){
+      localStorage.setItem(cacheKey,image);
+      return image;
+    }
+
+    return null;
+
+  }catch(err){
+    return null;
+  }
 }
-
-/* -------- PLATFORM -------- */
-
-function getPlatform(link){
-  if(link.includes("amazon")) return "Amazon";
-  return "Store";
-}
-
-/* -------- ADD TO SHOP -------- */
-
-function addToShop(product){
-  const wall = JSON.parse(localStorage.getItem("productWall")||"[]");
-  if(wall.find(p=>p.link===product.link)) return;
-  wall.push(product);
-  localStorage.setItem("productWall",JSON.stringify(wall));
-}
-
-/* -------- CATEGORY MAP -------- */
-const categories=[
-{heading:"🔥 Hot Today",count:6},
-{heading:"🚀 Viral Game Changers",count:4},
-{heading:"✨ Glow Up Factory",count:3},
-{heading:"🔥 Cozy Girl Winter Haven",count:3},
-{heading:"🍳 TikTok Kitchen Chaos",count:3},
-{heading:"🧘‍♀️ Soft Life Wellness",count:3},
-{heading:"📱 Aesthetic Tech Setup",count:3},
-{heading:"🐾 Pet Bestie Club",count:3},
-{heading:"🏋️ Strong Girl Era",count:3},
-{heading:"✈️ Travel Main Character",count:3}
-];
 
 /* -------- RENDER -------- */
-function render(){
+
+async function render(){
+
   const container=document.getElementById("content");
   container.innerHTML="";
 
-  categories.forEach(cat=>{
+  const categories=[
+    {heading:"🔥 Hot Today",count:6},
+    {heading:"🚀 Viral Game Changers",count:4},
+    {heading:"✨ Glow Up Factory",count:3},
+    {heading:"🧘‍♀️ Soft Life Wellness",count:3},
+    {heading:"📱 Aesthetic Tech Setup",count:3}
+  ];
+
+  for(const cat of categories){
+
     const section=document.createElement("div");
     section.className="category";
     section.innerHTML=`<h2>${cat.heading}</h2>`;
@@ -297,14 +226,15 @@ function render(){
 
     const items=getItems(cat.count);
 
-    items.forEach(item=>{
+    for(const item of items){
+
+      const image=await fetchImage(item.query);
+
       const product={
         title:item.title,
         link:"https://www.amazon.com/s?k="+encodeURIComponent(item.query),
-        thumb:"https://source.unsplash.com/600x600/?"+encodeURIComponent(item.title),
-        rating:(Math.random()*1+4).toFixed(1),
-        why:generateWhy(item.title),
-        note:""
+        thumb:image || "https://via.placeholder.com/600x600?text=LinkMe",
+        rating:(Math.random()*1+4).toFixed(1)
       };
 
       const card=document.createElement("div");
@@ -314,27 +244,23 @@ function render(){
         <img src="${product.thumb}">
         <div class="card-body">
           <h3>${product.title}</h3>
-          <div class="badge">${getPlatform(product.link)}</div>
+          <div class="badge">Amazon</div>
           <div class="rating">⭐ ${product.rating}</div>
-          <div class="why">${product.why}</div>
           <div class="card-buttons">
             <a href="${product.link}" target="_blank" class="primary">Visit Store</a>
-            <button class="secondary" onclick='addToShop(${JSON.stringify(product)})'>Add to Shop</button>
           </div>
         </div>
       `;
 
       grid.appendChild(card);
-    });
+    }
 
     section.appendChild(grid);
     container.appendChild(section);
-  });
+  }
 }
 
 render();
-
-
 
 </script>
 </body>
