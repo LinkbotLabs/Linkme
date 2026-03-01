@@ -3,60 +3,56 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LinkMe – Discover Viral Finds</title>
+<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
+<title>LinkMe – We Source Daily</title>
 
 <style>
 :root {
-  --bg: #0f0f11;
-  --surface: #1a1a1e;
-  --card: #1e1e24;
-  --accent: #3b82f6;       /* Modern vibrant blue – 2026 energy */
-  --accent-soft: #60a5fa;
-  --text: #f1f5f9;
-  --muted: #94a3b8;
-  --border: #2d3748;
-  --shadow-sm: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-md: 0 10px 30px rgba(0,0,0,0.5);
+  --bg: #ffffff;
+  --card: #ffffff;
+  --text: #0f0f11;
+  --muted: #6b7280;
+  --accent: #0066ff;
+  --accent-soft: #3b82f6;
+  --border: #e2e8f0;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
   --radius: 20px;
-  --glass: rgba(30,30,36,0.6);
 }
 
 body {
   margin: 0;
   background: var(--bg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
   color: var(--text);
   line-height: 1.5;
-  overflow-x: hidden;
 }
 
-/* HEADER – subtle glassmorphism */
+/* HEADER */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 28px;
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  padding: 20px 28px;
+  background: white;
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: var(--shadow-sm);
 }
 
 header h1 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   margin: 0;
-  letter-spacing: -0.3px;
 }
 
 header button {
   background: var(--accent);
   border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 14px;
   color: white;
   font-weight: 600;
   cursor: pointer;
@@ -65,69 +61,86 @@ header button {
 
 header button:hover {
   background: var(--accent-soft);
-  transform: translateY(-1px);
+}
+
+/* CATEGORY TABS (visual only for now) */
+.category-tabs {
+  display: flex;
+  overflow-x: auto;
+  padding: 16px 28px;
+  gap: 12px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+
+.category-tab {
+  padding: 10px 20px;
+  background: #f1f5f9;
+  border-radius: 50px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.category-tab.active,
+.category-tab:hover {
+  background: var(--accent);
+  color: white;
 }
 
 /* SECTIONS */
 .section {
-  padding: 48px 24px 16px;
+  padding: 40px 24px 20px;
 }
 
 .section h2 {
-  margin: 0 0 28px;
-  font-size: 1.6rem;
+  font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(to right, var(--text), var(--muted));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin: 0 0 32px;
+  color: var(--text);
 }
 
-/* GRID – spacious, magazine-like */
+/* GRID */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
-  padding: 0 24px 60px;
-  max-width: 1600px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
-/* CARD – neumorphic + glass hints, 2026 premium */
+/* CARD – matched to mywall.html */
 .card {
   background: var(--card);
-  border-radius: var(--radius);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid var(--border);
-  backdrop-filter: blur(4px);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.35s ease;
 }
 
 .card:hover {
-  transform: translateY(-12px);
+  transform: translateY(-10px);
   box-shadow: var(--shadow-md);
 }
 
 .card img {
   width: 100%;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  aspect-ratio: 4 / 3.5;
+  aspect-ratio: 4 / 3.2;
   object-fit: cover;
-  background: #111;
-  transition: transform 0.4s;
+  background: #f8fafc;
 }
 
-.card:hover img {
-  transform: scale(1.04);
+.card-content {
+  padding: 20px;
 }
 
 .card h3 {
-  margin: 0 0 16px;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 600;
+  margin: 0 0 12px;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -135,50 +148,28 @@ header button:hover {
   overflow: hidden;
 }
 
-.card-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: auto;
-}
-
-.card-buttons a,
-.card-buttons button {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.card-buttons a {
-  background: #2d3748;
-  color: var(--text);
-  text-align: center;
-  text-decoration: none;
-}
-
-.card-buttons a:hover {
-  background: #374151;
-}
-
-.card-buttons button {
+.card button {
+  width: 100%;
+  padding: 14px;
   background: var(--accent);
   color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
 }
 
-.card-buttons button:hover {
+.card button:hover {
   background: var(--accent-soft);
 }
 
-.added {
-  background: #10b981 !important;
-  transform: scale(1.05);
+.card button.saved {
+  background: #10b981;
 }
 
-/* FLOAT BUTTON – neumorphic pill */
+/* FLOAT BUTTON */
 #wallBtn {
   position: fixed;
   bottom: 32px;
@@ -188,24 +179,29 @@ header button:hover {
   padding: 14px 28px;
   border-radius: 50px;
   font-weight: 700;
-  font-size: 1rem;
   border: none;
   cursor: pointer;
-  box-shadow: 0 12px 32px rgba(59,130,246,0.35);
+  box-shadow: 0 12px 32px rgba(0,102,255,0.25);
   transition: all 0.3s;
   z-index: 999;
 }
 
 #wallBtn:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 16px 40px rgba(59,130,246,0.45);
+  transform: translateY(-4px);
 }
 
-/* Mobile tweaks */
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+/* Mobile */
 @media (max-width: 768px) {
-  .grid { gap: 24px; padding: 0 16px 60px; }
-  .section { padding: 40px 16px 12px; }
-  header { padding: 14px 20px; }
+  .grid { gap: 24px; padding: 0 16px; }
+  .section { padding: 32px 16px 16px; }
 }
 </style>
 </head>
@@ -213,26 +209,31 @@ header button:hover {
 <body>
 
 <header>
-  <h1>🛍 Discover Viral Finds</h1>
+  <h1>We Source Daily – Create Your Shop</h1>
   <button onclick="location.href='mywall.html'">My Wall</button>
 </header>
+
+<div class="category-tabs">
+  <div class="category-tab active">Hot Picks 🔥</div>
+  <div class="category-tab">TikTok Viral</div>
+  <div class="category-tab">New Niche Finds</div>
+  <div class="category-tab">Glow Up Essentials</div>
+  <div class="category-tab">Tech Gadgets</div>
+</div>
 
 <div id="sections"></div>
 
 <button id="wallBtn" onclick="location.href='mywall.html'">
-  My Curated Wall (0)
+  View My Wall (0)
 </button>
 
 <script>
-// ──────────────────────────────────────────────
-// Original logic preserved + minor polish
-// ──────────────────────────────────────────────
-
 const groups = [
-  {heading: "🔥 Hot Today", query: "tiktok viral products"},
-  {heading: "✨ Glow Up", query: "self care trending products"},
-  {heading: "📱 Tech Finds", query: "aesthetic tech gadgets"},
-  {heading: "✈️ Travel Picks", query: "travel essentials trending"}
+  { heading: "🔥 Hot Picks", query: "hot viral products tiktok" },
+  { heading: "TikTok Viral", query: "tiktok viral products 2026" },
+  { heading: "New Niche Finds", query: "emerging niche products trending" },
+  { heading: "Glow Up Essentials", query: "self care glow up trending" },
+  { heading: "Tech Gadgets", query: "aesthetic tech gadgets viral" }
 ];
 
 let seenLinks = new Set();
@@ -240,16 +241,16 @@ let seenImages = new Set();
 let seenTitles = new Set();
 
 function normalize(text) {
-  return text.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return text?.toLowerCase().replace(/[^a-z0-9]/g, "") || "";
 }
 
 function updateCount() {
   const wall = JSON.parse(localStorage.getItem("linkme_wall") || "[]");
-  document.getElementById("wallBtn").textContent = 
-    `My Curated Wall (${wall.length})`;
+  document.getElementById("wallBtn").textContent = `View My Wall (${wall.length})`;
 }
 
 function getPlatform(link) {
+  if (!link) return "other";
   if (link.includes("amazon")) return "amazon";
   if (link.includes("dhgate")) return "dhgate";
   if (link.includes("temu")) return "temu";
@@ -265,13 +266,10 @@ function addToWall(product) {
 }
 
 function createCard(item) {
-  const cleanTitle = normalize(item.title);
+  if (!item?.title || !item?.image || !item?.link) return null;
 
-  if (
-    seenLinks.has(item.link) ||
-    seenImages.has(item.image) ||
-    seenTitles.has(cleanTitle)
-  ) {
+  const cleanTitle = normalize(item.title);
+  if (seenLinks.has(item.link) || seenImages.has(item.image) || seenTitles.has(cleanTitle)) {
     return null;
   }
 
@@ -284,14 +282,13 @@ function createCard(item) {
 
   card.innerHTML = `
     <img src="${item.image}" loading="lazy" alt="${item.title}">
-    <h3>${item.title}</h3>
-    <div class="card-buttons">
-      <a href="${item.link}" target="_blank" rel="noopener">Visit</a>
-      <button>Add to Wall</button>
+    <div class="card-content">
+      <h3>${item.title}</h3>
+      <button class="save-btn">Save to Wall</button>
     </div>
   `;
 
-  const btn = card.querySelector("button");
+  const btn = card.querySelector(".save-btn");
   btn.onclick = () => {
     addToWall({
       title: item.title,
@@ -299,8 +296,8 @@ function createCard(item) {
       link: item.link,
       platform: getPlatform(item.link)
     });
-    btn.textContent = "Added ✓";
-    btn.classList.add("added");
+    btn.textContent = "Saved ✓";
+    btn.classList.add("saved");
     btn.disabled = true;
   };
 
@@ -310,6 +307,10 @@ function createCard(item) {
 async function render() {
   updateCount();
   const container = document.getElementById("sections");
+  container.innerHTML = "";
+
+  const today = new Date();
+  const daySeed = today.getDate() + today.getMonth() * 31 + today.getFullYear() * 365;
 
   for (const group of groups) {
     const section = document.createElement("div");
@@ -319,18 +320,39 @@ async function render() {
 
     const grid = document.createElement("div");
     grid.className = "grid";
-    container.appendChild(grid);
+    section.appendChild(grid);
+
+    const loading = document.createElement("div");
+    loading.className = "loading";
+    loading.textContent = "Sourcing today's fresh finds...";
+    grid.appendChild(loading);
 
     try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(group.query)}`);
+      // Try to fetch a larger set so we can pick ~50 daily
+      const res = await fetch(`/api/search?q=${encodeURIComponent(group.query)}&limit=300`);
       const data = await res.json();
 
-      (data.items || []).forEach(item => {
+      grid.removeChild(loading);
+
+      let items = data.items || [];
+      if (items.length > 50) {
+        // Simple daily rotation: seeded shuffle + slice first 50
+        const seeded = items.map((item, i) => ({ item, sort: Math.sin(daySeed + i) }));
+        seeded.sort((a, b) => a.sort - b.sort);
+        items = seeded.map(s => s.item).slice(0, 50);
+      }
+
+      items.forEach(item => {
         const card = createCard(item);
         if (card) grid.appendChild(card);
       });
+
+      if (!grid.children.length) {
+        grid.innerHTML = '<p style="text-align:center; color:var(--muted);">No new finds today – check back tomorrow!</p>';
+      }
     } catch (err) {
-      console.error("Fetch error for", group.query, err);
+      console.error("Fetch error:", err);
+      loading.textContent = "Couldn't load today's picks – try refreshing.";
     }
   }
 }
