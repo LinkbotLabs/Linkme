@@ -33,6 +33,7 @@ header{
 header h1{
   font-size:20px;
   font-weight:600;
+  outline:none;
 }
 
 .header-buttons{
@@ -61,18 +62,19 @@ button:hover{
 }
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:24px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
   padding:30px;
 }
 
+/* LANDSCAPE CARD */
 .card{
+  display:flex;
+  gap:20px;
   background:var(--card);
   border-radius:18px;
   padding:18px;
-  display:flex;
-  flex-direction:column;
   box-shadow:0 8px 30px rgba(0,0,0,0.3);
   transition:0.2s;
 }
@@ -82,9 +84,17 @@ button:hover{
 }
 
 .card img{
-  width:100%;
+  width:180px;
+  height:180px;
+  object-fit:cover;
   border-radius:14px;
-  margin-bottom:14px;
+  flex-shrink:0;
+}
+
+.card-content{
+  display:flex;
+  flex-direction:column;
+  flex:1;
 }
 
 .badge{
@@ -94,11 +104,12 @@ button:hover{
   border-radius:8px;
   display:inline-block;
   margin-bottom:8px;
+  width:fit-content;
 }
 
 .card h3{
   margin:0 0 8px 0;
-  font-size:16px;
+  font-size:18px;
 }
 
 .why{
@@ -117,6 +128,18 @@ button:hover{
 
 .remove-btn{
   background:#ff453a;
+}
+
+/* MOBILE STACK */
+@media(max-width:700px){
+  .card{
+    flex-direction:column;
+  }
+
+  .card img{
+    width:100%;
+    height:220px;
+  }
 }
 
 .modal{
@@ -150,7 +173,7 @@ button:hover{
 <body>
 
 <header>
-  <h1>🛍 Your Curated Wall</h1>
+  <h1 contenteditable="true" id="shopName">🛍 Your Curated Wall</h1>
   <div class="header-buttons">
     <button class="secondary" onclick="goHome()">Home</button>
     <button onclick="shareShop()">Share Shop</button>
@@ -161,7 +184,6 @@ button:hover{
 
 <div class="grid" id="wall"></div>
 
-<!-- Affiliate Modal -->
 <div class="modal" id="affiliateModal">
   <div class="modal-content">
     <h3>Affiliate Settings</h3>
@@ -177,40 +199,68 @@ let wall = JSON.parse(localStorage.getItem("linkme_wall")) || [];
 let affiliate = JSON.parse(localStorage.getItem("linkme_affiliate")) || {};
 
 const grid = document.getElementById("wall");
+const shopNameEl = document.getElementById("shopName");
 
+/* SHOP NAME SAVE */
+const savedName = localStorage.getItem("linkme_shopname");
+if(savedName) shopNameEl.innerText = savedName;
+
+shopNameEl.addEventListener("blur",()=>{
+  localStorage.setItem("linkme_shopname", shopNameEl.innerText);
+});
+
+/* RENDER */
 function render(){
   grid.innerHTML = "";
+
   if(!wall.length){
-    grid.innerHTML = "<p style='padding:30px;color:#9a9a9e'>No products added yet.</p>";
+    grid.innerHTML = "<p style='color:#9a9a9e'>No products added yet.</p>";
     return;
   }
 
   wall.forEach((p,index)=>{
     const card = document.createElement("div");
-    card.className = "card";
+    card.className="card";
 
-    const finalLink = injectAffiliate(p.link, p.platform);
+    const finalLink = injectAffiliate(p.link,p.platform);
 
-    card.innerHTML = `
+    card.innerHTML=`
       <img src="${p.image}" />
-      <div class="badge">⭐ Premium Pick</div>
-      <h3>${p.title}</h3>
-      <div class="why">${p.why || autoWhy(p.title)}</div>
-      <div class="card-buttons">
-        <button onclick="visit('${finalLink}')">Visit</button>
-        <button class="secondary" onclick="shareProduct('${p.title}','${finalLink}')">Share</button>
-        <button class="secondary" onclick="grok('${p.title}','${finalLink}')">Grok</button>
-        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+      <div class="card-content">
+        <div class="badge">⭐ Premium Pick</div>
+        <h3>${p.title}</h3>
+        <div class="why">${p.why || autoWhy(p.title)}</div>
+        <div class="card-buttons">
+          <button onclick="visit('${finalLink}')">Visit</button>
+          <button class="secondary" onclick="shareProduct('${p.title}','${finalLink}')">Share</button>
+          <button class="secondary" onclick="editItem(${index})">Edit</button>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        </div>
       </div>
     `;
     grid.appendChild(card);
   });
 }
 
-function autoWhy(title){
-  return `✨ ${title} upgrades your daily routine instantly. It blends emotional satisfaction with practical results. A premium addition that feels intentional and elevated.`;
+/* EDIT PRODUCT */
+function editItem(i){
+  const item = wall[i];
+  const newTitle = prompt("Edit title:", item.title);
+  if(newTitle !== null) item.title = newTitle;
+
+  const newWhy = prompt("Edit description:", item.why || "");
+  if(newWhy !== null) item.why = newWhy;
+
+  localStorage.setItem("linkme_wall", JSON.stringify(wall));
+  render();
 }
 
+/* AUTO DESCRIPTION */
+function autoWhy(title){
+  return `✨ ${title} levels up your setup instantly.\n🔥 Clean vibes, real impact.\n💎 Smart pick you won’t regret.`;
+}
+
+/* AFFILIATE */
 function injectAffiliate(link, platform){
   if(platform==="amazon" && affiliate.amazonId){
     return link + "&tag=" + affiliate.amazonId;
@@ -240,29 +290,41 @@ function clearWall(){
   render();
 }
 
+/* SHARE PRODUCT */
 function shareProduct(title,link){
-  const text = `Check this out: ${title} ${link}`;
-  navigator.share ? navigator.share({text}) : navigator.clipboard.writeText(text);
+  const text=`Check this out: ${title} ${link}`;
+  if(navigator.share){
+    navigator.share({text});
+  }else{
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+  }
 }
 
-function grok(title,link){
-  const text = `What do you think of this product: ${title} ${link}`;
-  navigator.clipboard.writeText(text);
-  alert("Copied for Grok!");
-}
+/* FIXED SHARE SHOP */
+async function shareShop(){
+  try{
+    const res = await fetch("/api/share",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({wall,affiliate})
+    });
 
-function shareShop(){
-  fetch("/api/share",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({wall,affiliate})
-  })
-  .then(res=>res.json())
-  .then(data=>{
+    if(!res.ok) throw new Error();
+
+    const data = await res.json();
     const url = window.location.origin + "/mywall.html?id=" + data.id;
-    navigator.share ? navigator.share({url}) : navigator.clipboard.writeText(url);
-    alert("Shop link ready!");
-  });
+
+    if(navigator.share){
+      await navigator.share({url});
+    }else{
+      await navigator.clipboard.writeText(url);
+      alert("Shop link copied!");
+    }
+
+  }catch{
+    alert("Share failed. Check API deployment.");
+  }
 }
 
 function goHome(){
@@ -274,23 +336,24 @@ function openAffiliate(){
 }
 
 function saveAffiliate(){
-  affiliate = {
-    amazonId:document.getElementById("amazonId").value,
-    dhgateId:document.getElementById("dhgateId").value,
-    temuId:document.getElementById("temuId").value
+  affiliate={
+    amazonId:amazonId.value,
+    dhgateId:dhgateId.value,
+    temuId:temuId.value
   };
   localStorage.setItem("linkme_affiliate",JSON.stringify(affiliate));
-  document.getElementById("affiliateModal").style.display="none";
+  affiliateModal.style.display="none";
 }
 
+/* LOAD SHARED */
 async function loadShared(){
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+  const params=new URLSearchParams(window.location.search);
+  const id=params.get("id");
   if(id){
-    const res = await fetch("/api/get?id="+id);
-    const data = await res.json();
-    wall = data.wall || [];
-    affiliate = data.affiliate || {};
+    const res=await fetch("/api/get?id="+id);
+    const data=await res.json();
+    wall=data.wall||[];
+    affiliate=data.affiliate||{};
     render();
   }
 }
