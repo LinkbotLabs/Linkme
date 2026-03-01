@@ -31,11 +31,9 @@ body{
   background:var(--bg);
   color:var(--text);
   margin:0;
-  padding:0;
   min-height:100vh;
 }
 
-/* HERO */
 .hero{
   text-align:center;
   padding:80px 20px 40px;
@@ -66,7 +64,6 @@ body{
   box-shadow:0 20px 40px rgba(0,0,0,0.08);
 }
 
-/* LAYOUT */
 .categories-container{
   max-width:1280px;
   margin:0 auto 80px;
@@ -78,23 +75,9 @@ body{
 }
 
 .category-section h2{
-  font-size:2.5rem;
+  font-size:2.3rem;
   text-align:center;
   margin-bottom:32px;
-  position:relative;
-}
-
-.category-section h2::after{
-  content:'';
-  position:absolute;
-  bottom:-10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:120px;
-  height:4px;
-  background:var(--text);
-  opacity:.15;
-  border-radius:5px;
 }
 
 .category-grid{
@@ -109,7 +92,6 @@ body{
   .category-grid{column-count:4;}
 }
 
-/* PRODUCT CARD */
 .product-card{
   break-inside:avoid;
   margin-bottom:24px;
@@ -118,13 +100,13 @@ body{
   border:1px solid var(--stroke);
   border-radius:24px;
   overflow:hidden;
-  transition:all .4s;
+  transition:.4s;
   box-shadow:0 15px 40px rgba(0,0,0,0.1);
   position:relative;
 }
 
 .product-card:hover{
-  transform:translateY(-10px) scale(1.03);
+  transform:translateY(-8px) scale(1.03);
   box-shadow:0 25px 60px rgba(0,0,0,0.15);
 }
 
@@ -144,30 +126,25 @@ body{
 }
 
 .card-title{
-  font-size:1.3rem;
+  font-size:1.2rem;
   font-weight:700;
-  margin:0 0 8px;
+  margin-bottom:8px;
 }
 
 .why-buy{
   font-size:0.95rem;
   color:var(--muted);
   line-height:1.5;
-  margin:8px 0 16px;
+  margin-bottom:16px;
   font-style:italic;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
 }
 
-/* BADGES */
 .price-badge{
   position:absolute;
   top:16px;
   left:16px;
   background:white;
-  padding:8px 16px;
+  padding:8px 14px;
   border-radius:14px;
   font-weight:800;
   box-shadow:0 10px 25px rgba(0,0,0,0.1);
@@ -178,7 +155,7 @@ body{
   top:16px;
   right:16px;
   background:rgba(255,255,255,0.9);
-  padding:8px 16px;
+  padding:8px 14px;
   border-radius:14px;
   font-weight:800;
 }
@@ -191,32 +168,29 @@ body{
   color:white;
   padding:6px 12px;
   border-radius:12px;
-  font-size:0.9rem;
+  font-size:0.85rem;
   font-weight:800;
 }
 
-/* BUTTONS */
 .add-btn{
-  margin:12px auto;
   display:block;
-  padding:12px 28px;
-  background:var(--text);
-  color:white;
+  width:100%;
+  padding:12px;
   border:none;
   border-radius:16px;
   font-weight:700;
+  background:var(--text);
+  color:white;
   cursor:pointer;
   transition:.3s;
 }
 
 .add-btn:hover{
   opacity:.85;
-  transform:translateY(-2px);
 }
 
 .added{
   background:var(--success)!important;
-  color:white!important;
 }
 
 #my-wall-btn{
@@ -230,12 +204,6 @@ body{
   font-weight:900;
   box-shadow:0 15px 40px rgba(0,0,0,0.15);
   z-index:100;
-  animation:pulse 2s infinite alternate;
-}
-
-@keyframes pulse{
-  from{box-shadow:0 15px 40px rgba(0,0,0,0.15);}
-  to{box-shadow:0 20px 60px rgba(0,0,0,0.25);}
 }
 </style>
 </head>
@@ -244,22 +212,20 @@ body{
 
 <div class="hero">
   <h1>Linkme</h1>
-  <p>Instant affiliate storefronts.  Amazon • Temu • DHgate </p>
+  <p>Instant affiliate storefronts. Unlimited Amazon • Temu • DHgate products. Earn commissions — free forever, no limits, no code.</p>
   <div class="unlimited-banner">
-    ✅ Choose your niche<br>
-    
+    ✅ UNLIMITED PRODUCTS FOR EVERYONE!<br>
+    <span style="font-size:0.95rem;">Password for My Wall: <strong>linkme</strong></span>
   </div>
 </div>
 
 <div id="categories-container" class="categories-container"></div>
-
 <button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
 
 <script>
-// ====================== DAILY ROTATION & GROUPS ======================
 const allGroups = [
-  { heading: "Hot Today 🔥", query: "tiktok viral products 2026", isHot: true },
-  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026", isGameChanger: true },
+  { heading: "Hot Today 🔥", query: "tiktok viral products 2026" },
+  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026" },
   { heading: "Glow Up Factory ✨", queries: ["LED face mask red light therapy", "snail mucin peptide serum", "collagen peptide sheet mask"] },
   { heading: "Cozy Girl Winter Haven 🔥", queries: ["indoor portable heater mini", "galaxy projector sunset lamp", "white noise machine sleep"] },
   { heading: "TikTok Kitchen Chaos 🍳", queries: ["mini waffle maker viral", "portable usb blender", "egg bite maker cloud bread"] },
@@ -270,89 +236,101 @@ const allGroups = [
   { heading: "Travel Main Character ✈️", queries: ["anti-theft crossbody bag", "rfid blocking wallet", "hanging toiletry bag"] }
 ];
 
-function getDailyGroups() {
+function getDailyGroups(){
   const day = new Date().getDate();
   const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]]; // Hot Today + Game Changers always first
-  for (let i = 0; i < 8; i++) {
+  const selected = [allGroups[0], allGroups[1]];
+  for(let i=0;i<8;i++){
     selected.push(allGroups[(start + i + 2) % allGroups.length]);
   }
   return selected;
 }
 
-// ====================== RICH PRODUCT CARD ======================
-function createProductCard(item) {
+function getPlatform(link){
+  if(link.includes("amazon")) return "Amazon";
+  if(link.includes("temu")) return "Temu";
+  if(link.includes("dhgate")) return "DHgate";
+  return "Shop";
+}
+
+function addToWall(title,img,link,snippet,price,customWhy){
+  const saved = JSON.parse(localStorage.getItem("wallItems")||"[]");
+  saved.push({title,img,link,snippet,price,customWhy});
+  localStorage.setItem("wallItems",JSON.stringify(saved));
+}
+
+function createProductCard(item){
   const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if (!thumb || thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.length < 50) return null;
+  if(!thumb || thumb.length<50) return null;
 
   const title = item.title || "Untitled";
   const link = item.link;
-  const snippet = item.snippet || "Trending favorite!";
-  let price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
+  const snippet = item.snippet || "";
+  const price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
   const platform = getPlatform(link);
 
-  const isViral = snippet.toLowerCase().includes('viral') || title.toLowerCase().includes('viral') || title.toLowerCase().includes('tiktok');
+  const isViral = snippet.toLowerCase().includes("viral") || title.toLowerCase().includes("tiktok");
 
-  const card = document.createElement("div");
-  card.className = "product-card";
+  const card=document.createElement("div");
+  card.className="product-card";
 
-  let html = `<img src="${thumb}" alt="${title}" loading="lazy">`;
-  if (price) html += `<div class="price-badge">$${price}</div>`;
-  html += `<div class="platform-badge">${platform}</div>`;
-  if (isViral) html += `<div class="viral-badge">FYP Viral 🔥</div>`;
+  let html=`<img src="${thumb}" loading="lazy">`;
+  if(price) html+=`<div class="price-badge">$${price}</div>`;
+  html+=`<div class="platform-badge">${platform}</div>`;
+  if(isViral) html+=`<div class="viral-badge">FYP Viral 🔥</div>`;
 
-  html += `
+  html+=`
     <div class="card-content">
       <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0, 100)}${snippet.length > 100 ? '...' : ''}</div>
+      <div class="why-buy">Why this slaps: ${snippet.substring(0,100)}</div>
       <button class="add-btn">Add to Wall</button>
-    </div>`;
+    </div>
+  `;
 
-  card.innerHTML = html;
+  card.innerHTML=html;
 
-  card.querySelector(".add-btn").onclick = () => {
-    let customWhy = prompt("Why do you like this? (optional – shows on your wall)", "");
-    addToWall(title, thumb, link, snippet, price, customWhy);
-    card.querySelector(".add-btn").textContent = "Added ✓";
-    card.querySelector(".add-btn").disabled = true;
+  card.querySelector(".add-btn").onclick=()=>{
+    let customWhy=prompt("Why do you like this?","");
+    addToWall(title,thumb,link,snippet,price,customWhy);
+    card.querySelector(".add-btn").textContent="Added ✓";
+    card.querySelector(".add-btn").classList.add("added");
+    card.querySelector(".add-btn").disabled=true;
   };
 
   return card;
 }
 
-// ====================== RENDER GROUP ======================
-async function renderGroup(group, container) {
-  const section = document.createElement("div");
-  section.className = "category-section";
-  section.innerHTML = `<h2>${group.heading}</h2><div class="category-grid" id="grid-${group.heading.replace(/\s/g,'')}"></div>`;
+async function renderGroup(group,container){
+  const section=document.createElement("div");
+  section.className="category-section";
+  section.innerHTML=`<h2>${group.heading}</h2><div class="category-grid"></div>`;
   container.appendChild(section);
 
-  const grid = section.querySelector(".category-grid");
+  const grid=section.querySelector(".category-grid");
 
-  try {
-    const query = group.query || group.queries[Math.floor(Math.random() * group.queries.length)];
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
-    const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      data.items.slice(0, 12).forEach(item => {
-        const card = createProductCard(item);
-        if (card) grid.appendChild(card);
+  try{
+    const query = group.query || group.queries[Math.floor(Math.random()*group.queries.length)];
+    const res=await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
+    const data=await res.json();
+    if(data.items){
+      data.items.slice(0,12).forEach(item=>{
+        const card=createProductCard(item);
+        if(card) grid.appendChild(card);
       });
     }
-  } catch (e) {
-    grid.innerHTML = '<p style="text-align:center;color:#ff6b6b;">Loading...</p>';
+  }catch(e){
+    grid.innerHTML="<p style='text-align:center;color:#999;'>Loading...</p>";
   }
 }
 
-// ====================== MAIN INIT ======================
-window.addEventListener('load', async () => {
-  const container = document.getElementById("categories-container");
-  const dailyGroups = getDailyGroups();
-
-  for (const group of dailyGroups) {
-    await renderGroup(group, container);
+window.addEventListener("load",async()=>{
+  const container=document.getElementById("categories-container");
+  const groups=getDailyGroups();
+  for(const group of groups){
+    await renderGroup(group,container);
   }
 });
 </script>
+
 </body>
 </html>
