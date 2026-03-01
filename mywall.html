@@ -3,420 +3,367 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Linkme Wall – Your Curated Storefront</title>
+<title>My Linkme Storefront</title>
 <link rel="stylesheet" href="uniform-dark-glass.css">
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
+
 <style>
 :root {
-  --accent: #ffe169;
-  --glow: #00ffff;
-  --text: #fff;
-  --muted: #ccc;
-  --bg: #0a0a15;
-  --glass: rgba(30,30,60,0.45);
-  --stroke: rgba(255,255,255,0.15);
-  --shadow: 0 20px 60px rgba(0,0,0,0.6);
+  --accent:#ffe169;
+  --glow:#00ffff;
+  --glass:rgba(20,20,35,0.85);
+  --stroke:rgba(255,255,255,0.18);
+  --text:#fff;
+  --muted:#d0d0ff;
+  --success:#39ff14;
+  --viral:#ff3366;
 }
-body {
-  background: linear-gradient(135deg, #000 0%, #0f001a 100%);
-  color: var(--text);
-  font-family: system-ui, sans-serif;
-  min-height: 100vh;
-  margin: 0;
-  padding-bottom: 180px;
+
+body{
+  margin:0;
+  font-family:system-ui;
+  background:linear-gradient(135deg,#000 0%,#0a0015 100%);
+  color:var(--text);
 }
-h1 {
-  text-align: center;
-  color: #ffe169;
-  font-size: 3rem;
-  margin: 50px 0 10px;
-  text-shadow: 0 0 40px rgba(255,225,105,0.5);
+
+/* HERO */
+.hero{
+  position:relative;
+  padding:100px 20px 60px;
+  text-align:center;
+  background:linear-gradient(135deg,#000,#1a0030);
 }
-.affiliate-banner {
-  background: rgba(57,255,20,0.15);
-  border: 1px solid #39ff14;
-  color: #39ff14;
-  text-align: center;
-  padding: 12px;
-  margin: 0 5% 30px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 1.05rem;
-  display: none;
-  box-shadow: 0 0 30px rgba(57,255,20,0.3);
+
+#bannerPreview{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0.35;
 }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 28px;
-  max-width: 1480px;
-  margin: 0 auto;
-  padding: 0 24px 100px;
+
+.avatar{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  border:3px solid var(--accent);
+  background:#111;
+  margin:0 auto 16px;
 }
-.card {
-  background: var(--glass);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--stroke);
-  border-radius: 28px;
-  overflow: hidden;
-  transition: all 0.45s;
-  box-shadow: var(--shadow);
-  position: relative;
+
+#shopName{
+  font-size:2.5rem;
+  font-weight:900;
+  color:var(--accent);
+  outline:none;
 }
-.card:hover {
-  transform: translateY(-16px) scale(1.04);
-  box-shadow: 0 40px 90px rgba(255,165,0,0.35);
+
+#shopBio{
+  max-width:600px;
+  margin:10px auto 0;
+  color:var(--muted);
+  outline:none;
 }
-.card img {
-  width: 100%;
-  height: 320px;
-  object-fit: cover;
-  transition: transform 0.6s;
+
+/* AFFILIATE */
+details{
+  max-width:600px;
+  margin:30px auto;
+  background:var(--glass);
+  border:1px solid var(--stroke);
+  padding:20px;
+  border-radius:20px;
 }
-.card:hover img { transform: scale(1.09); }
-.card-content {
-  padding: 24px;
+
+details summary{
+  cursor:pointer;
+  font-weight:700;
+  font-size:1.1rem;
 }
-.card-title {
-  font-size: 1.45rem;
-  font-weight: 700;
-  margin: 0 0 10px;
-  color: #ffe169;
-  cursor: pointer;
+
+details input{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
+  border-radius:8px;
+  border:none;
 }
-.card-why {
-  font-size: 1rem;
-  color: var(--muted);
-  line-height: 1.55;
-  margin-bottom: 20px;
-  min-height: 3.2em;
-  cursor: pointer;
+
+details button{
+  padding:10px 20px;
+  background:var(--accent);
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
 }
-.card-shop-link {
-  display: inline-block;
-  color: var(--accent);
-  font-weight: 600;
-  text-decoration: none;
-  margin-top: 12px;
-  transition: all 0.25s;
+
+/* MASONRY */
+.grid{
+  column-count:2;
+  column-gap:24px;
+  padding:20px;
 }
-.card-shop-link:hover {
-  color: #ffd14d;
-  text-decoration: underline;
+
+@media(min-width:640px){ .grid{ column-count:3; } }
+@media(min-width:1024px){ .grid{ column-count:4; } }
+
+.card{
+  break-inside:avoid;
+  margin-bottom:24px;
+  background:var(--glass);
+  border:1px solid var(--stroke);
+  border-radius:24px;
+  overflow:hidden;
+  transition:all .4s;
+  box-shadow:0 15px 50px rgba(0,0,0,.6);
+  position:relative;
 }
-.platform-badge {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(0,0,0,0.75);
-  color: var(--accent);
-  padding: 8px 16px;
-  border-radius: 14px;
-  font-size: 0.95rem;
-  font-weight: 800;
+
+.card:hover{
+  transform:translateY(-12px) scale(1.03);
+  box-shadow:0 30px 80px rgba(255,165,0,.35);
 }
-.remove-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: #ff4444;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 0.95rem;
-  display: none;
+
+.card img{
+  width:100%;
+  height:280px;
+  object-fit:cover;
 }
-.card:hover .remove-btn { display: block; }
-#affiliateModal, #shareModal, #unlockOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(12px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
+
+.price-badge{
+  position:absolute;
+  top:14px;
+  left:14px;
+  background:var(--success);
+  color:#000;
+  padding:6px 12px;
+  border-radius:12px;
+  font-weight:800;
 }
-#affiliateContent, #shareModalContent, #unlockBox {
-  background: rgba(30,30,60,0.98);
-  border: 3px solid var(--accent);
-  border-radius: 28px;
-  padding: 40px;
-  width: 92%;
-  max-width: 520px;
-  box-shadow: 0 0 80px rgba(255,165,0,0.6);
+
+.platform-badge{
+  position:absolute;
+  top:14px;
+  right:14px;
+  background:rgba(0,0,0,.75);
+  color:var(--accent);
+  padding:6px 12px;
+  border-radius:12px;
+  font-weight:800;
 }
-#affiliateContent h2, #shareModalContent h2 {
-  color: var(--accent);
-  margin: 0 0 24px;
-  text-align: center;
-  font-size: 1.8rem;
+
+.card-content{
+  padding:18px;
 }
-#amazonAffiliate, #temuAffiliate, #dhgateAffiliate {
-  width: 100%;
-  padding: 16px;
-  margin-bottom: 16px;
-  border-radius: 16px;
-  border: 1px solid var(--accent);
-  background: rgba(255,255,255,0.07);
-  color: white;
-  font-size: 1.05rem;
+
+.card-title{
+  font-weight:700;
+  margin-bottom:8px;
+  color:var(--accent);
 }
-.saveAffiliateBtn {
-  background: var(--accent);
-  color: #000;
-  padding: 18px;
-  border: none;
-  border-radius: 16px;
-  font-weight: 900;
-  font-size: 1.15rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 12px;
+
+.card-why{
+  font-size:.9rem;
+  color:var(--muted);
+  margin-bottom:12px;
 }
-#homeBtn {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background: rgba(255,225,105,0.15);
-  color: #ffe169;
-  border: 2px solid #ffe169;
-  border-radius: 50px;
-  padding: 14px 28px;
-  font-weight: 900;
-  font-size: 1.1rem;
-  cursor: pointer;
-  z-index: 1000;
-  box-shadow: 0 0 30px rgba(255,225,105,0.4);
-  transition: all 0.3s;
+
+.btn{
+  padding:8px 14px;
+  border:none;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer;
+  margin:4px 2px;
 }
-#homeBtn:hover {
-  background: #ffe169;
-  color: #000;
-  transform: scale(1.08);
-}
-#affiliateToggle, #shareWallBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--accent);
-  color: #000;
-  border: none;
-  border-radius: 50px;
-  padding: 16px 32px;
-  font-weight: 900;
-  font-size: 1.15rem;
-  cursor: pointer;
-  box-shadow: 0 0 40px rgba(255,165,0,0.5);
-  z-index: 1000;
-}
-#affiliateToggle:hover, #shareWallBtn:hover {
-  transform: scale(1.08);
+
+.btn-buy{ background:var(--accent); color:#000; }
+.btn-share{ background:#444; color:#fff; }
+.btn-grok{ background:var(--glow); color:#000; }
+.btn-remove{ background:#ff4444; color:#fff; }
+
+#publishBtn{
+  display:block;
+  margin:40px auto;
+  padding:18px 40px;
+  background:var(--accent);
+  color:#000;
+  border:none;
+  border-radius:40px;
+  font-size:1.2rem;
+  font-weight:900;
+  cursor:pointer;
 }
 </style>
 </head>
 <body>
 
-<div id="affiliateBanner" class="affiliate-banner"></div>
+<div class="hero">
+  <div id="bannerPreview"></div>
+  <div class="avatar"></div>
+  <h1 id="shopName" contenteditable="true">My Linkme Shop</h1>
+  <p id="shopBio" contenteditable="true">Curated viral finds ✨</p>
+  <br>
+  <input type="file" id="bannerUpload" accept="image/*">
+</div>
 
-<h1 id="wallTitle">My Linkme Shop</h1>
+<details id="affiliateBox">
+  <summary>⚙ Affiliate Settings</summary>
+  <input id="amazonTag" placeholder="Amazon Tag (-21)">
+  <input id="dhgateTag" placeholder="DHgate ID">
+  <input id="temuTag" placeholder="Temu ID">
+  <button onclick="saveAffiliateTags()">Save</button>
+</details>
 
 <div class="grid" id="wallGrid"></div>
 
-<button id="shareWallBtn">🔗 Share Shop</button>
-<button id="affiliateToggle">💰 Affiliate Tags</button>
-<button id="homeBtn">← Home</button>
-
-<!-- Affiliate Modal -->
-<div id="affiliateModal">
-  <div id="affiliateContent">
-    <h2>Set Your Affiliate Tags</h2>
-    <input type="text" id="amazonAffiliate" placeholder="Amazon tag (e.g., mytag-20)">
-    <input type="text" id="temuAffiliate" placeholder="Temu tag">
-    <input type="text" id="dhgateAffiliate" placeholder="DHgate ID (e.g., 2545671)">
-    <button class="saveAffiliateBtn" id="saveAffiliate">Save & Activate</button>
-    <button onclick="document.getElementById('affiliateModal').style.display='none'" style="margin-top:16px;background:#444;color:#fff;padding:16px;border:none;border-radius:16px;cursor:pointer;width:100%;">Cancel</button>
-  </div>
-</div>
-
-<!-- Share Modal (unchanged) -->
-<div id="shareModal">
-  <div id="shareModalContent">
-    <h2>Share Your Shop</h2>
-    <div id="qrContainer"><div id="qrcode"></div></div>
-    <div id="shareLinkDisplay"></div>
-    <button id="copyBtn">Copy Link</button>
-    <button id="closeShareBtn">Close</button>
-  </div>
-</div>
-
-<!-- Unlock Overlay (unchanged) -->
-<div id="unlockOverlay">
-  <div id="unlockBox">
-    <!-- existing unlock content -->
-  </div>
-</div>
+<button id="publishBtn">🔥 Publish My Shop</button>
 
 <script>
-// ====================== GLOBAL STATE ======================
-let isShared = false;
-let currentWall = [];
-let currentTags = {};
-let editingIndex = -1;
+let isShared=false;
+let currentWall=[];
+let currentTags={};
 
-// ====================== VISITOR COUNT ======================
-let visitors = (parseInt(localStorage.getItem("visitorCount") || "0")) + 1;
-localStorage.setItem("visitorCount", visitors);
-document.getElementById("visitorCount").innerText = "Visitors: " + visitors;
+const urlParams=new URLSearchParams(window.location.search);
+const sharedId=urlParams.get("id");
 
-// ====================== LOAD WALL ======================
-async function loadWallData() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
-  if (id) {
-    try {
-      const res = await fetch(`/api/getWall?id=${id}`);
-      if (res.ok) {
-        const data = await res.json();
-        currentWall = data.wall || [];
-        currentTags = data.tags || {};
-        isShared = true;
-        return;
-      }
-    } catch (err) {
-      console.error("Failed to load shared wall:", err);
-    }
-  }
-  currentWall = JSON.parse(localStorage.getItem("productWall") || "[]");
-  currentTags = JSON.parse(localStorage.getItem("userAffiliateTags") || "{}");
-  isShared = false;
+function saveAffiliateTags(){
+  currentTags={
+    amazon:amazonTag.value.trim(),
+    dhgate:dhgateTag.value.trim(),
+    temu:temuTag.value.trim()
+  };
+  localStorage.setItem("userAffiliateTags",JSON.stringify(currentTags));
+  alert("Affiliate IDs saved.");
 }
 
-// ====================== AFFILIATE HANDLING ======================
-const affiliateModal = document.getElementById("affiliateModal");
-const affiliateToggle = document.getElementById("affiliateToggle");
-const affiliateBanner = document.getElementById("affiliateBanner");
-
-affiliateToggle.addEventListener("click", () => {
-  if (!isShared) affiliateModal.style.display = "flex";
-});
-
-document.getElementById("saveAffiliate").addEventListener("click", () => {
-  if (isShared) return;
-  const amazon = document.getElementById("amazonAffiliate").value.trim();
-  const temu = document.getElementById("temuAffiliate").value.trim();
-  const dhgate = document.getElementById("dhgateAffiliate").value.trim();
-  const tags = { amazon, temu, dhgate };
-  localStorage.setItem("userAffiliateTags", JSON.stringify(tags));
-  currentTags = tags;
-
-  // Show banner
-  const active = [];
-  if (amazon) active.push("Amazon");
-  if (temu) active.push("Temu");
-  if (dhgate) active.push("DHgate");
-  affiliateBanner.innerHTML = active.length ? `Affiliates active: ${active.join(" • ")}` : "Affiliate tags saved!";
-  affiliateBanner.style.display = "block";
-  setTimeout(() => { affiliateBanner.style.display = "none"; }, 8000);
-
-  affiliateModal.style.display = "none";
-});
-
-function updateAffiliateBanner() {
-  const tags = currentTags;
-  const active = [];
-  if (tags.amazon) active.push("Amazon");
-  if (tags.temu) active.push("Temu");
-  if (tags.dhgate) active.push("DHgate");
-  if (active.length) {
-    affiliateBanner.innerHTML = `Affiliates active: ${active.join(" • ")}`;
-    affiliateBanner.style.display = "block";
+function requireAffiliateIDs(){
+  if(!currentTags.amazon && !currentTags.dhgate && !currentTags.temu){
+    affiliateBox.open=true;
+    affiliateBox.scrollIntoView({behavior:"smooth"});
+    alert("Add affiliate IDs before sharing.");
+    return false;
   }
+  return true;
 }
 
-// ====================== WALL RENDERING ======================
-const wallGrid = document.getElementById("wallGrid");
-
-function buildAffiliateLink(originalLink) {
-  const tags = currentTags;
-  if (!originalLink) return "#";
-  let url;
-  try { url = new URL(originalLink); } catch { return originalLink; }
-  if (url.hostname.includes("amazon")) url.searchParams.set("tag", tags.amazon || "mychanneld-20");
-  if (url.hostname.includes("temu.com") && tags.temu) url.searchParams.set("aff_id", tags.temu);
-  if (url.hostname.includes("dhgate.com")) {
-    const dh = tags.dhgate || "2545671";
-    if (dh) url.searchParams.set("affid", dh);
-  }
-  return url.toString();
+function buildAffiliateLink(url){
+  if(url.includes("amazon.") && currentTags.amazon)
+    return url+(url.includes("?")?"&":"?")+"tag="+currentTags.amazon;
+  if(url.includes("dhgate.") && currentTags.dhgate)
+    return url+(url.includes("?")?"&":"?")+"f="+currentTags.dhgate;
+  if(url.includes("temu.") && currentTags.temu)
+    return url+(url.includes("?")?"&":"?")+"af="+currentTags.temu;
+  return url;
 }
 
-function renderWall() {
-  wallGrid.innerHTML = "";
-  if (isShared) {
-    affiliateToggle.style.display = "none";
-    wallGrid.innerHTML = `<div style="grid-column:1/-1;background:rgba(255,165,0,0.15);border:2px solid var(--accent);color:var(--accent);padding:20px;border-radius:20px;text-align:center;margin-bottom:30px;">
-      🔗 Shared Linkme Shop<br><small>Affiliate links use sharer's tags</small><br>
-      <button onclick="window.location.href = window.location.origin + window.location.pathname" style="margin-top:12px;padding:12px 28px;background:#000;color:var(--accent);border:2px solid var(--accent);border-radius:16px;cursor:pointer;">Create My Own Shop</button>
-    </div>`;
-  } else {
-    affiliateToggle.style.display = "block";
-  }
+function getPlatform(url){
+  if(url.includes("amazon")) return "Amazon";
+  if(url.includes("dhgate")) return "DHgate";
+  if(url.includes("temu")) return "Temu";
+  return "Shop";
+}
 
-  if (currentWall.length === 0) {
-    wallGrid.innerHTML += `<p style='grid-column:1/-1;text-align:center;color:#888;font-size:1.3rem;padding:60px 20px;'>Your shop is empty.<br>Add viral products from home!</p>`;
-    return;
-  }
-
-  currentWall.forEach((item, idx) => {
-    const div = document.createElement("div");
-    div.className = "card";
-    const affLink = buildAffiliateLink(item.link);
-    const platform = getPlatform(item.link); // assume getPlatform exists or add it
-
-    const displayTitle = item.customTitle || item.title;
-    const whyText = item.whyLike || item.snippet || "Trending must-have!";
-
-    let html = `
-      <img src="${item.thumb || 'https://via.placeholder.com/600x400?text=Product'}" alt="${displayTitle}">
-      <div class="platform-badge">${platform}</div>
-      ${!isShared ? `<button class="remove-btn" onclick="removeItem(${idx})">Remove</button>` : ''}
+function renderWall(){
+  wallGrid.innerHTML="";
+  currentWall.forEach((item,i)=>{
+    const aff=buildAffiliateLink(item.link);
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <img src="${item.thumb}">
+      ${item.price?`<div class="price-badge">$${item.price}</div>`:""}
+      <div class="platform-badge">${getPlatform(item.link)}</div>
       <div class="card-content">
-        <div class="card-title" onclick="editItem(${idx})">${displayTitle}</div>
-        <div class="card-why" onclick="editItem(${idx})">${whyText}</div>
-        ${item.price ? `<div style="font-size:1.1rem;color:#39ff14;margin:12px 0;">$${item.price}</div>` : ''}
-        <a href="${affLink}" target="_blank" class="card-shop-link">Shop Now →</a>
-      </div>
-    `;
-    div.innerHTML = html;
-    wallGrid.appendChild(div);
+        <div class="card-title">${item.title}</div>
+        <div class="card-why">${item.customWhy||item.snippet||""}</div>
+        <a href="${aff}" target="_blank" class="btn btn-buy">Shop</a>
+        <button class="btn btn-share" onclick="shareProduct(${i})">Share</button>
+        <button class="btn btn-grok" onclick="shareGrok(${i})">Grok</button>
+        ${!isShared?`<button class="btn btn-remove" onclick="removeItem(${i})">X</button>`:""}
+      </div>`;
+    wallGrid.appendChild(card);
   });
 }
 
-// ... keep editItem, removeItem, expandItem, unlock, share logic unchanged ...
-
-// Add getPlatform if missing
-function getPlatform(link) {
-  if (link.includes('amazon')) return 'Amazon';
-  if (link.includes('temu')) return 'Temu';
-  if (link.includes('dhgate')) return 'DHgate';
-  return 'Store';
+function shareProduct(i){
+  if(!requireAffiliateIDs()) return;
+  const aff=buildAffiliateLink(currentWall[i].link);
+  navigator.clipboard.writeText(aff);
+  alert("Affiliate link copied.");
 }
 
-// INIT
-(async () => {
-  await loadWallData();
-  if (!isShared) {
-    // Load tags and show banner if set
-    const stored = JSON.parse(localStorage.getItem("userAffiliateTags") || "{}");
-    currentTags = stored;
-    updateAffiliateBanner();
+function shareGrok(i){
+  if(!requireAffiliateIDs()) return;
+  const item=currentWall[i];
+  const text=`Create a viral Pinterest-style image and short video script for:
+${item.title}
+Hook: ${item.customWhy||item.snippet}
+Link: ${buildAffiliateLink(item.link)}`;
+  navigator.clipboard.writeText(text);
+  window.open("https://grok.com","_blank");
+}
+
+function removeItem(i){
+  currentWall.splice(i,1);
+  localStorage.setItem("productWall",JSON.stringify(currentWall));
+  renderWall();
+}
+
+async function loadWall(){
+  if(sharedId){
+    isShared=true;
+    const res=await fetch("/api/getWall?id="+sharedId);
+    const data=await res.json();
+    currentWall=data.wall||[];
+    currentTags=data.tags||{};
+    shopName.innerText=data.shopName||"Shop";
+    shopName.contentEditable=false;
+    shopBio.contentEditable=false;
+    affiliateBox.style.display="none";
+    bannerUpload.style.display="none";
+  }else{
+    currentWall=JSON.parse(localStorage.getItem("productWall")||"[]");
+    currentTags=JSON.parse(localStorage.getItem("userAffiliateTags")||"{}");
+    shopName.innerText=localStorage.getItem("shopName")||"My Linkme Shop";
+    shopBio.innerText=localStorage.getItem("shopBio")||"Curated viral finds ✨";
+    const banner=localStorage.getItem("shopBanner");
+    if(banner) bannerPreview.style.backgroundImage=`url(${banner})`;
   }
   renderWall();
-})();
+}
+
+shopName.addEventListener("input",()=>localStorage.setItem("shopName",shopName.innerText));
+shopBio.addEventListener("input",()=>localStorage.setItem("shopBio",shopBio.innerText));
+
+bannerUpload.addEventListener("change",e=>{
+  const reader=new FileReader();
+  reader.onload=()=>{
+    bannerPreview.style.backgroundImage=`url(${reader.result})`;
+    localStorage.setItem("shopBanner",reader.result);
+  };
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+document.getElementById("publishBtn").onclick=async()=>{
+  if(!requireAffiliateIDs()) return;
+  const id=Math.random().toString(36).substring(2,8);
+  await fetch("/api/saveWall",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      id,
+      wall:currentWall,
+      tags:currentTags,
+      shopName:shopName.innerText,
+      shopBio:shopBio.innerText
+    })
+  });
+  alert("Published! Share link: "+window.location.origin+"/mywall.html?id="+id);
+};
+
+loadWall();
 </script>
 </body>
 </html>
