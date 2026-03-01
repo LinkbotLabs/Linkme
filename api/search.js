@@ -10,52 +10,35 @@ export default async function handler(req, res) {
   const ONE_DAY = 1000 * 60 * 60 * 24;
   const cacheKey = `${q}_${start}`;
 
-  // ✅ Serve from cache if valid
-  if (
-    cache[cacheKey] &&
-    Date.now() - cache[cacheKey].time < ONE_DAY
-  ) {
+  if (cache[cacheKey] && Date.now() - cache[cacheKey].time < ONE_DAY) {
     return res.status(200).json(cache[cacheKey].data);
   }
 
   try {
     const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(q)}&start=${start}`
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&searchType=image&q=${encodeURIComponent(q)}&start=${start}`
     );
 
     const data = await googleRes.json();
 
-    // ❌ If Google returned error (like 429), do NOT cache
     if (!googleRes.ok) {
       return res.status(googleRes.status).json({
         error: data.error?.message || "Google API error"
       });
     }
 
-    // ❌ If no items returned, do NOT cache
-    if (!data.items || data.items.length === 0) {
+    if (!data.items) {
       return res.status(200).json({ items: [] });
     }
 
-    // ✅ Clean + Normalize Items
-    const formattedItems = data.items.map(item => {
-      const image =
-        item.pagemap?.cse_thumbnail?.[0]?.src ||
-        item.pagemap?.cse_image?.[0]?.src ||
-        "https://via.placeholder.com/600x600?text=LinkMe+Pick";
+    const formattedItems = data.items.map(item => ({
+      title: item.title,
+      link: item.link,
+      image: item.link
+    }));
 
-      return {
-        title: item.title,
-        link: item.link,
-        image
-      };
-    });
+    const formatted = { items: formattedItems };
 
-    const formatted = {
-      items: formattedItems
-    };
-
-    // ✅ Cache valid formatted results
     cache[cacheKey] = {
       data: formatted,
       time: Date.now()
