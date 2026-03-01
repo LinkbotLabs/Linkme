@@ -1,22 +1,21 @@
 const cache = {};
 
 export default async function handler(req, res) {
-  const { q, start = 1 } = req.query;
+  const { q } = req.query;
 
   if (!q) {
     return res.status(400).json({ error: "Missing query parameter" });
   }
 
   const ONE_DAY = 1000 * 60 * 60 * 24;
-  const cacheKey = `${q}_${start}`;
 
-  if (cache[cacheKey] && Date.now() - cache[cacheKey].time < ONE_DAY) {
-    return res.status(200).json(cache[cacheKey].data);
+  if (cache[q] && Date.now() - cache[q].time < ONE_DAY) {
+    return res.status(200).json(cache[q].data);
   }
 
   try {
     const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&searchType=image&q=${encodeURIComponent(q)}&start=${start}`
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&searchType=image&q=${encodeURIComponent(q)}`
     );
 
     const data = await googleRes.json();
@@ -27,19 +26,15 @@ export default async function handler(req, res) {
       });
     }
 
-    if (!data.items) {
-      return res.status(200).json({ items: [] });
-    }
+    const formatted = {
+      items: (data.items || []).map(item => ({
+        title: item.title,
+        link: item.image?.contextLink || item.link,
+        image: item.link
+      }))
+    };
 
-    const formattedItems = data.items.map(item => ({
-      title: item.title,
-      link: item.link,
-      image: item.link
-    }));
-
-    const formatted = { items: formattedItems };
-
-    cache[cacheKey] = {
+    cache[q] = {
       data: formatted,
       time: Date.now()
     };
