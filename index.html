@@ -1,358 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
-<title>Linkme – Free Unlimited Affiliate Storefront Builder</title>
-<meta name="description" content="Linkme: Build & share unlimited affiliate storefronts with Amazon, Temu & DHgate products. Earn commissions instantly — no limits, no coding." />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://linkmetagshop.vercel.app" />
-<meta property="og:title" content="Linkme – Free Affiliate Storefront Builder" />
-<meta property="og:description" content="Instant affiliate walls for Amazon, Temu, DHgate. Unlimited products, one-click share, earn commissions. Free forever." />
-<meta property="og:url" content="https://linkmetagshop.vercel.app" />
-<meta property="og:type" content="website" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Shop</title>
 
 <style>
-:root{
-  --bg:#e6e7eb;
-  --glass:rgba(255,255,255,0.6);
-  --glass-strong:rgba(255,255,255,0.85);
-  --stroke:rgba(255,255,255,0.5);
-  --text:#1c1c1c;
-  --muted:#6e6e73;
-  --accent:#1c1c1c;
-  --success:#34c759;
-  --viral:#ff3b30;
+:root {
+  --bg: #0f0f10;
+  --card: #1a1a1c;
+  --accent: #ffa500;
+  --text: #ffffff;
+  --muted: #a0a0a0;
 }
 
-body{
-  font-family:system-ui,-apple-system,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  margin:0;
-  padding:0;
-  min-height:100vh;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* HERO */
-.hero{
-  text-align:center;
-  padding:80px 20px 40px;
+header {
+  text-align: center;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: 600;
 }
 
-.hero h1{
-  font-size:3.5rem;
-  margin:0 0 16px;
+.category {
+  padding: 20px;
 }
 
-.hero p{
-  font-size:1.35rem;
-  max-width:700px;
-  margin:0 auto 32px;
-  color:var(--muted);
+.category h2 {
+  margin-bottom: 15px;
 }
 
-.unlimited-banner{
-  background:var(--glass-strong);
-  backdrop-filter:blur(20px);
-  padding:18px 24px;
-  font-weight:700;
-  font-size:1.1rem;
-  border-radius:20px;
-  margin:0 auto 40px;
-  max-width:90%;
-  border:1px solid var(--stroke);
-  box-shadow:0 20px 40px rgba(0,0,0,0.08);
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
 }
 
-/* LAYOUT */
-.categories-container{
-  max-width:1280px;
-  margin:0 auto 80px;
-  padding:0 20px;
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform .2s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.category-section{
-  margin-bottom:100px;
+.card:hover {
+  transform: translateY(-4px);
 }
 
-.category-section h2{
-  font-size:2.5rem;
-  text-align:center;
-  margin-bottom:32px;
-  position:relative;
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
 }
 
-.category-section h2::after{
-  content:'';
-  position:absolute;
-  bottom:-10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:120px;
-  height:4px;
-  background:var(--text);
-  opacity:.15;
-  border-radius:5px;
+.card-content {
+  padding: 12px;
+  flex-grow: 1;
 }
 
-.category-grid{
-  column-count:2;
-  column-gap:20px;
+.card h3 {
+  font-size: 14px;
+  margin: 0 0 6px;
 }
 
-@media (min-width:640px){
-  .category-grid{column-count:3;}
-}
-@media (min-width:1024px){
-  .category-grid{column-count:4;}
-}
-
-/* PRODUCT CARD */
-.product-card{
-  break-inside:avoid;
-  margin-bottom:24px;
-  background:var(--glass);
-  backdrop-filter:blur(20px);
-  border:1px solid var(--stroke);
-  border-radius:24px;
-  overflow:hidden;
-  transition:all .4s;
-  box-shadow:0 15px 40px rgba(0,0,0,0.1);
-  position:relative;
+.snippet {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
 }
 
-.product-card:hover{
-  transform:translateY(-10px) scale(1.03);
-  box-shadow:0 25px 60px rgba(0,0,0,0.15);
+.rating {
+  font-size: 12px;
+  margin-bottom: 10px;
 }
 
-.product-card img{
-  width:100%;
-  height:300px;
-  object-fit:cover;
-  transition:transform .6s;
+.buttons {
+  display: flex;
+  gap: 8px;
 }
 
-.product-card:hover img{
-  transform:scale(1.05);
+button {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
-.card-content{
-  padding:20px;
+.visit {
+  background: var(--accent);
+  color: #000;
 }
 
-.card-title{
-  font-size:1.3rem;
-  font-weight:700;
-  margin:0 0 8px;
+.add {
+  background: #2a2a2c;
+  color: #fff;
 }
 
-.why-buy{
-  font-size:0.95rem;
-  color:var(--muted);
-  line-height:1.5;
-  margin:8px 0 16px;
-  font-style:italic;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+.added {
+  background: #1e4620;
+  color: #7CFC00;
 }
 
-/* BADGES */
-.price-badge{
-  position:absolute;
-  top:16px;
-  left:16px;
-  background:white;
-  padding:8px 16px;
-  border-radius:14px;
-  font-weight:800;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+/* Slide Up Sheet */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
 }
 
-.platform-badge{
-  position:absolute;
-  top:16px;
-  right:16px;
-  background:rgba(255,255,255,0.9);
-  padding:8px 16px;
-  border-radius:14px;
-  font-weight:800;
+.sheet {
+  background: #1c1c1e;
+  width: 100%;
+  max-height: 80%;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform .3s ease;
 }
 
-.viral-badge{
-  position:absolute;
-  bottom:16px;
-  left:16px;
-  background:var(--viral);
-  color:white;
-  padding:6px 12px;
-  border-radius:12px;
-  font-size:0.9rem;
-  font-weight:800;
+.sheet.open {
+  transform: translateY(0);
 }
 
-/* BUTTONS */
-.add-btn{
-  margin:12px auto;
-  display:block;
-  padding:12px 28px;
-  background:var(--text);
-  color:white;
-  border:none;
-  border-radius:16px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.3s;
+.sheet input, .sheet textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #2a2a2c;
+  color: white;
 }
 
-.add-btn:hover{
-  opacity:.85;
-  transform:translateY(-2px);
+.sheet button {
+  background: var(--accent);
+  color: black;
+  font-weight: bold;
 }
 
-.added{
-  background:var(--success)!important;
-  color:white!important;
-}
-
-#my-wall-btn{
-  position:fixed;
-  bottom:24px;
-  right:24px;
-  background:var(--text);
-  color:white;
-  padding:16px 32px;
-  border-radius:50px;
-  font-weight:900;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
-  z-index:100;
-  animation:pulse 2s infinite alternate;
-}
-
-@keyframes pulse{
-  from{box-shadow:0 15px 40px rgba(0,0,0,0.15);}
-  to{box-shadow:0 20px 60px rgba(0,0,0,0.25);}
-}
 </style>
 </head>
 
 <body>
 
-<div class="hero">
-  <h1>Linkme</h1>
-  <p>Instant affiliate storefronts.  Amazon • Temu • DHgate </p>
-  <div class="unlimited-banner">
-    ✅ Choose your niche<br>
-    
+<header>My Shop</header>
+
+<div id="categories"></div>
+
+<!-- Slide Up Sheet -->
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet">
+    <h3>Edit Before Adding</h3>
+    <input type="text" id="editTitle">
+    <textarea id="editWhy" rows="3"></textarea>
+    <textarea id="editNote" rows="2" placeholder="Personal note (optional)"></textarea>
+    <button id="saveProduct">Save to Shop</button>
   </div>
 </div>
 
-<div id="categories-container" class="categories-container"></div>
-
-<button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
-
 <script>
-// ====================== DAILY ROTATION & GROUPS ======================
-const allGroups = [
-  { heading: "Hot Today 🔥", query: "tiktok viral products 2026", isHot: true },
-  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026", isGameChanger: true },
-  { heading: "Glow Up Factory ✨", queries: ["LED face mask red light therapy", "snail mucin peptide serum", "collagen peptide sheet mask"] },
-  { heading: "Cozy Girl Winter Haven 🔥", queries: ["indoor portable heater mini", "galaxy projector sunset lamp", "white noise machine sleep"] },
-  { heading: "TikTok Kitchen Chaos 🍳", queries: ["mini waffle maker viral", "portable usb blender", "egg bite maker cloud bread"] },
-  { heading: "Soft Life Wellness 🧘‍♀️", queries: ["posture corrector neck hammock", "back stretcher spine decompressor", "ashwagandha gummies nootropic"] },
-  { heading: "Aesthetic Tech Setup 📱", queries: ["wireless earbuds noise cancelling", "solar power bank portable", "magnetic phone car mount"] },
-  { heading: "Pet Bestie Club 🐾", queries: ["automatic pet feeder camera", "interactive laser toy cat", "jellycat plush keychain"] },
-  { heading: "Strong Girl Era 🏋️", queries: ["rucking vest weighted", "pilates board home workout"] },
-  { heading: "Travel Main Character ✈️", queries: ["anti-theft crossbody bag", "rfid blocking wallet", "hanging toiletry bag"] }
-];
 
-function getDailyGroups() {
-  const day = new Date().getDate();
-  const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]]; // Hot Today + Game Changers always first
-  for (let i = 0; i < 8; i++) {
-    selected.push(allGroups[(start + i + 2) % allGroups.length]);
+/* ========== DAILY SEED ========== */
+function mulberry32(a) {
+  return function() {
+    var t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
   }
-  return selected;
 }
 
-// ====================== RICH PRODUCT CARD ======================
-function createProductCard(item) {
-  const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if (!thumb || thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.length < 50) return null;
+const todaySeed = new Date().toISOString().slice(0,10);
+const rng = mulberry32(todaySeed.split('-').join(''));
 
-  const title = item.title || "Untitled";
-  const link = item.link;
-  const snippet = item.snippet || "Trending favorite!";
-  let price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
-  const platform = getPlatform(link);
+/* ========== CATEGORIES ========== */
+const categoryPool = [
 
-  const isViral = snippet.toLowerCase().includes('viral') || title.toLowerCase().includes('viral') || title.toLowerCase().includes('tiktok');
+  /* Core Discovery */
+
+  { name: "🔥 Hot Today", query: "trending gadgets 2026" },
+  { name: "🚀 Viral Game Changers", query: "viral tech products" },
+  { name: "✨ Glow Up Factory", query: "beauty must have products" },
+  { name: "🏠 Home Upgrades", query: "amazon home improvement gadgets" },
+  { name: "🎮 Gamer Essentials", query: "gaming accessories amazon" },
+  { name: "💼 Productivity Hacks", query: "productivity desk gadgets" },
+  { name: "💡 Smart Living", query: "smart home devices 2026" },
+  { name: "🎒 Travel Must Haves", query: "travel accessories must have" },
+  { name: "🧠 Cool Finds", query: "unique amazon products" },
+  { name: "🛍 Budget Wins", query: "cheap useful gadgets" },
+
+  /* Lifestyle & Niche */
+
+  { name: "🐶 Pet Obsession", query: "innovative pet products amazon" },
+  { name: "🚗 Car Upgrades", query: "car accessories must have" },
+  { name: "🏋️ Home Fitness", query: "home workout equipment gadgets" },
+  { name: "🌿 Wellness Lab", query: "wellness gadgets trending" },
+  { name: "🧴 Skincare Tech", query: "skincare devices amazon" },
+  { name: "🎥 Creator Studio", query: "content creator gadgets amazon" },
+  { name: "🛠 DIY & Tools", query: "clever tools amazon" },
+  { name: "📱 Phone Life", query: "iphone accessories trending" },
+  { name: "🧑‍🍳 Kitchen Genius", query: "kitchen gadgets viral" },
+  { name: "🎁 Gift Radar", query: "cool gift ideas trending products" },
+
+  /* Micro-Trend / TikTok / High Conversion */
+
+  { name: "🧸 Jellycat & Kawaii Plush", query: "jellycat plush keychain phone charm" },
+  { name: "🧲 Magnetic Phone Mounts", query: "magnetic phone mount car desk holder" },
+  { name: "🧬 Collagen & Peptide Masks", query: "collagen mask peptide sheet mask hydrogel mask" },
+  { name: "🔋 Solar Power Banks", query: "solar power bank portable charger foldable solar" },
+  { name: "🧘 Back Stretchers", query: "back stretcher spine decompressor yoga wheel" },
+  { name: "🥟 Fusion Food Tools", query: "dumpling maker sushi roller scallion pancake maker" },
+  { name: "🎧 ASMR & Sensory Kits", query: "slime kit kinetic sand jellyfish lamp" },
+  { name: "💞 Long-Distance Touch", query: "long distance touch bracelet couple lamp" },
+  { name: "🌱 Mini Hydroponics", query: "self watering planter led grow light hydroponic kit" },
+  { name: "🛡 RFID Anti-Theft", query: "rfid blocking wallet anti theft wallet" },
+  { name: "💅 LED Nail Lamps", query: "led nail lamp uv gel dryer" },
+  { name: "☕ Portable Espresso", query: "portable espresso maker manual coffee grinder" },
+  { name: "💍 Smart Ring Trackers", query: "smart ring fitness tracker sleep monitor" },
+  { name: "🌀 Holographic Projectors", query: "holographic projector fan display" },
+  { name: "🧪 Biohacking Stack", query: "nmn supplement resveratrol longevity" },
+  { name: "🔥 Sauna Blankets", query: "infrared sauna blanket portable detox" },
+  { name: "🪞 AR Makeup Mirrors", query: "smart makeup mirror ar virtual try on" }
+
+];
+
+/* ========== FETCH PRODUCTS ========== */
+async function fetchProducts(query) {
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+  return data.items || [];
+}
+
+/* ========== FILTER VALID IMAGE ========== */
+function validImage(item) {
+  const img = item.pagemap?.cse_image?.[0]?.src;
+  if (!img) return false;
+  if (img.includes("gstatic")) return false;
+  if (img.length < 10) return false;
+  return img;
+}
+
+/* ========== STABLE DAILY RATING ========== */
+function dailyRating() {
+  return (4 + rng()).toFixed(1);
+}
+
+/* ========== CREATE CARD ========== */
+function createCard(item) {
+  const image = validImage(item);
+  if (!image) return null;
 
   const card = document.createElement("div");
-  card.className = "product-card";
+  card.className = "card";
 
-  let html = `<img src="${thumb}" alt="${title}" loading="lazy">`;
-  if (price) html += `<div class="price-badge">$${price}</div>`;
-  html += `<div class="platform-badge">${platform}</div>`;
-  if (isViral) html += `<div class="viral-badge">FYP Viral 🔥</div>`;
-
-  html += `
+  card.innerHTML = `
+    <img src="${image}" loading="lazy">
     <div class="card-content">
-      <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0, 100)}${snippet.length > 100 ? '...' : ''}</div>
-      <button class="add-btn">Add to Wall</button>
-    </div>`;
+      <h3>${item.title}</h3>
+      <div class="snippet">${item.snippet || ""}</div>
+      <div class="rating">⭐ ${dailyRating()}</div>
+      <div class="buttons">
+        <button class="visit">Visit</button>
+        <button class="add">Add</button>
+      </div>
+    </div>
+  `;
 
-  card.innerHTML = html;
-
-  card.querySelector(".add-btn").onclick = () => {
-    let customWhy = prompt("Why do you like this? (optional – shows on your wall)", "");
-    addToWall(title, thumb, link, snippet, price, customWhy);
-    card.querySelector(".add-btn").textContent = "Added ✓";
-    card.querySelector(".add-btn").disabled = true;
+  card.querySelector(".visit").onclick = () => {
+    window.open(item.link, "_blank");
   };
+
+  card.querySelector(".add").onclick = () => openSheet(item, image, card);
 
   return card;
 }
 
-// ====================== RENDER GROUP ======================
-async function renderGroup(group, container) {
-  const section = document.createElement("div");
-  section.className = "category-section";
-  section.innerHTML = `<h2>${group.heading}</h2><div class="category-grid" id="grid-${group.heading.replace(/\s/g,'')}"></div>`;
-  container.appendChild(section);
+/* ========== LOAD CATEGORIES ========== */
+async function loadCategories() {
+  const container = document.getElementById("categories");
 
-  const grid = section.querySelector(".category-grid");
+  for (let cat of categories) {
+    const section = document.createElement("div");
+    section.className = "category";
+    section.innerHTML = `<h2>${cat.name}</h2><div class="grid"></div>`;
+    container.appendChild(section);
 
-  try {
-    const query = group.query || group.queries[Math.floor(Math.random() * group.queries.length)];
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
-    const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      data.items.slice(0, 12).forEach(item => {
-        const card = createProductCard(item);
-        if (card) grid.appendChild(card);
-      });
-    }
-  } catch (e) {
-    grid.innerHTML = '<p style="text-align:center;color:#ff6b6b;">Loading...</p>';
+    const grid = section.querySelector(".grid");
+    const items = await fetchProducts(cat.query);
+
+    items.slice(0,8).forEach(item => {
+      const card = createCard(item);
+      if (card) grid.appendChild(card);
+    });
   }
 }
 
-// ====================== MAIN INIT ======================
-window.addEventListener('load', async () => {
-  const container = document.getElementById("categories-container");
-  const dailyGroups = getDailyGroups();
+/* ========== SLIDE SHEET LOGIC ========== */
+const overlay = document.getElementById("overlay");
+const sheet = document.getElementById("sheet");
 
-  for (const group of dailyGroups) {
-    await renderGroup(group, container);
-  }
-});
+let currentProduct = null;
+let currentCard = null;
+
+function openSheet(item, image, card) {
+  currentProduct = { ...item, image };
+  currentCard = card;
+
+  document.getElementById("editTitle").value = item.title;
+  document.getElementById("editWhy").value = item.snippet || "";
+  document.getElementById("editNote").value = "";
+
+  overlay.style.display = "flex";
+  setTimeout(() => sheet.classList.add("open"), 10);
+}
+
+function closeSheet() {
+  sheet.classList.remove("open");
+  setTimeout(() => overlay.style.display = "none", 300);
+}
+
+overlay.onclick = (e) => {
+  if (e.target === overlay) closeSheet();
+};
+
+document.getElementById("saveProduct").onclick = () => {
+  const title = document.getElementById("editTitle").value;
+  const why = document.getElementById("editWhy").value;
+  const note = document.getElementById("editNote").value;
+
+  const stored = JSON.parse(localStorage.getItem("productWall") || "[]");
+
+  stored.push({
+    title,
+    link: currentProduct.link,
+    image: currentProduct.image,
+    rating: dailyRating(),
+    why,
+    note,
+    dateAdded: new Date().toISOString()
+  });
+
+  localStorage.setItem("productWall", JSON.stringify(stored));
+
+  const addBtn = currentCard.querySelector(".add");
+  addBtn.textContent = "Added ✓";
+  addBtn.classList.add("added");
+  addBtn.disabled = true;
+
+  closeSheet();
+};
+
+/* ========== INIT ========== */
+loadCategories();
+
 </script>
 </body>
 </html>
