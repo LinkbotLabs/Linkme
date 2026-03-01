@@ -8,191 +8,205 @@
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js"></script>
 
 <style>
-:root {
-  --accent:#ffe169;
-  --glow:#00ffff;
-  --glass:rgba(20,20,35,0.85);
-  --stroke:rgba(255,255,255,0.18);
-  --text:#fff;
-  --muted:#d0d0ff;
-  --success:#39ff14;
-  --viral:#ff3366;
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --text:#111111;
+  --muted:#6e6e73;
+  --accent:#000000;
+  --border:#e5e5e7;
 }
 
 body{
   margin:0;
-  font-family:system-ui;
-  background:linear-gradient(135deg,#000 0%,#0a0015 100%);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif;
+  background:var(--bg);
   color:var(--text);
 }
 
 /* HERO */
 .hero{
-  position:relative;
-  padding:100px 20px 60px;
+  padding:120px 20px 80px;
   text-align:center;
-  background:linear-gradient(135deg,#000,#1a0030);
+  background:#fafafa;
+  border-bottom:1px solid var(--border);
 }
 
 #bannerPreview{
-  position:absolute;
-  inset:0;
-  background-size:cover;
-  background-position:center;
-  opacity:0.35;
+  display:none;
 }
 
 .avatar{
-  width:110px;
-  height:110px;
+  width:90px;
+  height:90px;
   border-radius:50%;
-  border:3px solid var(--accent);
-  background:#111;
-  margin:0 auto 16px;
+  background:#f2f2f2;
+  margin:0 auto 20px;
 }
 
 #shopName{
-  font-size:2.5rem;
-  font-weight:900;
-  color:var(--accent);
+  font-size:2.8rem;
+  font-weight:700;
+  letter-spacing:-0.02em;
   outline:none;
 }
 
 #shopBio{
-  max-width:600px;
-  margin:10px auto 0;
+  max-width:620px;
+  margin:12px auto 0;
   color:var(--muted);
+  font-size:1.1rem;
   outline:none;
 }
 
 /* AFFILIATE */
 details{
-  max-width:600px;
-  margin:30px auto;
-  background:var(--glass);
-  border:1px solid var(--stroke);
-  padding:20px;
-  border-radius:20px;
+  max-width:700px;
+  margin:50px auto;
+  padding:30px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:#fff;
 }
 
 details summary{
   cursor:pointer;
-  font-weight:700;
+  font-weight:600;
   font-size:1.1rem;
 }
 
 details input{
   width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:8px;
-  border:none;
+  padding:14px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-size:1rem;
 }
 
 details button{
-  padding:10px 20px;
-  background:var(--accent);
+  padding:12px 24px;
+  background:#000;
+  color:#fff;
   border:none;
-  border-radius:12px;
-  font-weight:700;
+  border-radius:30px;
+  font-weight:600;
   cursor:pointer;
 }
 
-/* MASONRY */
+/* GRID */
 .grid{
-  column-count:2;
-  column-gap:24px;
-  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
+  padding:60px 8%;
 }
 
-@media(min-width:640px){ .grid{ column-count:3; } }
-@media(min-width:1024px){ .grid{ column-count:4; } }
-
+/* CARD */
 .card{
-  break-inside:avoid;
-  margin-bottom:24px;
-  background:var(--glass);
-  border:1px solid var(--stroke);
-  border-radius:24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
   overflow:hidden;
-  transition:all .4s;
-  box-shadow:0 15px 50px rgba(0,0,0,.6);
+  transition:all .3s ease;
   position:relative;
 }
 
 .card:hover{
-  transform:translateY(-12px) scale(1.03);
-  box-shadow:0 30px 80px rgba(255,165,0,.35);
+  transform:translateY(-6px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.06);
 }
 
 .card img{
   width:100%;
-  height:280px;
+  height:300px;
   object-fit:cover;
+  background:#f5f5f7;
 }
 
 .price-badge{
   position:absolute;
-  top:14px;
-  left:14px;
-  background:var(--success);
-  color:#000;
+  top:16px;
+  left:16px;
+  background:#000;
+  color:#fff;
   padding:6px 12px;
-  border-radius:12px;
-  font-weight:800;
+  border-radius:20px;
+  font-size:.85rem;
+  font-weight:600;
 }
 
 .platform-badge{
   position:absolute;
-  top:14px;
-  right:14px;
-  background:rgba(0,0,0,.75);
-  color:var(--accent);
+  top:16px;
+  right:16px;
+  background:#fff;
+  border:1px solid var(--border);
+  color:#000;
   padding:6px 12px;
-  border-radius:12px;
-  font-weight:800;
+  border-radius:20px;
+  font-size:.8rem;
+  font-weight:600;
 }
 
 .card-content{
-  padding:18px;
+  padding:22px;
 }
 
 .card-title{
-  font-weight:700;
+  font-weight:600;
+  font-size:1.1rem;
   margin-bottom:8px;
-  color:var(--accent);
 }
 
 .card-why{
-  font-size:.9rem;
+  font-size:.95rem;
   color:var(--muted);
-  margin-bottom:12px;
+  margin-bottom:18px;
+  line-height:1.5;
 }
 
 .btn{
-  padding:8px 14px;
-  border:none;
-  border-radius:12px;
-  font-weight:700;
+  padding:10px 16px;
+  border-radius:30px;
+  font-weight:600;
   cursor:pointer;
-  margin:4px 2px;
+  border:1px solid var(--border);
+  background:#fff;
+  margin:4px 4px 0 0;
 }
 
-.btn-buy{ background:var(--accent); color:#000; }
-.btn-share{ background:#444; color:#fff; }
-.btn-grok{ background:var(--glow); color:#000; }
-.btn-remove{ background:#ff4444; color:#fff; }
+.btn-buy{
+  background:#000;
+  color:#fff;
+  border:none;
+}
 
+.btn-share{
+  background:#f5f5f7;
+}
+
+.btn-grok{
+  background:#f5f5f7;
+}
+
+.btn-remove{
+  background:#fff;
+  color:#ff3b30;
+  border:1px solid #ff3b30;
+}
+
+/* PUBLISH */
 #publishBtn{
   display:block;
-  margin:40px auto;
-  padding:18px 40px;
-  background:var(--accent);
-  color:#000;
+  margin:80px auto;
+  padding:18px 42px;
+  background:#000;
+  color:#fff;
   border:none;
   border-radius:40px;
-  font-size:1.2rem;
-  font-weight:900;
+  font-size:1.1rem;
+  font-weight:600;
   cursor:pointer;
 }
 </style>
@@ -221,6 +235,7 @@ details button{
 <button id="publishBtn">🔥 Publish My Shop</button>
 
 <script>
+/* YOUR ORIGINAL JS — 100% UNCHANGED */
 let isShared=false;
 let currentWall=[];
 let currentTags={};
