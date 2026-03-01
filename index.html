@@ -1,358 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
-<title>Linkme – Free Unlimited Affiliate Storefront Builder</title>
-<meta name="description" content="Linkme: Build & share unlimited affiliate storefronts with Amazon, Temu & DHgate products. Earn commissions instantly — no limits, no coding." />
-<meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://linkmetagshop.vercel.app" />
-<meta property="og:title" content="Linkme – Free Affiliate Storefront Builder" />
-<meta property="og:description" content="Instant affiliate walls for Amazon, Temu, DHgate. Unlimited products, one-click share, earn commissions. Free forever." />
-<meta property="og:url" content="https://linkmetagshop.vercel.app" />
-<meta property="og:type" content="website" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LinkMe | Curated Finds</title>
 
 <style>
 :root{
-  --bg:#e6e7eb;
-  --glass:rgba(255,255,255,0.6);
-  --glass-strong:rgba(255,255,255,0.85);
-  --stroke:rgba(255,255,255,0.5);
-  --text:#1c1c1c;
-  --muted:#6e6e73;
-  --accent:#1c1c1c;
-  --success:#34c759;
-  --viral:#ff3b30;
+  --bg:#111315;
+  --card:#1a1d21;
+  --text:#f5f5f7;
+  --muted:#9ca3af;
+  --border:#2a2f36;
+  --hover:#1f2328;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
 body{
-  font-family:system-ui,-apple-system,sans-serif;
   background:var(--bg);
   color:var(--text);
-  margin:0;
-  padding:0;
-  min-height:100vh;
 }
 
-/* HERO */
-.hero{
-  text-align:center;
-  padding:80px 20px 40px;
+header{
+  padding:24px 32px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  background:var(--bg);
+  z-index:10;
 }
 
-.hero h1{
-  font-size:3.5rem;
-  margin:0 0 16px;
+header h1{
+  font-size:20px;
+  font-weight:600;
+  letter-spacing:.5px;
 }
 
-.hero p{
-  font-size:1.35rem;
-  max-width:700px;
-  margin:0 auto 32px;
-  color:var(--muted);
-}
-
-.unlimited-banner{
-  background:var(--glass-strong);
-  backdrop-filter:blur(20px);
-  padding:18px 24px;
-  font-weight:700;
-  font-size:1.1rem;
-  border-radius:20px;
-  margin:0 auto 40px;
-  max-width:90%;
-  border:1px solid var(--stroke);
-  box-shadow:0 20px 40px rgba(0,0,0,0.08);
-}
-
-/* LAYOUT */
-.categories-container{
-  max-width:1280px;
-  margin:0 auto 80px;
-  padding:0 20px;
-}
-
-.category-section{
-  margin-bottom:100px;
-}
-
-.category-section h2{
-  font-size:2.5rem;
-  text-align:center;
-  margin-bottom:32px;
-  position:relative;
-}
-
-.category-section h2::after{
-  content:'';
-  position:absolute;
-  bottom:-10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:120px;
-  height:4px;
-  background:var(--text);
-  opacity:.15;
-  border-radius:5px;
-}
-
-.category-grid{
-  column-count:2;
-  column-gap:20px;
-}
-
-@media (min-width:640px){
-  .category-grid{column-count:3;}
-}
-@media (min-width:1024px){
-  .category-grid{column-count:4;}
-}
-
-/* PRODUCT CARD */
-.product-card{
-  break-inside:avoid;
-  margin-bottom:24px;
-  background:var(--glass);
-  backdrop-filter:blur(20px);
-  border:1px solid var(--stroke);
-  border-radius:24px;
-  overflow:hidden;
-  transition:all .4s;
-  box-shadow:0 15px 40px rgba(0,0,0,0.1);
-  position:relative;
-}
-
-.product-card:hover{
-  transform:translateY(-10px) scale(1.03);
-  box-shadow:0 25px 60px rgba(0,0,0,0.15);
-}
-
-.product-card img{
-  width:100%;
-  height:300px;
-  object-fit:cover;
-  transition:transform .6s;
-}
-
-.product-card:hover img{
-  transform:scale(1.05);
-}
-
-.card-content{
-  padding:20px;
-}
-
-.card-title{
-  font-size:1.3rem;
-  font-weight:700;
-  margin:0 0 8px;
-}
-
-.why-buy{
-  font-size:0.95rem;
-  color:var(--muted);
-  line-height:1.5;
-  margin:8px 0 16px;
-  font-style:italic;
-  display:-webkit-box;
-  -webkit-line-clamp:3;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-
-/* BADGES */
-.price-badge{
-  position:absolute;
-  top:16px;
-  left:16px;
-  background:white;
-  padding:8px 16px;
-  border-radius:14px;
-  font-weight:800;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
-
-.platform-badge{
-  position:absolute;
-  top:16px;
-  right:16px;
-  background:rgba(255,255,255,0.9);
-  padding:8px 16px;
-  border-radius:14px;
-  font-weight:800;
-}
-
-.viral-badge{
-  position:absolute;
-  bottom:16px;
-  left:16px;
-  background:var(--viral);
-  color:white;
-  padding:6px 12px;
-  border-radius:12px;
-  font-size:0.9rem;
-  font-weight:800;
-}
-
-/* BUTTONS */
-.add-btn{
-  margin:12px auto;
-  display:block;
-  padding:12px 28px;
-  background:var(--text);
-  color:white;
+.nav-btn{
+  background:#2a2f36;
   border:none;
-  border-radius:16px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.3s;
-}
-
-.add-btn:hover{
-  opacity:.85;
-  transform:translateY(-2px);
-}
-
-.added{
-  background:var(--success)!important;
-  color:white!important;
-}
-
-#my-wall-btn{
-  position:fixed;
-  bottom:24px;
-  right:24px;
-  background:var(--text);
   color:white;
-  padding:16px 32px;
-  border-radius:50px;
-  font-weight:900;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
-  z-index:100;
-  animation:pulse 2s infinite alternate;
+  padding:10px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+  transition:.2s ease;
+  text-decoration:none;
 }
 
-@keyframes pulse{
-  from{box-shadow:0 15px 40px rgba(0,0,0,0.15);}
-  to{box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+.nav-btn:hover{
+  background:#3a3f47;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:50px 20px;
+}
+
+.category{
+  margin-bottom:80px;
+}
+
+.category h2{
+  font-size:32px;
+  font-weight:600;
+  margin-bottom:28px;
+  letter-spacing:.3px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:24px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  transition:.3s ease;
+  display:flex;
+  flex-direction:column;
+}
+
+.card:hover{
+  transform:translateY(-4px);
+  background:var(--hover);
+}
+
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.card-body{
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.card h3{
+  font-size:15px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+.badge{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.rating{
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.why{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+  margin-bottom:16px;
+}
+
+.card-buttons{
+  margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.card-buttons button,
+.card-buttons a{
+  padding:10px;
+  border-radius:12px;
+  border:none;
+  font-size:13px;
+  cursor:pointer;
+  text-align:center;
+  text-decoration:none;
+}
+
+.primary{
+  background:#ffffff;
+  color:#000;
+}
+
+.primary:hover{
+  opacity:.9;
+}
+
+.secondary{
+  background:#2a2f36;
+  color:#fff;
+}
+
+.secondary:hover{
+  background:#3a3f47;
 }
 </style>
 </head>
-
 <body>
 
-<div class="hero">
-  <h1>Linkme</h1>
-  <p>Instant affiliate storefronts.  Amazon • Temu • DHgate </p>
-  <div class="unlimited-banner">
-    ✅ Choose your niche<br>
-    
-  </div>
-</div>
+<header>
+  <h1>LinkMe</h1>
+  <a href="/mywall.html" class="nav-btn">My Shop</a>
+</header>
 
-<div id="categories-container" class="categories-container"></div>
-
-<button id="my-wall-btn" onclick="window.location.href='mywall.html'">→ My Wall</button>
+<div class="container" id="content"></div>
 
 <script>
-// ====================== DAILY ROTATION & GROUPS ======================
-const allGroups = [
-  { heading: "Hot Today 🔥", query: "tiktok viral products 2026", isHot: true },
-  { heading: "Viral Game Changers 🚀", query: "viral amazon finds 2026", isGameChanger: true },
-  { heading: "Glow Up Factory ✨", queries: ["LED face mask red light therapy", "snail mucin peptide serum", "collagen peptide sheet mask"] },
-  { heading: "Cozy Girl Winter Haven 🔥", queries: ["indoor portable heater mini", "galaxy projector sunset lamp", "white noise machine sleep"] },
-  { heading: "TikTok Kitchen Chaos 🍳", queries: ["mini waffle maker viral", "portable usb blender", "egg bite maker cloud bread"] },
-  { heading: "Soft Life Wellness 🧘‍♀️", queries: ["posture corrector neck hammock", "back stretcher spine decompressor", "ashwagandha gummies nootropic"] },
-  { heading: "Aesthetic Tech Setup 📱", queries: ["wireless earbuds noise cancelling", "solar power bank portable", "magnetic phone car mount"] },
-  { heading: "Pet Bestie Club 🐾", queries: ["automatic pet feeder camera", "interactive laser toy cat", "jellycat plush keychain"] },
-  { heading: "Strong Girl Era 🏋️", queries: ["rucking vest weighted", "pilates board home workout"] },
-  { heading: "Travel Main Character ✈️", queries: ["anti-theft crossbody bag", "rfid blocking wallet", "hanging toiletry bag"] }
+
+/* -------- FULL HOT POOL -------- */
+const hotPool = [
+{title:"Jellycat Plush Keychain 🧸",query:"jellycat plush keychain phone charm"},
+{title:"Magnetic Phone Mount 📱",query:"magnetic phone mount car desk holder"},
+{title:"Collagen Peptide Face Mask ✨",query:"collagen mask peptide sheet mask hydrogel mask"},
+{title:"Solar Power Bank ☀️",query:"solar power bank portable charger foldable solar"},
+{title:"Back Stretcher & Yoga Wheel 🧘‍♀️",query:"back stretcher spine decompressor yoga wheel"},
+{title:"Fusion Dumpling Maker 🍳",query:"dumpling maker sushi roller scallion pancake maker"},
+{title:"ASMR Slime Kit 🌈",query:"slime kit kinetic sand jellyfish lamp"},
+{title:"Long Distance Touch Bracelet 💞",query:"long distance touch bracelet couple lamp"},
+{title:"Mini Hydroponic Planter 🌱",query:"self watering planter led grow light hydroponic kit"},
+{title:"RFID Blocking Wallet ✈️",query:"rfid blocking wallet anti theft wallet"},
+{title:"LED Nail Lamp 💅",query:"led nail lamp uv gel dryer"},
+{title:"Portable Espresso Maker ☕",query:"portable espresso maker manual coffee grinder"},
+{title:"Smart Ring Fitness Tracker 💍",query:"smart ring fitness tracker sleep monitor"},
+{title:"Holographic Projector 🚀",query:"holographic projector fan display"},
+{title:"NMN Longevity Supplement 🧬",query:"nmn supplement resveratrol longevity"},
+{title:"Portable Sauna Blanket 🔥",query:"infrared sauna blanket portable detox"},
+{title:"AR Makeup Mirror 💄",query:"smart makeup mirror ar virtual try on"}
 ];
 
-function getDailyGroups() {
-  const day = new Date().getDate();
-  const start = (day - 1) % allGroups.length;
-  const selected = [allGroups[0], allGroups[1]]; // Hot Today + Game Changers always first
-  for (let i = 0; i < 8; i++) {
-    selected.push(allGroups[(start + i + 2) % allGroups.length]);
+/* -------- DAILY STABLE SHUFFLE -------- */
+
+function seededShuffle(array, seed){
+  let result = [...array];
+  let random = mulberry32(seed);
+  for(let i=result.length-1;i>0;i--){
+    const j=Math.floor(random()* (i+1));
+    [result[i],result[j]]=[result[j],result[i]];
   }
-  return selected;
+  return result;
 }
 
-// ====================== RICH PRODUCT CARD ======================
-function createProductCard(item) {
-  const thumb = item.pagemap?.cse_image?.[0]?.src || "";
-  if (!thumb || thumb.includes('gstatic') || thumb.includes('placeholder') || thumb.includes('noimage') || thumb.length < 50) return null;
-
-  const title = item.title || "Untitled";
-  const link = item.link;
-  const snippet = item.snippet || "Trending favorite!";
-  let price = item.pagemap?.metatags?.[0]?.["og:price:amount"] || null;
-  const platform = getPlatform(link);
-
-  const isViral = snippet.toLowerCase().includes('viral') || title.toLowerCase().includes('viral') || title.toLowerCase().includes('tiktok');
-
-  const card = document.createElement("div");
-  card.className = "product-card";
-
-  let html = `<img src="${thumb}" alt="${title}" loading="lazy">`;
-  if (price) html += `<div class="price-badge">$${price}</div>`;
-  html += `<div class="platform-badge">${platform}</div>`;
-  if (isViral) html += `<div class="viral-badge">FYP Viral 🔥</div>`;
-
-  html += `
-    <div class="card-content">
-      <div class="card-title">${title}</div>
-      <div class="why-buy">Why this slaps: ${snippet.substring(0, 100)}${snippet.length > 100 ? '...' : ''}</div>
-      <button class="add-btn">Add to Wall</button>
-    </div>`;
-
-  card.innerHTML = html;
-
-  card.querySelector(".add-btn").onclick = () => {
-    let customWhy = prompt("Why do you like this? (optional – shows on your wall)", "");
-    addToWall(title, thumb, link, snippet, price, customWhy);
-    card.querySelector(".add-btn").textContent = "Added ✓";
-    card.querySelector(".add-btn").disabled = true;
-  };
-
-  return card;
+function mulberry32(a){
+  return function(){
+    var t=a+=0x6D2B79F5;
+    t=Math.imul(t^t>>>15,t|1);
+    t^=t+Math.imul(t^t>>>7,t|61);
+    return ((t^t>>>14)>>>0)/4294967296;
+  }
 }
 
-// ====================== RENDER GROUP ======================
-async function renderGroup(group, container) {
-  const section = document.createElement("div");
-  section.className = "category-section";
-  section.innerHTML = `<h2>${group.heading}</h2><div class="category-grid" id="grid-${group.heading.replace(/\s/g,'')}"></div>`;
-  container.appendChild(section);
+const todaySeed = parseInt(new Date().toISOString().slice(0,10).replace(/-/g,''),10);
+const rotatedPool = seededShuffle(hotPool, todaySeed);
 
-  const grid = section.querySelector(".category-grid");
+let usedTitles = new Set();
 
-  try {
-    const query = group.query || group.queries[Math.floor(Math.random() * group.queries.length)];
-    const res = await fetch(`/api/search?q=${encodeURIComponent(query)}&start=1`);
-    const data = await res.json();
-    if (data.items && data.items.length > 0) {
-      data.items.slice(0, 12).forEach(item => {
-        const card = createProductCard(item);
-        if (card) grid.appendChild(card);
-      });
+function getItems(count){
+  const items=[];
+  for(let item of rotatedPool){
+    if(!usedTitles.has(item.title)){
+      items.push(item);
+      usedTitles.add(item.title);
     }
-  } catch (e) {
-    grid.innerHTML = '<p style="text-align:center;color:#ff6b6b;">Loading...</p>';
+    if(items.length===count) break;
   }
+  return items;
 }
 
-// ====================== MAIN INIT ======================
-window.addEventListener('load', async () => {
-  const container = document.getElementById("categories-container");
-  const dailyGroups = getDailyGroups();
+/* -------- WHY BUY GENERATOR -------- */
 
-  for (const group of dailyGroups) {
-    await renderGroup(group, container);
-  }
-});
+function generateWhy(title){
+  return `Designed to elevate your daily routine with thoughtful functionality and modern style. ✨ 
+It delivers noticeable results while keeping things simple and intentional. 
+A refined upgrade that feels practical, polished, and genuinely worth it.`;
+}
+
+/* -------- PLATFORM -------- */
+
+function getPlatform(link){
+  if(link.includes("amazon")) return "Amazon";
+  return "Store";
+}
+
+/* -------- ADD TO SHOP -------- */
+
+function addToShop(product){
+  const wall = JSON.parse(localStorage.getItem("productWall")||"[]");
+  if(wall.find(p=>p.link===product.link)) return;
+  wall.push(product);
+  localStorage.setItem("productWall",JSON.stringify(wall));
+}
+
+/* -------- CATEGORY MAP -------- */
+const categories=[
+{heading:"🔥 Hot Today",count:6},
+{heading:"🚀 Viral Game Changers",count:4},
+{heading:"✨ Glow Up Factory",count:3},
+{heading:"🔥 Cozy Girl Winter Haven",count:3},
+{heading:"🍳 TikTok Kitchen Chaos",count:3},
+{heading:"🧘‍♀️ Soft Life Wellness",count:3},
+{heading:"📱 Aesthetic Tech Setup",count:3},
+{heading:"🐾 Pet Bestie Club",count:3},
+{heading:"🏋️ Strong Girl Era",count:3},
+{heading:"✈️ Travel Main Character",count:3}
+];
+
+/* -------- RENDER -------- */
+function render(){
+  const container=document.getElementById("content");
+  container.innerHTML="";
+
+  categories.forEach(cat=>{
+    const section=document.createElement("div");
+    section.className="category";
+    section.innerHTML=`<h2>${cat.heading}</h2>`;
+
+    const grid=document.createElement("div");
+    grid.className="grid";
+
+    const items=getItems(cat.count);
+
+    items.forEach(item=>{
+      const product={
+        title:item.title,
+        link:"https://www.amazon.com/s?k="+encodeURIComponent(item.query),
+        thumb:"https://source.unsplash.com/600x600/?"+encodeURIComponent(item.title),
+        rating:(Math.random()*1+4).toFixed(1),
+        why:generateWhy(item.title),
+        note:""
+      };
+
+      const card=document.createElement("div");
+      card.className="card";
+
+      card.innerHTML=`
+        <img src="${product.thumb}">
+        <div class="card-body">
+          <h3>${product.title}</h3>
+          <div class="badge">${getPlatform(product.link)}</div>
+          <div class="rating">⭐ ${product.rating}</div>
+          <div class="why">${product.why}</div>
+          <div class="card-buttons">
+            <a href="${product.link}" target="_blank" class="primary">Visit Store</a>
+            <button class="secondary" onclick='addToShop(${JSON.stringify(product)})'>Add to Shop</button>
+          </div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+}
+
+render();
+
+
+
+
 </script>
 </body>
 </html>
