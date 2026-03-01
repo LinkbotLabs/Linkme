@@ -3,142 +3,209 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>LinkMe – Discover</title>
+<title>LinkMe – Discover Viral Finds</title>
 
 <style>
-:root{
-  --bg:#1c1c1e;
-  --card:#2c2c2e;
-  --accent:#0a84ff;
-  --text:#f5f5f7;
-  --muted:#9a9a9e;
+:root {
+  --bg: #0f0f11;
+  --surface: #1a1a1e;
+  --card: #1e1e24;
+  --accent: #3b82f6;       /* Modern vibrant blue – 2026 energy */
+  --accent-soft: #60a5fa;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #2d3748;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.5);
+  --radius: 20px;
+  --glass: rgba(30,30,36,0.6);
 }
 
-body{
-  margin:0;
-  background:var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  color:var(--text);
+body {
+  margin: 0;
+  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: hidden;
 }
 
-/* HEADER */
-
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:18px 24px;
-  background:#141416;
-  border-bottom:1px solid #2c2c2e;
+/* HEADER – subtle glassmorphism */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-header h1{
-  font-size:20px;
-  font-weight:600;
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.3px;
 }
 
-header button{
-  background:var(--accent);
-  border:none;
-  padding:10px 16px;
-  border-radius:10px;
-  color:white;
-  cursor:pointer;
+header button {
+  background: var(--accent);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+header button:hover {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
 }
 
 /* SECTIONS */
-
-.section{
-  padding:40px 30px 10px;
+.section {
+  padding: 48px 24px 16px;
 }
 
-.section h2{
-  margin-bottom:20px;
-  font-size:18px;
+.section h2 {
+  margin: 0 0 28px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--text), var(--muted));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* GRID */
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:24px;
-  padding:0 30px 50px;
+/* GRID – spacious, magazine-like */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  padding: 0 24px 60px;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-/* CARD */
-
-.card{
-  background:var(--card);
-  border-radius:18px;
-  padding:18px;
-  display:flex;
-  flex-direction:column;
-  box-shadow:0 8px 30px rgba(0,0,0,0.3);
-  transition:0.2s;
+/* CARD – neumorphic + glass hints, 2026 premium */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(4px);
 }
 
-.card:hover{
-  transform:translateY(-4px);
+.card:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--shadow-md);
 }
 
-.card img{
-  width:100%;
-  border-radius:14px;
-  margin-bottom:14px;
+.card img {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  aspect-ratio: 4 / 3.5;
+  object-fit: cover;
+  background: #111;
+  transition: transform 0.4s;
 }
 
-.card h3{
-  margin:0 0 14px 0;
-  font-size:15px;
+.card:hover img {
+  transform: scale(1.04);
 }
 
-.card-buttons{
-  display:flex;
-  gap:10px;
-  margin-top:auto;
+.card h3 {
+  margin: 0 0 16px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
 }
 
 .card-buttons a,
-.card-buttons button{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:14px;
+.card-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-.card-buttons a{
-  background:#3a3a3c;
-  color:white;
-  text-align:center;
-  text-decoration:none;
+.card-buttons a {
+  background: #2d3748;
+  color: var(--text);
+  text-align: center;
+  text-decoration: none;
 }
 
-.card-buttons button{
-  background:var(--accent);
-  color:white;
+.card-buttons a:hover {
+  background: #374151;
 }
 
-.added{
-  background:#30d158 !important;
+.card-buttons button {
+  background: var(--accent);
+  color: white;
 }
 
-/* FLOAT BUTTON */
+.card-buttons button:hover {
+  background: var(--accent-soft);
+}
 
-#wallBtn{
-  position:fixed;
-  bottom:30px;
-  right:30px;
-  background:var(--accent);
-  color:white;
-  padding:16px 24px;
-  border-radius:50px;
-  font-weight:600;
-  border:none;
-  cursor:pointer;
-  box-shadow:0 8px 25px rgba(0,0,0,0.5);
+.added {
+  background: #10b981 !important;
+  transform: scale(1.05);
+}
+
+/* FLOAT BUTTON – neumorphic pill */
+#wallBtn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--accent);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(59,130,246,0.35);
+  transition: all 0.3s;
+  z-index: 999;
+}
+
+#wallBtn:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 16px 40px rgba(59,130,246,0.45);
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .grid { gap: 24px; padding: 0 16px 60px; }
+  .section { padding: 40px 16px 12px; }
+  header { padding: 14px 20px; }
 }
 </style>
 </head>
@@ -146,64 +213,65 @@ header button{
 <body>
 
 <header>
-  <h1>🛍 Discover Products</h1>
+  <h1>🛍 Discover Viral Finds</h1>
   <button onclick="location.href='mywall.html'">My Wall</button>
 </header>
 
 <div id="sections"></div>
 
 <button id="wallBtn" onclick="location.href='mywall.html'">
-My Curated Wall (0)
+  My Curated Wall (0)
 </button>
 
 <script>
-const groups=[
-  {heading:"🔥 Hot Today",query:"tiktok viral products"},
-  {heading:"✨ Glow Up",query:"self care trending products"},
-  {heading:"📱 Tech Finds",query:"aesthetic tech gadgets"},
-  {heading:"✈️ Travel Picks",query:"travel essentials trending"}
+// ──────────────────────────────────────────────
+// Original logic preserved + minor polish
+// ──────────────────────────────────────────────
+
+const groups = [
+  {heading: "🔥 Hot Today", query: "tiktok viral products"},
+  {heading: "✨ Glow Up", query: "self care trending products"},
+  {heading: "📱 Tech Finds", query: "aesthetic tech gadgets"},
+  {heading: "✈️ Travel Picks", query: "travel essentials trending"}
 ];
 
 let seenLinks = new Set();
 let seenImages = new Set();
 let seenTitles = new Set();
 
-function normalize(text){
-  return text.toLowerCase().replace(/[^a-z0-9]/g,"");
+function normalize(text) {
+  return text.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function updateCount(){
-  const wall=JSON.parse(localStorage.getItem("linkme_wall")||"[]");
-  document.getElementById("wallBtn").textContent=
+function updateCount() {
+  const wall = JSON.parse(localStorage.getItem("linkme_wall") || "[]");
+  document.getElementById("wallBtn").textContent = 
     `My Curated Wall (${wall.length})`;
 }
 
-function getPlatform(link){
-  if(link.includes("amazon")) return "amazon";
-  if(link.includes("dhgate")) return "dhgate";
-  if(link.includes("temu")) return "temu";
+function getPlatform(link) {
+  if (link.includes("amazon")) return "amazon";
+  if (link.includes("dhgate")) return "dhgate";
+  if (link.includes("temu")) return "temu";
   return "other";
 }
 
-function addToWall(product){
-  let wall=JSON.parse(localStorage.getItem("linkme_wall")||"[]");
-
-  if(wall.some(p=>p.link===product.link)) return;
-
+function addToWall(product) {
+  let wall = JSON.parse(localStorage.getItem("linkme_wall") || "[]");
+  if (wall.some(p => p.link === product.link)) return;
   wall.push(product);
-  localStorage.setItem("linkme_wall",JSON.stringify(wall));
+  localStorage.setItem("linkme_wall", JSON.stringify(wall));
   updateCount();
 }
 
-function createCard(item){
-
+function createCard(item) {
   const cleanTitle = normalize(item.title);
 
-  if(
+  if (
     seenLinks.has(item.link) ||
     seenImages.has(item.image) ||
     seenTitles.has(cleanTitle)
-  ){
+  ) {
     return null;
   }
 
@@ -211,64 +279,63 @@ function createCard(item){
   seenImages.add(item.image);
   seenTitles.add(cleanTitle);
 
-  const card=document.createElement("div");
-  card.className="card";
+  const card = document.createElement("div");
+  card.className = "card";
 
-  card.innerHTML=`
-    <img src="${item.image}">
+  card.innerHTML = `
+    <img src="${item.image}" loading="lazy" alt="${item.title}">
     <h3>${item.title}</h3>
     <div class="card-buttons">
-      <a href="${item.link}" target="_blank">Visit</a>
-      <button>Add</button>
+      <a href="${item.link}" target="_blank" rel="noopener">Visit</a>
+      <button>Add to Wall</button>
     </div>
   `;
 
-  const btn=card.querySelector("button");
-
-  btn.onclick=()=>{
+  const btn = card.querySelector("button");
+  btn.onclick = () => {
     addToWall({
-      title:item.title,
-      image:item.image,
-      link:item.link,
-      platform:getPlatform(item.link)
+      title: item.title,
+      image: item.image,
+      link: item.link,
+      platform: getPlatform(item.link)
     });
-
-    btn.textContent="Added ✓";
+    btn.textContent = "Added ✓";
     btn.classList.add("added");
-    btn.disabled=true;
+    btn.disabled = true;
   };
 
   return card;
 }
 
-async function render(){
+async function render() {
   updateCount();
-  const container=document.getElementById("sections");
+  const container = document.getElementById("sections");
 
-  for(const group of groups){
-
-    const section=document.createElement("div");
-    section.className="section";
-    section.innerHTML=`<h2>${group.heading}</h2>`;
+  for (const group of groups) {
+    const section = document.createElement("div");
+    section.className = "section";
+    section.innerHTML = `<h2>${group.heading}</h2>`;
     container.appendChild(section);
 
-    const grid=document.createElement("div");
-    grid.className="grid";
+    const grid = document.createElement("div");
+    grid.className = "grid";
     container.appendChild(grid);
 
-    const res=await fetch(`/api/search?q=${encodeURIComponent(group.query)}`);
-    const data=await res.json();
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(group.query)}`);
+      const data = await res.json();
 
-    (data.items||[]).forEach(item=>{
-      const card=createCard(item);
-      if(card) grid.appendChild(card);
-    });
+      (data.items || []).forEach(item => {
+        const card = createCard(item);
+        if (card) grid.appendChild(card);
+      });
+    } catch (err) {
+      console.error("Fetch error for", group.query, err);
+    }
   }
 }
 
-window.onload=render;
-
-
+window.onload = render;
 </script>
 </body>
 </html>
