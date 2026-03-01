@@ -38,15 +38,22 @@ header h1{
   outline:none;
 }
 
-/* 3 CARDS PER ROW */
+/* 3 LANDSCAPE PER ROW */
 .grid{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:24px;
   padding:30px;
 }
 
-/* LANDSCAPE CARD */
+@media(max-width:1100px){
+  .grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+@media(max-width:700px){
+  .grid{ grid-template-columns:1fr; }
+}
+
 .card{
   display:flex;
   background:var(--card);
@@ -54,7 +61,6 @@ header h1{
   overflow:hidden;
   box-shadow:0 8px 30px rgba(0,0,0,0.3);
   transition:.2s;
-  position:relative;
 }
 
 .card:hover{
@@ -64,27 +70,6 @@ header h1{
 .card img{
   width:45%;
   object-fit:cover;
-}
-
-/* SIDE ACTION TABS */
-.side-tabs{
-  position:absolute;
-  right:0;
-  top:0;
-  bottom:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:8px;
-  padding:10px;
-}
-
-.side-tabs button{
-  writing-mode:vertical-rl;
-  transform:rotate(180deg);
-  padding:8px 6px;
-  font-size:12px;
-  border-radius:8px;
 }
 
 .card-content{
@@ -111,44 +96,31 @@ header h1{
 .why{
   font-size:14px;
   color:var(--muted);
-  line-height:1.5;
   margin-bottom:12px;
+  white-space:pre-line;
 }
 
-/* MOBILE */
-@media(max-width:1100px){
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
+.card-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:auto;
 }
 
-@media(max-width:700px){
-  .grid{
-    grid-template-columns:1fr;
-  }
-  .card{
-    flex-direction:column;
-  }
-  .card img{
-    width:100%;
-    height:220px;
-  }
-  .card-content{
-    width:100%;
-  }
-  .side-tabs{
-    position:static;
-    flex-direction:row;
-    justify-content:flex-start;
-    padding:10px 18px 18px 18px;
-  }
-  .side-tabs button{
-    writing-mode:horizontal-tb;
-    transform:none;
-  }
+button{
+  background:var(--accent);
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+  font-size:13px;
 }
 
-/* MODAL */
+button.secondary{ background:#3a3a3c; }
+.remove-btn{ background:#ff453a; }
+
+/* MODALS */
 .modal{
   position:fixed;
   inset:0;
@@ -177,23 +149,6 @@ header h1{
   background:#3a3a3c;
   color:white;
 }
-
-button{
-  background:var(--accent);
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  color:white;
-  cursor:pointer;
-}
-
-button.secondary{
-  background:#3a3a3c;
-}
-
-.remove-btn{
-  background:#ff453a;
-}
 </style>
 </head>
 <body>
@@ -203,6 +158,7 @@ button.secondary{
   <div>
     <button class="secondary" onclick="goHome()">Home</button>
     <button onclick="shareShop()">Share Shop</button>
+    <button class="secondary" onclick="openAffiliate()">Affiliate</button>
     <button class="secondary" onclick="clearWall()">Clear</button>
   </div>
 </header>
@@ -220,40 +176,55 @@ button.secondary{
   </div>
 </div>
 
+<!-- AFFILIATE MODAL -->
+<div class="modal" id="affiliateModal">
+  <div class="modal-content">
+    <h3>Affiliate Settings</h3>
+    <input id="amazonId" placeholder="Amazon Affiliate ID">
+    <input id="dhgateId" placeholder="DHGate Affiliate ID">
+    <input id="temuId" placeholder="Temu Affiliate ID">
+    <button onclick="saveAffiliate()">Save</button>
+  </div>
+</div>
+
 <script>
 let wall = JSON.parse(localStorage.getItem("linkme_wall")) || [];
 let affiliate = JSON.parse(localStorage.getItem("linkme_affiliate")) || {};
 
-const grid=document.getElementById("wall");
-const shopNameEl=document.getElementById("shopName");
+const grid = document.getElementById("wall");
+const shopNameEl = document.getElementById("shopName");
 
-/* SAVE SHOP NAME */
-const savedName=localStorage.getItem("linkme_shopname");
-if(savedName) shopNameEl.innerText=savedName;
+/* SHOP NAME SAVE */
+const savedName = localStorage.getItem("linkme_shopname");
+if(savedName) shopNameEl.innerText = savedName;
 shopNameEl.addEventListener("blur",()=>{
-  localStorage.setItem("linkme_shopname",shopNameEl.innerText);
+  localStorage.setItem("linkme_shopname", shopNameEl.innerText);
 });
 
 /* RENDER */
 function render(){
   grid.innerHTML="";
+  if(!wall.length){
+    grid.innerHTML="<p style='color:#9a9a9e'>No products added yet.</p>";
+    return;
+  }
+
   wall.forEach((p,index)=>{
     const finalLink=injectAffiliate(p.link,p.platform);
-
     const card=document.createElement("div");
     card.className="card";
 
     card.innerHTML=`
-      <img src="${p.image}" />
+      <img src="${p.image}">
       <div class="card-content">
         <div class="badge">⭐ Featured</div>
         <h3>${p.title}</h3>
         <div class="why">${p.why||autoWhy(p.title)}</div>
-      </div>
-      <div class="side-tabs">
-        <button onclick="visit('${finalLink}')">Visit</button>
-        <button class="secondary" onclick="editItem(${index})">Edit</button>
-        <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        <div class="card-buttons">
+          <button onclick="visit('${finalLink}')">Visit</button>
+          <button class="secondary" onclick="editItem(${index})">Edit</button>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        </div>
       </div>
     `;
     grid.appendChild(card);
@@ -289,19 +260,37 @@ function clearWall(){
   render();
 }
 
-function visit(link){
-  window.open(link,"_blank");
-}
+function visit(link){ window.open(link,"_blank"); }
 
-/* AFFILIATE */
+/* AFFILIATE LOGIC RESTORED */
 function injectAffiliate(link,platform){
-  if(platform==="amazon" && affiliate.amazonId) return link+"&tag="+affiliate.amazonId;
-  if(platform==="dhgate" && affiliate.dhgateId) return link+"?aff="+affiliate.dhgateId;
-  if(platform==="temu" && affiliate.temuId) return link+"?ref="+affiliate.temuId;
+  if(platform==="amazon" && affiliate.amazonId){
+    return link.includes("?") ? link+"&tag="+affiliate.amazonId : link+"?tag="+affiliate.amazonId;
+  }
+  if(platform==="dhgate" && affiliate.dhgateId){
+    return link+"?aff="+affiliate.dhgateId;
+  }
+  if(platform==="temu" && affiliate.temuId){
+    return link+"?ref="+affiliate.temuId;
+  }
   return link;
 }
 
-/* SHARE WITH QR */
+function openAffiliate(){
+  document.getElementById("affiliateModal").style.display="flex";
+}
+
+function saveAffiliate(){
+  affiliate={
+    amazonId:amazonId.value,
+    dhgateId:dhgateId.value,
+    temuId:temuId.value
+  };
+  localStorage.setItem("linkme_affiliate",JSON.stringify(affiliate));
+  affiliateModal.style.display="none";
+}
+
+/* SHARE + QR */
 async function shareShop(){
   try{
     const res=await fetch("/api/share",{
@@ -310,22 +299,20 @@ async function shareShop(){
       body:JSON.stringify({wall,affiliate})
     });
 
+    if(!res.ok) throw new Error();
+
     const data=await res.json();
     const url=window.location.origin+"/mywall.html?id="+data.id;
 
     document.getElementById("shareLink").value=url;
     document.getElementById("shareModal").style.display="flex";
 
-    const qrContainer=document.getElementById("qrcode");
-    qrContainer.innerHTML="";
-    new QRCode(qrContainer,{
-      text:url,
-      width:180,
-      height:180
-    });
+    const qr=document.getElementById("qrcode");
+    qr.innerHTML="";
+    new QRCode(qr,{ text:url, width:180, height:180 });
 
   }catch{
-    alert("Share failed.");
+    alert("Share failed. Check API.");
   }
 }
 
@@ -337,10 +324,22 @@ function closeShare(){
   document.getElementById("shareModal").style.display="none";
 }
 
-function goHome(){
-  window.location.href="index.html";
+function goHome(){ window.location.href="index.html"; }
+
+/* LOAD SHARED WALL RESTORED */
+async function loadShared(){
+  const params=new URLSearchParams(window.location.search);
+  const id=params.get("id");
+  if(id){
+    const res=await fetch("/api/get?id="+id);
+    const data=await res.json();
+    wall=data.wall||[];
+    affiliate=data.affiliate||{};
+    render();
+  }
 }
 
+loadShared();
 render();
 </script>
 
