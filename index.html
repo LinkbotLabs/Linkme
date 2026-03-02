@@ -25,9 +25,29 @@ body{
   background:var(--bg);
   padding:40px 20px;
   display:flex;
-  justify-content:center;
+  flex-direction:column;
+  align-items:center;
 }
 
+/* Affiliate Section */
+#affiliateSection{
+  width:100%;
+  max-width:420px;
+  margin-bottom:24px;
+}
+
+#affiliateConnected{
+  display:none;
+  padding:14px;
+  border-radius:14px;
+  background:#ecfdf3;
+  color:#166534;
+  font-size:14px;
+  font-weight:500;
+  text-align:center;
+}
+
+/* Card */
 .card{
   width:100%;
   max-width:420px;
@@ -35,7 +55,6 @@ body{
   border-radius:24px;
   box-shadow:0 20px 40px rgba(0,0,0,0.06);
   padding:30px;
-  transition:0.3s ease;
 }
 
 .hook{
@@ -138,15 +157,65 @@ body{
 
 <body>
 
+<!-- Affiliate Section -->
+<div id="affiliateSection">
+  
+  <div id="affiliateForm">
+    <input 
+      id="affiliateInput"
+      placeholder="Enter your affiliate ID or full link"
+      style="width:100%;padding:14px;border-radius:14px;border:1px solid #e5e7eb;font-size:14px;"
+    />
+    <button 
+      onclick="saveAffiliate()" 
+      style="margin-top:12px;width:100%;padding:14px;border-radius:14px;border:none;background:#1a1a1a;color:white;font-weight:500;cursor:pointer;">
+      Connect Affiliate
+    </button>
+  </div>
+
+  <div id="affiliateConnected">
+    ✓ Affiliate Connected
+  </div>
+
+</div>
+
+<!-- Product Card -->
 <div class="card" id="card">
   <div class="loading">Waiting for PSE reset…</div>
 </div>
 
 <script>
-const affiliateId = "YOUR_AFFILIATE_ID";
-const searchQuery = "viral gadgets"; // Predefined search pool
 
-// Generate viral hook dynamically
+// ===== Affiliate System =====
+let affiliateId = localStorage.getItem("affiliateId") || "";
+
+if (affiliateId) {
+  showConnected();
+}
+
+function saveAffiliate() {
+  const input = document.getElementById("affiliateInput").value.trim();
+
+  if (!input) {
+    alert("Enter valid affiliate details");
+    return;
+  }
+
+  localStorage.setItem("affiliateId", input);
+  affiliateId = input;
+
+  showConnected();
+}
+
+function showConnected() {
+  document.getElementById("affiliateForm").style.display = "none";
+  document.getElementById("affiliateConnected").style.display = "block";
+}
+
+// ===== Product Logic =====
+
+const searchQuery = "viral gadgets";
+
 function generateHook(title){
   const hooks = [
     "Amazon Can’t Keep This in Stock",
@@ -157,7 +226,6 @@ function generateHook(title){
   return hooks[Math.floor(Math.random() * hooks.length)];
 }
 
-// Fetch once only
 async function loadProduct(){
   try{
     const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&start=1`);
@@ -166,9 +234,7 @@ async function loadProduct(){
     const data = await res.json();
     if(!data.items || !data.items.length) throw new Error("No items");
 
-    const product = data.items[0];
-
-    renderCard(product);
+    renderCard(data.items[0]);
 
   }catch(err){
     document.getElementById("card").innerHTML =
@@ -217,8 +283,26 @@ function renderCard(product){
 }
 
 function shopNow(link){
+
+  if(!affiliateId){
+    alert("Please connect your affiliate first.");
+    return;
+  }
+
   const shareCode = localStorage.getItem("shareCode") || "";
-  const finalUrl = `${link}&affid=${affiliateId}&share=${shareCode}`;
+
+  let finalUrl;
+
+  if(affiliateId.startsWith("http")){
+    finalUrl = affiliateId;
+  } else {
+    finalUrl = `${link}&affid=${affiliateId}`;
+  }
+
+  if(shareCode){
+    finalUrl += `&share=${shareCode}`;
+  }
+
   window.open(finalUrl, "_blank");
 }
 
