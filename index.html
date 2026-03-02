@@ -276,7 +276,6 @@ const data=await res.json();
 products=data.products||[];
 renderProduct();
 }
-
 function renderProduct(){
 const p=products[currentIndex];
 if(!p)return;
@@ -317,6 +316,7 @@ ${appendAffiliate(p.link)}
 <div class="card-brand">Float Rising</div>
 `;
 }
+
 
 /* Navigation */
 function nextProduct(){currentIndex=(currentIndex+1)%products.length;renderProduct();}
