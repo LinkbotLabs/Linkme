@@ -306,50 +306,58 @@ function shuffleArray(array){
 }
 
 /* LOAD PRODUCTS */
+<script>
+
+/* LOAD PRODUCTS */
 async function loadProducts(){
 
-  const cached=localStorage.getItem(CACHE_PRODUCTS);
-  const time=localStorage.getItem(CACHE_TIME);
+  const cached = localStorage.getItem(CACHE_PRODUCTS);
+  const time = localStorage.getItem(CACHE_TIME);
 
-  if(cached && time && (Date.now()-time)<ONE_DAY){
+  // ✅ Use 24h local cache
+  if(cached && time && (Date.now() - Number(time)) < ONE_DAY){
 
-    let pool=JSON.parse(cached);
-    let index=parseInt(localStorage.getItem(CACHE_INDEX)||"0");
+    let pool = JSON.parse(cached);
+    let index = parseInt(localStorage.getItem(CACHE_INDEX) || "0");
 
-    if(index>=pool.length) index=0;
+    if(index >= pool.length) index = 0;
 
-    currentProduct=pool[index];
-    localStorage.setItem(CACHE_INDEX,index+1);
+    currentProduct = pool[index];
+    localStorage.setItem(CACHE_INDEX, index + 1);
 
     renderProduct(currentProduct);
     return;
   }
 
-  const cat=categoryPool[Math.floor(Math.random()*categoryPool.length)];
-
   try{
-    const res = await fetch(`/api/get?q=${encodeURIComponent(cat)}&num=50`);
-    const data=await res.json();
-    if(!data.products||!data.products.length) throw new Error();
+    // ✅ Call your working endpoint
+    const res = await fetch(`/api/search`);
+    if(!res.ok) throw new Error("API failed");
 
-    let pool=data.products.sort(
-      (a,b)=>getNumericPrice(b.price)-getNumericPrice(a.price)
-    );
+    const products = await res.json();
 
-    pool=shuffleArray(pool);
+    // ✅ Your API returns an ARRAY
+    if(!products || !products.length) throw new Error("No products");
 
-    localStorage.setItem(CACHE_PRODUCTS,JSON.stringify(pool));
-    localStorage.setItem(CACHE_TIME,Date.now());
-    localStorage.setItem(CACHE_INDEX,1);
+    // Shuffle for randomness
+    let pool = shuffleArray(products);
 
-    currentProduct=pool[0];
+    // Cache locally
+    localStorage.setItem(CACHE_PRODUCTS, JSON.stringify(pool));
+    localStorage.setItem(CACHE_TIME, Date.now());
+    localStorage.setItem(CACHE_INDEX, 1);
+
+    currentProduct = pool[0];
     renderProduct(currentProduct);
 
-  }catch{
-    document.getElementById("card").innerHTML=
+  }catch(err){
+    console.error("FLOAT load failed:", err);
+    document.getElementById("card").innerHTML =
       "<div class='loading'>Waiting for API reset…</div>";
   }
 }
+
+</script>
 
 /* RENDER */
 function renderProduct(product){
