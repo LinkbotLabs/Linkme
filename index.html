@@ -484,10 +484,15 @@ const content=type==="square"
   </div>
 `;
 
-  html2canvas(template,{
-  scale:2,
-  useCORS:true
-})
+  html2canvas(template, {
+  scale: 2,
+  useCORS: true
+}).then(canvas => {
+  const a = document.createElement("a");
+  a.download = "float-rising-share.png";
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+});
     const a=document.createElement("a");
     a.download="float-rising-share.png";
     a.href=canvas.toDataURL();
