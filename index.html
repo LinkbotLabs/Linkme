@@ -53,10 +53,20 @@ body{
 }
 .product-title{
   font-family:'Playfair Display';
-  font-size:24px;text-align:center;margin-bottom:12px;
+  font-size:22px;text-align:center;margin-bottom:12px;
 }
 .hook{text-align:center;color:var(--muted);margin-bottom:16px;}
 .price{text-align:center;font-size:30px;font-weight:700;margin:14px 0;}
+
+.rich{font-size:14px;line-height:1.6;margin:12px 0;}
+.stars{text-align:center;font-size:14px;margin:10px 0;}
+.cta-box{
+  background:#111;color:white;
+  padding:14px;border-radius:14px;
+  text-align:center;margin:16px 0;
+  font-weight:600;
+}
+
 .btn{
   width:100%;padding:14px;border-radius:14px;
   border:1px solid var(--border);
@@ -75,7 +85,7 @@ body{
   background:white;padding:28px;border-radius:20px;
   width:90%;max-width:420px;text-align:center;
 }
-.modal textarea{width:100%;height:160px;margin:12px 0;padding:12px;border-radius:12px;border:1px solid var(--border);}
+.modal textarea{width:100%;height:180px;margin:12px 0;padding:12px;border-radius:12px;border:1px solid var(--border);}
 .error{color:red;font-size:13px;margin-top:6px;}
 
 .share-template{
@@ -97,9 +107,7 @@ body{
 <div class="header">
   <button onclick="openAffiliate()">Set Your Affiliate ID</button>
   <div id="affiliateStatus" class="status"></div>
-  <div id="premiumStatus" class="status"></div>
   <input id="searchInput" placeholder="Search trending gadgets..."/>
-  <div class="small-note">Premium required for magazine downloads.</div>
 </div>
 
 <div class="card" id="card">Loading...</div>
@@ -109,39 +117,20 @@ body{
   <button onclick="nextProduct()">Next →</button>
 </div>
 
-<!-- Modals -->
+<!-- Affiliate Modal -->
 <div class="modal" id="affiliateModal">
 <div class="modal-content">
 <h3>Amazon Affiliate ID</h3>
 <input id="affiliateInput" placeholder="yourname-20"/>
 <div id="affiliateError" class="error"></div>
 <button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
-<button class="btn" onclick="closeModal()">Cancel</button>
 </div>
 </div>
 
-<div class="modal" id="premiumModal">
-<div class="modal-content">
-<h3>Unlock Premium</h3>
-<input type="password" id="premiumPassword"/>
-<div id="passwordError" class="error"></div>
-<button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
-<button class="btn" onclick="closeModal()">Cancel</button>
-</div>
-</div>
-
-<div class="modal" id="formatModal">
-<div class="modal-content">
-<h3>Choose Format</h3>
-<button class="btn btn-primary" onclick="generateImage('square')">Square</button>
-<button class="btn btn-primary" onclick="generateImage('vertical')">Vertical</button>
-<button class="btn" onclick="closeModal()">Cancel</button>
-</div>
-</div>
-
+<!-- Grok Modal -->
 <div class="modal" id="grokModal">
 <div class="modal-content">
-<h3>Adaptive 6s Video Script</h3>
+<h3>6s Viral Video Script</h3>
 <textarea id="grokText"></textarea>
 <button class="btn" onclick="copyGrok()">Copy</button>
 <button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
@@ -155,12 +144,10 @@ body{
 <script>
 let products=[],currentIndex=0;
 let affiliateId=localStorage.getItem("affiliateId")||"";
-let isPremiumUser=localStorage.getItem("premiumUser")==="true";
 
 function updateStatus(){
 affiliateStatus.innerHTML=affiliateId?"Affiliate: "+affiliateId:"Affiliate Required";
 affiliateStatus.style.color=affiliateId?"green":"#b45309";
-premiumStatus.innerHTML=isPremiumUser?"Premium Active ✓":"Premium Locked";
 }
 updateStatus();
 
@@ -175,16 +162,9 @@ localStorage.setItem("affiliateId",val);
 closeModal();updateStatus();renderProduct();
 }
 
-function validatePassword(){
-if(premiumPassword.value==="Floaton"){
-localStorage.setItem("premiumUser","true");
-isPremiumUser=true;closeModal();updateStatus();
-formatModal.style.display="flex";
-}else{passwordError.innerText="Incorrect password";}
-}
-
 function appendAffiliate(url){
 if(!affiliateId)return url;
+if(url.includes("tag="+affiliateId))return url;
 return url+(url.includes("?")?"&":"?")+"tag="+affiliateId;
 }
 
@@ -196,112 +176,97 @@ products=(data.products||[]).filter(p=>p.link);
 currentIndex=0;renderProduct();
 }
 
+function generateHook(title){
+return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
+}
+
 function renderProduct(){
 if(!products.length){card.innerHTML="No products found.";return;}
 const p=products[currentIndex];
+
 p.rating=(4.6+Math.random()*0.3).toFixed(1);
 p.reviews=Math.floor(Math.random()*800+200);
 p.sold=Math.floor(Math.random()*1200+300);
 p.urgency=Math.floor(Math.random()*10+3);
+p.price=p.price||"$39.99";
 
 card.innerHTML=`
 <img src="${p.image}">
 <div class="product-title">${p.title}</div>
-<div class="hook">Curated Luxury Pick</div>
-<div style="text-align:center;font-size:14px;margin:10px 0;">
-⭐ ${p.rating} • ${p.reviews}+ reviews
+<div class="hook">${generateHook(p.title)}</div>
+
+<div class="stars">⭐ ${p.rating} • ${p.reviews}+ reviews</div>
+
+<div class="rich">
+✨ Why You’ll Love It:
+<br>✔ ${p.sold}+ sold
+<br>✔ Only ${p.urgency} left in stock
+<br>✔ Viral trending gadget
 </div>
-<div style="text-align:center;font-size:14px;color:#6b7280;">
-${p.sold}+ sold • Only ${p.urgency} left
-</div>
-<div class="price">${p.price||"$39.99"}</div>
+
+<div class="price">${p.price}</div>
+
+<div class="cta-box">LIMITED STOCK — SHOP NOW</div>
+
 <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now</button>
-<button class="btn" onclick="shareProduct()">${isPremiumUser?"Download Magazine":"Unlock Premium"}</button>
-<button class="btn" onclick="createGrokVideo()">Create 6s AI Video</button>
+<button class="btn" onclick="shareLink()">Share Link</button>
+<button class="btn" onclick="shareCard()">Share Full Card</button>
+<button class="btn" onclick="createGrokVideo()">Generate 6s AI Video</button>
 `;
 }
 
 function nextProduct(){currentIndex=(currentIndex+1)%products.length;renderProduct();}
 function prevProduct(){currentIndex=(currentIndex-1+products.length)%products.length;renderProduct();}
 
-function shareProduct(){
+async function shareLink(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
-if(!isPremiumUser){premiumModal.style.display="flex";return;}
-formatModal.style.display="flex";
+const p=products[currentIndex];
+
+const res=await fetch("/api/share",{method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({...p,link:appendAffiliate(p.link)})
+});
+const data=await res.json();
+const smallLink=window.location.origin+"/s/"+data.id;
+
+navigator.share?navigator.share({title:p.title,text:smallLink}):
+alert("Copy this link:\n"+smallLink);
 }
 
-async function generateImage(type){
-closeModal();
+async function shareCard(){
+if(!affiliateId){alert("Affiliate ID required.");return;}
 const p=products[currentIndex];
-const template=type==="square"?squareTemplate:verticalTemplate;
+const template=squareTemplate;
 
 template.innerHTML=`
 <div style="padding:120px;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:center;">
-<h1 style="font-family:Playfair Display;font-size:80px;">${p.title}</h1>
+<h1 style="font-family:Playfair Display;font-size:70px;">${p.title}</h1>
 <img src="${p.image}" style="width:70%;margin:40px auto;border-radius:20px;">
 <div style="font-size:60px;font-weight:700;">${p.price}</div>
-<div style="margin-top:20px;">Shop → ${appendAffiliate(p.link)}</div>
+<div style="margin-top:20px;">${appendAffiliate(p.link)}</div>
 <div class="watermark">Float Rising</div>
 </div>`;
 
 await new Promise(r=>setTimeout(r,400));
-const canvas = await html2canvas(template, {
-  useCORS: true,
-  scale: 2
+const canvas=await html2canvas(template,{useCORS:true,scale:2});
+const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
+
+if(navigator.canShare && navigator.canShare({files:[new File([blob],"card.png",{type:"image/png"})]})){
+await navigator.share({
+files:[new File([blob],"card.png",{type:"image/png"})],
+title:p.title
 });
-
-const blob = await new Promise(resolve =>
-  canvas.toBlob(resolve, "image/png")
-);
-
-const file = new File(
-  [blob],
-  `float-rising-${type}.png`,
-  { type: "image/png" }
-);
-
-const shareData = {
-  files: [file],
-  title: "Float Rising Pick",
-  text: `Luxury find from Float Rising ✨\n\nShop here:\n${appendAffiliate(p.link)}`
-};
-
-// HYBRID FLOW
-if (navigator.canShare && navigator.canShare({ files: [file] })) {
-  await navigator.share(shareData);
-} else {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = file.name;
-  a.click();
+}else{
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download="float-card.png";a.click();
 }
-}
-
-function detectCategory(title=""){
-title=title.toLowerCase();
-if(title.includes("light")||title.includes("lamp"))return"home";
-if(title.includes("fitness")||title.includes("gym"))return"fitness";
-if(title.includes("beauty")||title.includes("skin"))return"beauty";
-return"general";
 }
 
 function createGrokVideo(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
 const p=products[currentIndex];
-const category=detectCategory(p.title);
 const link=appendAffiliate(p.link);
-
-let angle="";
-if(category==="fitness"){
-angle="Focus on transformation and energy. Show before/after motion.";
-}else if(category==="beauty"){
-angle="Focus on glow, close-up skin shots, soft lighting.";
-}else if(category==="home"){
-angle="Show aesthetic room upgrade transformation.";
-}else{
-angle="Highlight problem → solution quickly.";
-}
 
 const prompt=`
 Create a HIGH-CONVERTING 6-second vertical TikTok ad.
@@ -309,18 +274,17 @@ Create a HIGH-CONVERTING 6-second vertical TikTok ad.
 Product: ${p.title}
 Price: ${p.price}
 Rating: ${p.rating} (${p.reviews}+ reviews)
-${angle}
 
 STRUCTURE:
-0-1s: Bold hook text.
-1-3s: Show product in action.
-3-5s: Close-up detail.
-5-6s: CTA screen "SHOP NOW"
+0-1s: Bold hook text
+1-3s: Show product in action
+3-5s: Close-up
+5-6s: CTA "SHOP NOW"
 
 Final screen URL:
 ${link}
 
-Style: premium, fast-paced, viral, mobile-optimized.
+Style: fast, viral, premium.
 `;
 
 grokText.value=prompt;
