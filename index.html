@@ -306,7 +306,49 @@ function shuffleArray(array){
 }
 
 /* LOAD PRODUCTS */
-<script>
+/* LOAD PRODUCTS */
+async function loadProducts(){
+
+  const cached = localStorage.getItem(CACHE_PRODUCTS);
+  const time = localStorage.getItem(CACHE_TIME);
+
+  // ✅ Use 24h local cache
+  if(cached && time && (Date.now() - Number(time)) < ONE_DAY){
+
+    let pool = JSON.parse(cached);
+    let index = parseInt(localStorage.getItem(CACHE_INDEX) || "0");
+
+    if(index >= pool.length) index = 0;
+
+    currentProduct = pool[index];
+    localStorage.setItem(CACHE_INDEX, index + 1);
+
+    renderProduct(currentProduct);
+    return;
+  }
+
+  try{
+    const res = await fetch(`/api/search`);
+    if(!res.ok) throw new Error("API failed");
+
+    const products = await res.json();
+    if(!products || !products.length) throw new Error("No products");
+
+    let pool = shuffleArray(products);
+
+    localStorage.setItem(CACHE_PRODUCTS, JSON.stringify(pool));
+    localStorage.setItem(CACHE_TIME, Date.now());
+    localStorage.setItem(CACHE_INDEX, 1);
+
+    currentProduct = pool[0];
+    renderProduct(currentProduct);
+
+  }catch(err){
+    console.error("FLOAT load failed:", err);
+    document.getElementById("card").innerHTML =
+      "<div class='loading'>Waiting for API reset…</div>";
+  }
+}
 
 /* LOAD PRODUCTS */
 async function loadProducts(){
