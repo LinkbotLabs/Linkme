@@ -1,396 +1,496 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Float Rising</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root{
- --bg:#0c0f14;
- --card:#141923;
- --accent:#00e6ff;
- --gold:#d4af37;
- --text:#f5f5f7;
+  --bg:#f4f4f2;
+  --card:#f9f9f7;
+  --muted:#6b7280;
+  --accent:#1f2937;
+  --border:#e5e7eb;
+  --gold:#b45309;
 }
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
- margin:0;
- background:var(--bg);
- color:var(--text);
- font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
- overflow-x:hidden;
- animation:fadeIn 1s ease forwards;
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  padding:40px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  color:#111;
+  min-height:100vh;
 }
 
-@keyframes fadeIn{
- from{opacity:0;transform:translateY(10px)}
- to{opacity:1;transform:translateY(0)}
+/* Brand */
+.brand{
+  text-align:center;
+  margin-bottom:30px;
+}
+.wave{
+  width:120px;
+  height:20px;
+  margin:0 auto 10px auto;
+  border-top:2px solid #111;
+  border-radius:100% 100% 0 0;
+}
+.brand h1{
+  font-family:'Playfair Display',serif;
+  font-size:32px;
+  font-weight:700;
+  letter-spacing:1.5px;
 }
 
-header{
- text-align:center;
- padding:40px 20px 10px;
+/* Header */
+.header{
+  width:100%;
+  max-width:420px;
+  margin-bottom:24px;
+}
+.header input, .header button{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  margin-bottom:8px;
+  font-size:15px;
+}
+.header button{
+  background:#111;
+  color:white;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+.status{
+  font-size:13px;
+  font-weight:500;
+  margin:8px 0;
+  text-align:center;
+}
+.small-note{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+  margin-top:4px;
 }
 
-.logo{
- font-size:34px;
- font-weight:700;
- letter-spacing:6px;
- background:linear-gradient(90deg,#00e6ff,#7afcff);
- -webkit-background-clip:text;
- -webkit-text-fill-color:transparent;
-}
-
-.subtitle{
- font-size:12px;
- letter-spacing:3px;
- opacity:.6;
- margin-top:6px;
-}
-
-.controls{
- text-align:center;
- margin:25px;
-}
-
-input{
- padding:10px;
- border-radius:6px;
- border:none;
- width:220px;
-}
-
-button{
- padding:10px 14px;
- margin:6px;
- border:none;
- border-radius:6px;
- cursor:pointer;
- font-weight:600;
-}
-
-.primary{background:var(--accent);color:#000;}
-.gold{background:var(--gold);color:#000;}
-
-.grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
- gap:28px;
- padding:20px;
-}
-
+/* Card */
 .card{
- background:var(--card);
- border-radius:18px;
- overflow:hidden;
- position:relative;
- box-shadow:0 20px 50px rgba(0,0,0,.6);
- transition:.4s;
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border-radius:24px;
+  padding:32px 24px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.06);
+  margin-bottom:24px;
 }
-
-.card:hover{
- transform:translateY(-10px);
- box-shadow:0 30px 70px rgba(0,230,255,.15);
+.counter{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:12px;
 }
-
 .card img{
- width:100%;
- height:340px;
- object-fit:cover;
+  width:100%;
+  border-radius:16px;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
-
-.badge{
- position:absolute;
- top:15px;
- left:15px;
- background:var(--gold);
- color:#000;
- padding:6px 10px;
- font-size:11px;
- font-weight:700;
- border-radius:4px;
+.product-title{
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  text-align:center;
+  margin-bottom:12px;
+  line-height:1.1;
 }
-
-.vertical-b{
- position:absolute;
- right:0;
- top:0;
- bottom:0;
- width:30px;
- background:linear-gradient(180deg,#00e6ff,#004d66);
- writing-mode:vertical-rl;
- text-orientation:upright;
- display:flex;
- align-items:center;
- justify-content:center;
- font-weight:700;
-}
-
-.content{padding:22px;}
-
 .hook{
- font-size:21px;
- font-weight:700;
- margin-bottom:8px;
+  font-size:16px;
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:16px;
+}
+.price{
+  font-size:32px;
+  font-weight:700;
+  text-align:center;
+  color:var(--accent);
+  margin:16px 0;
+}
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  cursor:pointer;
+  font-weight:600;
+  font-size:15px;
+  margin-bottom:12px;
+  background:white;
+  transition:0.2s;
+}
+.btn:hover{opacity:0.95;}
+.btn-primary{
+  background:#111;
+  color:white;
+  border:none;
+}
+.nav{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  max-width:420px;
+  margin:0 auto;
+}
+.nav button{
+  padding:12px 24px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:white;
+  cursor:pointer;
+  font-size:15px;
 }
 
-.reason{
- font-size:14px;
- opacity:.75;
- margin-bottom:15px;
-}
-
-.footer{
- display:flex;
- flex-wrap:wrap;
- gap:8px;
-}
-
+/* Modal */
 .modal{
- position:fixed;
- inset:0;
- background:rgba(0,0,0,.85);
- display:none;
- align-items:center;
- justify-content:center;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
 }
-
 .modal-content{
- background:var(--card);
- padding:30px;
- border-radius:14px;
- text-align:center;
+  background:var(--card);
+  padding:32px;
+  border-radius:24px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
 }
+.modal input, .modal textarea{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  margin:12px 0;
+  font-size:15px;
+}
+.modal textarea{height:140px;resize:none;}
+.error{color:#dc2626;font-size:13px;margin-top:8px;}
 
-.premium-badge{
- position:fixed;
- bottom:15px;
- right:15px;
- background:var(--gold);
- color:#000;
- padding:8px 12px;
- border-radius:20px;
- font-size:12px;
- display:none;
+/* Share templates */
+.share-template{
+  position:absolute;
+  left:-9999px;
+  background:#fffef9;
+  font-family:'Inter',sans-serif;
+  border:1px solid #e0d9c8;
+  box-shadow:0 0 40px rgba(0,0,0,0.05);
+}
+.watermark{
+  position:absolute;
+  bottom:40px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:18px;
+  color:#9ca3af;
+  letter-spacing:2px;
+  opacity:0.7;
 }
 </style>
 </head>
 <body>
 
-<header>
- <div class="logo">FLOAT RISING</div>
- <div class="subtitle">GLOBAL EDITORIAL LUXURY DISCOVERY</div>
-</header>
-
-<div class="controls">
- <input id="affInput" placeholder="Enter Affiliate Tag">
- <button class="primary" onclick="saveAff()">Activate</button>
- <button class="gold" onclick="openPremium()">Premium</button>
- <div id="status" style="margin-top:8px;color:#00ff9d;font-size:13px;"></div>
+<div class="brand">
+  <div class="wave"></div>
+  <h1>Float Rising</h1>
 </div>
 
-<div class="grid" id="grid"></div>
+<div class="header">
+  <button id="affiliateBtn">Set Your Affiliate ID</button>
+  <div id="affiliateStatus" class="status"></div>
+  <div id="premiumStatus" class="status"></div>
+  <input id="searchInput" placeholder="Search trending gadgets..."/>
+  <div class="small-note">Premium required for magazine-style downloads & advanced sharing.</div>
+</div>
 
+<div class="card" id="card">Loading trending picks...</div>
+
+<div class="nav">
+  <button onclick="prevProduct()">← Prev</button>
+  <button onclick="nextProduct()">Next →</button>
+</div>
+
+<!-- Affiliate Modal -->
+<div class="modal" id="affiliateModal">
+  <div class="modal-content">
+    <h3>Your Amazon Affiliate ID</h3>
+    <input type="text" id="affiliateInput" placeholder="e.g. yourname-20"/>
+    <div id="affiliateError" class="error"></div>
+    <button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
+    <button class="btn" onclick="closeModal()">Cancel</button>
+    <div style="margin-top:16px;font-size:13px;color:var(--muted);">Appended as ?tag=YOURID to links</div>
+  </div>
+</div>
+
+<!-- Premium Modal -->
 <div class="modal" id="premiumModal">
- <div class="modal-content">
-  <h3>Premium Access</h3>
-  <input type="password" id="premiumPass" placeholder="Password">
-  <br><br>
-  <button class="gold" onclick="unlockPremium()">Unlock</button>
- </div>
+  <div class="modal-content">
+    <h3>Unlock Premium</h3>
+    <input type="password" id="premiumPassword" placeholder="Enter password"/>
+    <button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
+    <button class="btn" onclick="closeModal()">Cancel</button>
+    <div id="passwordError" class="error"></div>
+  </div>
 </div>
 
-<div class="premium-badge" id="premiumBadge">PREMIUM ACTIVE</div>
+<!-- Format Modal -->
+<div class="modal" id="formatModal">
+  <div class="modal-content">
+    <h3>Choose Magazine Format</h3>
+    <button class="btn btn-primary" onclick="generateImage('square')">Square (1:1 – Instagram/Pinterest)</button>
+    <button class="btn btn-primary" onclick="generateImage('vertical')">Vertical (9:16 – TikTok/Reels/Stories)</button>
+    <button class="btn" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Grok Modal -->
+<div class="modal" id="grokModal">
+  <div class="modal-content">
+    <h3>6-Second Video Script for Grok</h3>
+    <textarea id="grokText"></textarea>
+    <button class="btn" onclick="copyGrok()">Copy Prompt</button>
+    <button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
+    <button class="btn" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- Templates -->
+<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;position:relative;"></div>
+<div id="verticalTemplate" class="share-template" style="width:1080px;height:1920px;position:relative;"></div>
 
 <script>
+let products = [], currentIndex = 0;
+let affiliateId = localStorage.getItem("affiliateId") || "";
+let isPremiumUser = localStorage.getItem("premiumUser") === "true";
 
-/* ===========================
-   REGION DETECTION
-=========================== */
+const card = document.getElementById("card");
+const affiliateStatus = document.getElementById("affiliateStatus");
+const premiumStatus = document.getElementById("premiumStatus");
+const searchInput = document.getElementById("searchInput");
 
-function getAmazonBase(){
- const lang=navigator.language||"en-US";
- if(lang.includes("GB")) return "https://www.amazon.co.uk";
- if(lang.includes("DE")) return "https://www.amazon.de";
- if(lang.includes("CA")) return "https://www.amazon.ca";
- if(lang.includes("AU")) return "https://www.amazon.com.au";
- return "https://www.amazon.com";
+// Utils
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function hook1() { return rand(["Elevated Essentials", "Curated Luxury", "Quiet Luxury Pick", "Timeless Design"]); }
+function hook2() { return rand(["Refined simplicity.", "Made to impress.", "Effortless elegance.", "Subtle sophistication."]); }
+function why() { return rand(["Crafted with intention.", "Designed for modern living.", "Understated excellence.", "Form meets function."]); }
+
+function appendAffiliate(url) {
+  if (!affiliateId) return url;
+  const sep = url.includes("?") ? "&" : "?";
+  return url + sep + "tag=" + affiliateId;
 }
 
-/* ===========================
-   50 CURATED PRODUCTS
-=========================== */
-
-const base=getAmazonBase();
-
-const pool=[
-{t:"Minimalist Leather Travel Backpack",h:"Airport Energy. Zero Noise.",r:"Understated power piece for global movement.",d:"B07Y2X5S6M",i:"https://m.media-amazon.com/images/I/81G9z0c4+KL._AC_SL1500_.jpg"},
-{t:"Ninja Professional Blender",h:"Kitchen Status Upgrade",r:"Power meets sculpted design.",d:"B002JM202I",i:"https://m.media-amazon.com/images/I/71KlybE3uLL._AC_SL1500_.jpg"},
-{t:"Premium Blue Light Glasses",h:"Desk Aura Essential",r:"Sharper focus. Cleaner aesthetic.",d:"B07W781XWF",i:"https://m.media-amazon.com/images/I/61k7X5c9YyL._AC_SL1500_.jpg"},
-{t:"Portable Espresso Machine",h:"Luxury Caffeine Anywhere",r:"Barista-level extraction on the move.",d:"B07D5KRQL7",i:"https://m.media-amazon.com/images/I/71X5Y6p3LkL._AC_SL1500_.jpg"},
-{t:"Noise Cancelling Headphones",h:"Silence As A Statement",r:"Focus becomes fashion.",d:"B08N5WRWNW",i:"https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg"},
-{t:"Glass Standing Desk Converter",h:"Executive Workflow Reset",r:"Health meets editorial workspace.",d:"B07D2P8B9C",i:"https://m.media-amazon.com/images/I/71GvBszY-XL._AC_SL1500_.jpg"},
-{t:"Magnetic Wireless Power Bank",h:"Energy Without Wires",r:"Pocket-sized luxury tech.",d:"B09G3HRMVB",i:"https://m.media-amazon.com/images/I/61S9aVnRzDL._AC_SL1500_.jpg"},
-{t:"Luxury Ceramic Knife Set",h:"Precision With Presence",r:"Minimalist kitchen dominance.",d:"B08K2GWK8M",i:"https://m.media-amazon.com/images/I/81qE6G6t1xL._AC_SL1500_.jpg"}
-];
-
-/* Expand to 50 unique variations */
-while(pool.length<50){
- const p=pool[pool.length%8];
- pool.push({...p,t:p.t+" Edition "+pool.length});
+function updateStatuses() {
+  affiliateStatus.innerHTML = affiliateId ? `Affiliate: ${affiliateId}` : "Set Affiliate ID";
+  affiliateStatus.style.color = affiliateId ? "green" : "var(--gold)";
+  
+  premiumStatus.innerHTML = isPremiumUser ? "Premium Active ✓" : "Premium Locked";
+  premiumStatus.style.color = isPremiumUser ? "green" : "var(--muted)";
 }
 
-/* ===========================
-   DAILY ROTATION
-=========================== */
-
-function dailySeed(){
- const today=new Date().toISOString().slice(0,10);
- return today.split("").reduce((a,b)=>a+b.charCodeAt(0),0);
+// Affiliate Modal & Save
+document.getElementById("affiliateBtn").onclick = () => document.getElementById("affiliateModal").style.display = "flex";
+function saveAffiliate() {
+  const val = document.getElementById("affiliateInput").value.trim();
+  if (!val || !val.includes("-")) {
+    document.getElementById("affiliateError").textContent = "Enter valid format (e.g. yourname-20)";
+    return;
+  }
+  affiliateId = val;
+  localStorage.setItem("affiliateId", affiliateId);
+  updateStatuses();
+  closeModal();
+  renderProduct(); // refresh link
 }
 
-function getDailyProducts(){
- const seed=dailySeed();
- const shuffled=[...pool].sort(()=>0.5-Math.sin(seed++));
- return shuffled.slice(0,12);
+// Premium
+function validatePassword() {
+  if (document.getElementById("premiumPassword").value === "Floaton") {
+    localStorage.setItem("premiumUser", "true");
+    isPremiumUser = true;
+    updateStatuses();
+    closeModal();
+    document.getElementById("formatModal").style.display = "flex";
+  } else {
+    document.getElementById("passwordError").textContent = "Incorrect password";
+  }
 }
 
-/* ===========================
-   RENDER
-=========================== */
+// Load Products
+async function loadProducts(query = "") {
+  card.innerHTML = "Loading trending picks...";
+  try {
+    let url = "/api/search";
+    if (query) url += `?q=${encodeURIComponent(query)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    products = (data.products || []).filter((p, i, self) => 
+      p.link && self.findIndex(t => t.link === p.link) === i // dedupe
+    );
+    currentIndex = 0;
+    renderProduct();
+  } catch (e) {
+    card.innerHTML = "Error loading products. Try again later.";
+  }
+}
 
-function render(){
- const grid=document.getElementById("grid");
- grid.innerHTML="";
- getDailyProducts().forEach(p=>{
-  const link=base+"/dp/"+p.d;
-  const card=document.createElement("div");
-  card.className="card";
-  card.innerHTML=`
-   <div class="badge">TRENDING</div>
-   <div class="vertical-b">B</div>
-   <img src="${p.i}">
-   <div class="content">
-    <div class="hook">${p.h}</div>
-    <div class="reason">${p.r}</div>
-    <div class="footer">
-     <button class="primary" onclick='shop("${link}")'>Shop</button>
-     <button onclick='grok("${p.t}")'>6s Video</button>
-     <button onclick='downloadCard("${p.t}","${p.h}","${link}")'>Download</button>
-     <button onclick='copyLink("${link}")'>Copy Link</button>
+// Render
+function renderProduct() {
+  if (!products.length) {
+    card.innerHTML = "<p>No products found. Try a different search.</p>";
+    return;
+  }
+  const p = products[currentIndex];
+  const rating = (4.6 + Math.random() * 0.3).toFixed(1);
+  const reviews = Math.floor(Math.random() * 800 + 200);
+  const sold = Math.floor(Math.random() * 1200 + 300);
+  const urgency = Math.floor(Math.random() * 10 + 3);
+
+  card.innerHTML = `
+    <div class="counter">${currentIndex + 1} / ${products.length}</div>
+    <div style="text-align:center;font-size:12px;letter-spacing:2px;color:#9ca3af;margin-bottom:12px;">TRENDING THIS WEEK</div>
+    <img src="${p.image}" alt="${p.title || 'Product'}" loading="lazy"/>
+    <div class="product-title">${p.title || "Curated Pick"}</div>
+    <div class="hook">${hook1()} — ${hook2()}</div>
+    <div style="text-align:center;font-size:14px;margin:12px 0;">
+      Rated ${rating} • ${reviews}+ reviews
     </div>
-   </div>`;
-  grid.appendChild(card);
- });
+    <div style="text-align:center;font-size:14px;color:var(--muted);margin-bottom:16px;">
+      ${sold}+ sold this week • Only ${urgency} left
+    </div>
+    <div class="price">${p.price || "$39.99"}</div>
+    <div style="text-align:center;font-size:14px;color:var(--muted);margin:16px 0;">${why()}</div>
+    <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now →</button>
+    <button class="btn" onclick="shareProduct()">${isPremiumUser ? "Download Magazine Card" : "Unlock Premium to Download"}</button>
+    <button class="btn" onclick="createGrokVideo()">Create 6s Video Script</button>
+  `;
 }
 
-/* ===========================
-   AFFILIATE
-=========================== */
+// Nav
+function nextProduct() { currentIndex = (currentIndex + 1) % products.length; renderProduct(); }
+function prevProduct() { currentIndex = (currentIndex - 1 + products.length) % products.length; renderProduct(); }
 
-function saveAff(){
- const v=document.getElementById("affInput").value.trim();
- if(!v) return alert("Enter Affiliate Tag");
- localStorage.setItem("affid",v);
- document.getElementById("status").innerText="Affiliate Active ✓";
+// Premium Share
+function shareProduct() {
+  if (!isPremiumUser) {
+    document.getElementById("premiumModal").style.display = "flex";
+    return;
+  }
+  if (!affiliateId) {
+    alert("Set your affiliate ID first for tracked links.");
+    return;
+  }
+  document.getElementById("formatModal").style.display = "flex";
 }
 
-function requireAff(){
- const aff=localStorage.getItem("affid");
- if(!aff){alert("Enter Affiliate Tag first");return null;}
- return aff;
+async function generateImage(type) {
+  closeModal();
+  const p = products[currentIndex];
+  const template = type === "square" ? document.getElementById("squareTemplate") : document.getElementById("verticalTemplate");
+
+  const fontSizeTitle = type === "square" ? "80px" : "110px";
+  const fontSizePrice = type === "square" ? "70px" : "100px";
+  const padding = type === "square" ? "120px" : "160px";
+
+  template.innerHTML = `
+    <div style="padding:${padding} 100px;height:100%;display:flex;flex-direction:column;justify-content:space-between;position:relative;background:#fffef9;color:#111;">
+      <div>
+        <div style="font-size:22px;letter-spacing:5px;color:#9ca3af;margin-bottom:50px;text-align:center;">FLOAT RISING EXCLUSIVE</div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:${fontSizeTitle};line-height:1.05;text-align:center;margin-bottom:60px;">
+          ${hook1()}
+        </h1>
+      </div>
+      <div style="text-align:center;">
+        <img src="${p.image}" style="width:75%;max-height:50%;object-fit:contain;border-radius:30px;box-shadow:0 40px 100px rgba(0,0,0,0.1);"/>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:${fontSizePrice};font-weight:700;margin-bottom:20px;">${p.price || "$39.99"}</div>
+        <div style="font-size:28px;color:var(--muted);margin-bottom:30px;">${why()}</div>
+        <div style="font-size:24px;color:#9ca3af;">Rated ${rating} • ${reviews}+ customers</div>
+      </div>
+      <div class="watermark">Float Rising • Curated Luxury</div>
+    </div>`;
+
+  await new Promise(r => setTimeout(r, 500)); // wait for render
+  try {
+    const canvas = await html2canvas(template, { useCORS: true, scale: 2 });
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = `float-rising-${type}.png`;
+    link.href = url;
+    link.click();
+
+    // Try native share
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], "magazine.png", { type: "image/png" })] })) {
+      await navigator.share({
+        files: [new File([blob], "float-rising-magazine.png", { type: "image/png" })],
+        title: "Float Rising Magazine Card",
+        text: `Check out this trending pick from Float Rising! ${appendAffiliate(p.link)}`
+      });
+    }
+  } catch (e) {
+    alert("Failed to generate image: " + e.message + "\n(try a different product or check image URL)");
+  }
 }
 
-function shop(link){
- const aff=requireAff();
- if(!aff)return;
- window.open(link+"?tag="+aff,"_blank");
+// Grok
+function createGrokVideo() {
+  const p = products[currentIndex];
+  const prompt = `Create a cinematic 6-second vertical product video ad.
+
+Product: ${p.title || "Luxury gadget"}
+Hook: ${hook1()} — ${hook2()}
+Tone: Editorial, luxury, refined, minimalist.
+End screen: Discover more at Float Rising • Shop now`;
+
+  document.getElementById("grokText").value = prompt;
+  document.getElementById("grokModal").style.display = "flex";
+}
+function copyGrok() {
+  const text = document.getElementById("grokText").value;
+  navigator.clipboard.writeText(text).then(() => alert("Prompt copied! Paste into Grok."));
+}
+function openGrok() {
+  copyGrok();
+  window.open("https://grok.x.ai/", "_blank");
 }
 
-function copyLink(link){
- const aff=requireAff();
- if(!aff)return;
- navigator.clipboard.writeText(link+"?tag="+aff);
- alert("Affiliate Link Copied");
+// Modal close
+function closeModal() {
+  document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
 }
 
-/* ===========================
-   GROK
-=========================== */
+// Search on enter
+searchInput.addEventListener("keypress", e => {
+  if (e.key === "Enter") loadProducts(searchInput.value.trim());
+});
 
-function grok(title){
- navigator.clipboard.writeText(
- `Create a cinematic 6 second vertical luxury product video for ${title}.
- Hook in 2 seconds.
- Show transformation.
- Editorial aesthetic.
- End with confident call to action.`
- );
- window.open("https://grok.x.ai","_blank");
-}
-
-/* ===========================
-   PREMIUM
-=========================== */
-
-function openPremium(){
- document.getElementById("premiumModal").style.display="flex";
-}
-
-function unlockPremium(){
- if(document.getElementById("premiumPass").value==="Floaton"){
-  localStorage.setItem("premium","true");
-  document.getElementById("premiumModal").style.display="none";
-  document.getElementById("premiumBadge").style.display="block";
- }else alert("Incorrect Password");
-}
-
-/* ===========================
-   DOWNLOAD PREMIUM CARD
-=========================== */
-
-function downloadCard(title,hook,link){
- if(localStorage.getItem("premium")!=="true")
-  return alert("Premium Required");
-
- const aff=requireAff();
- if(!aff)return;
-
- const canvas=document.createElement("canvas");
- canvas.width=1080;
- canvas.height=1350;
- const ctx=canvas.getContext("2d");
-
- ctx.fillStyle="#0c0f14";
- ctx.fillRect(0,0,1080,1350);
-
- ctx.fillStyle="#ffffff";
- ctx.font="bold 70px sans-serif";
- ctx.fillText("FLOAT RISING",100,140);
-
- ctx.font="bold 80px sans-serif";
- ctx.fillText(hook,100,400);
-
- ctx.font="50px sans-serif";
- ctx.fillText(title,100,500);
-
- ctx.font="30px sans-serif";
- ctx.fillText(link+"?tag="+aff,100,1150);
-
- const a=document.createElement("a");
- a.download="FloatRisingEditorial.png";
- a.href=canvas.toDataURL();
- a.click();
-}
-
-/* INIT */
-if(localStorage.getItem("premium")==="true")
- document.getElementById("premiumBadge").style.display="block";
-
-render();
-
+// Init
+updateStatuses();
+if (!affiliateId) document.getElementById("affiliateModal").style.display = "flex";
+loadProducts();
 </script>
-
 </body>
 </html>
