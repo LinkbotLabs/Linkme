@@ -29,7 +29,7 @@ body{
   align-items:center;
 }
 
-/* Affiliate Section */
+/* Affiliate */
 #affiliateSection{
   width:100%;
   max-width:420px;
@@ -57,96 +57,6 @@ body{
   padding:30px;
 }
 
-.hook{
-  font-family:'Playfair Display',serif;
-  font-size:26px;
-  font-weight:600;
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.product-image{
-  width:100%;
-  border-radius:18px;
-  margin-bottom:20px;
-  box-shadow:0 15px 30px rgba(0,0,0,0.08);
-}
-
-.social-proof{
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:16px;
-}
-
-.divider{
-  height:1px;
-  background:var(--border);
-  margin:16px 0;
-}
-
-.micro-copy{
-  font-size:14px;
-  color:var(--muted);
-  margin-bottom:20px;
-}
-
-.price{
-  font-size:28px;
-  font-weight:600;
-}
-
-.old-price{
-  font-size:16px;
-  text-decoration:line-through;
-  color:var(--muted);
-  margin-left:8px;
-}
-
-.discount{
-  display:inline-block;
-  background:var(--accent);
-  color:white;
-  padding:6px 14px;
-  border-radius:30px;
-  font-size:13px;
-  margin-top:10px;
-}
-
-.button-row{
-  display:flex;
-  gap:10px;
-  margin-top:24px;
-}
-
-.btn{
-  flex:1;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  cursor:pointer;
-  font-weight:500;
-  font-size:14px;
-}
-
-.btn-primary{
-  background:linear-gradient(135deg,var(--accent),var(--accent-light));
-  color:white;
-}
-
-.btn-secondary{
-  background:#f3f4f6;
-}
-
-.grok-btn{
-  margin-top:12px;
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  background:#e5e7eb;
-  cursor:pointer;
-}
-
 .loading{
   text-align:center;
   color:var(--muted);
@@ -157,9 +67,9 @@ body{
 
 <body>
 
-<!-- Affiliate Section -->
+<!-- Affiliate -->
 <div id="affiliateSection">
-  
+
   <div id="affiliateForm">
     <input 
       id="affiliateInput"
@@ -179,31 +89,26 @@ body{
 
 </div>
 
-<!-- Product Card -->
+<!-- Product -->
 <div class="card" id="card">
-  <div class="loading">Waiting for PSE reset…</div>
+  <div class="loading">Loading curated product…</div>
 </div>
 
 <script>
 
-// ===== Affiliate System =====
-let affiliateId = localStorage.getItem("affiliateId") || "";
+/* ===============================
+   AFFILIATE SYSTEM
+=================================*/
 
-if (affiliateId) {
-  showConnected();
-}
+let affiliateId = localStorage.getItem("affiliateId") || "";
+if (affiliateId) showConnected();
 
 function saveAffiliate() {
   const input = document.getElementById("affiliateInput").value.trim();
-
-  if (!input) {
-    alert("Enter valid affiliate details");
-    return;
-  }
+  if (!input) return alert("Enter valid affiliate details");
 
   localStorage.setItem("affiliateId", input);
   affiliateId = input;
-
   showConnected();
 }
 
@@ -212,114 +117,161 @@ function showConnected() {
   document.getElementById("affiliateConnected").style.display = "block";
 }
 
-// ===== Product Logic =====
+/* ===============================
+   ENGINE CONFIG
+=================================*/
 
-const searchQuery = "viral gadgets";
+const categoryPool = [
+  "viral gadgets",
+  "tiktok beauty finds",
+  "amazon fitness trending",
+  "home improvement must have",
+  "car accessories trending",
+  "kitchen hacks viral",
+  "tech under 50 dollars",
+  "travel essentials trending"
+];
+
+const CACHE_KEY = "float_pool";
+const CACHE_TIME_KEY = "float_time";
+const ONE_DAY = 1000 * 60 * 60 * 24;
+
+/* ===============================
+   HELPERS
+=================================*/
+
+function getNumericPrice(price){
+  if(!price) return 0;
+  return Number(price.replace(/[^0-9.]/g,"")) || 0;
+}
+
+function appendAffiliate(url){
+  if(!affiliateId) return url;
+  if(affiliateId.startsWith("http")) return affiliateId;
+
+  const joiner = url.includes("?") ? "&" : "?";
+  return url + joiner + "affid=" + affiliateId;
+}
 
 function generateHook(title){
   const hooks = [
     "Amazon Can’t Keep This in Stock",
-    "The $19 Fix Nobody Told You About",
     "TikTok Made This Sell Out in 48 Hours",
+    "The Upgrade Everyone’s Talking About",
     title + " Is Blowing Up Right Now"
   ];
   return hooks[Math.floor(Math.random() * hooks.length)];
 }
 
-async function loadProduct(){
+/* ===============================
+   SHARE + GROK
+=================================*/
+
+function shareProduct(){
+  const code = Math.random().toString(36).substring(2,8);
+  localStorage.setItem("shareCode", code);
+  const shareUrl = window.location.origin + "?ref=" + code;
+  navigator.clipboard.writeText(shareUrl);
+  alert("Share link copied!");
+}
+
+function generateVideo(product){
+  const shareCode = localStorage.getItem("shareCode") || "";
+  const shareUrl = window.location.origin + "?ref=" + shareCode;
+
+  const prompt = `
+Create a 6 second viral product video.
+Hook: "${product.title}"
+Price: ${product.price}
+Tone: Excited, viral, modern.
+End with: Shop here ${shareUrl}
+`;
+
+  navigator.clipboard.writeText(prompt.trim());
+  alert("Grok prompt copied!");
+}
+
+/* ===============================
+   FETCH ENGINE (50 pool + 24h cache)
+=================================*/
+
+async function loadProducts(){
+
+  const cached = localStorage.getItem(CACHE_KEY);
+  const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+
+  if(cached && cachedTime && (Date.now() - cachedTime < ONE_DAY)){
+    renderProduct(JSON.parse(cached));
+    return;
+  }
+
+  const randomCategory = categoryPool[Math.floor(Math.random() * categoryPool.length)];
+
   try{
-    const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&start=1`);
-    if(!res.ok) throw new Error("API error");
-
+    const res = await fetch(`/api/search?q=${encodeURIComponent(randomCategory)}&num=50`);
     const data = await res.json();
-    if(!data.items || !data.items.length) throw new Error("No items");
+    if(!data.products) throw new Error("No products");
 
-    renderCard(data.items[0]);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data.products));
+    localStorage.setItem(CACHE_TIME_KEY, Date.now());
+
+    renderProduct(data.products);
 
   }catch(err){
     document.getElementById("card").innerHTML =
-      `<div class="loading">API quota waiting. Will work after reset.</div>`;
+      `<div class="loading">Waiting for API reset…</div>`;
   }
 }
 
-function renderCard(product){
+/* ===============================
+   RENDER HIGHEST PRICE FEATURED
+=================================*/
+
+function renderProduct(products){
+
+  products.sort((a,b)=>{
+    return getNumericPrice(b.price) - getNumericPrice(a.price);
+  });
+
+  const product = products[0]; // highest price
 
   const hook = generateHook(product.title);
-  const price = product.price || "$29.99";
-  const oldPrice = product.old_price || "$39.99";
 
   document.getElementById("card").innerHTML = `
-    <div class="hook">${hook}</div>
-
-    <img class="product-image" src="${product.image}" />
-
-    <div class="social-proof">
-      🔥 4.8 (1,342 reviews)<br/>
-      🚀 Trending Now
+    <div style="font-family:Playfair Display,serif;font-size:26px;margin-bottom:20px;text-align:center;">
+      ${hook}
     </div>
 
-    <div class="divider"></div>
+    <img src="${product.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
 
-    <div class="micro-copy">
-      Solves a problem you didn’t know had a fix.
+    <div style="color:#6b7280;font-size:14px;margin-bottom:12px;">
+      🔥 Trending Today
     </div>
 
-    <div class="price">
-      ${price}
-      <span class="old-price">${oldPrice}</span>
+    <div style="font-size:28px;font-weight:600;margin-bottom:20px;">
+      ${product.price || "$29.99"}
     </div>
 
-    <div class="discount">20% OFF</div>
+    <button onclick="window.open(appendAffiliate('${product.link}'),'_blank')" 
+      style="width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#2e7d32,#3fa34d);color:white;font-weight:500;cursor:pointer;margin-bottom:12px;">
+      🛒 Shop Now
+    </button>
 
-    <div class="button-row">
-      <button class="btn btn-primary" onclick="shopNow('${product.link}')">🛒 Shop Now</button>
-      <button class="btn btn-secondary" onclick="shareProduct()">🔗 Share</button>
-    </div>
+    <button onclick="shareProduct()" 
+      style="width:100%;padding:14px;border-radius:14px;border:1px solid #e5e7eb;background:white;margin-bottom:12px;">
+      🔗 Share
+    </button>
 
-    <button class="grok-btn" onclick="generateVideo()">
+    <button onclick='generateVideo(${JSON.stringify(product)})'
+      style="width:100%;padding:14px;border-radius:14px;border:none;background:#e5e7eb;">
       🎬 Grok Video
     </button>
   `;
 }
 
-function shopNow(link){
+/* =============================== */
 
-  if(!affiliateId){
-    alert("Please connect your affiliate first.");
-    return;
-  }
-
-  const shareCode = localStorage.getItem("shareCode") || "";
-
-  let finalUrl;
-
-  if(affiliateId.startsWith("http")){
-    finalUrl = affiliateId;
-  } else {
-    finalUrl = `${link}&affid=${affiliateId}`;
-  }
-
-  if(shareCode){
-    finalUrl += `&share=${shareCode}`;
-  }
-
-  window.open(finalUrl, "_blank");
-}
-
-function shareProduct(){
-  const code = Math.random().toString(36).substring(2,8);
-  localStorage.setItem("shareCode", code);
-  const shareUrl = window.location.href + "?ref=" + code;
-  navigator.clipboard.writeText(shareUrl);
-  alert("Share link copied!");
-}
-
-function generateVideo(){
-  alert("Grok video trigger placeholder.");
-}
-
-// Run once
-loadProduct();
+loadProducts();
 
 </script>
 
