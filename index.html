@@ -397,24 +397,87 @@ function generateImage(type){
     ?document.getElementById("squareContent")
     :document.getElementById("verticalContent");
 
-  const hook1=generateHookLine1();
-  const hook2=generateHookLine2(currentProduct.title);
+  const hook1 = currentHook1;
+const hook2 = currentHook2;
 
-  content.innerHTML=`
-    <img src="${currentProduct.image}" style="width:100%;border-radius:20px;margin-bottom:60px;" />
-    <h1 style="font-family:Playfair Display,serif;font-size:${type==="square"?"64px":"84px"};margin-bottom:40px;line-height:1.2;">
-      ${hook1}<br>
-      <span style="font-size:0.7em;color:#6b7280;">
-        ${hook2}
-      </span>
-    </h1>
-    <div style="font-size:48px;font-weight:600;">
-      ${currentProduct.price||"$29.99"}
+  content.innerHTML = `
+  <div style="
+    background:#f4efe8;
+    padding:80px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    box-sizing:border-box;
+  ">
+
+    <!-- Top Badge -->
+    <div style="text-align:center;">
+      <div style="
+        display:inline-block;
+        padding:12px 28px;
+        border-radius:40px;
+        background:rgba(0,0,0,0.06);
+        font-size:28px;
+        letter-spacing:1px;
+      ">
+        Today’s Pick
+      </div>
     </div>
-    <div style="margin-top:40px;font-size:32px;color:#6b7280;">
+
+    <!-- Hook -->
+    <div style="text-align:center;margin-top:40px;">
+      <h1 style="
+        font-family:Playfair Display,serif;
+        font-size:${type==="square"?"76px":"96px"};
+        line-height:1.15;
+        margin-bottom:30px;
+      ">
+        ${currentHook1}<br>
+        <span style="
+          font-size:0.65em;
+          color:#6b7280;
+          font-weight:500;
+        ">
+          ${currentHook2}
+        </span>
+      </h1>
+    </div>
+
+    <!-- Product Image -->
+    <div style="text-align:center;margin:60px 0;">
+      <img src="${currentProduct.image}"
+        style="
+          width:80%;
+          border-radius:30px;
+          box-shadow:0 40px 80px rgba(0,0,0,0.08);
+        "
+      />
+    </div>
+
+    <!-- Price -->
+    <div style="text-align:center;">
+      <div style="
+        font-size:64px;
+        font-weight:600;
+        margin-bottom:20px;
+      ">
+        ${currentProduct.price || "$29.99"}
+      </div>
+    </div>
+
+    <!-- Subline -->
+    <div style="
+      text-align:center;
+      font-size:34px;
+      color:#6b7280;
+      margin-bottom:40px;
+    ">
       Shop via link in bio
     </div>
-  `;
+
+  </div>
+`;
 
   html2canvas(template,{scale:2}).then(canvas=>{
     const a=document.createElement("a");
