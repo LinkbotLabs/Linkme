@@ -17,24 +17,21 @@ const AFFILIATE_TAG = "tag=davidshort-20";
 
 export default async function handler(req, res) {
 
-  // 🔥 CRITICAL: Disable HTTP caching (fixes 304 issue)
   res.setHeader("Cache-Control", "no-store");
 
   const now = Date.now();
 
-  // ✅ Serve server-side cache (still keeps your daily rotation)
   if (cache.data && now - cache.timestamp < ONE_DAY) {
-    console.log("Serving from server cache:", cache.data.length);
     return res.status(200).json({ products: cache.data });
   }
 
   try {
-    // Rotate keyword daily
-    const dayIndex = Math.floor(now / ONE_DAY) % keywords.length;
-    const activeKeyword = keywords[dayIndex];
 
-    // 🔥 Improved query (forces product pages)
-    const query = `${activeKeyword} site:amazon.com/dp/ -book -novel -kindle`;
+    const activeKeyword =
+      keywords[Math.floor(Math.random() * keywords.length)];
+
+    // 🔥 Back to looser query (this is key)
+    const query = `${activeKeyword} site:amazon.com -book -novel -kindle`;
 
     const googleRes = await fetch(
       `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
@@ -48,34 +45,24 @@ export default async function handler(req, res) {
       });
     }
 
-    if (!data.items) {
-      return res.status(500).json({ error: "No results from PSE" });
+    if (!data.items || data.items.length === 0) {
+      return res.status(200).json({ products: [] });
     }
 
-    console.log("Total Google results:", data.items.length);
-
-    // ✅ More flexible Amazon filtering
+    // 🔥 Only basic Amazon check
     const filtered = data.items.filter(item =>
-      item.link &&
-      item.link.includes("amazon.com")
+      item.link && item.link.includes("amazon.com")
     );
-
-    console.log("Valid Amazon links:", filtered.length);
-
-    if (!filtered.length) {
-      return res.status(500).json({ error: "No valid Amazon product links found" });
-    }
 
     const products = filtered.map((item, i) => {
 
       const image =
-        item.pagemap?.cse_image?.[0]?.src ||
         item.pagemap?.cse_thumbnail?.[0]?.src ||
-        "";
+        item.pagemap?.cse_image?.[0]?.src ||
+        "https://via.placeholder.com/600x600?text=Float+Pick";
 
       let link = item.link;
 
-      // ✅ Append affiliate safely
       if (!link.includes(AFFILIATE_TAG)) {
         link += link.includes("?")
           ? `&${AFFILIATE_TAG}`
@@ -86,25 +73,18 @@ export default async function handler(req, res) {
         id: `${now}-${i}`,
         title: cleanTitle(item.title),
         image,
-        hook1: cleanTitle(item.title),
-        hook2: randomHook(),
         link
       };
     });
 
-    // Save server cache
     cache.timestamp = now;
     cache.data = products;
 
-    console.log("Products returned to frontend:", products.length);
-
-    return res.status(200).json({
-      products
-    });
+    return res.status(200).json({ products });
 
   } catch (error) {
     return res.status(500).json({
-      error: "FLOAT engine failed",
+      error: "Search failed",
       details: error.message
     });
   }
@@ -117,17 +97,4 @@ function cleanTitle(title) {
     .split("|")[0]
     .substring(0, 80)
     .trim();
-}
-
-function randomHook() {
-  const lines = [
-    "TikTok can’t stop talking about it.",
-    "Quietly trending this week.",
-    "One of Amazon’s fastest risers.",
-    "Floating up the charts today.",
-    "The internet’s latest obsession.",
-    "This keeps selling out.",
-    "Everyone’s adding this to cart."
-  ];
-  return lines[Math.floor(Math.random() * lines.length)];
 }
