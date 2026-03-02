@@ -13,14 +13,13 @@ const keywords = [
   "amazon impulse buy gadgets"
 ];
 
-const AFFILIATE_TAG = "tag=davidshort-20";
-
 export default async function handler(req, res) {
 
   res.setHeader("Cache-Control", "no-store");
 
   const now = Date.now();
 
+  // Return cached products if fresh
   if (cache.data && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({ products: cache.data });
   }
@@ -30,7 +29,6 @@ export default async function handler(req, res) {
     const activeKeyword =
       keywords[Math.floor(Math.random() * keywords.length)];
 
-    // 🔥 Back to looser query (this is key)
     const query = `${activeKeyword} site:amazon.com -book -novel -kindle`;
 
     const googleRes = await fetch(
@@ -49,9 +47,11 @@ export default async function handler(req, res) {
       return res.status(200).json({ products: [] });
     }
 
-    // 🔥 Only basic Amazon check
+    // Filter only valid Amazon product links
     const filtered = data.items.filter(item =>
-      item.link && item.link.includes("amazon.com")
+      item.link &&
+      item.link.includes("amazon.com") &&
+      (item.link.includes("/dp/") || item.link.includes("/gp/product/"))
     );
 
     const products = filtered.map((item, i) => {
@@ -61,19 +61,13 @@ export default async function handler(req, res) {
         item.pagemap?.cse_image?.[0]?.src ||
         "https://via.placeholder.com/600x600?text=Float+Pick";
 
-      let link = item.link;
-
-      if (!link.includes(AFFILIATE_TAG)) {
-        link += link.includes("?")
-          ? `&${AFFILIATE_TAG}`
-          : `?${AFFILIATE_TAG}`;
-      }
+      const cleanLink = normalizeAmazonLink(item.link);
 
       return {
         id: `${now}-${i}`,
         title: cleanTitle(item.title),
         image,
-        link
+        link: cleanLink
       };
     });
 
@@ -90,6 +84,9 @@ export default async function handler(req, res) {
   }
 }
 
+
+/* ------------------ HELPERS ------------------ */
+
 function cleanTitle(title) {
   return title
     .replace("- Amazon.com", "")
@@ -97,4 +94,24 @@ function cleanTitle(title) {
     .split("|")[0]
     .substring(0, 80)
     .trim();
+}
+
+function normalizeAmazonLink(url) {
+  try {
+    const parsed = new URL(url);
+
+    // Extract ASIN
+    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
+    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
+
+    const asin = dpMatch?.[1] || gpMatch?.[1];
+
+    if (!asin) return parsed.origin;
+
+    // Return clean canonical product URL
+    return `https://www.amazon.com/dp/${asin}`;
+
+  } catch {
+    return url;
+  }
 }
