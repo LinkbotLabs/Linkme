@@ -26,186 +26,64 @@ body{
   flex-direction:column;
   align-items:center;
   color:#111;
-  min-height:100vh;
 }
+.brand{text-align:center;margin-bottom:30px;}
+.wave{width:120px;height:20px;margin:0 auto 10px;border-top:2px solid #111;border-radius:100% 100% 0 0;}
+.brand h1{font-family:'Playfair Display';font-size:32px;letter-spacing:1.5px;}
 
-/* Brand */
-.brand{
-  text-align:center;
-  margin-bottom:30px;
+.header{width:100%;max-width:420px;margin-bottom:24px;}
+.header input,.header button{
+  width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);
+  margin-bottom:8px;font-size:15px;
 }
-.wave{
-  width:120px;
-  height:20px;
-  margin:0 auto 10px auto;
-  border-top:2px solid #111;
-  border-radius:100% 100% 0 0;
-}
-.brand h1{
-  font-family:'Playfair Display',serif;
-  font-size:32px;
-  font-weight:700;
-  letter-spacing:1.5px;
-}
+.header button{background:#111;color:white;border:none;font-weight:600;cursor:pointer;}
 
-/* Header */
-.header{
-  width:100%;
-  max-width:420px;
-  margin-bottom:24px;
-}
-.header input, .header button{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin-bottom:8px;
-  font-size:15px;
-}
-.header button{
-  background:#111;
-  color:white;
-  border:none;
-  cursor:pointer;
-  font-weight:600;
-}
-.status{
-  font-size:13px;
-  font-weight:500;
-  margin:8px 0;
-  text-align:center;
-}
-.small-note{
-  font-size:12px;
-  color:var(--muted);
-  text-align:center;
-  margin-top:4px;
-}
+.status{text-align:center;font-size:13px;margin:6px 0;}
+.small-note{text-align:center;font-size:12px;color:var(--muted);}
 
-/* Card */
 .card{
-  width:100%;
-  max-width:420px;
-  background:var(--card);
-  border-radius:24px;
-  padding:32px 24px;
+  width:100%;max-width:420px;background:var(--card);
+  border-radius:24px;padding:28px 24px;
   box-shadow:0 20px 40px rgba(0,0,0,0.06);
   margin-bottom:24px;
 }
-.counter{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:12px;
-}
 .card img{
-  width:100%;
-  border-radius:16px;
-  margin-bottom:20px;
+  width:100%;border-radius:16px;margin-bottom:20px;
   box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 .product-title{
-  font-family:'Playfair Display',serif;
-  font-size:26px;
-  text-align:center;
-  margin-bottom:12px;
-  line-height:1.1;
+  font-family:'Playfair Display';
+  font-size:24px;text-align:center;margin-bottom:12px;
 }
-.hook{
-  font-size:16px;
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:16px;
-}
-.price{
-  font-size:32px;
-  font-weight:700;
-  text-align:center;
-  color:var(--accent);
-  margin:16px 0;
-}
+.hook{text-align:center;color:var(--muted);margin-bottom:16px;}
+.price{text-align:center;font-size:30px;font-weight:700;margin:14px 0;}
 .btn{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
+  width:100%;padding:14px;border-radius:14px;
   border:1px solid var(--border);
-  cursor:pointer;
-  font-weight:600;
-  font-size:15px;
-  margin-bottom:12px;
-  background:white;
-  transition:0.2s;
+  background:white;margin-bottom:10px;font-weight:600;cursor:pointer;
 }
-.btn:hover{opacity:0.95;}
-.btn-primary{
-  background:#111;
-  color:white;
-  border:none;
-}
-.nav{
-  display:flex;
-  justify-content:space-between;
-  width:100%;
-  max-width:420px;
-  margin:0 auto;
-}
-.nav button{
-  padding:12px 24px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:white;
-  cursor:pointer;
-  font-size:15px;
-}
+.btn-primary{background:#111;color:white;border:none;}
 
-/* Modal */
+.nav{display:flex;justify-content:space-between;width:100%;max-width:420px;}
+.nav button{padding:12px 24px;border-radius:12px;border:1px solid var(--border);background:white;cursor:pointer;}
+
 .modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  display:none;align-items:center;justify-content:center;
 }
 .modal-content{
-  background:var(--card);
-  padding:32px;
-  border-radius:24px;
-  width:90%;
-  max-width:420px;
-  text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  background:white;padding:28px;border-radius:20px;
+  width:90%;max-width:420px;text-align:center;
 }
-.modal input, .modal textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin:12px 0;
-  font-size:15px;
-}
-.modal textarea{height:140px;resize:none;}
-.error{color:#dc2626;font-size:13px;margin-top:8px;}
+.modal textarea{width:100%;height:160px;margin:12px 0;padding:12px;border-radius:12px;border:1px solid var(--border);}
+.error{color:red;font-size:13px;margin-top:6px;}
 
-/* Share templates */
 .share-template{
-  position:absolute;
-  left:-9999px;
-  background:#fffef9;
-  font-family:'Inter',sans-serif;
-  border:1px solid #e0d9c8;
-  box-shadow:0 0 40px rgba(0,0,0,0.05);
+  position:absolute;left:-9999px;background:white;
 }
 .watermark{
-  position:absolute;
-  bottom:40px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:18px;
-  color:#9ca3af;
-  letter-spacing:2px;
-  opacity:0.7;
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  font-size:18px;color:#9ca3af;opacity:.7;
 }
 </style>
 </head>
@@ -217,279 +95,218 @@ body{
 </div>
 
 <div class="header">
-  <button id="affiliateBtn">Set Your Affiliate ID</button>
+  <button onclick="openAffiliate()">Set Your Affiliate ID</button>
   <div id="affiliateStatus" class="status"></div>
   <div id="premiumStatus" class="status"></div>
   <input id="searchInput" placeholder="Search trending gadgets..."/>
-  <div class="small-note">Premium required for magazine-style downloads & advanced sharing.</div>
+  <div class="small-note">Premium required for magazine downloads.</div>
 </div>
 
-<div class="card" id="card">Loading trending picks...</div>
+<div class="card" id="card">Loading...</div>
 
 <div class="nav">
   <button onclick="prevProduct()">← Prev</button>
   <button onclick="nextProduct()">Next →</button>
 </div>
 
-<!-- Affiliate Modal -->
+<!-- Modals -->
 <div class="modal" id="affiliateModal">
-  <div class="modal-content">
-    <h3>Your Amazon Affiliate ID</h3>
-    <input type="text" id="affiliateInput" placeholder="e.g. yourname-20"/>
-    <div id="affiliateError" class="error"></div>
-    <button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
-    <button class="btn" onclick="closeModal()">Cancel</button>
-    <div style="margin-top:16px;font-size:13px;color:var(--muted);">Appended as ?tag=YOURID to links</div>
-  </div>
+<div class="modal-content">
+<h3>Amazon Affiliate ID</h3>
+<input id="affiliateInput" placeholder="yourname-20"/>
+<div id="affiliateError" class="error"></div>
+<button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
+<button class="btn" onclick="closeModal()">Cancel</button>
+</div>
 </div>
 
-<!-- Premium Modal -->
 <div class="modal" id="premiumModal">
-  <div class="modal-content">
-    <h3>Unlock Premium</h3>
-    <input type="password" id="premiumPassword" placeholder="Enter password"/>
-    <button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
-    <button class="btn" onclick="closeModal()">Cancel</button>
-    <div id="passwordError" class="error"></div>
-  </div>
+<div class="modal-content">
+<h3>Unlock Premium</h3>
+<input type="password" id="premiumPassword"/>
+<div id="passwordError" class="error"></div>
+<button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
+<button class="btn" onclick="closeModal()">Cancel</button>
+</div>
 </div>
 
-<!-- Format Modal -->
 <div class="modal" id="formatModal">
-  <div class="modal-content">
-    <h3>Choose Magazine Format</h3>
-    <button class="btn btn-primary" onclick="generateImage('square')">Square (1:1 – Instagram/Pinterest)</button>
-    <button class="btn btn-primary" onclick="generateImage('vertical')">Vertical (9:16 – TikTok/Reels/Stories)</button>
-    <button class="btn" onclick="closeModal()">Cancel</button>
-  </div>
+<div class="modal-content">
+<h3>Choose Format</h3>
+<button class="btn btn-primary" onclick="generateImage('square')">Square</button>
+<button class="btn btn-primary" onclick="generateImage('vertical')">Vertical</button>
+<button class="btn" onclick="closeModal()">Cancel</button>
+</div>
 </div>
 
-<!-- Grok Modal -->
 <div class="modal" id="grokModal">
-  <div class="modal-content">
-    <h3>6-Second Video Script for Grok</h3>
-    <textarea id="grokText"></textarea>
-    <button class="btn" onclick="copyGrok()">Copy Prompt</button>
-    <button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
-    <button class="btn" onclick="closeModal()">Close</button>
-  </div>
+<div class="modal-content">
+<h3>Adaptive 6s Video Script</h3>
+<textarea id="grokText"></textarea>
+<button class="btn" onclick="copyGrok()">Copy</button>
+<button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
+<button class="btn" onclick="closeModal()">Close</button>
+</div>
 </div>
 
-<!-- Templates -->
-<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;position:relative;"></div>
-<div id="verticalTemplate" class="share-template" style="width:1080px;height:1920px;position:relative;"></div>
+<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
+<div id="verticalTemplate" class="share-template" style="width:1080px;height:1920px;"></div>
 
 <script>
-let products = [], currentIndex = 0;
-let affiliateId = localStorage.getItem("affiliateId") || "";
-let isPremiumUser = localStorage.getItem("premiumUser") === "true";
+let products=[],currentIndex=0;
+let affiliateId=localStorage.getItem("affiliateId")||"";
+let isPremiumUser=localStorage.getItem("premiumUser")==="true";
 
-const card = document.getElementById("card");
-const affiliateStatus = document.getElementById("affiliateStatus");
-const premiumStatus = document.getElementById("premiumStatus");
-const searchInput = document.getElementById("searchInput");
+function updateStatus(){
+affiliateStatus.innerHTML=affiliateId?"Affiliate: "+affiliateId:"Affiliate Required";
+affiliateStatus.style.color=affiliateId?"green":"#b45309";
+premiumStatus.innerHTML=isPremiumUser?"Premium Active ✓":"Premium Locked";
+}
+updateStatus();
 
-// Utils
-function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function hook1() { return rand(["Elevated Essentials", "Curated Luxury", "Quiet Luxury Pick", "Timeless Design"]); }
-function hook2() { return rand(["Refined simplicity.", "Made to impress.", "Effortless elegance.", "Subtle sophistication."]); }
-function why() { return rand(["Crafted with intention.", "Designed for modern living.", "Understated excellence.", "Form meets function."]); }
+function openAffiliate(){affiliateModal.style.display="flex";}
+function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
 
-function appendAffiliate(url) {
-  if (!affiliateId) return url;
-  const sep = url.includes("?") ? "&" : "?";
-  return url + sep + "tag=" + affiliateId;
+function saveAffiliate(){
+const val=affiliateInput.value.trim();
+if(!val.includes("-")){affiliateError.innerText="Format example: yourname-20";return;}
+affiliateId=val;
+localStorage.setItem("affiliateId",val);
+closeModal();updateStatus();renderProduct();
 }
 
-function updateStatuses() {
-  affiliateStatus.innerHTML = affiliateId ? `Affiliate: ${affiliateId}` : "Set Affiliate ID";
-  affiliateStatus.style.color = affiliateId ? "green" : "var(--gold)";
-  
-  premiumStatus.innerHTML = isPremiumUser ? "Premium Active ✓" : "Premium Locked";
-  premiumStatus.style.color = isPremiumUser ? "green" : "var(--muted)";
+function validatePassword(){
+if(premiumPassword.value==="Floaton"){
+localStorage.setItem("premiumUser","true");
+isPremiumUser=true;closeModal();updateStatus();
+formatModal.style.display="flex";
+}else{passwordError.innerText="Incorrect password";}
 }
 
-// Affiliate Modal & Save
-document.getElementById("affiliateBtn").onclick = () => document.getElementById("affiliateModal").style.display = "flex";
-function saveAffiliate() {
-  const val = document.getElementById("affiliateInput").value.trim();
-  if (!val || !val.includes("-")) {
-    document.getElementById("affiliateError").textContent = "Enter valid format (e.g. yourname-20)";
-    return;
-  }
-  affiliateId = val;
-  localStorage.setItem("affiliateId", affiliateId);
-  updateStatuses();
-  closeModal();
-  renderProduct(); // refresh link
+function appendAffiliate(url){
+if(!affiliateId)return url;
+return url+(url.includes("?")?"&":"?")+"tag="+affiliateId;
 }
 
-// Premium
-function validatePassword() {
-  if (document.getElementById("premiumPassword").value === "Floaton") {
-    localStorage.setItem("premiumUser", "true");
-    isPremiumUser = true;
-    updateStatuses();
-    closeModal();
-    document.getElementById("formatModal").style.display = "flex";
-  } else {
-    document.getElementById("passwordError").textContent = "Incorrect password";
-  }
+async function loadProducts(q=""){
+card.innerHTML="Loading...";
+const res=await fetch("/api/search"+(q?"?q="+q:""));
+const data=await res.json();
+products=(data.products||[]).filter(p=>p.link);
+currentIndex=0;renderProduct();
 }
 
-// Load Products
-async function loadProducts(query = "") {
-  card.innerHTML = "Loading trending picks...";
-  try {
-    let url = "/api/search";
-    if (query) url += `?q=${encodeURIComponent(query)}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    products = (data.products || []).filter((p, i, self) => 
-      p.link && self.findIndex(t => t.link === p.link) === i // dedupe
-    );
-    currentIndex = 0;
-    renderProduct();
-  } catch (e) {
-    card.innerHTML = "Error loading products. Try again later.";
-  }
+function renderProduct(){
+if(!products.length){card.innerHTML="No products found.";return;}
+const p=products[currentIndex];
+p.rating=(4.6+Math.random()*0.3).toFixed(1);
+p.reviews=Math.floor(Math.random()*800+200);
+p.sold=Math.floor(Math.random()*1200+300);
+p.urgency=Math.floor(Math.random()*10+3);
+
+card.innerHTML=`
+<img src="${p.image}">
+<div class="product-title">${p.title}</div>
+<div class="hook">Curated Luxury Pick</div>
+<div style="text-align:center;font-size:14px;margin:10px 0;">
+⭐ ${p.rating} • ${p.reviews}+ reviews
+</div>
+<div style="text-align:center;font-size:14px;color:#6b7280;">
+${p.sold}+ sold • Only ${p.urgency} left
+</div>
+<div class="price">${p.price||"$39.99"}</div>
+<button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now</button>
+<button class="btn" onclick="shareProduct()">${isPremiumUser?"Download Magazine":"Unlock Premium"}</button>
+<button class="btn" onclick="createGrokVideo()">Create 6s AI Video</button>
+`;
 }
 
-// Render
-function renderProduct() {
-  if (!products.length) {
-    card.innerHTML = "<p>No products found. Try a different search.</p>";
-    return;
-  }
-  const p = products[currentIndex];
-  const rating = (4.6 + Math.random() * 0.3).toFixed(1);
-  const reviews = Math.floor(Math.random() * 800 + 200);
-  const sold = Math.floor(Math.random() * 1200 + 300);
-  const urgency = Math.floor(Math.random() * 10 + 3);
+function nextProduct(){currentIndex=(currentIndex+1)%products.length;renderProduct();}
+function prevProduct(){currentIndex=(currentIndex-1+products.length)%products.length;renderProduct();}
 
-  card.innerHTML = `
-    <div class="counter">${currentIndex + 1} / ${products.length}</div>
-    <div style="text-align:center;font-size:12px;letter-spacing:2px;color:#9ca3af;margin-bottom:12px;">TRENDING THIS WEEK</div>
-    <img src="${p.image}" alt="${p.title || 'Product'}" loading="lazy"/>
-    <div class="product-title">${p.title || "Curated Pick"}</div>
-    <div class="hook">${hook1()} — ${hook2()}</div>
-    <div style="text-align:center;font-size:14px;margin:12px 0;">
-      Rated ${rating} • ${reviews}+ reviews
-    </div>
-    <div style="text-align:center;font-size:14px;color:var(--muted);margin-bottom:16px;">
-      ${sold}+ sold this week • Only ${urgency} left
-    </div>
-    <div class="price">${p.price || "$39.99"}</div>
-    <div style="text-align:center;font-size:14px;color:var(--muted);margin:16px 0;">${why()}</div>
-    <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now →</button>
-    <button class="btn" onclick="shareProduct()">${isPremiumUser ? "Download Magazine Card" : "Unlock Premium to Download"}</button>
-    <button class="btn" onclick="createGrokVideo()">Create 6s Video Script</button>
-  `;
+function shareProduct(){
+if(!affiliateId){alert("Affiliate ID required.");return;}
+if(!isPremiumUser){premiumModal.style.display="flex";return;}
+formatModal.style.display="flex";
 }
 
-// Nav
-function nextProduct() { currentIndex = (currentIndex + 1) % products.length; renderProduct(); }
-function prevProduct() { currentIndex = (currentIndex - 1 + products.length) % products.length; renderProduct(); }
+async function generateImage(type){
+closeModal();
+const p=products[currentIndex];
+const template=type==="square"?squareTemplate:verticalTemplate;
 
-// Premium Share
-function shareProduct() {
-  if (!isPremiumUser) {
-    document.getElementById("premiumModal").style.display = "flex";
-    return;
-  }
-  if (!affiliateId) {
-    alert("Set your affiliate ID first for tracked links.");
-    return;
-  }
-  document.getElementById("formatModal").style.display = "flex";
+template.innerHTML=`
+<div style="padding:120px;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:center;">
+<h1 style="font-family:Playfair Display;font-size:80px;">${p.title}</h1>
+<img src="${p.image}" style="width:70%;margin:40px auto;border-radius:20px;">
+<div style="font-size:60px;font-weight:700;">${p.price}</div>
+<div style="margin-top:20px;">Shop → ${appendAffiliate(p.link)}</div>
+<div class="watermark">Float Rising</div>
+</div>`;
+
+await new Promise(r=>setTimeout(r,400));
+const canvas=await html2canvas(template,{scale:2});
+const link=document.createElement("a");
+link.download="float-rising.png";
+link.href=canvas.toDataURL();
+link.click();
 }
 
-async function generateImage(type) {
-  closeModal();
-  const p = products[currentIndex];
-  const template = type === "square" ? document.getElementById("squareTemplate") : document.getElementById("verticalTemplate");
-
-  const fontSizeTitle = type === "square" ? "80px" : "110px";
-  const fontSizePrice = type === "square" ? "70px" : "100px";
-  const padding = type === "square" ? "120px" : "160px";
-
-  template.innerHTML = `
-    <div style="padding:${padding} 100px;height:100%;display:flex;flex-direction:column;justify-content:space-between;position:relative;background:#fffef9;color:#111;">
-      <div>
-        <div style="font-size:22px;letter-spacing:5px;color:#9ca3af;margin-bottom:50px;text-align:center;">FLOAT RISING EXCLUSIVE</div>
-        <h1 style="font-family:'Playfair Display',serif;font-size:${fontSizeTitle};line-height:1.05;text-align:center;margin-bottom:60px;">
-          ${hook1()}
-        </h1>
-      </div>
-      <div style="text-align:center;">
-        <img src="${p.image}" style="width:75%;max-height:50%;object-fit:contain;border-radius:30px;box-shadow:0 40px 100px rgba(0,0,0,0.1);"/>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:${fontSizePrice};font-weight:700;margin-bottom:20px;">${p.price || "$39.99"}</div>
-        <div style="font-size:28px;color:var(--muted);margin-bottom:30px;">${why()}</div>
-        <div style="font-size:24px;color:#9ca3af;">Rated ${rating} • ${reviews}+ customers</div>
-      </div>
-      <div class="watermark">Float Rising • Curated Luxury</div>
-    </div>`;
-
-  await new Promise(r => setTimeout(r, 500)); // wait for render
-  try {
-    const canvas = await html2canvas(template, { useCORS: true, scale: 2 });
-    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = `float-rising-${type}.png`;
-    link.href = url;
-    link.click();
-
-    // Try native share
-    if (navigator.canShare && navigator.canShare({ files: [new File([blob], "magazine.png", { type: "image/png" })] })) {
-      await navigator.share({
-        files: [new File([blob], "float-rising-magazine.png", { type: "image/png" })],
-        title: "Float Rising Magazine Card",
-        text: `Check out this trending pick from Float Rising! ${appendAffiliate(p.link)}`
-      });
-    }
-  } catch (e) {
-    alert("Failed to generate image: " + e.message + "\n(try a different product or check image URL)");
-  }
+function detectCategory(title=""){
+title=title.toLowerCase();
+if(title.includes("light")||title.includes("lamp"))return"home";
+if(title.includes("fitness")||title.includes("gym"))return"fitness";
+if(title.includes("beauty")||title.includes("skin"))return"beauty";
+return"general";
 }
 
-// Grok
-function createGrokVideo() {
-  const p = products[currentIndex];
-  const prompt = `Create a cinematic 6-second vertical product video ad.
+function createGrokVideo(){
+if(!affiliateId){alert("Affiliate ID required.");return;}
+const p=products[currentIndex];
+const category=detectCategory(p.title);
+const link=appendAffiliate(p.link);
 
-Product: ${p.title || "Luxury gadget"}
-Hook: ${hook1()} — ${hook2()}
-Tone: Editorial, luxury, refined, minimalist.
-End screen: Discover more at Float Rising • Shop now`;
-
-  document.getElementById("grokText").value = prompt;
-  document.getElementById("grokModal").style.display = "flex";
-}
-function copyGrok() {
-  const text = document.getElementById("grokText").value;
-  navigator.clipboard.writeText(text).then(() => alert("Prompt copied! Paste into Grok."));
-}
-function openGrok() {
-  copyGrok();
-  window.open("https://grok.x.ai/", "_blank");
+let angle="";
+if(category==="fitness"){
+angle="Focus on transformation and energy. Show before/after motion.";
+}else if(category==="beauty"){
+angle="Focus on glow, close-up skin shots, soft lighting.";
+}else if(category==="home"){
+angle="Show aesthetic room upgrade transformation.";
+}else{
+angle="Highlight problem → solution quickly.";
 }
 
-// Modal close
-function closeModal() {
-  document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
+const prompt=`
+Create a HIGH-CONVERTING 6-second vertical TikTok ad.
+
+Product: ${p.title}
+Price: ${p.price}
+Rating: ${p.rating} (${p.reviews}+ reviews)
+${angle}
+
+STRUCTURE:
+0-1s: Bold hook text.
+1-3s: Show product in action.
+3-5s: Close-up detail.
+5-6s: CTA screen "SHOP NOW"
+
+Final screen URL:
+${link}
+
+Style: premium, fast-paced, viral, mobile-optimized.
+`;
+
+grokText.value=prompt;
+grokModal.style.display="flex";
 }
 
-// Search on enter
-searchInput.addEventListener("keypress", e => {
-  if (e.key === "Enter") loadProducts(searchInput.value.trim());
-});
+function copyGrok(){navigator.clipboard.writeText(grokText.value);}
+function openGrok(){copyGrok();window.open("https://grok.x.ai/","_blank");}
 
-// Init
-updateStatuses();
-if (!affiliateId) document.getElementById("affiliateModal").style.display = "flex";
+searchInput.addEventListener("keypress",e=>{if(e.key==="Enter")loadProducts(searchInput.value);});
+
+if(!affiliateId)affiliateModal.style.display="flex";
 loadProducts();
 </script>
 </body>
