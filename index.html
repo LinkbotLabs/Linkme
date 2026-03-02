@@ -227,7 +227,7 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({...p,link:appendAffiliate(p.link)})
 });
 const data=await res.json();
-const smallLink=window.location.origin+"/s/"+data.id;
+const smallLink = window.location.origin + "/s.html?id=" + data.id;
 
 navigator.share?navigator.share({title:p.title,text:smallLink}):
 alert("Copy this link:\n"+smallLink);
