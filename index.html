@@ -232,7 +232,9 @@ async function loadProducts(){
   }
 
   try{
-  const res = await fetch(`/api/search`);
+  const res = await fetch(`/api/search`, {
+  cache: "no-store"
+});
   if(!res.ok) throw new Error("API failed");
 
   const data = await res.json();
