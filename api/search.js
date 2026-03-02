@@ -16,10 +16,15 @@ const keywords = [
 const AFFILIATE_TAG = "tag=davidshort-20";
 
 export default async function handler(req, res) {
+
+  // 🔥 CRITICAL: Disable HTTP caching (fixes 304 issue)
+  res.setHeader("Cache-Control", "no-store");
+
   const now = Date.now();
 
-  // ✅ Serve cache if within 24h
+  // ✅ Serve server-side cache (still keeps your daily rotation)
   if (cache.data && now - cache.timestamp < ONE_DAY) {
+    console.log("Serving from server cache:", cache.data.length);
     return res.status(200).json({ products: cache.data });
   }
 
@@ -28,10 +33,11 @@ export default async function handler(req, res) {
     const dayIndex = Math.floor(now / ONE_DAY) % keywords.length;
     const activeKeyword = keywords[dayIndex];
 
-    const query = `${activeKeyword} site:amazon.com -book -novel -kindle`;
+    // 🔥 Improved query (forces product pages)
+    const query = `${activeKeyword} site:amazon.com/dp/ -book -novel -kindle`;
 
     const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}`
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
     );
 
     const data = await googleRes.json();
@@ -46,20 +52,21 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "No results from PSE" });
     }
 
-    // ✅ Keep only real Amazon product URLs
+    console.log("Total Google results:", data.items.length);
+
+    // ✅ More flexible Amazon filtering
     const filtered = data.items.filter(item =>
       item.link &&
-      (
-        item.link.includes("/dp/") ||
-        item.link.includes("/gp/product/")
-      )
+      item.link.includes("amazon.com")
     );
+
+    console.log("Valid Amazon links:", filtered.length);
 
     if (!filtered.length) {
       return res.status(500).json({ error: "No valid Amazon product links found" });
     }
 
-    const products = filtered.slice(0, 20).map((item, i) => {
+    const products = filtered.map((item, i) => {
 
       const image =
         item.pagemap?.cse_image?.[0]?.src ||
@@ -70,11 +77,9 @@ export default async function handler(req, res) {
 
       // ✅ Append affiliate safely
       if (!link.includes(AFFILIATE_TAG)) {
-        if (link.includes("?")) {
-          link += `&${AFFILIATE_TAG}`;
-        } else {
-          link += `?${AFFILIATE_TAG}`;
-        }
+        link += link.includes("?")
+          ? `&${AFFILIATE_TAG}`
+          : `?${AFFILIATE_TAG}`;
       }
 
       return {
@@ -87,10 +92,12 @@ export default async function handler(req, res) {
       };
     });
 
+    // Save server cache
     cache.timestamp = now;
     cache.data = products;
 
-    // ✅ RETURN SHAPE YOUR FRONTEND EXPECTS
+    console.log("Products returned to frontend:", products.length);
+
     return res.status(200).json({
       products
     });
