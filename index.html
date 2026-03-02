@@ -245,11 +245,37 @@ template.innerHTML=`
 </div>`;
 
 await new Promise(r=>setTimeout(r,400));
-const canvas=await html2canvas(template,{scale:2});
-const link=document.createElement("a");
-link.download="float-rising.png";
-link.href=canvas.toDataURL();
-link.click();
+const canvas = await html2canvas(template, {
+  useCORS: true,
+  scale: 2
+});
+
+const blob = await new Promise(resolve =>
+  canvas.toBlob(resolve, "image/png")
+);
+
+const file = new File(
+  [blob],
+  `float-rising-${type}.png`,
+  { type: "image/png" }
+);
+
+const shareData = {
+  files: [file],
+  title: "Float Rising Pick",
+  text: `Luxury find from Float Rising ✨\n\nShop here:\n${appendAffiliate(p.link)}`
+};
+
+// HYBRID FLOW
+if (navigator.canShare && navigator.canShare({ files: [file] })) {
+  await navigator.share(shareData);
+} else {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = file.name;
+  a.click();
+}
 }
 
 function detectCategory(title=""){
