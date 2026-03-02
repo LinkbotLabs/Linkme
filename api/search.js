@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
   // Serve cache if within 24h
   if (cache.data && now - cache.timestamp < ONE_DAY) {
-    return res.status(200).json(cache.data);
+    return res.status(200).json({ products });
   }
 
   try {
