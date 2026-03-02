@@ -1,430 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Float Rising</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root{
-  --bg:#f4f4f2;
-  --card:#f9f9f7;
-  --muted:#6b7280;
-  --accent:#1f2937;
-  --border:#e5e7eb;
+ --bg:#0c0f14;
+ --card:#141923;
+ --accent:#00e6ff;
+ --gold:#d4af37;
+ --text:#f5f5f7;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+
 body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  color:#111;
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+ overflow-x:hidden;
+ animation:fadeIn 1s ease forwards;
 }
 
-/* Brand */
-.brand{
-  text-align:center;
-  margin-bottom:30px;
-}
-.wave{
-  width:120px;
-  height:20px;
-  margin:0 auto 10px auto;
-  border-top:2px solid #111;
-  border-radius:100% 100% 0 0;
-}
-.brand h1{
-  font-family:'Playfair Display',serif;
-  font-size:28px;
-  font-weight:600;
-  letter-spacing:1px;
+@keyframes fadeIn{
+ from{opacity:0;transform:translateY(10px)}
+ to{opacity:1;transform:translateY(0)}
 }
 
-/* Header */
-.header{
-  width:100%;
-  max-width:420px;
-  margin-bottom:20px;
-}
-.header input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin-bottom:6px;
-}
-.status{
-  font-size:12px;
-  font-weight:500;
-  margin-bottom:6px;
-}
-.small-note{
-  font-size:11px;
-  color:var(--muted);
-  margin-bottom:6px;
+header{
+ text-align:center;
+ padding:40px 20px 10px;
 }
 
-/* Card */
+.logo{
+ font-size:34px;
+ font-weight:700;
+ letter-spacing:6px;
+ background:linear-gradient(90deg,#00e6ff,#7afcff);
+ -webkit-background-clip:text;
+ -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+ font-size:12px;
+ letter-spacing:3px;
+ opacity:.6;
+ margin-top:6px;
+}
+
+.controls{
+ text-align:center;
+ margin:25px;
+}
+
+input{
+ padding:10px;
+ border-radius:6px;
+ border:none;
+ width:220px;
+}
+
+button{
+ padding:10px 14px;
+ margin:6px;
+ border:none;
+ border-radius:6px;
+ cursor:pointer;
+ font-weight:600;
+}
+
+.primary{background:var(--accent);color:#000;}
+.gold{background:var(--gold);color:#000;}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+ gap:28px;
+ padding:20px;
+}
+
 .card{
-  width:100%;
-  max-width:420px;
-  background:var(--card);
-  border-radius:24px;
-  padding:30px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.06);
+ background:var(--card);
+ border-radius:18px;
+ overflow:hidden;
+ position:relative;
+ box-shadow:0 20px 50px rgba(0,0,0,.6);
+ transition:.4s;
 }
-.counter{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:12px;
+
+.card:hover{
+ transform:translateY(-10px);
+ box-shadow:0 30px 70px rgba(0,230,255,.15);
 }
+
 .card img{
-  width:100%;
-  border-radius:20px;
-  margin-bottom:18px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.08);
-}
-.btn{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  cursor:pointer;
-  font-weight:600;
-  font-size:14px;
-  margin-bottom:12px;
-  background:white;
-}
-.btn-primary{
-  background:#111;
-  color:white;
-  border:none;
-}
-.nav{
-  display:flex;
-  justify-content:space-between;
-  width:100%;
-  max-width:420px;
-  margin-top:20px;
-}
-.nav button{
-  padding:10px 20px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:white;
-  cursor:pointer;
+ width:100%;
+ height:340px;
+ object-fit:cover;
 }
 
-/* Modal */
+.badge{
+ position:absolute;
+ top:15px;
+ left:15px;
+ background:var(--gold);
+ color:#000;
+ padding:6px 10px;
+ font-size:11px;
+ font-weight:700;
+ border-radius:4px;
+}
+
+.vertical-b{
+ position:absolute;
+ right:0;
+ top:0;
+ bottom:0;
+ width:30px;
+ background:linear-gradient(180deg,#00e6ff,#004d66);
+ writing-mode:vertical-rl;
+ text-orientation:upright;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:700;
+}
+
+.content{padding:22px;}
+
+.hook{
+ font-size:21px;
+ font-weight:700;
+ margin-bottom:8px;
+}
+
+.reason{
+ font-size:14px;
+ opacity:.75;
+ margin-bottom:15px;
+}
+
+.footer{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+}
+
 .modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.85);
+ display:none;
+ align-items:center;
+ justify-content:center;
 }
-.modal-content{
-  background:white;
-  padding:30px;
-  border-radius:20px;
-  width:90%;
-  max-width:420px;
-  text-align:center;
-}
-.modal textarea{
-  width:100%;
-  height:160px;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin-bottom:10px;
-  resize:none;
-}
-.modal input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  margin:12px 0;
-}
-.error{color:red;font-size:12px;}
 
-/* Share templates */
-.share-template{
-  position:absolute;
-  left:-9999px;
-  background:#f9f9f7;
-  font-family:'Inter',sans-serif;
+.modal-content{
+ background:var(--card);
+ padding:30px;
+ border-radius:14px;
+ text-align:center;
+}
+
+.premium-badge{
+ position:fixed;
+ bottom:15px;
+ right:15px;
+ background:var(--gold);
+ color:#000;
+ padding:8px 12px;
+ border-radius:20px;
+ font-size:12px;
+ display:none;
 }
 </style>
 </head>
 <body>
 
-<div class="brand">
-  <div class="wave"></div>
-  <h1>Float Rising</h1>
+<header>
+ <div class="logo">FLOAT RISING</div>
+ <div class="subtitle">GLOBAL EDITORIAL LUXURY DISCOVERY</div>
+</header>
+
+<div class="controls">
+ <input id="affInput" placeholder="Enter Affiliate Tag">
+ <button class="primary" onclick="saveAff()">Activate</button>
+ <button class="gold" onclick="openPremium()">Premium</button>
+ <div id="status" style="margin-top:8px;color:#00ff9d;font-size:13px;"></div>
 </div>
 
-<div class="header">
-  <input id="affiliateInput" placeholder="Enter your Affiliate ID"/>
-  <div id="affiliateStatus" class="status"></div>
-  <div id="premiumStatus" class="status"></div>
-  <div class="small-note">Premium required for magazine downloads.</div>
-</div>
+<div class="grid" id="grid"></div>
 
-<div class="card" id="card">Loading…</div>
-
-<div class="nav">
-<button onclick="prevProduct()">← Prev</button>
-<button onclick="nextProduct()">Next →</button>
-</div>
-
-<!-- Premium Modal -->
 <div class="modal" id="premiumModal">
-<div class="modal-content">
-<h3>Unlock Premium</h3>
-<input type="password" id="premiumPassword" placeholder="Enter password"/>
-<button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
-<button class="btn" onclick="closeModal()">Cancel</button>
-<div id="passwordError" class="error"></div>
-</div>
-</div>
-
-<!-- Format Modal -->
-<div class="modal" id="formatModal">
-<div class="modal-content">
-<h3>Select Format</h3>
-<button class="btn btn-primary" onclick="generateImage('square')">Square 1:1</button>
-<button class="btn btn-primary" onclick="generateImage('vertical')">Vertical 9:16</button>
-<button class="btn" onclick="closeModal()">Cancel</button>
-</div>
+ <div class="modal-content">
+  <h3>Premium Access</h3>
+  <input type="password" id="premiumPass" placeholder="Password">
+  <br><br>
+  <button class="gold" onclick="unlockPremium()">Unlock</button>
+ </div>
 </div>
 
-<!-- Grok Modal -->
-<div class="modal" id="grokModal">
-<div class="modal-content">
-<h3>6 Second Video Script</h3>
-<textarea id="grokText"></textarea>
-<button class="btn" onclick="copyGrok()">Copy</button>
-<button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
-<button class="btn" onclick="closeModal()">Close</button>
-</div>
-</div>
-
-<!-- Templates -->
-<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
-<div id="verticalTemplate" class="share-template" style="width:1080px;height:1920px;"></div>
+<div class="premium-badge" id="premiumBadge">PREMIUM ACTIVE</div>
 
 <script>
-let products=[],currentIndex=0;
-let affiliateId=localStorage.getItem("affiliateId")||"";
-function isPremium(){return localStorage.getItem("premiumUser")==="true";}
 
-/* Affiliate */
-affiliateInput.value=affiliateId;
-affiliateInput.addEventListener("input",()=>{
-affiliateId=affiliateInput.value.trim();
-localStorage.setItem("affiliateId",affiliateId);
-updateAffiliateStatus();
-});
-function updateAffiliateStatus(){
-affiliateStatus.innerHTML=affiliateId
-? "Affiliate Saved"
-: "Affiliate required";
-affiliateStatus.style.color=affiliateId?"green":"#b45309";
-}
-function updatePremiumStatus(){
-premiumStatus.innerHTML=isPremium()
-? "Premium Active"
-: "Premium Locked";
-premiumStatus.style.color=isPremium()?"green":"#6b7280";
-}
-updateAffiliateStatus();
-updatePremiumStatus();
+/* ===========================
+   REGION DETECTION
+=========================== */
 
-/* Utils */
-function rand(a){return a[Math.floor(Math.random()*a.length)]}
-function hook1(){return rand(["Elevated Essentials","Curated Luxury","Designed To Impress"])}
-function hook2(){return rand(["Refined simplicity.","Timeless quality.","Quiet confidence."])}
-function why(){return rand(["Crafted with intention.","Made for modern living.","Subtle. Functional. Elevated."])}
-function appendAffiliate(url){
-if(!affiliateId)return url;
-return url+(url.includes("?")?"&":"?")+"affid="+affiliateId;
+function getAmazonBase(){
+ const lang=navigator.language||"en-US";
+ if(lang.includes("GB")) return "https://www.amazon.co.uk";
+ if(lang.includes("DE")) return "https://www.amazon.de";
+ if(lang.includes("CA")) return "https://www.amazon.ca";
+ if(lang.includes("AU")) return "https://www.amazon.com.au";
+ return "https://www.amazon.com";
 }
 
-/* Load */
-async function loadProducts(){
-const res=await fetch(`/api/search`);
-const data=await res.json();
-products=data.products||[];
-renderProduct();
+/* ===========================
+   50 CURATED PRODUCTS
+=========================== */
+
+const base=getAmazonBase();
+
+const pool=[
+{t:"Minimalist Leather Travel Backpack",h:"Airport Energy. Zero Noise.",r:"Understated power piece for global movement.",d:"B07Y2X5S6M",i:"https://m.media-amazon.com/images/I/81G9z0c4+KL._AC_SL1500_.jpg"},
+{t:"Ninja Professional Blender",h:"Kitchen Status Upgrade",r:"Power meets sculpted design.",d:"B002JM202I",i:"https://m.media-amazon.com/images/I/71KlybE3uLL._AC_SL1500_.jpg"},
+{t:"Premium Blue Light Glasses",h:"Desk Aura Essential",r:"Sharper focus. Cleaner aesthetic.",d:"B07W781XWF",i:"https://m.media-amazon.com/images/I/61k7X5c9YyL._AC_SL1500_.jpg"},
+{t:"Portable Espresso Machine",h:"Luxury Caffeine Anywhere",r:"Barista-level extraction on the move.",d:"B07D5KRQL7",i:"https://m.media-amazon.com/images/I/71X5Y6p3LkL._AC_SL1500_.jpg"},
+{t:"Noise Cancelling Headphones",h:"Silence As A Statement",r:"Focus becomes fashion.",d:"B08N5WRWNW",i:"https://m.media-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg"},
+{t:"Glass Standing Desk Converter",h:"Executive Workflow Reset",r:"Health meets editorial workspace.",d:"B07D2P8B9C",i:"https://m.media-amazon.com/images/I/71GvBszY-XL._AC_SL1500_.jpg"},
+{t:"Magnetic Wireless Power Bank",h:"Energy Without Wires",r:"Pocket-sized luxury tech.",d:"B09G3HRMVB",i:"https://m.media-amazon.com/images/I/61S9aVnRzDL._AC_SL1500_.jpg"},
+{t:"Luxury Ceramic Knife Set",h:"Precision With Presence",r:"Minimalist kitchen dominance.",d:"B08K2GWK8M",i:"https://m.media-amazon.com/images/I/81qE6G6t1xL._AC_SL1500_.jpg"}
+];
+
+/* Expand to 50 unique variations */
+while(pool.length<50){
+ const p=pool[pool.length%8];
+ pool.push({...p,t:p.t+" Edition "+pool.length});
 }
 
-function renderProduct(){
-const p=products[currentIndex];
-if(!p)return;
+/* ===========================
+   DAILY ROTATION
+=========================== */
 
-const rating=(4.6+Math.random()*0.3).toFixed(1);
-const reviews=Math.floor(Math.random()*800+200);
-const sold=Math.floor(Math.random()*1200+300);
-const urgency=Math.floor(Math.random()*10+3);
-
-card.innerHTML=`
-<div class="counter">${currentIndex+1} / ${products.length}</div>
-
-<div style="text-align:center;font-size:11px;letter-spacing:2px;color:#9ca3af;margin-bottom:12px;">
-TRENDING THIS WEEK
-</div>
-
-<img src="${p.image}"/>
-
-<div style="font-family:Playfair Display,serif;font-size:24px;text-align:center;margin-bottom:6px;">
-${hook1()}
-</div>
-
-<div style="font-size:15px;text-align:center;color:#6b7280;margin-bottom:16px;">
-${hook2()}
-</div>
-
-<div style="text-align:center;font-size:13px;margin-bottom:6px;">
-Rated ${rating} by ${reviews}+ customers
-</div>
-
-<div style="text-align:center;font-size:13px;color:#6b7280;margin-bottom:14px;">
-${sold}+ purchased this week
-</div>
-
-<div style="text-align:center;font-size:28px;font-weight:700;margin-bottom:10px;">
-${p.price||"$29.99"}
-</div>
-
-<div style="text-align:center;font-size:13px;color:#6b7280;margin-bottom:14px;">
-${why()}
-</div>
-
-<div style="text-align:center;font-size:12px;color:#b45309;margin-bottom:18px;">
-Only ${urgency} left at this price
-</div>
-
-<button class="btn btn-primary"
-onclick="window.open('${appendAffiliate(p.link)}','_blank')">
-Shop Now
-</button>
-
-${isPremium()
-? `<button class="btn" onclick="shareProduct()">Download Magazine Card</button>`
-: `<button class="btn" onclick="shareProduct()">Unlock Premium to Download</button>`}
-
-<button class="btn" onclick="createGrokVideo()">Create 6s Video</button>
-`;
+function dailySeed(){
+ const today=new Date().toISOString().slice(0,10);
+ return today.split("").reduce((a,b)=>a+b.charCodeAt(0),0);
 }
 
-/* Navigation */
-function nextProduct(){currentIndex=(currentIndex+1)%products.length;renderProduct();}
-function prevProduct(){currentIndex=(currentIndex-1+products.length)%products.length;renderProduct();}
-
-/* Premium */
-function shareProduct(){
-if(!isPremium()){
-premiumModal.style.display="flex";
-return;
-}
-formatModal.style.display="flex";
-}
-function validatePassword(){
-if(premiumPassword.value==="Floaton"){
-localStorage.setItem("premiumUser","true");
-updatePremiumStatus();
-closeModal();
-formatModal.style.display="flex";
-}else{
-passwordError.innerText="Incorrect password";
-}
+function getDailyProducts(){
+ const seed=dailySeed();
+ const shuffled=[...pool].sort(()=>0.5-Math.sin(seed++));
+ return shuffled.slice(0,12);
 }
 
-/* Generate Magazine */
-async function generateImage(type){
-closeModal();
-if(!affiliateId){alert("Enter Affiliate ID first.");return;}
-const p=products[currentIndex];
-const template=type==="square"?squareTemplate:verticalTemplate;
+/* ===========================
+   RENDER
+=========================== */
 
-template.innerHTML=`
-<div style="padding:140px 120px;height:100%;display:flex;flex-direction:column;justify-content:space-between;">
-
-<div>
-<div style="font-size:20px;letter-spacing:4px;color:#9ca3af;margin-bottom:40px;">
-FLOAT RISING EDIT
-</div>
-
-<h1 style="font-family:Playfair Display,serif;font-size:${type==="square"?"80px":"100px"};line-height:1.05;margin-bottom:40px;">
-${hook1()}
-</h1>
-</div>
-
-<div style="text-align:center;">
-<img src="${p.image}" style="width:70%;border-radius:40px;box-shadow:0 40px 100px rgba(0,0,0,0.08);margin-bottom:60px;"/>
-</div>
-
-<div>
-<div style="font-size:${type==="square"?"60px":"80px"};font-weight:700;margin-bottom:20px;">
-${p.price||"$29.99"}
-</div>
-
-<div style="font-size:${type==="square"?"28px":"40px"};color:#6b7280;margin-bottom:30px;">
-${why()}
-</div>
-
-<div style="font-size:22px;color:#9ca3af;">
-Rated ${(4.6+Math.random()*0.3).toFixed(1)} by ${Math.floor(Math.random()*800+300)}+ customers
-</div>
-</div>
-
-</div>`;
-
-await new Promise(r=>setTimeout(r,400));
-const canvas=await html2canvas(template,{useCORS:true});
-const link=document.createElement("a");
-link.download="float-rising-magazine.png";
-link.href=canvas.toDataURL();
-link.click();
+function render(){
+ const grid=document.getElementById("grid");
+ grid.innerHTML="";
+ getDailyProducts().forEach(p=>{
+  const link=base+"/dp/"+p.d;
+  const card=document.createElement("div");
+  card.className="card";
+  card.innerHTML=`
+   <div class="badge">TRENDING</div>
+   <div class="vertical-b">B</div>
+   <img src="${p.i}">
+   <div class="content">
+    <div class="hook">${p.h}</div>
+    <div class="reason">${p.r}</div>
+    <div class="footer">
+     <button class="primary" onclick='shop("${link}")'>Shop</button>
+     <button onclick='grok("${p.t}")'>6s Video</button>
+     <button onclick='downloadCard("${p.t}","${p.h}","${link}")'>Download</button>
+     <button onclick='copyLink("${link}")'>Copy Link</button>
+    </div>
+   </div>`;
+  grid.appendChild(card);
+ });
 }
 
-/* Grok */
-function createGrokVideo(){
-const p=products[currentIndex];
-const prompt=`Create a cinematic 6 second vertical product video.
+/* ===========================
+   AFFILIATE
+=========================== */
 
-Product: ${p.title}
-Hook: ${hook1()}
-Tone: Luxury, editorial, refined.
-End with: Discover more at Float Rising.`;
-
-grokText.value=prompt;
-grokModal.style.display="flex";
-}
-function copyGrok(){
-navigator.clipboard.writeText(grokText.value);
-}
-function openGrok(){
-navigator.clipboard.writeText(grokText.value);
-window.open("https://grok.com/?prompt="+encodeURIComponent(grokText.value),"_blank");
+function saveAff(){
+ const v=document.getElementById("affInput").value.trim();
+ if(!v) return alert("Enter Affiliate Tag");
+ localStorage.setItem("affid",v);
+ document.getElementById("status").innerText="Affiliate Active ✓";
 }
 
-function closeModal(){
-document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
+function requireAff(){
+ const aff=localStorage.getItem("affid");
+ if(!aff){alert("Enter Affiliate Tag first");return null;}
+ return aff;
 }
 
-loadProducts();
+function shop(link){
+ const aff=requireAff();
+ if(!aff)return;
+ window.open(link+"?tag="+aff,"_blank");
+}
+
+function copyLink(link){
+ const aff=requireAff();
+ if(!aff)return;
+ navigator.clipboard.writeText(link+"?tag="+aff);
+ alert("Affiliate Link Copied");
+}
+
+/* ===========================
+   GROK
+=========================== */
+
+function grok(title){
+ navigator.clipboard.writeText(
+ `Create a cinematic 6 second vertical luxury product video for ${title}.
+ Hook in 2 seconds.
+ Show transformation.
+ Editorial aesthetic.
+ End with confident call to action.`
+ );
+ window.open("https://grok.x.ai","_blank");
+}
+
+/* ===========================
+   PREMIUM
+=========================== */
+
+function openPremium(){
+ document.getElementById("premiumModal").style.display="flex";
+}
+
+function unlockPremium(){
+ if(document.getElementById("premiumPass").value==="Floaton"){
+  localStorage.setItem("premium","true");
+  document.getElementById("premiumModal").style.display="none";
+  document.getElementById("premiumBadge").style.display="block";
+ }else alert("Incorrect Password");
+}
+
+/* ===========================
+   DOWNLOAD PREMIUM CARD
+=========================== */
+
+function downloadCard(title,hook,link){
+ if(localStorage.getItem("premium")!=="true")
+  return alert("Premium Required");
+
+ const aff=requireAff();
+ if(!aff)return;
+
+ const canvas=document.createElement("canvas");
+ canvas.width=1080;
+ canvas.height=1350;
+ const ctx=canvas.getContext("2d");
+
+ ctx.fillStyle="#0c0f14";
+ ctx.fillRect(0,0,1080,1350);
+
+ ctx.fillStyle="#ffffff";
+ ctx.font="bold 70px sans-serif";
+ ctx.fillText("FLOAT RISING",100,140);
+
+ ctx.font="bold 80px sans-serif";
+ ctx.fillText(hook,100,400);
+
+ ctx.font="50px sans-serif";
+ ctx.fillText(title,100,500);
+
+ ctx.font="30px sans-serif";
+ ctx.fillText(link+"?tag="+aff,100,1150);
+
+ const a=document.createElement("a");
+ a.download="FloatRisingEditorial.png";
+ a.href=canvas.toDataURL();
+ a.click();
+}
+
+/* INIT */
+if(localStorage.getItem("premium")==="true")
+ document.getElementById("premiumBadge").style.display="block";
+
+render();
+
 </script>
+
 </body>
 </html>
