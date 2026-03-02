@@ -36,16 +36,11 @@ body{
 .card{
   width:100%;max-width:420px;background:var(--card);
   border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,0.06);
-  padding:30px;
-  position:relative;
+  padding:30px;position:relative;
 }
 .card-brand{
-  position:absolute;
-  bottom:18px;
-  right:20px;
-  font-family:'Playfair Display',serif;
-  font-size:16px;
-  opacity:0.6;
+  position:absolute;bottom:18px;right:20px;
+  font-family:'Playfair Display',serif;font-size:16px;opacity:0.6;
 }
 .loading{text-align:center;color:var(--muted);font-size:14px;}
 .btn{
@@ -69,9 +64,7 @@ body{
   width:90%;max-width:420px;text-align:center;
 }
 .share-template{
-  position:absolute;
-  left:-9999px;
-  background:white;
+  position:absolute;left:-9999px;background:white;
   font-family:'Inter',sans-serif;
 }
 .branding{
@@ -132,15 +125,18 @@ body{
 
 <script>
 
-/* ============================
-   HOOK ENGINE
-============================ */
-
+/* GLOBAL STATE */
 let currentHook1="";
 let currentHook2="";
 let currentWhy="";
 let currentProduct=null;
 
+const CACHE_PRODUCTS="float_products_pool";
+const CACHE_TIME="float_products_time";
+const CACHE_INDEX="float_products_index";
+const ONE_DAY=86400000;
+
+/* HOOKS */
 function generateHookLine1(){
   const patterns=[
     "This Is Going Everywhere Right Now",
@@ -154,20 +150,6 @@ function generateHookLine1(){
 }
 
 function generateHookLine2(title){
-  const lower=title.toLowerCase();
-
-  if(lower.includes("fitness")||lower.includes("gym"))
-    return "And It Actually Makes Workouts Easier";
-
-  if(lower.includes("beauty")||lower.includes("skin"))
-    return "And It’s Surprisingly Affordable";
-
-  if(lower.includes("car"))
-    return "Drivers Didn’t Know They Needed This";
-
-  if(lower.includes("home"))
-    return "It Instantly Upgrades Any Space";
-
   const generic=[
     "And The Price Makes It Even Better",
     "It Looks Premium Without The Price Tag",
@@ -182,49 +164,10 @@ function generateWhyWeLike(){
     "Clean design. Smart functionality. Zero gimmicks.",
     "High ratings and strong repeat buyers.",
     "It feels premium without the premium price.",
-    "Practical, trending, and easy to recommend.",
-    "One of the most shared finds this week."
+    "Practical, trending, and easy to recommend."
   ];
   return lines[Math.floor(Math.random()*lines.length)];
 }
-
-/* ============================
-   GROK VIDEO (NEW)
-============================ */
-
-function buildGrokVideoPrompt(){
-  return `
-Create a 6 second vertical cinematic product video (9:16).
-
-Opening text:
-"${currentHook1}"
-
-Second line:
-"${currentHook2}"
-
-Show the product in motion.
-Modern lifestyle setting.
-Soft dramatic lighting.
-Premium aesthetic.
-Quick close-up cuts.
-Smooth transitions.
-
-End frame:
-"${currentProduct.price || "$29.99"}"
-Brand: Float Rising
-
-Optimized for TikTok engagement.
-`;
-}
-
-function createGrokVideo(){
-  const prompt=encodeURIComponent(buildGrokVideoPrompt());
-  window.open("https://grok.com/imagine?prompt="+prompt,"_blank");
-}
-
-/* ============================
-   EVERYTHING BELOW IS YOUR ORIGINAL LOGIC
-============================ */
 
 /* AFFILIATE */
 let affiliateId = localStorage.getItem("affiliateId") || "";
@@ -237,33 +180,22 @@ function saveAffiliate(){
   affiliateId=val;
   showConnected();
 }
+
 function showConnected(){
   document.getElementById("affiliateForm").style.display="none";
   document.getElementById("affiliateConnected").style.display="block";
-
-  document.getElementById("affiliateConnected").innerHTML = `
-    ✓ Affiliate Connected<br>
-    <button onclick="resetAffiliate()" style="
-      margin-top:10px;
-      padding:8px 14px;
-      border-radius:10px;
-      border:none;
-      background:#1a1a1a;
-      color:white;
-      cursor:pointer;
-      font-size:12px;
-    ">
-      Change Affiliate
-    </button>
-  `;
 }
 
 function resetAffiliate(){
   localStorage.removeItem("affiliateId");
   location.reload();
 }
-  
 
+function appendAffiliate(url){
+  if(!affiliateId) return url;
+  const separator=url.includes("?")?"&":"?";
+  return url+separator+"affid="+affiliateId;
+}
 
 /* PREMIUM */
 let premiumUser=localStorage.getItem("premiumUser")==="true";
@@ -274,29 +206,7 @@ function unlockPremium(){
   closeModal();
 }
 
-/* ENGINE CONFIG */
-const categoryPool=[
-"viral gadgets","tiktok beauty finds",
-"amazon fitness trending",
-"home improvement must have",
-"car accessories trending"
-];
-
-const CACHE_PRODUCTS="float_products_pool";
-const CACHE_TIME="float_products_time";
-const CACHE_INDEX="float_products_index";
-const ONE_DAY=86400000;
-
-/* HELPERS */
-function getNumericPrice(p){
-  return Number((p||"").replace(/[^0-9.]/g,""))||0;
-}
-function appendAffiliate(url){
-  if(!affiliateId) return url;
-  if(affiliateId.startsWith("http")) return affiliateId;
-  const separator=url.includes("?")?"&":"?";
-  return url+separator+"affid="+affiliateId;
-}
+/* UTIL */
 function shuffleArray(array){
   for(let i=array.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
@@ -306,23 +216,17 @@ function shuffleArray(array){
 }
 
 /* LOAD PRODUCTS */
-/* LOAD PRODUCTS */
 async function loadProducts(){
 
   const cached = localStorage.getItem(CACHE_PRODUCTS);
   const time = localStorage.getItem(CACHE_TIME);
 
-  // ✅ Use 24h local cache
   if(cached && time && (Date.now() - Number(time)) < ONE_DAY){
-
     let pool = JSON.parse(cached);
     let index = parseInt(localStorage.getItem(CACHE_INDEX) || "0");
-
     if(index >= pool.length) index = 0;
-
     currentProduct = pool[index];
     localStorage.setItem(CACHE_INDEX, index + 1);
-
     renderProduct(currentProduct);
     return;
   }
@@ -330,7 +234,6 @@ async function loadProducts(){
   try{
     const res = await fetch(`/api/search`);
     if(!res.ok) throw new Error("API failed");
-
     const products = await res.json();
     if(!products || !products.length) throw new Error("No products");
 
@@ -344,79 +247,23 @@ async function loadProducts(){
     renderProduct(currentProduct);
 
   }catch(err){
-    console.error("FLOAT load failed:", err);
     document.getElementById("card").innerHTML =
       "<div class='loading'>Waiting for API reset…</div>";
   }
 }
-
-/* LOAD PRODUCTS */
-async function loadProducts(){
-
-  const cached = localStorage.getItem(CACHE_PRODUCTS);
-  const time = localStorage.getItem(CACHE_TIME);
-
-  // ✅ Use 24h local cache
-  if(cached && time && (Date.now() - Number(time)) < ONE_DAY){
-
-    let pool = JSON.parse(cached);
-    let index = parseInt(localStorage.getItem(CACHE_INDEX) || "0");
-
-    if(index >= pool.length) index = 0;
-
-    currentProduct = pool[index];
-    localStorage.setItem(CACHE_INDEX, index + 1);
-
-    renderProduct(currentProduct);
-    return;
-  }
-
-  try{
-    // ✅ Call your working endpoint
-    const res = await fetch(`/api/search`);
-    if(!res.ok) throw new Error("API failed");
-
-    const products = await res.json();
-
-    // ✅ Your API returns an ARRAY
-    if(!products || !products.length) throw new Error("No products");
-
-    // Shuffle for randomness
-    let pool = shuffleArray(products);
-
-    // Cache locally
-    localStorage.setItem(CACHE_PRODUCTS, JSON.stringify(pool));
-    localStorage.setItem(CACHE_TIME, Date.now());
-    localStorage.setItem(CACHE_INDEX, 1);
-
-    currentProduct = pool[0];
-    renderProduct(currentProduct);
-
-  }catch(err){
-    console.error("FLOAT load failed:", err);
-    document.getElementById("card").innerHTML =
-      "<div class='loading'>Waiting for API reset…</div>";
-  }
-}
-
-</script>
 
 /* RENDER */
 function renderProduct(product){
 
   currentProduct=product;
-
   currentHook1=generateHookLine1();
   currentHook2=generateHookLine2(product.title);
   currentWhy=generateWhyWeLike();
 
   document.getElementById("card").innerHTML=`
-
-    <div style="font-family:Playfair Display,serif;font-size:22px;line-height:1.3;margin-bottom:18px;text-align:center;">
+    <div style="font-family:Playfair Display,serif;font-size:22px;text-align:center;margin-bottom:18px;">
       ${currentHook1}<br>
-      <span style="color:#6b7280;font-weight:500;">
-        ${currentHook2}
-      </span>
+      <span style="color:#6b7280;font-weight:500;">${currentHook2}</span>
     </div>
 
     <img src="${product.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
@@ -429,21 +276,14 @@ function renderProduct(product){
       ${currentWhy}
     </div>
 
-    <button class="btn btn-primary" onclick="window.open(appendAffiliate('${product.link}'),'_blank')">
+    <button class="btn btn-primary" onclick="window.open('${appendAffiliate(product.link)}','_blank')">
       🛒 Shop Now
     </button>
 
-    <button class="btn btn-outline" onclick="shareProduct()">
-      🔗 Share
-    </button>
+    <button class="btn btn-outline" onclick="shareProduct()">🔗 Share</button>
+    <button class="btn btn-outline" onclick="createGrokVideo()">🎬 Create 6s Video</button>
 
-    <button class="btn btn-outline" onclick="createGrokVideo()">
-      🎬 Create 6s Video
-    </button>
-
-    <div class="card-brand">
-      Float Rising
-    </div>
+    <div class="card-brand">Float Rising</div>
   `;
 }
 
@@ -458,115 +298,6 @@ function shareProduct(){
     return;
   }
   document.getElementById("formatModal").style.display="flex";
-}
-
-function generateImage(type){
-
-  closeModal();
-
-  const template=type==="square"
-    ?document.getElementById("squareTemplate")
-    :document.getElementById("verticalTemplate");
-const content=type==="square"
-    ?document.getElementById("squareContent")
-    :document.getElementById("verticalContent");
-
-  
-
-  content.innerHTML = `
-  <div style="
-  background:#f4efe8;
-  padding:80px;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  box-sizing:border-box;
-  font-family:'Inter',sans-serif;
-  color:#1a1a1a;
-">
-
-  
-    <!-- Top Badge -->
-    <div style="text-align:center;">
-      <div style="
-        display:inline-block;
-        padding:12px 28px;
-        border-radius:40px;
-        background:rgba(0,0,0,0.06);
-        font-size:28px;
-        letter-spacing:1px;
-      ">
-        Today’s Pick
-      </div>
-    </div>
-
-    <!-- Hook -->
-    <div style="text-align:center;margin-top:40px;">
-      <h1 style="
-        font-family:Playfair Display,serif;
-        font-size:${type==="square"?"76px":"96px"};
-        line-height:1.15;
-        margin-bottom:30px;
-      ">
-        ${currentHook1}<br>
-        <span style="
-          font-size:0.65em;
-          color:#6b7280;
-          font-weight:500;
-        ">
-          ${currentHook2}
-        </span>
-      </h1>
-    </div>
-
-    <!-- Product Image -->
-    <div style="text-align:center;margin:60px 0;">
-      <img 
-  src="${currentProduct.image}"
-  crossOrigin="anonymous"
-        style="
-          width:80%;
-          border-radius:30px;
-          box-shadow:0 40px 80px rgba(0,0,0,0.08);
-        "
-      />
-    </div>
-
-    <!-- Price -->
-    <div style="text-align:center;">
-      <div style="
-        font-size:64px;
-        font-weight:600;
-        margin-bottom:20px;
-      ">
-        ${currentProduct.price || "$29.99"}
-      </div>
-    </div>
-
-    <!-- Subline -->
-    <div style="
-      text-align:center;
-      font-size:34px;
-      color:#6b7280;
-      margin-bottom:40px;
-    ">
-      Shop via link in bio
-    </div>
-
-  </div>
-`;
-
-  html2canvas(template, {
-  scale: 2,
-  useCORS: true
-}).then(canvas => {
-  const a = document.createElement("a");
-  a.download = "float-rising-share.png";
-  a.href = canvas.toDataURL("image/png");
-  a.click();
-});
-    
 }
 
 function closeModal(){
