@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Float Rising Products</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,13 +26,7 @@ body{
   flex-direction:column;
   align-items:center;
 }
-
-/* Header */
-.header{
-  width:100%;
-  max-width:420px;
-  margin-bottom:20px;
-}
+.header{width:100%;max-width:420px;margin-bottom:20px;}
 .header h1{
   font-family:'Playfair Display',serif;
   font-size:26px;
@@ -43,15 +37,11 @@ body{
   padding:12px;
   border-radius:12px;
   border:1px solid var(--border);
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
-.small-note{
-  font-size:12px;
-  color:var(--muted);
-  margin-bottom:10px;
-}
+.small-note{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.status{font-size:12px;font-weight:600;margin-bottom:8px;}
 
-/* Card */
 .card{
   width:100%;
   max-width:420px;
@@ -69,14 +59,8 @@ body{
   font-size:14px;
   opacity:0.5;
 }
-.counter{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:10px;
-}
+.counter{text-align:center;font-size:13px;color:var(--muted);margin-bottom:10px;}
 
-/* Buttons */
 .btn{
   width:100%;
   padding:14px;
@@ -96,7 +80,6 @@ body{
   border:1px solid var(--border);
 }
 
-/* Nav */
 .nav{
   display:flex;
   justify-content:space-between;
@@ -147,13 +130,8 @@ body{
   border:1px solid var(--border);
   margin:12px 0;
 }
-.error{
-  color:red;
-  font-size:12px;
-  margin-top:6px;
-}
+.error{color:red;font-size:12px;margin-top:6px;}
 
-/* Share Templates */
 .share-template{
   position:absolute;
   left:-9999px;
@@ -182,11 +160,15 @@ body{
 
 <div class="header">
 <h1>Float Rising Products</h1>
-<input id="affiliateInput" placeholder="Enter your Affiliate ID" />
-<div class="small-note">Required for premium card downloads.</div>
+
+<input id="affiliateInput" placeholder="Enter your Affiliate ID"/>
+<div id="affiliateStatus" class="status"></div>
+
+<div id="premiumStatus" class="status"></div>
+<div class="small-note">Affiliate required for premium downloads.</div>
 </div>
 
-<div class="card" id="card">Loading curated product…</div>
+<div class="card" id="card">Loading…</div>
 
 <div class="nav">
 <button onclick="prevProduct()">← Prev</button>
@@ -195,34 +177,34 @@ body{
 
 <!-- Premium Modal -->
 <div class="modal" id="premiumModal">
-  <div class="modal-content">
-    <h3>Unlock Premium</h3>
-    <input type="password" id="premiumPassword" placeholder="Enter password">
-    <button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
-    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-    <div id="passwordError" class="error"></div>
-  </div>
+<div class="modal-content">
+<h3>Unlock Premium</h3>
+<input type="password" id="premiumPassword" placeholder="Enter password"/>
+<button class="btn btn-primary" onclick="validatePassword()">Unlock</button>
+<button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+<div id="passwordError" class="error"></div>
+</div>
 </div>
 
 <!-- Format Modal -->
 <div class="modal" id="formatModal">
-  <div class="modal-content">
-    <h3>Choose Format</h3>
-    <button class="btn btn-primary" onclick="generateImage('square')">Instagram 1:1</button>
-    <button class="btn btn-primary" onclick="generateImage('vertical')">TikTok 9:16</button>
-    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-  </div>
+<div class="modal-content">
+<h3>Choose Format</h3>
+<button class="btn btn-primary" onclick="generateImage('square')">Instagram 1:1</button>
+<button class="btn btn-primary" onclick="generateImage('vertical')">TikTok 9:16</button>
+<button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+</div>
 </div>
 
 <!-- Grok Modal -->
 <div class="modal" id="grokModal">
-  <div class="modal-content">
-    <h3>6-Second Video Script</h3>
-    <textarea id="grokText"></textarea>
-    <button class="btn btn-outline" onclick="copyGrok()">Copy</button>
-    <button class="btn btn-primary" onclick="openGrok()">Open in Grok</button>
-    <button class="btn btn-outline" onclick="closeModal()">Close</button>
-  </div>
+<div class="modal-content">
+<h3>6-Second Video Script</h3>
+<textarea id="grokText"></textarea>
+<button class="btn btn-outline" onclick="copyGrok()">Copy</button>
+<button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
+<button class="btn btn-outline" onclick="closeModal()">Close</button>
+</div>
 </div>
 
 <!-- Share Templates -->
@@ -239,60 +221,65 @@ body{
 </div>
 
 <script>
-
-/* STATE */
-let products=[];
-let currentIndex=0;
+let products=[],currentIndex=0;
 let affiliateId=localStorage.getItem("affiliateId")||"";
-const CACHE_PRODUCTS="float_products_pool";
-const CACHE_TIME="float_products_time";
-const ONE_DAY=86400000;
 
-function isPremium(){
-  return localStorage.getItem("premiumUser")==="true";
-}
+function isPremium(){return localStorage.getItem("premiumUser")==="true";}
 
-/* Affiliate persistence */
+/* Affiliate */
 const affiliateInput=document.getElementById("affiliateInput");
 affiliateInput.value=affiliateId;
 affiliateInput.addEventListener("input",()=>{
-  affiliateId=affiliateInput.value.trim();
-  localStorage.setItem("affiliateId",affiliateId);
+affiliateId=affiliateInput.value.trim();
+localStorage.setItem("affiliateId",affiliateId);
+updateAffiliateStatus();
 });
 
+function updateAffiliateStatus(){
+const el=document.getElementById("affiliateStatus");
+if(affiliateId){
+el.innerHTML="✅ Affiliate Saved: "+affiliateId;
+el.style.color="#2e7d32";
+}else{
+el.innerHTML="⚠ Affiliate required for premium.";
+el.style.color="#b45309";
+}
+}
+function updatePremiumStatus(){
+const el=document.getElementById("premiumStatus");
+if(isPremium()){
+el.innerHTML="💎 Premium Active";
+el.style.color="#2e7d32";
+}else{
+el.innerHTML="🔒 Premium Locked";
+el.style.color="#6b7280";
+}
+}
+updateAffiliateStatus();
+updatePremiumStatus();
+
 /* Hooks */
-function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function rand(a){return a[Math.floor(Math.random()*a.length)]}
 function hook1(){return rand(["This Is Going Everywhere","TikTok Can't Stop Talking","Nobody Expected This"])}
 function hook2(){return rand(["And The Price Is Wild","It Actually Lives Up To The Hype","It Feels Premium"])}
 function why(){return rand(["Clean design. Zero gimmicks.","High ratings and repeat buyers.","Simple. Smart. Useful."])}
 
 function appendAffiliate(url){
-  if(!affiliateId) return url;
-  const sep=url.includes("?")?"&":"?";
-  return url+sep+"affid="+affiliateId;
+if(!affiliateId)return url;
+return url+(url.includes("?")?"&":"?")+"affid="+affiliateId;
 }
 
-/* Load products */
+/* Load */
 async function loadProducts(){
-const cached=localStorage.getItem(CACHE_PRODUCTS);
-const time=localStorage.getItem(CACHE_TIME);
-if(cached && time && (Date.now()-Number(time))<ONE_DAY){
-products=JSON.parse(cached);
-renderProduct();
-return;
-}
-const res=await fetch(`/api/search`,{cache:"no-store"});
+const res=await fetch(`/api/search`);
 const data=await res.json();
 products=data.products||[];
-localStorage.setItem(CACHE_PRODUCTS,JSON.stringify(products));
-localStorage.setItem(CACHE_TIME,Date.now());
 renderProduct();
 }
 
-/* Render */
 function renderProduct(){
 const p=products[currentIndex];
-if(!p) return;
+if(!p)return;
 
 const rating=(4.5+Math.random()*0.4).toFixed(1);
 const views=Math.floor(Math.random()*50+10)+"K";
@@ -305,10 +292,10 @@ ${hook1()}<br>
 <span style="color:#6b7280;font-weight:500;">${hook2()}</span>
 </div>
 
-<img src="${p.image}" style="width:100%;border-radius:18px;margin-bottom:14px;" />
+<img src="${p.image}" style="width:100%;border-radius:18px;margin-bottom:14px;"/>
 
 <div style="text-align:center;font-size:13px;color:#6b7280;margin-bottom:8px;">
-⭐ ${rating} &nbsp; • &nbsp; 👁 ${views} views
+⭐ ${rating} • 👁 ${views}
 </div>
 
 <div style="font-size:28px;font-weight:700;margin-bottom:10px;text-align:center;">
@@ -317,6 +304,10 @@ ${p.price||"$29.99"}
 
 <div style="color:#6b7280;font-size:14px;margin-bottom:18px;text-align:center;">
 ${why()}
+</div>
+
+<div style="font-size:11px;color:#6b7280;text-align:center;margin-bottom:10px;">
+${appendAffiliate(p.link)}
 </div>
 
 <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">🛒 Shop Now</button>
@@ -331,22 +322,19 @@ ${why()}
 function nextProduct(){currentIndex=(currentIndex+1)%products.length;renderProduct();}
 function prevProduct(){currentIndex=(currentIndex-1+products.length)%products.length;renderProduct();}
 
-/* Share Logic */
+/* Share */
 function shareProduct(){
-const p=products[currentIndex];
 if(!isPremium()){
-navigator.clipboard.writeText(appendAffiliate(p.link));
-alert("Link copied. Upgrade to download branded card.");
+document.getElementById("premiumModal").style.display="flex";
 return;
 }
 document.getElementById("formatModal").style.display="flex";
 }
 
-/* Password */
 function validatePassword(){
-const input=document.getElementById("premiumPassword").value;
-if(input==="Floaton"){
+if(document.getElementById("premiumPassword").value==="Floaton"){
 localStorage.setItem("premiumUser","true");
+updatePremiumStatus();
 closeModal();
 document.getElementById("formatModal").style.display="flex";
 }else{
@@ -354,31 +342,20 @@ document.getElementById("passwordError").innerText="Incorrect password";
 }
 }
 
-/* Generate Image */
 async function generateImage(type){
 closeModal();
-if(!affiliateId){
-alert("Please enter your Affiliate ID first.");
-return;
-}
+if(!affiliateId){alert("Enter Affiliate ID first.");return;}
+
 const p=products[currentIndex];
-const template=type==="square"
-?document.getElementById("squareTemplate")
-:document.getElementById("verticalTemplate");
+const template=type==="square"?squareTemplate:verticalTemplate;
+const content=type==="square"?squareContent:verticalContent;
+const aff=type==="square"?squareAff:verticalAff;
 
-const content=type==="square"
-?document.getElementById("squareContent")
-:document.getElementById("verticalContent");
-
-const affText=type==="square"
-?document.getElementById("squareAff")
-:document.getElementById("verticalAff");
-
-affText.innerText="affid="+affiliateId;
+aff.innerText="affid="+affiliateId;
 
 content.innerHTML=`
 <div style="padding:100px;text-align:center;">
-<img src="${p.image}" style="width:70%;border-radius:30px;margin-bottom:40px;" />
+<img src="${p.image}" style="width:70%;border-radius:30px;margin-bottom:40px;"/>
 <h1 style="font-family:Playfair Display,serif;font-size:64px;margin-bottom:20px;">
 ${hook1()}
 </h1>
@@ -386,8 +363,7 @@ ${hook1()}
 ${p.price||"$29.99"}
 </h2>
 <p style="font-size:32px;color:#666;">${why()}</p>
-</div>
-`;
+</div>`;
 
 await new Promise(r=>setTimeout(r,300));
 const canvas=await html2canvas(template,{useCORS:true});
@@ -398,40 +374,32 @@ link.click();
 }
 
 /* Grok */
-let currentPrompt="";
 function createGrokVideo(){
 const p=products[currentIndex];
-currentPrompt=`Create a cinematic 6 second vertical product video.
+const prompt=`Create a cinematic 6 second vertical product video.
 
 Product: ${p.title}
 Hook: ${hook1()} ${hook2()}
 Why: ${why()}
 
-Style:
-Fast TikTok pacing
-Soft lighting
-Close ups
-Modern aesthetic
-Text overlay hook
-End with: Shop Now`;
-document.getElementById("grokText").value=currentPrompt;
-document.getElementById("grokModal").style.display="flex";
+Fast TikTok pacing.
+Modern aesthetic.
+Text overlay hook.
+End with: Shop Now.`;
+
+grokText.value=prompt;
+grokModal.style.display="flex";
 }
-function copyGrok(){
-navigator.clipboard.writeText(document.getElementById("grokText").value);
-}
+function copyGrok(){navigator.clipboard.writeText(grokText.value);}
 function openGrok(){
-const encoded=encodeURIComponent(document.getElementById("grokText").value);
-window.open(`https://grok.com/?prompt=${encoded}`,"_blank");
+navigator.clipboard.writeText(grokText.value).then(()=>{
+window.open("https://grok.com/?prompt="+encodeURIComponent(grokText.value),"_blank");
+});
 }
 
-/* Close Modal */
-function closeModal(){
-document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
-}
+function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
 
 loadProducts();
-
 </script>
 </body>
 </html>
