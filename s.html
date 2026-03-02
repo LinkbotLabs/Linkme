@@ -15,7 +15,7 @@ const id = params.get("id");
 if(!id){
   document.getElementById("app").innerText = "Missing product ID.";
 } else {
-  fetch("/api/load?id=" + id)
+  fetch("/api/get?id=" + id)
     .then(res => res.json())
     .then(p => {
       if(p.error){
