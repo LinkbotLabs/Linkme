@@ -12,7 +12,6 @@
 :root{
   --bg:#f6f7f9;
   --card:#ffffff;
-  --text:#1a1a1a;
   --muted:#6b7280;
   --accent:#2e7d32;
   --accent-light:#3fa34d;
@@ -27,76 +26,121 @@ body{
   flex-direction:column;
   align-items:center;
 }
-#affiliateSection{width:100%;max-width:420px;margin-bottom:24px;}
-#affiliateConnected{
-  display:none;padding:14px;border-radius:14px;
-  background:#ecfdf3;color:#166534;font-size:14px;
-  font-weight:500;text-align:center;
-}
+
+/* Card */
 .card{
-  width:100%;max-width:420px;background:var(--card);
-  border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,0.06);
-  padding:30px;position:relative;
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border-radius:24px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.06);
+  padding:30px;
+  position:relative;
+  transition:0.3s ease;
 }
 .card-brand{
-  position:absolute;bottom:18px;right:20px;
-  font-family:'Playfair Display',serif;font-size:16px;opacity:0.6;
+  position:absolute;
+  bottom:18px;
+  right:20px;
+  font-family:'Playfair Display',serif;
+  font-size:16px;
+  opacity:0.6;
 }
-.loading{text-align:center;color:var(--muted);font-size:14px;}
+.counter{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+/* Buttons */
 .btn{
-  width:100%;padding:14px;border-radius:14px;
-  border:none;cursor:pointer;font-weight:500;
-  font-size:14px;margin-bottom:12px;
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  font-weight:500;
+  font-size:14px;
+  margin-bottom:12px;
 }
 .btn-primary{
   background:linear-gradient(135deg,var(--accent),var(--accent-light));
   color:white;
 }
 .btn-outline{
-  background:white;border:1px solid var(--border);
+  background:white;
+  border:1px solid var(--border);
 }
+
+/* Nav */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  max-width:420px;
+  margin-top:20px;
+}
+.nav button{
+  padding:10px 20px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:white;
+  cursor:pointer;
+}
+
+/* Modals */
 .modal{
-  position:fixed;inset:0;background:rgba(0,0,0,0.6);
-  display:none;align-items:center;justify-content:center;z-index:1000;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
 }
 .modal-content{
-  background:white;padding:30px;border-radius:20px;
-  width:90%;max-width:420px;text-align:center;
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
 }
+
+/* Hidden share templates */
 .share-template{
-  position:absolute;left:-9999px;background:white;
+  position:absolute;
+  left:-9999px;
+  background:white;
   font-family:'Inter',sans-serif;
 }
 .branding{
-  position:absolute;bottom:40px;right:40px;
-  font-size:22px;font-weight:600;
+  position:absolute;
+  bottom:40px;
+  right:40px;
+  font-size:22px;
+  font-weight:600;
   font-family:'Playfair Display',serif;
 }
 </style>
 </head>
 <body>
 
-<div id="affiliateSection">
-  <div id="affiliateForm">
-    <input id="affiliateInput"
-      placeholder="Enter affiliate ID or full link"
-      style="width:100%;padding:14px;border-radius:14px;border:1px solid #e5e7eb;font-size:14px;" />
-    <button onclick="saveAffiliate()"
-      style="margin-top:12px;width:100%;padding:14px;border-radius:14px;border:none;background:#1a1a1a;color:white;font-weight:500;cursor:pointer;">
-      Connect Affiliate
-    </button>
-  </div>
-  <div id="affiliateConnected">✓ Affiliate Connected</div>
-</div>
-
 <div class="card" id="card">
-  <div class="loading">Loading curated product…</div>
+Loading curated product…
 </div>
 
+<div class="nav">
+<button onclick="prevProduct()">← Prev</button>
+<button onclick="nextProduct()">Next →</button>
+</div>
+
+<!-- Premium Modal -->
 <div class="modal" id="freeModal">
   <div class="modal-content">
-    <h3 style="margin-bottom:15px;">Unlock Premium</h3>
-    <p style="color:#6b7280;margin-bottom:20px;">
+    <h3>Unlock Premium</h3>
+    <p style="color:#6b7280;margin:15px 0;">
       Download branded Instagram & TikTok share cards.
     </p>
     <button class="btn btn-primary" onclick="unlockPremium()">Unlock Premium</button>
@@ -104,9 +148,10 @@ body{
   </div>
 </div>
 
+<!-- Format Modal -->
 <div class="modal" id="formatModal">
   <div class="modal-content">
-    <h3 style="margin-bottom:20px;">Choose Format</h3>
+    <h3>Choose Format</h3>
     <button class="btn btn-primary" onclick="generateImage('square')">Instagram 1:1</button>
     <button class="btn btn-primary" onclick="generateImage('vertical')">TikTok 9:16</button>
     <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
@@ -114,203 +159,200 @@ body{
 </div>
 
 <div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;">
-  <div id="squareContent"></div>
-  <div class="branding">Float Rising</div>
+<div id="squareContent"></div>
+<div class="branding">Float Rising</div>
 </div>
 
 <div id="verticalTemplate" class="share-template" style="width:1080px;height:1920px;">
-  <div id="verticalContent"></div>
-  <div class="branding">Float Rising</div>
+<div id="verticalContent"></div>
+<div class="branding">Float Rising</div>
 </div>
 
 <script>
 
-/* GLOBAL STATE */
-let currentHook1="";
-let currentHook2="";
-let currentWhy="";
-let currentProduct=null;
+/* STATE */
+let products=[];
+let currentIndex=0;
+let affiliateId=localStorage.getItem("affiliateId")||"";
+let premiumUser=localStorage.getItem("premiumUser")==="true";
 
 const CACHE_PRODUCTS="float_products_pool";
 const CACHE_TIME="float_products_time";
-const CACHE_INDEX="float_products_index";
 const ONE_DAY=86400000;
 
-/* HOOKS */
-function generateHookLine1(){
-  const patterns=[
-    "This Is Going Everywhere Right Now",
-    "TikTok Can’t Stop Talking About This",
-    "Nobody Expected This To Blow Up",
-    "This Quietly Became A Bestseller",
-    "One Of The Smartest Buys This Month",
-    "The Internet Found Another Winner"
-  ];
-  return patterns[Math.floor(Math.random()*patterns.length)];
-}
-
-function generateHookLine2(title){
-  const generic=[
-    "And The Price Makes It Even Better",
-    "It Looks Premium Without The Price Tag",
-    "And It Actually Lives Up To The Hype",
-    "It’s More Useful Than You Think"
-  ];
-  return generic[Math.floor(Math.random()*generic.length)];
-}
-
-function generateWhyWeLike(){
-  const lines=[
-    "Clean design. Smart functionality. Zero gimmicks.",
-    "High ratings and strong repeat buyers.",
-    "It feels premium without the premium price.",
-    "Practical, trending, and easy to recommend."
-  ];
-  return lines[Math.floor(Math.random()*lines.length)];
-}
-
-/* AFFILIATE */
-let affiliateId = localStorage.getItem("affiliateId") || "";
-if(affiliateId) showConnected();
-
-function saveAffiliate(){
-  const val=document.getElementById("affiliateInput").value.trim();
-  if(!val) return alert("Enter valid affiliate");
-  localStorage.setItem("affiliateId",val);
-  affiliateId=val;
-  showConnected();
-}
-
-function showConnected(){
-  document.getElementById("affiliateForm").style.display="none";
-  document.getElementById("affiliateConnected").style.display="block";
-}
-
-function resetAffiliate(){
-  localStorage.removeItem("affiliateId");
-  location.reload();
-}
-
-function appendAffiliate(url){
-  if(!affiliateId) return url;
-  const separator=url.includes("?")?"&":"?";
-  return url+separator+"affid="+affiliateId;
-}
-
-/* PREMIUM */
-let premiumUser=localStorage.getItem("premiumUser")==="true";
-function unlockPremium(){
-  localStorage.setItem("premiumUser","true");
-  premiumUser=true;
-  alert("Premium Activated (Demo)");
-  closeModal();
-}
-
 /* UTIL */
-function shuffleArray(array){
-  for(let i=array.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
-  }
-  return array;
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+/* HOOKS */
+function hook1(){return rand([
+"This Is Going Everywhere Right Now",
+"TikTok Can’t Stop Talking About This",
+"Nobody Expected This To Blow Up",
+"This Quietly Became A Bestseller",
+"One Of The Smartest Buys This Month"
+])}
+function hook2(){return rand([
+"And The Price Makes It Even Better",
+"It Looks Premium Without The Price Tag",
+"And It Actually Lives Up To The Hype"
+])}
+function why(){return rand([
+"Clean design. Smart functionality. Zero gimmicks.",
+"High ratings and strong repeat buyers.",
+"Feels premium without premium price."
+])}
+
+/* Affiliate */
+function appendAffiliate(url){
+if(!affiliateId) return url;
+const sep=url.includes("?")?"&":"?";
+return url+sep+"affid="+affiliateId;
 }
 
-/* LOAD PRODUCTS */
+/* Load */
 async function loadProducts(){
 
-  const cached = localStorage.getItem(CACHE_PRODUCTS);
-  const time = localStorage.getItem(CACHE_TIME);
+const cached=localStorage.getItem(CACHE_PRODUCTS);
+const time=localStorage.getItem(CACHE_TIME);
 
-  if(cached && time && (Date.now() - Number(time)) < ONE_DAY){
-    let pool = JSON.parse(cached);
-    let index = parseInt(localStorage.getItem(CACHE_INDEX) || "0");
-    if(index >= pool.length) index = 0;
-    currentProduct = pool[index];
-    localStorage.setItem(CACHE_INDEX, index + 1);
-    renderProduct(currentProduct);
-    return;
-  }
+if(cached && time && (Date.now()-Number(time))<ONE_DAY){
+products=JSON.parse(cached);
+renderProduct();
+return;
+}
 
-  try{
-  const res = await fetch(`/api/search`, {
-  cache: "no-store"
+const res=await fetch(`/api/search`,{cache:"no-store"});
+const data=await res.json();
+products=data.products||[];
+
+localStorage.setItem(CACHE_PRODUCTS,JSON.stringify(products));
+localStorage.setItem(CACHE_TIME,Date.now());
+
+renderProduct();
+}
+
+/* Render */
+function renderProduct(){
+const p=products[currentIndex];
+if(!p) return;
+
+document.getElementById("card").innerHTML=`
+<div class="counter">${currentIndex+1} / ${products.length}</div>
+
+<div style="font-family:Playfair Display,serif;font-size:22px;text-align:center;margin-bottom:18px;">
+${hook1()}<br>
+<span style="color:#6b7280;font-weight:500;">${hook2()}</span>
+</div>
+
+<img src="${p.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
+
+<div style="font-size:28px;font-weight:600;margin-bottom:12px;text-align:center;">
+${p.price||"$29.99"}
+</div>
+
+<div style="color:#6b7280;font-size:14px;margin-bottom:20px;text-align:center;">
+${why()}
+</div>
+
+<button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">
+🛒 Shop Now
+</button>
+
+<button class="btn btn-outline" onclick="shareProduct()">🔗 Share</button>
+<button class="btn btn-outline" onclick="createGrokVideo()">🎬 Create 6s Video</button>
+
+<div class="card-brand">Float Rising</div>
+`;
+}
+
+/* Carousel */
+function nextProduct(){
+currentIndex=(currentIndex+1)%products.length;
+renderProduct();
+}
+function prevProduct(){
+currentIndex=(currentIndex-1+products.length)%products.length;
+renderProduct();
+}
+
+/* Swipe */
+let startX=0;
+document.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
+document.addEventListener("touchend",e=>{
+let diff=e.changedTouches[0].clientX-startX;
+if(diff>50) prevProduct();
+if(diff<-50) nextProduct();
 });
-  if(!res.ok) throw new Error("API failed");
 
-  const data = await res.json();
-
-  if(!data.products || !data.products.length)
-    throw new Error("No products");
-
-  let pool = shuffleArray(data.products);
-
-  localStorage.setItem(CACHE_PRODUCTS, JSON.stringify(pool));
-  localStorage.setItem(CACHE_TIME, Date.now());
-  localStorage.setItem(CACHE_INDEX, 1);
-
-  currentProduct = pool[0];
-  renderProduct(currentProduct);
-
-}catch(err){
-  document.getElementById("card").innerHTML =
-    "<div class='loading'>Waiting for API reset…</div>";
-}
-}
-
-/* RENDER */
-function renderProduct(product){
-
-  currentProduct=product;
-  currentHook1=generateHookLine1();
-  currentHook2=generateHookLine2(product.title);
-  currentWhy=generateWhyWeLike();
-
-  document.getElementById("card").innerHTML=`
-    <div style="font-family:Playfair Display,serif;font-size:22px;text-align:center;margin-bottom:18px;">
-      ${currentHook1}<br>
-      <span style="color:#6b7280;font-weight:500;">${currentHook2}</span>
-    </div>
-
-    <img src="${product.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
-
-    <div style="font-size:28px;font-weight:600;margin-bottom:12px;text-align:center;">
-      ${product.price||"$29.99"}
-    </div>
-
-    <div style="color:#6b7280;font-size:14px;margin-bottom:20px;text-align:center;">
-      ${currentWhy}
-    </div>
-
-    <button class="btn btn-primary" onclick="window.open('${appendAffiliate(product.link)}','_blank')">
-      🛒 Shop Now
-    </button>
-
-    <button class="btn btn-outline" onclick="shareProduct()">🔗 Share</button>
-    <button class="btn btn-outline" onclick="createGrokVideo()">🎬 Create 6s Video</button>
-
-    <div class="card-brand">Float Rising</div>
-  `;
-}
-
-/* SHARE */
+/* Share */
 function shareProduct(){
-  const code=Math.random().toString(36).substring(2,8);
-  const link=window.location.origin+"?ref="+code;
-  navigator.clipboard.writeText(link);
-
-  if(!premiumUser){
-    document.getElementById("freeModal").style.display="flex";
-    return;
-  }
-  document.getElementById("formatModal").style.display="flex";
+if(!premiumUser){
+document.getElementById("freeModal").style.display="flex";
+return;
 }
-
+document.getElementById("formatModal").style.display="flex";
+}
+function unlockPremium(){
+localStorage.setItem("premiumUser","true");
+premiumUser=true;
+closeModal();
+}
 function closeModal(){
-  document.getElementById("freeModal").style.display="none";
-  document.getElementById("formatModal").style.display="none";
+document.getElementById("freeModal").style.display="none";
+document.getElementById("formatModal").style.display="none";
 }
 
-/* INIT */
+/* Image */
+async function generateImage(type){
+closeModal();
+const template=type==="square"
+?document.getElementById("squareTemplate")
+:document.getElementById("verticalTemplate");
+
+const content=type==="square"
+?document.getElementById("squareContent")
+:document.getElementById("verticalContent");
+
+const p=products[currentIndex];
+
+content.innerHTML=`
+<div style="padding:100px;text-align:center;">
+<img src="${p.image}" style="width:80%;border-radius:30px;margin-bottom:40px;" />
+<h1 style="font-family:Playfair Display,serif;font-size:64px;">
+${p.price||"$29.99"}
+</h1>
+</div>
+`;
+
+const canvas=await html2canvas(template);
+const link=document.createElement("a");
+link.download="float-rising-share.png";
+link.href=canvas.toDataURL();
+link.click();
+}
+
+/* Grok */
+function createGrokVideo(){
+const p=products[currentIndex];
+const prompt=encodeURIComponent(`
+Create a 6 second cinematic vertical product video.
+
+Product: ${p.title}
+Hook: ${hook1()} ${hook2()}
+Why people love it: ${why()}
+
+Style:
+Fast TikTok pacing
+Soft lighting
+Close up shots
+Modern aesthetic
+Text overlay hook
+End with "Shop Now"
+`);
+
+window.open(`https://grok.com/?prompt=${prompt}`,"_blank");
+}
+
 loadProducts();
 
 </script>
