@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Float Rising Products</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -38,19 +38,12 @@ body{
   transition:0.3s ease;
 }
 
-.card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 25px 50px rgba(0,0,0,0.08);
-}
-
 .hook{
   font-family:'Playfair Display',serif;
-  font-size:28px;
+  font-size:26px;
   font-weight:600;
-  color:var(--text);
   text-align:center;
-  margin-bottom:24px;
-  line-height:1.2;
+  margin-bottom:20px;
 }
 
 .product-image{
@@ -81,14 +74,13 @@ body{
 .price{
   font-size:28px;
   font-weight:600;
-  color:var(--text);
 }
 
 .old-price{
   font-size:16px;
   text-decoration:line-through;
   color:var(--muted);
-  margin-left:10px;
+  margin-left:8px;
 }
 
 .discount{
@@ -115,7 +107,6 @@ body{
   cursor:pointer;
   font-weight:500;
   font-size:14px;
-  transition:0.2s ease;
 }
 
 .btn-primary{
@@ -123,13 +114,8 @@ body{
   color:white;
 }
 
-.btn-primary:hover{
-  transform:translateY(-2px);
-}
-
 .btn-secondary{
   background:#f3f4f6;
-  color:var(--text);
 }
 
 .grok-btn{
@@ -140,61 +126,99 @@ body{
   border:none;
   background:#e5e7eb;
   cursor:pointer;
-  font-weight:500;
+}
+
+.loading{
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
-
-  <div class="hook">
-    Amazon Can’t Keep This in Stock
-  </div>
-
-  <img class="product-image" 
-       src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba4" 
-       alt="Product Image" />
-
-  <div class="social-proof">
-    🔥 4.8 (1,342 reviews) <br/>
-    🚀 16K sold this week
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="micro-copy">
-    Solves a problem you didn’t know had a fix.
-  </div>
-
-  <div class="price">
-    $29.99 
-    <span class="old-price">$39.99</span>
-  </div>
-
-  <div class="discount">
-    20% OFF
-  </div>
-
-  <div class="button-row">
-    <button class="btn btn-primary" onclick="shopNow()">🛒 Shop Now</button>
-    <button class="btn btn-secondary" onclick="shareProduct()">🔗 Share</button>
-  </div>
-
-  <button class="grok-btn" onclick="generateVideo()">
-    🎬 Grok Video
-  </button>
-
+<div class="card" id="card">
+  <div class="loading">Waiting for PSE reset…</div>
 </div>
 
 <script>
 const affiliateId = "YOUR_AFFILIATE_ID";
+const searchQuery = "viral gadgets"; // Predefined search pool
 
-function shopNow(){
-  const baseUrl = "https://example.com/product";
+// Generate viral hook dynamically
+function generateHook(title){
+  const hooks = [
+    "Amazon Can’t Keep This in Stock",
+    "The $19 Fix Nobody Told You About",
+    "TikTok Made This Sell Out in 48 Hours",
+    title + " Is Blowing Up Right Now"
+  ];
+  return hooks[Math.floor(Math.random() * hooks.length)];
+}
+
+// Fetch once only
+async function loadProduct(){
+  try{
+    const res = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}&start=1`);
+    if(!res.ok) throw new Error("API error");
+
+    const data = await res.json();
+    if(!data.items || !data.items.length) throw new Error("No items");
+
+    const product = data.items[0];
+
+    renderCard(product);
+
+  }catch(err){
+    document.getElementById("card").innerHTML =
+      `<div class="loading">API quota waiting. Will work after reset.</div>`;
+  }
+}
+
+function renderCard(product){
+
+  const hook = generateHook(product.title);
+  const price = product.price || "$29.99";
+  const oldPrice = product.old_price || "$39.99";
+
+  document.getElementById("card").innerHTML = `
+    <div class="hook">${hook}</div>
+
+    <img class="product-image" src="${product.image}" />
+
+    <div class="social-proof">
+      🔥 4.8 (1,342 reviews)<br/>
+      🚀 Trending Now
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="micro-copy">
+      Solves a problem you didn’t know had a fix.
+    </div>
+
+    <div class="price">
+      ${price}
+      <span class="old-price">${oldPrice}</span>
+    </div>
+
+    <div class="discount">20% OFF</div>
+
+    <div class="button-row">
+      <button class="btn btn-primary" onclick="shopNow('${product.link}')">🛒 Shop Now</button>
+      <button class="btn btn-secondary" onclick="shareProduct()">🔗 Share</button>
+    </div>
+
+    <button class="grok-btn" onclick="generateVideo()">
+      🎬 Grok Video
+    </button>
+  `;
+}
+
+function shopNow(link){
   const shareCode = localStorage.getItem("shareCode") || "";
-  const finalUrl = `${baseUrl}?affid=${affiliateId}&share=${shareCode}`;
+  const finalUrl = `${link}&affid=${affiliateId}&share=${shareCode}`;
   window.open(finalUrl, "_blank");
 }
 
@@ -207,8 +231,12 @@ function shareProduct(){
 }
 
 function generateVideo(){
-  alert("Trigger Grok video generation here.");
+  alert("Grok video trigger placeholder.");
 }
+
+// Run once
+loadProduct();
+
 </script>
 
 </body>
