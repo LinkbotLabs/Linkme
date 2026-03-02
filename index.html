@@ -232,24 +232,27 @@ async function loadProducts(){
   }
 
   try{
-    const res = await fetch(`/api/search`);
-    if(!res.ok) throw new Error("API failed");
-    const products = await res.json();
-    if(!products || !products.length) throw new Error("No products");
+  const res = await fetch(`/api/search`);
+  if(!res.ok) throw new Error("API failed");
 
-    let pool = shuffleArray(products);
+  const data = await res.json();
 
-    localStorage.setItem(CACHE_PRODUCTS, JSON.stringify(pool));
-    localStorage.setItem(CACHE_TIME, Date.now());
-    localStorage.setItem(CACHE_INDEX, 1);
+  if(!data.products || !data.products.length)
+    throw new Error("No products");
 
-    currentProduct = pool[0];
-    renderProduct(currentProduct);
+  let pool = shuffleArray(data.products);
 
-  }catch(err){
-    document.getElementById("card").innerHTML =
-      "<div class='loading'>Waiting for API reset…</div>";
-  }
+  localStorage.setItem(CACHE_PRODUCTS, JSON.stringify(pool));
+  localStorage.setItem(CACHE_TIME, Date.now());
+  localStorage.setItem(CACHE_INDEX, 1);
+
+  currentProduct = pool[0];
+  renderProduct(currentProduct);
+
+}catch(err){
+  document.getElementById("card").innerHTML =
+    "<div class='loading'>Waiting for API reset…</div>";
+}
 }
 
 /* RENDER */
