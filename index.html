@@ -7,6 +7,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <style>
 :root{
   --bg:#f6f7f9;
@@ -62,218 +64,261 @@ body{
   color:var(--muted);
   font-size:14px;
 }
+
+/* Buttons */
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+  font-weight:500;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-light));
+  color:white;
+}
+
+.btn-outline{
+  background:white;
+  border:1px solid var(--border);
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+}
+
+.modal-content{
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+}
+
+/* Hidden share templates */
+.share-template{
+  position:absolute;
+  left:-9999px;
+  background:white;
+  padding:60px;
+  font-family:'Inter',sans-serif;
+}
+
+.branding{
+  position:absolute;
+  bottom:40px;
+  right:40px;
+  font-size:18px;
+  font-weight:600;
+  font-family:'Playfair Display',serif;
+}
 </style>
 </head>
-
 <body>
 
-<!-- Affiliate -->
 <div id="affiliateSection">
-
   <div id="affiliateForm">
-    <input 
-      id="affiliateInput"
-      placeholder="Enter your affiliate ID or full link"
-      style="width:100%;padding:14px;border-radius:14px;border:1px solid #e5e7eb;font-size:14px;"
-    />
-    <button 
-      onclick="saveAffiliate()" 
+    <input id="affiliateInput"
+      placeholder="Enter affiliate ID or full link"
+      style="width:100%;padding:14px;border-radius:14px;border:1px solid #e5e7eb;font-size:14px;" />
+    <button onclick="saveAffiliate()"
       style="margin-top:12px;width:100%;padding:14px;border-radius:14px;border:none;background:#1a1a1a;color:white;font-weight:500;cursor:pointer;">
       Connect Affiliate
     </button>
   </div>
-
-  <div id="affiliateConnected">
-    ✓ Affiliate Connected
-  </div>
-
+  <div id="affiliateConnected">✓ Affiliate Connected</div>
 </div>
 
-<!-- Product -->
 <div class="card" id="card">
   <div class="loading">Loading curated product…</div>
 </div>
 
+<!-- FREE PREVIEW MODAL -->
+<div class="modal" id="freeModal">
+  <div class="modal-content">
+    <h3 style="margin-bottom:15px;">Unlock Premium</h3>
+    <p style="color:#6b7280;margin-bottom:20px;">
+      Download branded Instagram & TikTok share cards.
+    </p>
+    <button class="btn btn-primary" onclick="unlockPremium()">Unlock Premium</button>
+    <button class="btn btn-outline" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- PREMIUM FORMAT MODAL -->
+<div class="modal" id="formatModal">
+  <div class="modal-content">
+    <h3 style="margin-bottom:20px;">Choose Format</h3>
+    <button class="btn btn-primary" onclick="generateImage('square')">
+      Instagram 1:1
+    </button>
+    <button class="btn btn-primary" onclick="generateImage('vertical')">
+      TikTok 9:16
+    </button>
+    <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- Hidden Share Templates -->
+<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;">
+  <div id="squareContent"></div>
+  <div class="branding">Float Rising</div>
+</div>
+
+<div id="verticalTemplate" class="share-template" style="width:1080px;height:1920px;">
+  <div id="verticalContent"></div>
+  <div class="branding">Float Rising</div>
+</div>
+
 <script>
 
-/* ===============================
-   AFFILIATE SYSTEM
-=================================*/
-
+/* Affiliate */
 let affiliateId = localStorage.getItem("affiliateId") || "";
-if (affiliateId) showConnected();
+if(affiliateId) showConnected();
 
-function saveAffiliate() {
-  const input = document.getElementById("affiliateInput").value.trim();
-  if (!input) return alert("Enter valid affiliate details");
-
-  localStorage.setItem("affiliateId", input);
-  affiliateId = input;
+function saveAffiliate(){
+  const val = document.getElementById("affiliateInput").value.trim();
+  if(!val) return alert("Enter valid affiliate");
+  localStorage.setItem("affiliateId", val);
+  affiliateId = val;
   showConnected();
 }
-
-function showConnected() {
-  document.getElementById("affiliateForm").style.display = "none";
-  document.getElementById("affiliateConnected").style.display = "block";
+function showConnected(){
+  document.getElementById("affiliateForm").style.display="none";
+  document.getElementById("affiliateConnected").style.display="block";
 }
 
-/* ===============================
-   ENGINE CONFIG
-=================================*/
+/* Premium Flag */
+let premiumUser = localStorage.getItem("premiumUser")==="true";
 
-const categoryPool = [
-  "viral gadgets",
-  "tiktok beauty finds",
-  "amazon fitness trending",
-  "home improvement must have",
-  "car accessories trending",
-  "kitchen hacks viral",
-  "tech under 50 dollars",
-  "travel essentials trending"
+function unlockPremium(){
+  localStorage.setItem("premiumUser","true");
+  premiumUser=true;
+  alert("Premium Activated (Demo)");
+  closeModal();
+}
+
+/* Config */
+const categoryPool=[
+"viral gadgets","tiktok beauty finds","amazon fitness trending",
+"home improvement must have","car accessories trending"
 ];
+const CACHE_KEY="float_pool";
+const CACHE_TIME="float_time";
+const ONE_DAY=86400000;
+let currentProduct=null;
 
-const CACHE_KEY = "float_pool";
-const CACHE_TIME_KEY = "float_time";
-const ONE_DAY = 1000 * 60 * 60 * 24;
-
-/* ===============================
-   HELPERS
-=================================*/
-
-function getNumericPrice(price){
-  if(!price) return 0;
-  return Number(price.replace(/[^0-9.]/g,"")) || 0;
+/* Helpers */
+function getNumericPrice(p){
+  return Number((p||"").replace(/[^0-9.]/g,""))||0;
 }
-
 function appendAffiliate(url){
   if(!affiliateId) return url;
   if(affiliateId.startsWith("http")) return affiliateId;
-
-  const joiner = url.includes("?") ? "&" : "?";
-  return url + joiner + "affid=" + affiliateId;
+  return url+(url.includes("?")?"&":"?")+"affid="+affiliateId;
 }
 
-function generateHook(title){
-  const hooks = [
-    "Amazon Can’t Keep This in Stock",
-    "TikTok Made This Sell Out in 48 Hours",
-    "The Upgrade Everyone’s Talking About",
-    title + " Is Blowing Up Right Now"
-  ];
-  return hooks[Math.floor(Math.random() * hooks.length)];
-}
-
-/* ===============================
-   SHARE + GROK
-=================================*/
-
-function shareProduct(){
-  const code = Math.random().toString(36).substring(2,8);
-  localStorage.setItem("shareCode", code);
-  const shareUrl = window.location.origin + "?ref=" + code;
-  navigator.clipboard.writeText(shareUrl);
-  alert("Share link copied!");
-}
-
-function generateVideo(product){
-  const shareCode = localStorage.getItem("shareCode") || "";
-  const shareUrl = window.location.origin + "?ref=" + shareCode;
-
-  const prompt = `
-Create a 6 second viral product video.
-Hook: "${product.title}"
-Price: ${product.price}
-Tone: Excited, viral, modern.
-End with: Shop here ${shareUrl}
-`;
-
-  navigator.clipboard.writeText(prompt.trim());
-  alert("Grok prompt copied!");
-}
-
-/* ===============================
-   FETCH ENGINE (50 pool + 24h cache)
-=================================*/
-
+/* Load Products */
 async function loadProducts(){
-
-  const cached = localStorage.getItem(CACHE_KEY);
-  const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
-
-  if(cached && cachedTime && (Date.now() - cachedTime < ONE_DAY)){
+  const cached=localStorage.getItem(CACHE_KEY);
+  const time=localStorage.getItem(CACHE_TIME);
+  if(cached && time && Date.now()-time<ONE_DAY){
     renderProduct(JSON.parse(cached));
     return;
   }
-
-  const randomCategory = categoryPool[Math.floor(Math.random() * categoryPool.length)];
-
+  const cat=categoryPool[Math.floor(Math.random()*categoryPool.length)];
   try{
-    const res = await fetch(`/api/search?q=${encodeURIComponent(randomCategory)}&num=50`);
-    const data = await res.json();
-    if(!data.products) throw new Error("No products");
-
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data.products));
-    localStorage.setItem(CACHE_TIME_KEY, Date.now());
-
+    const res=await fetch(`/api/search?q=${encodeURIComponent(cat)}&num=50`);
+    const data=await res.json();
+    if(!data.products) throw new Error();
+    localStorage.setItem(CACHE_KEY,JSON.stringify(data.products));
+    localStorage.setItem(CACHE_TIME,Date.now());
     renderProduct(data.products);
-
-  }catch(err){
-    document.getElementById("card").innerHTML =
-      `<div class="loading">Waiting for API reset…</div>`;
+  }catch{
+    document.getElementById("card").innerHTML="<div class='loading'>Waiting for API reset…</div>";
   }
 }
 
-/* ===============================
-   RENDER HIGHEST PRICE FEATURED
-=================================*/
-
+/* Render */
 function renderProduct(products){
-
-  products.sort((a,b)=>{
-    return getNumericPrice(b.price) - getNumericPrice(a.price);
-  });
-
-  const product = products[0]; // highest price
-
-  const hook = generateHook(product.title);
-
-  document.getElementById("card").innerHTML = `
+  products.sort((a,b)=>getNumericPrice(b.price)-getNumericPrice(a.price));
+  currentProduct=products[0];
+  document.getElementById("card").innerHTML=`
     <div style="font-family:Playfair Display,serif;font-size:26px;margin-bottom:20px;text-align:center;">
-      ${hook}
+      ${currentProduct.title}
     </div>
-
-    <img src="${product.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
-
-    <div style="color:#6b7280;font-size:14px;margin-bottom:12px;">
-      🔥 Trending Today
-    </div>
-
+    <img src="${currentProduct.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
     <div style="font-size:28px;font-weight:600;margin-bottom:20px;">
-      ${product.price || "$29.99"}
+      ${currentProduct.price||"$29.99"}
     </div>
-
-    <button onclick="window.open(appendAffiliate('${product.link}'),'_blank')" 
-      style="width:100%;padding:14px;border-radius:14px;border:none;background:linear-gradient(135deg,#2e7d32,#3fa34d);color:white;font-weight:500;cursor:pointer;margin-bottom:12px;">
+    <button class="btn btn-primary" onclick="window.open(appendAffiliate('${currentProduct.link}'),'_blank')">
       🛒 Shop Now
     </button>
-
-    <button onclick="shareProduct()" 
-      style="width:100%;padding:14px;border-radius:14px;border:1px solid #e5e7eb;background:white;margin-bottom:12px;">
-      🔗 Share
-    </button>
-
-    <button onclick='generateVideo(${JSON.stringify(product)})'
-      style="width:100%;padding:14px;border-radius:14px;border:none;background:#e5e7eb;">
-      🎬 Grok Video
-    </button>
+    <button class="btn btn-outline" onclick="shareProduct()">🔗 Share</button>
   `;
 }
 
-/* =============================== */
+/* Share */
+function shareProduct(){
+  const code=Math.random().toString(36).substring(2,8);
+  const link=window.location.origin+"?ref="+code;
+  navigator.clipboard.writeText(link);
+
+  if(!premiumUser){
+    document.getElementById("freeModal").style.display="flex";
+    return;
+  }
+  document.getElementById("formatModal").style.display="flex";
+}
+
+function generateImage(type){
+  closeModal();
+  const template=type==="square"?
+    document.getElementById("squareTemplate"):
+    document.getElementById("verticalTemplate");
+  const content=type==="square"?
+    document.getElementById("squareContent"):
+    document.getElementById("verticalContent");
+
+  content.innerHTML=`
+    <img src="${currentProduct.image}" style="width:100%;border-radius:20px;margin-bottom:40px;" />
+    <h1 style="font-family:Playfair Display,serif;font-size:64px;margin-bottom:30px;">
+      ${currentProduct.title}
+    </h1>
+    <div style="font-size:48px;font-weight:600;">
+      ${currentProduct.price||"$29.99"}
+    </div>
+    <div style="margin-top:40px;font-size:32px;color:#6b7280;">
+      Shop via link in bio
+    </div>
+  `;
+
+  html2canvas(template,{scale:2}).then(canvas=>{
+    const link=document.createElement("a");
+    link.download="float-rising-share.png";
+    link.href=canvas.toDataURL();
+    link.click();
+  });
+}
+
+function closeModal(){
+  document.getElementById("freeModal").style.display="none";
+  document.getElementById("formatModal").style.display="none";
+}
 
 loadProducts();
 
 </script>
-
 </body>
 </html>
