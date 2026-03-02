@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loading...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body style="font-family:sans-serif;text-align:center;padding:40px;">
+
+<div id="app">Loading product...</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+if(!id){
+  document.getElementById("app").innerText = "Missing product ID.";
+} else {
+  fetch("/api/load?id=" + id)
+    .then(res => res.json())
+    .then(p => {
+      if(p.error){
+        document.getElementById("app").innerText = "Product not found.";
+        return;
+      }
+
+      document.getElementById("app").innerHTML = `
+        <h1>${p.title}</h1>
+        <img src="${p.image}" width="300" style="border-radius:12px;">
+        <br><br>
+        <a href="${p.link}" target="_blank"
+           style="display:inline-block;padding:14px 24px;background:#111;color:white;text-decoration:none;border-radius:12px;">
+           Shop Now
+        </a>
+      `;
+    })
+    .catch(() => {
+      document.getElementById("app").innerText = "Error loading product.";
+    });
+}
+</script>
+
+</body>
+</html>
