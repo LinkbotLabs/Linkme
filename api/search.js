@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
   // Serve cache if within 24h
   if (cache.data && now - cache.timestamp < ONE_DAY) {
-    return res.status(200).json({ products });
+    return res.status(200).json(cache.data);
   }
 
   try {
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       const image =
         item.pagemap?.cse_image?.[0]?.src ||
         item.pagemap?.cse_thumbnail?.[0]?.src ||
-        "";
+        "https://picsum.photos/600";
 
       let link = item.link;
 
@@ -70,10 +70,12 @@ export default async function handler(req, res) {
       };
     });
 
-    cache.timestamp = now;
-    cache.data = products;
+    const responseData = { products };
 
-    return res.status(200).json(products);
+    cache.timestamp = now;
+    cache.data = responseData;
+
+    return res.status(200).json(responseData);
 
   } catch (error) {
     return res.status(500).json({
