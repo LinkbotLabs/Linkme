@@ -37,6 +37,15 @@ body{
   width:100%;max-width:420px;background:var(--card);
   border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,0.06);
   padding:30px;
+  position:relative;
+}
+.card-brand{
+  position:absolute;
+  bottom:18px;
+  right:20px;
+  font-family:'Playfair Display',serif;
+  font-size:16px;
+  opacity:0.6;
 }
 .loading{text-align:center;color:var(--muted);font-size:14px;}
 .btn{
@@ -125,6 +134,11 @@ body{
    HOOK ENGINE
 ============================ */
 
+let currentHook1="";
+let currentHook2="";
+let currentWhy="";
+let currentProduct=null;
+
 function generateHookLine1(){
   const patterns=[
     "This Is Going Everywhere Right Now",
@@ -173,8 +187,44 @@ function generateWhyWeLike(){
 }
 
 /* ============================
-   AFFILIATE
+   GROK VIDEO (NEW)
 ============================ */
+
+function buildGrokVideoPrompt(){
+  return `
+Create a 6 second vertical cinematic product video (9:16).
+
+Opening text:
+"${currentHook1}"
+
+Second line:
+"${currentHook2}"
+
+Show the product in motion.
+Modern lifestyle setting.
+Soft dramatic lighting.
+Premium aesthetic.
+Quick close-up cuts.
+Smooth transitions.
+
+End frame:
+"${currentProduct.price || "$29.99"}"
+Brand: Float Rising
+
+Optimized for TikTok engagement.
+`;
+}
+
+function createGrokVideo(){
+  const prompt=encodeURIComponent(buildGrokVideoPrompt());
+  window.open("https://grok.com/imagine?prompt="+prompt,"_blank");
+}
+
+/* ============================
+   EVERYTHING BELOW IS YOUR ORIGINAL LOGIC
+============================ */
+
+/* AFFILIATE */
 let affiliateId = localStorage.getItem("affiliateId") || "";
 if(affiliateId) showConnected();
 
@@ -190,9 +240,7 @@ function showConnected(){
   document.getElementById("affiliateConnected").style.display="block";
 }
 
-/* ============================
-   PREMIUM
-============================ */
+/* PREMIUM */
 let premiumUser=localStorage.getItem("premiumUser")==="true";
 function unlockPremium(){
   localStorage.setItem("premiumUser","true");
@@ -201,9 +249,7 @@ function unlockPremium(){
   closeModal();
 }
 
-/* ============================
-   ENGINE CONFIG
-============================ */
+/* ENGINE CONFIG */
 const categoryPool=[
 "viral gadgets","tiktok beauty finds",
 "amazon fitness trending",
@@ -216,11 +262,7 @@ const CACHE_TIME="float_products_time";
 const CACHE_INDEX="float_products_index";
 const ONE_DAY=86400000;
 
-let currentProduct=null;
-
-/* ============================
-   HELPERS
-============================ */
+/* HELPERS */
 function getNumericPrice(p){
   return Number((p||"").replace(/[^0-9.]/g,""))||0;
 }
@@ -238,9 +280,7 @@ function shuffleArray(array){
   return array;
 }
 
-/* ============================
-   LOAD PRODUCTS
-============================ */
+/* LOAD PRODUCTS */
 async function loadProducts(){
 
   const cached=localStorage.getItem(CACHE_PRODUCTS);
@@ -286,23 +326,21 @@ async function loadProducts(){
   }
 }
 
-/* ============================
-   RENDER
-============================ */
+/* RENDER */
 function renderProduct(product){
 
   currentProduct=product;
 
-  const hook1=generateHookLine1();
-  const hook2=generateHookLine2(product.title);
-  const why=generateWhyWeLike();
+  currentHook1=generateHookLine1();
+  currentHook2=generateHookLine2(product.title);
+  currentWhy=generateWhyWeLike();
 
   document.getElementById("card").innerHTML=`
 
     <div style="font-family:Playfair Display,serif;font-size:22px;line-height:1.3;margin-bottom:18px;text-align:center;">
-      ${hook1}<br>
+      ${currentHook1}<br>
       <span style="color:#6b7280;font-weight:500;">
-        ${hook2}
+        ${currentHook2}
       </span>
     </div>
 
@@ -313,7 +351,7 @@ function renderProduct(product){
     </div>
 
     <div style="color:#6b7280;font-size:14px;margin-bottom:20px;text-align:center;">
-      ${why}
+      ${currentWhy}
     </div>
 
     <button class="btn btn-primary" onclick="window.open(appendAffiliate('${product.link}'),'_blank')">
@@ -323,12 +361,18 @@ function renderProduct(product){
     <button class="btn btn-outline" onclick="shareProduct()">
       🔗 Share
     </button>
+
+    <button class="btn btn-outline" onclick="createGrokVideo()">
+      🎬 Create 6s Video
+    </button>
+
+    <div class="card-brand">
+      Float Rising
+    </div>
   `;
 }
 
-/* ============================
-   SHARE
-============================ */
+/* SHARE */
 function shareProduct(){
   const code=Math.random().toString(36).substring(2,8);
   const link=window.location.origin+"?ref="+code;
