@@ -6,7 +6,6 @@
 <title>Float Rising Products</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
@@ -19,9 +18,7 @@
   --accent-light:#3fa34d;
   --border:#e5e7eb;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-
 body{
   font-family:'Inter',sans-serif;
   background:var(--bg);
@@ -30,97 +27,45 @@ body{
   flex-direction:column;
   align-items:center;
 }
-
-/* Affiliate */
-#affiliateSection{
-  width:100%;
-  max-width:420px;
-  margin-bottom:24px;
-}
-
+#affiliateSection{width:100%;max-width:420px;margin-bottom:24px;}
 #affiliateConnected{
-  display:none;
-  padding:14px;
-  border-radius:14px;
-  background:#ecfdf3;
-  color:#166534;
-  font-size:14px;
-  font-weight:500;
-  text-align:center;
+  display:none;padding:14px;border-radius:14px;
+  background:#ecfdf3;color:#166534;font-size:14px;
+  font-weight:500;text-align:center;
 }
-
-/* Card */
 .card{
-  width:100%;
-  max-width:420px;
-  background:var(--card);
-  border-radius:24px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.06);
+  width:100%;max-width:420px;background:var(--card);
+  border-radius:24px;box-shadow:0 20px 40px rgba(0,0,0,0.06);
   padding:30px;
 }
-
-.loading{
-  text-align:center;
-  color:var(--muted);
-  font-size:14px;
-}
-
-/* Buttons */
+.loading{text-align:center;color:var(--muted);font-size:14px;}
 .btn{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  cursor:pointer;
-  font-weight:500;
-  font-size:14px;
-  margin-bottom:12px;
+  width:100%;padding:14px;border-radius:14px;
+  border:none;cursor:pointer;font-weight:500;
+  font-size:14px;margin-bottom:12px;
 }
-
 .btn-primary{
   background:linear-gradient(135deg,var(--accent),var(--accent-light));
   color:white;
 }
-
 .btn-outline{
-  background:white;
-  border:1px solid var(--border);
+  background:white;border:1px solid var(--border);
 }
-
 .modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1000;
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  display:none;align-items:center;justify-content:center;z-index:1000;
 }
-
 .modal-content{
-  background:white;
-  padding:30px;
-  border-radius:20px;
-  width:90%;
-  max-width:420px;
-  text-align:center;
+  background:white;padding:30px;border-radius:20px;
+  width:90%;max-width:420px;text-align:center;
 }
-
-/* Hidden share templates */
 .share-template{
-  position:absolute;
-  left:-9999px;
-  background:white;
-  padding:60px;
-  font-family:'Inter',sans-serif;
+  position:absolute;left:-9999px;background:white;
+  padding:60px;font-family:'Inter',sans-serif;
 }
-
 .branding{
-  position:absolute;
-  bottom:40px;
-  right:40px;
-  font-size:18px;
-  font-weight:600;
+  position:absolute;bottom:40px;right:40px;
+  font-size:18px;font-weight:600;
   font-family:'Playfair Display',serif;
 }
 </style>
@@ -144,7 +89,6 @@ body{
   <div class="loading">Loading curated product…</div>
 </div>
 
-<!-- FREE PREVIEW MODAL -->
 <div class="modal" id="freeModal">
   <div class="modal-content">
     <h3 style="margin-bottom:15px;">Unlock Premium</h3>
@@ -156,21 +100,15 @@ body{
   </div>
 </div>
 
-<!-- PREMIUM FORMAT MODAL -->
 <div class="modal" id="formatModal">
   <div class="modal-content">
     <h3 style="margin-bottom:20px;">Choose Format</h3>
-    <button class="btn btn-primary" onclick="generateImage('square')">
-      Instagram 1:1
-    </button>
-    <button class="btn btn-primary" onclick="generateImage('vertical')">
-      TikTok 9:16
-    </button>
+    <button class="btn btn-primary" onclick="generateImage('square')">Instagram 1:1</button>
+    <button class="btn btn-primary" onclick="generateImage('vertical')">TikTok 9:16</button>
     <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
   </div>
 </div>
 
-<!-- Hidden Share Templates -->
 <div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;">
   <div id="squareContent"></div>
   <div class="branding">Float Rising</div>
@@ -183,15 +121,17 @@ body{
 
 <script>
 
-/* Affiliate */
+/* ============================
+   AFFILIATE
+============================ */
 let affiliateId = localStorage.getItem("affiliateId") || "";
 if(affiliateId) showConnected();
 
 function saveAffiliate(){
-  const val = document.getElementById("affiliateInput").value.trim();
+  const val=document.getElementById("affiliateInput").value.trim();
   if(!val) return alert("Enter valid affiliate");
-  localStorage.setItem("affiliateId", val);
-  affiliateId = val;
+  localStorage.setItem("affiliateId",val);
+  affiliateId=val;
   showConnected();
 }
 function showConnected(){
@@ -199,9 +139,10 @@ function showConnected(){
   document.getElementById("affiliateConnected").style.display="block";
 }
 
-/* Premium Flag */
-let premiumUser = localStorage.getItem("premiumUser")==="true";
-
+/* ============================
+   PREMIUM
+============================ */
+let premiumUser=localStorage.getItem("premiumUser")==="true";
 function unlockPremium(){
   localStorage.setItem("premiumUser","true");
   premiumUser=true;
@@ -209,67 +150,114 @@ function unlockPremium(){
   closeModal();
 }
 
-/* Config */
+/* ============================
+   ENGINE CONFIG
+============================ */
 const categoryPool=[
-"viral gadgets","tiktok beauty finds","amazon fitness trending",
-"home improvement must have","car accessories trending"
+"viral gadgets","tiktok beauty finds",
+"amazon fitness trending",
+"home improvement must have",
+"car accessories trending"
 ];
-const CACHE_KEY="float_pool";
-const CACHE_TIME="float_time";
+
+const CACHE_PRODUCTS="float_products_pool";
+const CACHE_TIME="float_products_time";
+const CACHE_INDEX="float_products_index";
 const ONE_DAY=86400000;
+
 let currentProduct=null;
 
-/* Helpers */
+/* ============================
+   HELPERS
+============================ */
 function getNumericPrice(p){
   return Number((p||"").replace(/[^0-9.]/g,""))||0;
 }
 function appendAffiliate(url){
   if(!affiliateId) return url;
   if(affiliateId.startsWith("http")) return affiliateId;
-  return url+(url.includes("?")?"&":"?")+"affid="+affiliateId;
+  const separator=url.includes("?")?"&":"?";
+  return url+separator+"affid="+affiliateId;
+}
+function shuffleArray(array){
+  for(let i=array.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [array[i],array[j]]=[array[j],array[i]];
+  }
+  return array;
 }
 
-/* Load Products */
+/* ============================
+   LOAD PRODUCTS (50 ROTATION)
+============================ */
 async function loadProducts(){
-  const cached=localStorage.getItem(CACHE_KEY);
+
+  const cached=localStorage.getItem(CACHE_PRODUCTS);
   const time=localStorage.getItem(CACHE_TIME);
-  if(cached && time && Date.now()-time<ONE_DAY){
-    renderProduct(JSON.parse(cached));
+
+  if(cached && time && (Date.now()-time)<ONE_DAY){
+
+    let pool=JSON.parse(cached);
+    let index=parseInt(localStorage.getItem(CACHE_INDEX)||"0");
+
+    if(index>=pool.length) index=0;
+
+    currentProduct=pool[index];
+    localStorage.setItem(CACHE_INDEX,index+1);
+
+    renderProduct(currentProduct);
     return;
   }
+
   const cat=categoryPool[Math.floor(Math.random()*categoryPool.length)];
+
   try{
     const res=await fetch(`/api/search?q=${encodeURIComponent(cat)}&num=50`);
     const data=await res.json();
-    if(!data.products) throw new Error();
-    localStorage.setItem(CACHE_KEY,JSON.stringify(data.products));
+    if(!data.products || !data.products.length) throw new Error();
+
+    let pool=data.products.sort(
+      (a,b)=>getNumericPrice(b.price)-getNumericPrice(a.price)
+    );
+
+    pool=shuffleArray(pool);
+
+    localStorage.setItem(CACHE_PRODUCTS,JSON.stringify(pool));
     localStorage.setItem(CACHE_TIME,Date.now());
-    renderProduct(data.products);
+    localStorage.setItem(CACHE_INDEX,1);
+
+    currentProduct=pool[0];
+    renderProduct(currentProduct);
+
   }catch{
-    document.getElementById("card").innerHTML="<div class='loading'>Waiting for API reset…</div>";
+    document.getElementById("card").innerHTML=
+      "<div class='loading'>Waiting for API reset…</div>";
   }
 }
 
-/* Render */
-function renderProduct(products){
-  products.sort((a,b)=>getNumericPrice(b.price)-getNumericPrice(a.price));
-  currentProduct=products[0];
+/* ============================
+   RENDER
+============================ */
+function renderProduct(product){
+  currentProduct=product;
   document.getElementById("card").innerHTML=`
     <div style="font-family:Playfair Display,serif;font-size:26px;margin-bottom:20px;text-align:center;">
-      ${currentProduct.title}
+      ${product.title}
     </div>
-    <img src="${currentProduct.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
+    <img src="${product.image}" style="width:100%;border-radius:18px;margin-bottom:20px;" />
     <div style="font-size:28px;font-weight:600;margin-bottom:20px;">
-      ${currentProduct.price||"$29.99"}
+      ${product.price||"$29.99"}
     </div>
-    <button class="btn btn-primary" onclick="window.open(appendAffiliate('${currentProduct.link}'),'_blank')">
+    <button class="btn btn-primary" onclick="window.open(appendAffiliate('${product.link}'),'_blank')">
       🛒 Shop Now
     </button>
     <button class="btn btn-outline" onclick="shareProduct()">🔗 Share</button>
   `;
 }
 
-/* Share */
+/* ============================
+   SHARE
+============================ */
 function shareProduct(){
   const code=Math.random().toString(36).substring(2,8);
   const link=window.location.origin+"?ref="+code;
@@ -284,16 +272,18 @@ function shareProduct(){
 
 function generateImage(type){
   closeModal();
-  const template=type==="square"?
-    document.getElementById("squareTemplate"):
-    document.getElementById("verticalTemplate");
-  const content=type==="square"?
-    document.getElementById("squareContent"):
-    document.getElementById("verticalContent");
+
+  const template=type==="square"
+    ?document.getElementById("squareTemplate")
+    :document.getElementById("verticalTemplate");
+
+  const content=type==="square"
+    ?document.getElementById("squareContent")
+    :document.getElementById("verticalContent");
 
   content.innerHTML=`
     <img src="${currentProduct.image}" style="width:100%;border-radius:20px;margin-bottom:40px;" />
-    <h1 style="font-family:Playfair Display,serif;font-size:64px;margin-bottom:30px;">
+    <h1 style="font-family:Playfair Display,serif;font-size:${type==="square"?"64px":"84px"};margin-bottom:30px;">
       ${currentProduct.title}
     </h1>
     <div style="font-size:48px;font-weight:600;">
@@ -305,10 +295,10 @@ function generateImage(type){
   `;
 
   html2canvas(template,{scale:2}).then(canvas=>{
-    const link=document.createElement("a");
-    link.download="float-rising-share.png";
-    link.href=canvas.toDataURL();
-    link.click();
+    const a=document.createElement("a");
+    a.download="float-rising-share.png";
+    a.href=canvas.toDataURL();
+    a.click();
   });
 }
 
@@ -317,6 +307,7 @@ function closeModal(){
   document.getElementById("formatModal").style.display="none";
 }
 
+/* INIT */
 loadProducts();
 
 </script>
