@@ -77,7 +77,6 @@ export default async function handler(req, res) {
     }
 
     const config = platformConfigs[platform];
-
     const allResults = [];
 
     // 🔥 Pull from ALL keywords daily for mix
@@ -86,11 +85,12 @@ export default async function handler(req, res) {
       const query = `${keyword} site:${config.site} -book -novel -kindle -cd -vinyl -album -case -cover -blog -advertising`;
 
       const googleRes = await fetch(
-        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=4`
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=6`
       );
 
-      const data = await googleRes.json();
       if (!googleRes.ok) continue;
+
+      const data = await googleRes.json();
 
       const validItems = (data.items || []).filter(item => {
         if (!item?.link) return false;
@@ -107,7 +107,7 @@ export default async function handler(req, res) {
       allResults.push(...validItems);
     }
 
-    // 🔥 Remove duplicates by link
+    // 🔥 Remove duplicates
     const uniqueMap = new Map();
     allResults.forEach(item => {
       if (!uniqueMap.has(item.link)) {
@@ -119,50 +119,47 @@ export default async function handler(req, res) {
 
     const now = Date.now();
 
-    const cleanProducts = uniqueResults
-      .map((item, i) => {
+    // ✅ Clean but NEVER reject products
+    const cleanProducts = uniqueResults.map((item, i) => {
 
-        let image =
-          item?.pagemap?.cse_image?.[0]?.src ||
-          item?.pagemap?.cse_thumbnail?.[0]?.src ||
-          "";
+      let image =
+        item?.pagemap?.cse_image?.[0]?.src ||
+        item?.pagemap?.cse_thumbnail?.[0]?.src ||
+        "";
 
-        // ❌ Reject junk images completely
-        if (
-          !image ||
-          !image.startsWith("http") ||
-          image.includes("data:image") ||
-          image.includes("logo") ||
-          image.includes("sprite")
-        ) {
-          return null;
-        }
+      // 🔥 If image bad → fallback instead of dropping
+      if (
+        !image ||
+        !image.startsWith("http") ||
+        image.includes("data:image")
+      ) {
+        image = "https://via.placeholder.com/600x600?text=Float+Pick";
+      }
 
-        // 🔥 Remove Amazon resize strings
-        image = image.replace(/\._.*?_\.jpg/, ".jpg");
+      // Remove Amazon resize patterns
+      image = image.replace(/\._.*?_\.jpg/, ".jpg");
 
-        // Remove query params
-        image = image.split("?")[0];
+      // Remove query params
+      image = image.split("?")[0];
 
-        const cleanLink = item.link
-          .split("?")[0]
-          .split("/ref=")[0];
+      const cleanLink = item.link
+        .split("?")[0]
+        .split("/ref=")[0];
 
-        return {
-          id: `${platform}-${now}-${i}`,
-          platform,
-          title: item.title?.substring(0, 90) || "Product",
-          image,
-          link: cleanLink,
-          siteLink: `${BASE_SITE}/s.html?id=${platform}-${now}-${i}`
-        };
-      })
-      .filter(Boolean);
+      return {
+        id: `${platform}-${now}-${i}`,
+        platform,
+        title: item.title?.substring(0, 90) || "Product",
+        image,
+        link: cleanLink,
+        siteLink: `${BASE_SITE}/s.html?id=${platform}-${now}-${i}`
+      };
+    });
 
-    // 🔥 Shuffle for random mix
+    // 🔥 Shuffle daily
     shuffle(cleanProducts);
 
-    // ✅ Guarantee exactly 8
+    // ✅ Guarantee up to 8
     const finalProducts = cleanProducts.slice(0, MAX_PRODUCTS);
 
     platformCache[platform] = {
