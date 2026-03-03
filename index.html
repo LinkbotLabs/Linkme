@@ -188,7 +188,7 @@ p.rating=(4.6+Math.random()*0.3).toFixed(1);
 p.reviews=Math.floor(Math.random()*800+200);
 p.sold=Math.floor(Math.random()*1200+300);
 p.urgency=Math.floor(Math.random()*10+3);
-p.price=p.price||"$39.99";
+
 
 card.innerHTML=`
 <img src="${p.image}">
@@ -204,7 +204,7 @@ card.innerHTML=`
 <br>✔ Viral trending gadget
 </div>
 
-<div class="price">${p.price}</div>
+
 
 <div class="cta-box">LIMITED STOCK — SHOP NOW</div>
 
@@ -272,7 +272,7 @@ const prompt=`
 Create a HIGH-CONVERTING 6-second vertical TikTok-style product ad.
 
 Product: ${p.title}
-Price: ${p.price}
+
 Rating: ${p.rating} (${p.reviews}+ reviews)
 
 Style: Fast, viral, premium.
