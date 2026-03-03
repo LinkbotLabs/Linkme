@@ -1,35 +1,78 @@
-const cache = {
-  timestamp: 0,
-  data: null
-};
-
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-const keywords = [
-  "amazon trending gadgets",
-  "viral kitchen gadgets amazon",
-  "amazon best seller tech",
-  "tiktok viral home gadgets amazon",
-  "amazon impulse buy gadgets"
-];
+const BASE_SITE = "https://linkmetagshop.vercel.app";
+
+// 🔥 Simple per-platform daily cache
+const platformCache = {
+  amazon: { day: null, data: [] },
+  dhgate: { day: null, data: [] },
+  temu: { day: null, data: [] }
+};
+
+const platformConfigs = {
+  amazon: {
+    site: "amazon.com",
+    keywords: [
+      "amazon kitchen problem solving gadgets",
+      "amazon car gadgets accessories",
+      "amazon home organization gadgets",
+      "amazon tech gadgets under 50",
+      "amazon cleaning gadgets"
+    ]
+  },
+  dhgate: {
+    site: "dhgate.com",
+    keywords: [
+      "dhgate trending tech gadgets",
+      "dhgate cool electronics",
+      "dhgate car accessories"
+    ]
+  },
+  temu: {
+    site: "temu.com",
+    keywords: [
+      "temu kitchen gadgets",
+      "temu viral home gadgets",
+      "temu tech accessories"
+    ]
+  }
+};
+
+function getDayNumber() {
+  return Math.floor(Date.now() / ONE_DAY);
+}
 
 export default async function handler(req, res) {
-
-  res.setHeader("Cache-Control", "no-store");
-
-  const now = Date.now();
-
-  // Return cached products if fresh
-  if (cache.data && now - cache.timestamp < ONE_DAY) {
-    return res.status(200).json({ products: cache.data });
-  }
-
   try {
+    res.setHeader("Cache-Control", "no-store");
 
-    const activeKeyword =
-      keywords[Math.floor(Math.random() * keywords.length)];
+    const platform = (req.query.platform || "amazon").toLowerCase();
 
-    const query = `${activeKeyword} site:amazon.com -book -novel -kindle`;
+    if (!platformConfigs[platform]) {
+      return res.status(400).json({ error: "Invalid platform" });
+    }
+
+    const today = getDayNumber();
+    const cache = platformCache[platform];
+
+    // ✅ If already fetched today → return cached
+    if (cache.day === today && cache.data.length) {
+      return res.status(200).json({
+        cached: true,
+        platform,
+        count: cache.data.length,
+        products: cache.data,
+        site: BASE_SITE
+      });
+    }
+
+    const config = platformConfigs[platform];
+
+    // 🔥 Daily rotating keyword
+    const keywordIndex = today % config.keywords.length;
+    const activeKeyword = config.keywords[keywordIndex];
+
+    const query = `${activeKeyword} site:${config.site} -book -novel -kindle -cd -vinyl -album -case -cover -blog -advertising`;
 
     const googleRes = await fetch(
       `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
@@ -43,75 +86,65 @@ export default async function handler(req, res) {
       });
     }
 
-    if (!data.items || data.items.length === 0) {
-      return res.status(200).json({ products: [] });
-    }
+    const filtered = (data.items || []).filter(item => {
+      if (!item?.link) return false;
 
-    // Filter only valid Amazon product links
-    const filtered = data.items.filter(item =>
-      item.link &&
-      item.link.includes("amazon.com") &&
-      (item.link.includes("/dp/") || item.link.includes("/gp/product/"))
-    );
+      const url = item.link.toLowerCase();
+
+      if (platform === "amazon") return url.includes("/dp/");
+      if (platform === "dhgate") return url.includes("/product/");
+      if (platform === "temu") return url.endsWith(".html");
+
+      return false;
+    });
+
+    const now = Date.now();
 
     const products = filtered.map((item, i) => {
-
-      const image =
-        item.pagemap?.cse_thumbnail?.[0]?.src ||
-        item.pagemap?.cse_image?.[0]?.src ||
+      let image =
+        item?.pagemap?.cse_thumbnail?.[0]?.src ||
+        item?.pagemap?.cse_image?.[0]?.src ||
         "https://via.placeholder.com/600x600?text=Float+Pick";
 
-      const cleanLink = normalizeAmazonLink(item.link);
+      image = image.replace(/\s/g, "");
+
+      const cleanLink = item.link
+        .split("?")[0]
+        .split("/ref=")[0];
+
+      const id = `${platform}-${now}-${i}`;
 
       return {
-        id: `${now}-${i}`,
-        title: cleanTitle(item.title),
+        id,
+        platform,
+        title: item.title?.substring(0, 90) || "Product",
         image,
-        link: cleanLink
+        originalLink: cleanLink,
+        siteLink: `${BASE_SITE}/s.html?id=${id}`
       };
     });
 
-    cache.timestamp = now;
-    cache.data = products;
+    // ✅ Save daily cache
+    platformCache[platform] = {
+      day: today,
+      data: products
+    };
 
-    return res.status(200).json({ products });
+    return res.status(200).json({
+      cached: false,
+      platform,
+      keywordUsed: activeKeyword,
+      count: products.length,
+      products,
+      site: BASE_SITE
+    });
 
   } catch (error) {
+    console.error("Search crash:", error);
+
     return res.status(500).json({
-      error: "Search failed",
+      error: "Function crashed",
       details: error.message
     });
-  }
-}
-
-
-/* ------------------ HELPERS ------------------ */
-
-function cleanTitle(title) {
-  return title
-    .replace("- Amazon.com", "")
-    .replace("| Amazon", "")
-    .split("|")[0]
-    .substring(0, 80)
-    .trim();
-}
-
-function normalizeAmazonLink(url) {
-  try {
-    const parsed = new URL(url);
-
-    // Extract ASIN
-    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
-    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
-
-    const asin = dpMatch?.[1] || gpMatch?.[1];
-
-    if (!asin) return parsed.origin;
-
-    // Return clean canonical product URL
-    return `https://www.amazon.com/dp/${asin}`;
-
-  } catch {
-    return url;
   }
 }
