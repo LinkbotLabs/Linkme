@@ -197,7 +197,9 @@ card.innerHTML=`
 
 <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now</button>
 <button class="btn" onclick="shareLink()">Share Link</button>
+<button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
 <button class="btn" onclick="shareCard()">Share Full Card</button>
+<button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
 <button class="btn" onclick="createGrokVideo()">Generate 6s AI Video</button>
 `;
 }
@@ -209,6 +211,42 @@ function prevProduct(){currentIndex=(currentIndex-1+products.length)%products.le
 async function shareLink(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
 const p=products[currentIndex];
+  async function sharePinterest(){
+  if(!affiliateId){
+    alert("Affiliate ID required.");
+    return;
+  }
+
+  if(!products.length || !products[currentIndex]){
+    alert("No product loaded yet.");
+    return;
+  }
+
+  const p = products[currentIndex];
+
+  // Create short link from your API
+  const res = await fetch("/api/share",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({...p,link:appendAffiliate(p.link)})
+  });
+
+  const data = await res.json();
+  const smallLink = window.location.origin + "/s.html?id=" + data.id;
+
+  const description = `${p.title} 🔥
+⭐ ${p.rating} stars
+Limited stock trending product.
+Shop here → ${smallLink}`;
+
+  const pinterestUrl =
+    "https://www.pinterest.com/pin/create/button/?" +
+    "url=" + encodeURIComponent(smallLink) +
+    "&media=" + encodeURIComponent(p.image) +
+    "&description=" + encodeURIComponent(description);
+
+  window.open(pinterestUrl, "_blank");
+}
 
 const res=await fetch("/api/share",{
 method:"POST",
