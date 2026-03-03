@@ -55,7 +55,7 @@ export default async function handler(req, res) {
     const today = getDayNumber();
     const cache = platformCache[platform];
 
-    // ✅ If already fetched today → return cached
+    // ✅ Return cached if already fetched today
     if (cache.day === today && cache.data.length) {
       return res.status(200).json({
         cached: true,
@@ -119,12 +119,12 @@ export default async function handler(req, res) {
         platform,
         title: item.title?.substring(0, 90) || "Product",
         image,
-        originalLink: cleanLink,
+        link: cleanLink, // ✅ FIXED HERE
         siteLink: `${BASE_SITE}/s.html?id=${id}`
       };
     });
 
-    // ✅ Save daily cache
+    // ✅ Save cache
     platformCache[platform] = {
       day: today,
       data: products
