@@ -12,16 +12,15 @@ const platformConfigs = {
   amazon: {
     site: "amazon.com",
     keywords: [
-
-  "tiktok made me buy it amazon gadget",
-  "amazon viral gadgets under 50",
-  "amazon cool tech gadgets",
-  "amazon impulse buy gadgets",
-  "amazon trending tech 2025",
-  "amazon must have gadgets",
-  "amazon weird but useful gadgets",
-  "amazon problem solving gadgets"
-]
+      "tiktok made me buy it amazon gadget",
+      "amazon viral gadgets under 50",
+      "amazon cool tech gadgets",
+      "amazon impulse buy gadgets",
+      "amazon trending tech 2025",
+      "amazon must have gadgets",
+      "amazon weird but useful gadgets",
+      "amazon problem solving gadgets"
+    ]
   },
   dhgate: {
     site: "dhgate.com",
@@ -46,20 +45,25 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "no-store");
 
     const platform = (req.query.platform || "amazon").toLowerCase();
-    const manualKeyword = req.query.keyword;
 
     if (!platformConfigs[platform]) {
       return res.status(400).json({ error: "Invalid platform" });
     }
 
+    // ✅ Clean keyword safely (handles spaces automatically)
+    const manualKeyword = req.query.keyword
+      ? decodeURIComponent(req.query.keyword).trim()
+      : null;
+
     const now = Date.now();
     const cache = platformCache[platform];
 
-    // ✅ Return cached results (24h)
+    // ✅ 24h Cache only if NOT manual test
     if (!manualKeyword && cache.data.length && now - cache.timestamp < ONE_DAY) {
       return res.status(200).json({
         cached: true,
         platform,
+        keywordUsed: "cached",
         count: cache.data.length,
         products: cache.data,
         site: BASE_SITE
@@ -72,7 +76,8 @@ export default async function handler(req, res) {
       ? manualKeyword
       : config.keywords[Math.floor(Math.random() * config.keywords.length)];
 
-    const query = `${activeKeyword} site:${config.site} -book -novel -kindle -blog -advertising`;
+    // 🔥 Stronger junk filtering
+    const query = `${activeKeyword} site:${config.site} -book -novel -kindle -cd -vinyl -album -case -cover -blog -advertising`;
 
     const googleRes = await fetch(
       `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
@@ -86,7 +91,6 @@ export default async function handler(req, res) {
       });
     }
 
-    // ✅ STRICT PRODUCT FILTERING
     const filtered = (data.items || []).filter(item => {
       if (!item?.link) return false;
 
@@ -111,20 +115,18 @@ export default async function handler(req, res) {
         .split("?")[0]
         .split("/ref=")[0];
 
-      // 🔥 THIS is your site link format
-      const siteLink = `${BASE_SITE}/s.html?id=${platform}-${now}-${i}`;
+      const id = `${platform}-${now}-${i}`;
 
       return {
-        id: `${platform}-${now}-${i}`,
+        id,
         platform,
         title: item.title?.substring(0, 90) || "Product",
         image,
         originalLink: cleanLink,
-        siteLink
+        siteLink: `${BASE_SITE}/s.html?id=${id}`
       };
     });
 
-    // Cache only if not manual test
     if (!manualKeyword) {
       platformCache[platform] = {
         timestamp: now,
