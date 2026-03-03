@@ -327,60 +327,68 @@ function copyGrok(){navigator.clipboard.writeText(grokText.value);}
 function openGrok(){copyGrok();window.open("https://grok.x.ai/","_blank");}
 
 searchInput.addEventListener("keypress",e=>{if(e.key==="Enter")loadProducts(searchInput.value);});
-let startX = 0;
-let endX = 0;
+/* -------------------- */
+/* SWIPE LOGIC STARTS HERE */
+/* -------------------- */
 
 const cardElement = document.getElementById("card");
+let startX = 0;
+let endX = 0;
+let isDragging = false;
 
-// Touch (mobile)
+// Mobile Touch
 cardElement.addEventListener("touchstart", (e) => {
-  startX = e.changedTouches[0].screenX;
+  startX = e.touches[0].clientX;
 });
 
 cardElement.addEventListener("touchend", (e) => {
-  endX = e.changedTouches[0].screenX;
+  endX = e.changedTouches[0].clientX;
   handleSwipe();
 });
 
-// Mouse (desktop)
+// Desktop Mouse
 cardElement.addEventListener("mousedown", (e) => {
-  startX = e.screenX;
+  isDragging = true;
+  startX = e.clientX;
 });
 
 cardElement.addEventListener("mouseup", (e) => {
-  endX = e.screenX;
+  if(!isDragging) return;
+  endX = e.clientX;
+  isDragging = false;
   handleSwipe();
 });
 
-function handleSwipe() {
-  const threshold = 50;
+function handleSwipe(){
+  const threshold = 60;
 
   if (endX < startX - threshold) {
     slideNext();
-  }
-
-  if (endX > startX + threshold) {
+  } 
+  else if (endX > startX + threshold) {
     slidePrev();
   }
 }
 
-function slideNext() {
+function slideNext(){
   cardElement.classList.add("slide-left");
-
-  setTimeout(() => {
+  setTimeout(()=>{
     nextProduct();
     cardElement.classList.remove("slide-left");
-  }, 200);
+  },250);
 }
 
-function slidePrev() {
+function slidePrev(){
   cardElement.classList.add("slide-right");
-
-  setTimeout(() => {
+  setTimeout(()=>{
     prevProduct();
     cardElement.classList.remove("slide-right");
-  }, 200);
+  },250);
 }
+
+/* -------------------- */
+/* SWIPE LOGIC ENDS HERE */
+/* -------------------- */
 if(!affiliateId)affiliateModal.style.display="flex";
 loadProducts();
 </script>
