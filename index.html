@@ -261,7 +261,7 @@ const url=URL.createObjectURL(blob);
 const a=document.createElement("a");
 a.href=url;a.download="float-card.png";a.click();
 }
-}
+
 
 function createGrokVideo(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
@@ -269,28 +269,44 @@ const p=products[currentIndex];
 const link=appendAffiliate(p.link);
 
 const prompt=`
-Create a HIGH-CONVERTING 6-second vertical TikTok ad.
+Create a HIGH-CONVERTING 6-second vertical TikTok-style product ad.
 
 Product: ${p.title}
 Price: ${p.price}
 Rating: ${p.rating} (${p.reviews}+ reviews)
 
-STRUCTURE:
-0-1s: Bold hook text
-1-3s: Show product in action
-3-5s: Close-up
-5-6s: CTA "SHOP NOW"
+Style: Fast, viral, premium.
+Lighting: Bright, clean, high contrast.
+Mood: Satisfying, problem-solving, impulse-buy energy.
+Camera: Smooth motion, subtle zoom, shallow depth of field.
 
-Final screen URL:
-${link}
+Flow (do NOT show timestamps or structure labels):
 
-Style: fast, viral, premium.
+Opening:
+Start with a visually dynamic, scroll-stopping shot.
+
+Middle:
+Show the product in smooth realistic action.
+
+Detail:
+Cut to a crisp close-up highlighting material and design quality.
+
+Ending:
+Confident final product shot.
+
+Add energetic natural voiceover:
+"Stop wasting time. ${p.title} is going viral with ${p.rating} stars. Tap to shop now."
+
+Do NOT add on-screen text.
+Do NOT add subtitles.
+Do NOT show URLs inside the video.
+Do NOT add countdown timers.
+Do NOT add watermarks.
 `;
 
 grokText.value=prompt;
 grokModal.style.display="flex";
 }
-
 function copyGrok(){navigator.clipboard.writeText(grokText.value);}
 function openGrok(){copyGrok();window.open("https://grok.x.ai/","_blank");}
 
