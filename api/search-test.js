@@ -34,28 +34,28 @@ const platformConfigs = {
 };
 
 export default async function handler(req, res) {
-  res.setHeader("Cache-Control", "no-store");
-
-  const platform = (req.query.platform || "amazon").toLowerCase();
-
-  if (!platformConfigs[platform]) {
-    return res.status(400).json({ error: "Invalid platform" });
-  }
-
-  const now = Date.now();
-  const cache = platformCache[platform];
-
-  // ✅ Return cached if fresh
-  if (cache.data.length && now - cache.timestamp < ONE_DAY) {
-    return res.status(200).json({
-      cached: true,
-      platform,
-      count: cache.data.length,
-      products: cache.data
-    });
-  }
-
   try {
+    res.setHeader("Cache-Control", "no-store");
+
+    const platform = (req.query.platform || "amazon").toLowerCase();
+
+    if (!platformConfigs[platform]) {
+      return res.status(400).json({ error: "Invalid platform" });
+    }
+
+    const now = Date.now();
+    const cache = platformCache[platform];
+
+    // ✅ Return cached if fresh
+    if (cache.data.length && now - cache.timestamp < ONE_DAY) {
+      return res.status(200).json({
+        cached: true,
+        platform,
+        count: cache.data.length,
+        products: cache.data
+      });
+    }
+
     const config = platformConfigs[platform];
 
     const activeKeyword =
@@ -77,45 +77,36 @@ export default async function handler(req, res) {
 
     // ✅ STRICT PRODUCT FILTERING
     const filtered = (data.items || []).filter(item => {
-      if (!item.link) return false;
+      if (!item || !item.link) return false;
 
-      const url = item.link.toLowerCase();
+      const url = String(item.link).toLowerCase();
 
-      if (platform === "amazon") {
-        return url.includes("/dp/");
-      }
-
-      if (platform === "dhgate") {
-        return url.includes("/product/");
-      }
-
-      if (platform === "temu") {
-        return url.endsWith(".html");
-      }
+      if (platform === "amazon") return url.includes("/dp/");
+      if (platform === "dhgate") return url.includes("/product/");
+      if (platform === "temu") return url.endsWith(".html");
 
       return false;
     });
 
     const products = filtered.map((item, i) => {
 
-      // Clean image URL spacing issue
       let image =
-        item.pagemap?.cse_thumbnail?.[0]?.src ||
-        item.pagemap?.cse_image?.[0]?.src ||
+        item?.pagemap?.cse_thumbnail?.[0]?.src ||
+        item?.pagemap?.cse_image?.[0]?.src ||
         "https://via.placeholder.com/600x600?text=Float+Pick";
 
-      image = image.replace(/\s/g, "");
+      image = String(image).replace(/\s/g, "");
+
+      const cleanLink = String(item.link)
+        .split("?")[0]
+        .split("/ref=")[0];
 
       return {
         id: `${platform}-${now}-${i}`,
         platform,
-        title: item.title?.substring(0, 90),
+        title: item.title?.substring(0, 90) || "Product",
         image,
-        const cleanLink = item.link
-  .split("?")[0]
-  .split("/ref=")[0];
-
-link: cleanLink
+        link: cleanLink
       };
     });
 
@@ -133,8 +124,10 @@ link: cleanLink
     });
 
   } catch (error) {
+    console.error("Search test crash:", error);
+
     return res.status(500).json({
-      error: "Search failed",
+      error: "Function crashed",
       details: error.message
     });
   }
