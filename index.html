@@ -273,7 +273,79 @@ const a=document.createElement("a");
 a.href=url;a.download="float-card.png";a.click();
 }
 }
+/* -------------------- */
+/* PROMPT ENGINE START */
+/* -------------------- */
 
+function buildMasterPrompt(p){
+  return {
+    name: p.title,
+    rating: p.rating,
+    reviews: p.reviews,
+    problem: "Dirty surfaces and stubborn grime",
+    outcome: "Powerful steam blasting away dirt instantly",
+    vibe: "Fast-paced, cinematic, premium viral energy",
+    lighting: "Dramatic high-contrast lighting",
+    hookAngles: [
+      "Stop wasting money on cheap versions.",
+      "Nobody told you about this.",
+      "This replaced my old one instantly.",
+      "I didn’t believe this either.",
+      "Amazon’s hidden gem just dropped."
+    ]
+  };
+}
+
+function buildVideoPrompt(data){
+  const hook = data.hookAngles[Math.floor(Math.random()*data.hookAngles.length)];
+
+  return `
+Create a HIGH-CONVERTING 6-second vertical product ad.
+
+Product: ${data.name}
+Rating: ${data.rating} stars with ${data.reviews}+ reviews.
+
+GOAL:
+Make viewers stop scrolling immediately.
+
+STYLE:
+${data.vibe}. ${data.lighting}.
+
+STRUCTURE (do NOT show labels or timestamps):
+Start with a strong scroll-stopping visual.
+Introduce a relatable problem: ${data.problem}.
+Show the product solving it in a satisfying way: ${data.outcome}.
+End with a confident hero shot.
+
+Voiceover tone: energetic, natural, urgent.
+
+Voiceover:
+"${hook} ${data.name} is going viral with ${data.rating} stars. This changes everything."
+
+IMPORTANT:
+No subtitles.
+No on-screen text.
+No URLs.
+No watermarks.
+Under 6 seconds.
+`;
+}
+
+function buildImagePrompt(data){
+  return `
+Cinematic commercial product shot of ${data.name}
+in action showing ${data.outcome}.
+Scene includes ${data.problem}.
+${data.lighting}.
+Ultra realistic.
+High contrast.
+Shallow depth of field.
+Premium advertisement photography.
+NO text.
+NO captions.
+NO typography.
+`;
+}
 function createGrokVideo(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
 const p=products[currentIndex];
@@ -323,6 +395,10 @@ Under 6 seconds.
 grokText.value=prompt;
 grokModal.style.display="flex";
 }
+/* -------------------- */
+/* PROMPT ENGINE END */
+/* -------------------- */
+
 function copyGrok(){navigator.clipboard.writeText(grokText.value);}
 function openGrok(){copyGrok();window.open("https://grok.x.ai/","_blank");}
 
