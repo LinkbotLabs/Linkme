@@ -274,38 +274,40 @@ const prompt=`
 Create a HIGH-CONVERTING 6-second vertical TikTok-style product ad.
 
 Product: ${p.title}
+Rating: ${p.rating} stars with ${p.reviews}+ reviews.
 
-Rating: ${p.rating} (${p.reviews}+ reviews)
+GOAL:
+Make viewers stop scrolling and feel immediate curiosity.
 
-Style: Fast, viral, premium.
-Lighting: Bright, clean, high contrast.
-Mood: Satisfying, problem-solving, impulse-buy energy.
-Camera: Smooth motion, subtle zoom, shallow depth of field.
+STYLE:
+Fast-paced. Dramatic lighting. Smooth cinematic motion.
+Premium, viral energy. Slight tension.
 
-Flow (do NOT show timestamps or structure labels):
+STRUCTURE (do NOT show labels or timestamps):
 
-Opening:
-Start with a visually dynamic, scroll-stopping shot.
+Start with a powerful scroll-stopping visual.
+Begin with movement, close-up detail, or dramatic reveal.
 
-Middle:
-Show the product in smooth realistic action.
+Immediately introduce a relatable problem people face.
 
-Detail:
-Cut to a crisp close-up highlighting material and design quality.
+Show the product solving that problem in a satisfying way.
 
-Ending:
-Confident final product shot.
+End with a confident hero shot of the product.
 
-Add energetic natural voiceover:
-"Stop wasting time. ${p.title} is going viral with ${p.rating} stars. Tap to shop now."
+Voiceover must feel urgent and natural, not robotic.
 
+Voiceover example tone:
+"Stop wasting money on cheap fixes. ${p.title} is going viral for a reason. ${p.rating} stars. This changes everything."
+
+IMPORTANT:
+Do NOT show subtitles.
 Do NOT add on-screen text.
-Do NOT add subtitles.
-Do NOT show URLs inside the video.
-Do NOT add countdown timers.
+Do NOT show URLs.
 Do NOT add watermarks.
+Do NOT mention TikTok.
+Do NOT use countdown timers.
+Keep it under 6 seconds.
 `;
-
 grokText.value=prompt;
 grokModal.style.display="flex";
 }
