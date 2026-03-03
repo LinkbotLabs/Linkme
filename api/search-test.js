@@ -1,5 +1,7 @@
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
+const BASE_SITE = "https://linkmetagshop.vercel.app";
+
 const platformCache = {
   amazon: { timestamp: 0, data: [] },
   dhgate: { timestamp: 0, data: [] },
@@ -14,26 +16,23 @@ const platformConfigs = {
       "amazon viral gadgets",
       "amazon hidden gems",
       "amazon must have under 50",
-      "amazon aesthetic home finds",
       "amazon trending tech 2025"
     ]
   },
   dhgate: {
     site: "dhgate.com",
     keywords: [
-      "dhgate viral gadgets",
-      "dhgate trending products",
-      "dhgate best selling tech",
-      "dhgate hidden gems"
+      "dhgate trending gadgets",
+      "viral dhgate finds",
+      "dhgate best selling tech"
     ]
   },
   temu: {
     site: "temu.com",
     keywords: [
-      "temu viral products",
       "temu trending gadgets",
-      "temu best sellers",
-      "temu hidden finds"
+      "temu viral products",
+      "temu best sellers"
     ]
   }
 };
@@ -43,6 +42,7 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "no-store");
 
     const platform = (req.query.platform || "amazon").toLowerCase();
+    const manualKeyword = req.query.keyword;
 
     if (!platformConfigs[platform]) {
       return res.status(400).json({ error: "Invalid platform" });
@@ -51,85 +51,95 @@ export default async function handler(req, res) {
     const now = Date.now();
     const cache = platformCache[platform];
 
-    // ✅ Serve cached for 24h (no API hit)
-    if (cache.data.length && now - cache.timestamp < ONE_DAY) {
+    // ✅ Return cached results (24h)
+    if (!manualKeyword && cache.data.length && now - cache.timestamp < ONE_DAY) {
       return res.status(200).json({
         cached: true,
         platform,
         count: cache.data.length,
-        products: cache.data
+        products: cache.data,
+        site: BASE_SITE
       });
     }
 
     const config = platformConfigs[platform];
 
-    let allProducts = [];
-    let seenLinks = new Set();
+    const activeKeyword = manualKeyword
+      ? manualKeyword
+      : config.keywords[Math.floor(Math.random() * config.keywords.length)];
 
-    // 🔥 Loop ALL keywords (one-time daily hit)
-    for (const keyword of config.keywords) {
+    const query = `${activeKeyword} site:${config.site} -book -novel -kindle -blog -advertising`;
 
-      const query = `${keyword} site:${config.site} -book -novel -blog -advertising`;
+    const googleRes = await fetch(
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+    );
 
-      const googleRes = await fetch(
-        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
-      );
+    const data = await googleRes.json();
 
-      const data = await googleRes.json();
-      if (!googleRes.ok) continue;
-
-      const filtered = (data.items || []).filter(item => {
-        if (!item || !item.link) return false;
-
-        const url = String(item.link).toLowerCase();
-
-        if (platform === "amazon") return url.includes("/dp/");
-        if (platform === "dhgate") return url.includes("/product/");
-        if (platform === "temu") return url.endsWith(".html");
-
-        return false;
+    if (!googleRes.ok) {
+      return res.status(googleRes.status).json({
+        error: data.error?.message || "Google API error"
       });
-
-      for (const item of filtered) {
-
-        const cleanLink = String(item.link)
-          .split("?")[0]
-          .split("/ref=")[0];
-
-        if (seenLinks.has(cleanLink)) continue;
-        seenLinks.add(cleanLink);
-
-        let image =
-          item?.pagemap?.cse_thumbnail?.[0]?.src ||
-          item?.pagemap?.cse_image?.[0]?.src ||
-          "https://via.placeholder.com/600x600?text=Float+Pick";
-
-        image = String(image).replace(/\s/g, "");
-
-        allProducts.push({
-          id: `${platform}-${Date.now()}-${Math.random()}`,
-          platform,
-          title: item.title?.substring(0, 90) || "Product",
-          image,
-          link: cleanLink
-        });
-      }
     }
 
-    platformCache[platform] = {
-      timestamp: now,
-      data: allProducts
-    };
+    // ✅ STRICT PRODUCT FILTERING
+    const filtered = (data.items || []).filter(item => {
+      if (!item?.link) return false;
+
+      const url = item.link.toLowerCase();
+
+      if (platform === "amazon") return url.includes("/dp/");
+      if (platform === "dhgate") return url.includes("/product/");
+      if (platform === "temu") return url.endsWith(".html");
+
+      return false;
+    });
+
+    const products = filtered.map((item, i) => {
+      let image =
+        item?.pagemap?.cse_thumbnail?.[0]?.src ||
+        item?.pagemap?.cse_image?.[0]?.src ||
+        "https://via.placeholder.com/600x600?text=Float+Pick";
+
+      image = image.replace(/\s/g, "");
+
+      const cleanLink = item.link
+        .split("?")[0]
+        .split("/ref=")[0];
+
+      // 🔥 THIS is your site link format
+      const siteLink = `${BASE_SITE}/s.html?id=${platform}-${now}-${i}`;
+
+      return {
+        id: `${platform}-${now}-${i}`,
+        platform,
+        title: item.title?.substring(0, 90) || "Product",
+        image,
+        originalLink: cleanLink,
+        siteLink
+      };
+    });
+
+    // Cache only if not manual test
+    if (!manualKeyword) {
+      platformCache[platform] = {
+        timestamp: now,
+        data: products
+      };
+    }
 
     return res.status(200).json({
       cached: false,
       platform,
-      count: allProducts.length,
-      products: allProducts
+      keywordUsed: activeKeyword,
+      count: products.length,
+      products,
+      site: BASE_SITE
     });
 
   } catch (error) {
-    console.error("Keyword test crash:", error);
+    console.error("Search test crash:", error);
+
     return res.status(500).json({
       error: "Function crashed",
       details: error.message
