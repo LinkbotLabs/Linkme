@@ -95,6 +95,19 @@ body{
   position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
   font-size:18px;color:#9ca3af;opacity:.7;
 }
+  #card {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.slide-left {
+  transform: translateX(-100px);
+  opacity: 0;
+}
+
+.slide-right {
+  transform: translateX(100px);
+  opacity: 0;
+}
 </style>
 </head>
 <body>
