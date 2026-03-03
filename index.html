@@ -254,16 +254,50 @@ a.href=url;a.download="float-card.png";a.click();
 
 /* GROK VIDEO */
 function buildMasterPrompt(p){
-return {
-name:p.title,
-rating:p.rating,
-reviews:p.reviews,
-problem:"Dirty surfaces and stubborn grime",
-outcome:"Powerful steam blasting away dirt instantly",
-hook:"This changes everything."
-};
-}
 
+  const title = p.title.toLowerCase();
+
+  let problem = "Everyday frustration";
+  let outcome = "Instant visible improvement";
+  let hook = "This changes everything.";
+
+  // Glasses / eye products
+  if(title.includes("glasses") || title.includes("blue light")){
+    problem = "Eye strain from long hours on screens";
+    outcome = "Clear, comfortable vision with reduced blue light fatigue";
+    hook = "Your eyes will thank you.";
+  }
+
+  // Cleaning products
+  else if(title.includes("clean") || title.includes("steam")){
+    problem = "Built-up dirt and stubborn grime";
+    outcome = "Powerful deep cleaning in seconds";
+    hook = "Satisfying and effortless.";
+  }
+
+  // Kitchen gadgets
+  else if(title.includes("kitchen") || title.includes("chopper") || title.includes("slicer")){
+    problem = "Slow and messy food prep";
+    outcome = "Fast, effortless meal prep";
+    hook = "Cooking just got easier.";
+  }
+
+  // Tech gadgets
+  else if(title.includes("led") || title.includes("light") || title.includes("gadget")){
+    problem = "Outdated or boring setup";
+    outcome = "A modern, eye-catching upgrade";
+    hook = "This setup is next level.";
+  }
+
+  return {
+    name: p.title,
+    rating: p.rating,
+    reviews: p.reviews,
+    problem,
+    outcome,
+    hook
+  };
+}
 function createGrokVideo(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
 const p=products[currentIndex];
