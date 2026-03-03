@@ -34,7 +34,6 @@ const platformConfigs = {
 };
 
 export default async function handler(req, res) {
-
   res.setHeader("Cache-Control", "no-store");
 
   const platform = (req.query.platform || "amazon").toLowerCase();
@@ -46,7 +45,7 @@ export default async function handler(req, res) {
   const now = Date.now();
   const cache = platformCache[platform];
 
-  // Return cached if fresh
+  // ✅ Return cached if fresh
   if (cache.data.length && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({
       cached: true,
@@ -57,13 +56,12 @@ export default async function handler(req, res) {
   }
 
   try {
-
     const config = platformConfigs[platform];
 
     const activeKeyword =
       config.keywords[Math.floor(Math.random() * config.keywords.length)];
 
-    const query = `${activeKeyword} site:${config.site} -book -novel -kindle`;
+    const query = `${activeKeyword} site:${config.site} -book -novel -kindle -blog -advertising`;
 
     const googleRes = await fetch(
       `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
@@ -77,16 +75,36 @@ export default async function handler(req, res) {
       });
     }
 
-    const filtered = (data.items || []).filter(item =>
-      item.link && item.link.includes(config.site)
-    );
+    // ✅ STRICT PRODUCT FILTERING
+    const filtered = (data.items || []).filter(item => {
+      if (!item.link) return false;
+
+      const url = item.link.toLowerCase();
+
+      if (platform === "amazon") {
+        return url.includes("/dp/");
+      }
+
+      if (platform === "dhgate") {
+        return url.includes("/product/");
+      }
+
+      if (platform === "temu") {
+        return url.endsWith(".html");
+      }
+
+      return false;
+    });
 
     const products = filtered.map((item, i) => {
 
-      const image =
+      // Clean image URL spacing issue
+      let image =
         item.pagemap?.cse_thumbnail?.[0]?.src ||
         item.pagemap?.cse_image?.[0]?.src ||
         "https://via.placeholder.com/600x600?text=Float+Pick";
+
+      image = image.replace(/\s/g, "");
 
       return {
         id: `${platform}-${now}-${i}`,
@@ -105,6 +123,7 @@ export default async function handler(req, res) {
     return res.status(200).json({
       cached: false,
       platform,
+      keywordUsed: activeKeyword,
       count: products.length,
       products
     });
