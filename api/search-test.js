@@ -12,12 +12,16 @@ const platformConfigs = {
   amazon: {
     site: "amazon.com",
     keywords: [
-      "tiktok made me buy it amazon",
-      "amazon viral gadgets",
-      "amazon hidden gems",
-      "amazon must have under 50",
-      "amazon trending tech 2025"
-    ]
+
+  "tiktok made me buy it amazon gadget",
+  "amazon viral gadgets under 50",
+  "amazon cool tech gadgets",
+  "amazon impulse buy gadgets",
+  "amazon trending tech 2025",
+  "amazon must have gadgets",
+  "amazon weird but useful gadgets",
+  "amazon problem solving gadgets"
+]
   },
   dhgate: {
     site: "dhgate.com",
