@@ -270,43 +270,46 @@ if(!affiliateId){alert("Affiliate ID required.");return;}
 const p=products[currentIndex];
 const link=appendAffiliate(p.link);
 
+const hookAngles = [
+"Stop wasting money on cheap versions.",
+"Nobody told you about this.",
+"This replaced my old one instantly.",
+"I didn’t believe this either.",
+"Amazon’s hidden gem just dropped."
+];
+
+const hook = hookAngles[Math.floor(Math.random()*hookAngles.length)];
+
 const prompt=`
-Create a HIGH-CONVERTING 6-second vertical TikTok-style product ad.
+Create a HIGH-CONVERTING 6-second vertical product ad.
 
 Product: ${p.title}
 Rating: ${p.rating} stars with ${p.reviews}+ reviews.
 
 GOAL:
-Make viewers stop scrolling and feel immediate curiosity.
+Make viewers stop scrolling immediately.
 
 STYLE:
-Fast-paced. Dramatic lighting. Smooth cinematic motion.
-Premium, viral energy. Slight tension.
+Fast-paced. Cinematic. Dramatic lighting. Premium viral energy.
 
 STRUCTURE (do NOT show labels or timestamps):
 
-Start with a powerful scroll-stopping visual.
-Begin with movement, close-up detail, or dramatic reveal.
+Start with a strong scroll-stopping visual.
+Introduce a relatable problem.
+Show the product solving it in a satisfying way.
+End with a confident hero shot.
 
-Immediately introduce a relatable problem people face.
+Voiceover tone: energetic, natural, urgent.
 
-Show the product solving that problem in a satisfying way.
-
-End with a confident hero shot of the product.
-
-Voiceover must feel urgent and natural, not robotic.
-
-Voiceover example tone:
-"Stop wasting money on cheap fixes. ${p.title} is going viral for a reason. ${p.rating} stars. This changes everything."
+Voiceover:
+"${hook} ${p.title} is going viral with ${p.rating} stars. This changes everything."
 
 IMPORTANT:
-Do NOT show subtitles.
-Do NOT add on-screen text.
-Do NOT show URLs.
-Do NOT add watermarks.
-Do NOT mention TikTok.
-Do NOT use countdown timers.
-Keep it under 6 seconds.
+No subtitles.
+No on-screen text.
+No URLs.
+No watermarks.
+Under 6 seconds.
 `;
 grokText.value=prompt;
 grokModal.style.display="flex";
