@@ -10,25 +10,30 @@ const platformConfigs = {
   amazon: {
     site: "amazon.com",
     keywords: [
-      "amazon trending gadgets",
-      "tiktok viral amazon finds",
-      "amazon movers and shakers gadgets"
+      "tiktok made me buy it amazon",
+      "amazon viral gadgets",
+      "amazon hidden gems",
+      "amazon must have under 50",
+      "amazon aesthetic home finds",
+      "amazon trending tech 2025"
     ]
   },
   dhgate: {
     site: "dhgate.com",
     keywords: [
-      "dhgate trending gadgets",
-      "viral dhgate finds",
-      "dhgate best selling tech"
+      "dhgate viral gadgets",
+      "dhgate trending products",
+      "dhgate best selling tech",
+      "dhgate hidden gems"
     ]
   },
   temu: {
     site: "temu.com",
     keywords: [
-      "temu trending gadgets",
       "temu viral products",
-      "temu best sellers"
+      "temu trending gadgets",
+      "temu best sellers",
+      "temu hidden finds"
     ]
   }
 };
@@ -46,7 +51,7 @@ export default async function handler(req, res) {
     const now = Date.now();
     const cache = platformCache[platform];
 
-    // ✅ Return cached if fresh
+    // ✅ Serve cached for 24h (no API hit)
     if (cache.data.length && now - cache.timestamp < ONE_DAY) {
       return res.status(200).json({
         cached: true,
@@ -58,74 +63,73 @@ export default async function handler(req, res) {
 
     const config = platformConfigs[platform];
 
-    const activeKeyword =
-      config.keywords[Math.floor(Math.random() * config.keywords.length)];
+    let allProducts = [];
+    let seenLinks = new Set();
 
-    const query = `${activeKeyword} site:${config.site} -book -novel -kindle -blog -advertising`;
+    // 🔥 Loop ALL keywords (one-time daily hit)
+    for (const keyword of config.keywords) {
 
-    const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
-    );
+      const query = `${keyword} site:${config.site} -book -novel -blog -advertising`;
 
-    const data = await googleRes.json();
+      const googleRes = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+      );
 
-    if (!googleRes.ok) {
-      return res.status(googleRes.status).json({
-        error: data.error?.message || "Google API error"
+      const data = await googleRes.json();
+      if (!googleRes.ok) continue;
+
+      const filtered = (data.items || []).filter(item => {
+        if (!item || !item.link) return false;
+
+        const url = String(item.link).toLowerCase();
+
+        if (platform === "amazon") return url.includes("/dp/");
+        if (platform === "dhgate") return url.includes("/product/");
+        if (platform === "temu") return url.endsWith(".html");
+
+        return false;
       });
+
+      for (const item of filtered) {
+
+        const cleanLink = String(item.link)
+          .split("?")[0]
+          .split("/ref=")[0];
+
+        if (seenLinks.has(cleanLink)) continue;
+        seenLinks.add(cleanLink);
+
+        let image =
+          item?.pagemap?.cse_thumbnail?.[0]?.src ||
+          item?.pagemap?.cse_image?.[0]?.src ||
+          "https://via.placeholder.com/600x600?text=Float+Pick";
+
+        image = String(image).replace(/\s/g, "");
+
+        allProducts.push({
+          id: `${platform}-${Date.now()}-${Math.random()}`,
+          platform,
+          title: item.title?.substring(0, 90) || "Product",
+          image,
+          link: cleanLink
+        });
+      }
     }
-
-    // ✅ STRICT PRODUCT FILTERING
-    const filtered = (data.items || []).filter(item => {
-      if (!item || !item.link) return false;
-
-      const url = String(item.link).toLowerCase();
-
-      if (platform === "amazon") return url.includes("/dp/");
-      if (platform === "dhgate") return url.includes("/product/");
-      if (platform === "temu") return url.endsWith(".html");
-
-      return false;
-    });
-
-    const products = filtered.map((item, i) => {
-
-      let image =
-        item?.pagemap?.cse_thumbnail?.[0]?.src ||
-        item?.pagemap?.cse_image?.[0]?.src ||
-        "https://via.placeholder.com/600x600?text=Float+Pick";
-
-      image = String(image).replace(/\s/g, "");
-
-      const cleanLink = String(item.link)
-        .split("?")[0]
-        .split("/ref=")[0];
-
-      return {
-        id: `${platform}-${now}-${i}`,
-        platform,
-        title: item.title?.substring(0, 90) || "Product",
-        image,
-        link: cleanLink
-      };
-    });
 
     platformCache[platform] = {
       timestamp: now,
-      data: products
+      data: allProducts
     };
 
     return res.status(200).json({
       cached: false,
       platform,
-      keywordUsed: activeKeyword,
-      count: products.length,
-      products
+      count: allProducts.length,
+      products: allProducts
     });
 
   } catch (error) {
-    console.error("Search test crash:", error);
-
+    console.error("Keyword test crash:", error);
     return res.status(500).json({
       error: "Function crashed",
       details: error.message
