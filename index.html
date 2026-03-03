@@ -87,10 +87,6 @@ body{
   position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
   font-size:18px;color:#9ca3af;opacity:.7;
 }
-
-#card{transition: transform 0.25s ease, opacity 0.25s ease;}
-.slide-left{transform: translateX(-100px);opacity:0;}
-.slide-right{transform: translateX(100px);opacity:0;}
 </style>
 </head>
 <body>
@@ -135,12 +131,14 @@ body{
 let products=[],currentIndex=0;
 let affiliateId=localStorage.getItem("affiliateId")||"";
 
+/* STATUS */
 function updateStatus(){
 affiliateStatus.innerHTML=affiliateId?"Affiliate: "+affiliateId:"Affiliate Required";
 affiliateStatus.style.color=affiliateId?"green":"#b45309";
 }
 updateStatus();
 
+/* AFFILIATE */
 function openAffiliate(){affiliateModal.style.display="flex";}
 function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
 
@@ -158,6 +156,7 @@ if(url.includes("tag="+affiliateId))return url;
 return url+(url.includes("?")?"&":"?")+"tag="+affiliateId;
 }
 
+/* LOAD PRODUCTS */
 async function loadProducts(q=""){
 card.innerHTML="Loading...";
 const res=await fetch("/api/search"+(q?"?q="+q:""));
@@ -171,6 +170,7 @@ function generateHook(title){
 return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
 }
 
+/* RENDER */
 function renderProduct(){
 if(!products.length){card.innerHTML="No products found.";return;}
 const p=products[currentIndex];
@@ -199,54 +199,16 @@ card.innerHTML=`
 <button class="btn" onclick="shareLink()">Share Link</button>
 <button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
 <button class="btn" onclick="shareCard()">Share Full Card</button>
-<button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
 <button class="btn" onclick="createGrokVideo()">Generate 6s AI Video</button>
 `;
 }
 
-function nextProduct(){currentIndex=(currentIndex+1)%products.length;renderProduct();}
-function prevProduct(){currentIndex=(currentIndex-1+products.length)%products.length;renderProduct();}
-
 /* SHARE LINK */
 async function shareLink(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
+if(!products.length)return;
+
 const p=products[currentIndex];
-  async function sharePinterest(){
-  if(!affiliateId){
-    alert("Affiliate ID required.");
-    return;
-  }
-
-  if(!products.length || !products[currentIndex]){
-    alert("No product loaded yet.");
-    return;
-  }
-
-  const p = products[currentIndex];
-
-  // Create short link from your API
-  const res = await fetch("/api/share",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({...p,link:appendAffiliate(p.link)})
-  });
-
-  const data = await res.json();
-  const smallLink = window.location.origin + "/s.html?id=" + data.id;
-
-  const description = `${p.title} 🔥
-⭐ ${p.rating} stars
-Limited stock trending product.
-Shop here → ${smallLink}`;
-
-  const pinterestUrl =
-    "https://www.pinterest.com/pin/create/button/?" +
-    "url=" + encodeURIComponent(smallLink) +
-    "&media=" + encodeURIComponent(p.image) +
-    "&description=" + encodeURIComponent(description);
-
-  window.open(pinterestUrl, "_blank");
-}
 
 const res=await fetch("/api/share",{
 method:"POST",
@@ -263,9 +225,40 @@ alert("Copy this link:\n"+smallLink);
 }
 }
 
+/* SHARE PINTEREST */
+async function sharePinterest(){
+if(!affiliateId){alert("Affiliate ID required.");return;}
+if(!products.length)return;
+
+const p=products[currentIndex];
+
+const res=await fetch("/api/share",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({...p,link:appendAffiliate(p.link)})
+});
+const data=await res.json();
+const smallLink=window.location.origin+"/s.html?id="+data.id;
+
+const description=`${p.title} 🔥
+⭐ ${p.rating} stars
+Trending gadget.
+Shop here → ${smallLink}`;
+
+const pinterestUrl=
+"https://www.pinterest.com/pin/create/button/?" +
+"url="+encodeURIComponent(smallLink) +
+"&media="+encodeURIComponent(p.image) +
+"&description="+encodeURIComponent(description);
+
+window.open(pinterestUrl,"_blank");
+}
+
 /* SHARE CARD */
 async function shareCard(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
+if(!products.length)return;
+
 const p=products[currentIndex];
 const template=document.getElementById("squareTemplate");
 
@@ -290,82 +283,74 @@ a.href=url;a.download="float-card.png";a.click();
 }
 }
 
-/* GROK VIDEO */
+/* GROK */
 function buildMasterPrompt(p){
+const title=p.title.toLowerCase();
+let problem="Everyday frustration";
+let outcome="Instant visible improvement";
+let hook="This changes everything.";
 
-  const title = p.title.toLowerCase();
-
-  let problem = "Everyday frustration";
-  let outcome = "Instant visible improvement";
-  let hook = "This changes everything.";
-
-  // Glasses / eye products
-  if(title.includes("glasses") || title.includes("blue light")){
-    problem = "Eye strain from long hours on screens";
-    outcome = "Clear, comfortable vision with reduced blue light fatigue";
-    hook = "Your eyes will thank you.";
-  }
-
-  // Cleaning products
-  else if(title.includes("clean") || title.includes("steam")){
-    problem = "Built-up dirt and stubborn grime";
-    outcome = "Powerful deep cleaning in seconds";
-    hook = "Satisfying and effortless.";
-  }
-
-  // Kitchen gadgets
-  else if(title.includes("kitchen") || title.includes("chopper") || title.includes("slicer")){
-    problem = "Slow and messy food prep";
-    outcome = "Fast, effortless meal prep";
-    hook = "Cooking just got easier.";
-  }
-
-  // Tech gadgets
-  else if(title.includes("led") || title.includes("light") || title.includes("gadget")){
-    problem = "Outdated or boring setup";
-    outcome = "A modern, eye-catching upgrade";
-    hook = "This setup is next level.";
-  }
-
-  return {
-    name: p.title,
-    rating: p.rating,
-    reviews: p.reviews,
-    problem,
-    outcome,
-    hook
-  };
+if(title.includes("glasses")||title.includes("blue light")){
+problem="Eye strain from long hours on screens";
+outcome="Clear, comfortable vision with reduced blue light fatigue";
+hook="Your eyes will thank you.";
 }
+
+return {name:p.title,rating:p.rating,problem,outcome,hook};
+}
+
 function createGrokVideo(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
+if(!products.length)return;
+
 const p=products[currentIndex];
 const master=buildMasterPrompt(p);
+
 grokText.value=`Create a 6-second viral vertical ad for ${master.name}.
 Show the problem: ${master.problem}.
 Show the solution: ${master.outcome}.
 Voiceover: "${master.name} is going viral with ${master.rating} stars. ${master.hook}"
 No text. Under 6 seconds.`;
+
 grokModal.style.display="flex";
 }
 
-function copyGrok(){navigator.clipboard.writeText(grokText.value);}
-function openGrok(){copyGrok();window.open("https://grok.x.ai/","_blank");}
+function copyGrok(){
+navigator.clipboard.writeText(grokText.value);
+alert("Copied ✅");
+}
 
-/* SWIPE */
-const cardElement=document.getElementById("card");
-let startX=0,endX=0;
-
-cardElement.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-cardElement.addEventListener("touchend",e=>{
-endX=e.changedTouches[0].clientX;
-if(endX<startX-60)nextProduct();
-if(endX>startX+60)prevProduct();
-});
+function openGrok(){
+copyGrok();
+window.open("https://grok.x.ai/","_blank");
+}
 
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
 });
+/* SWIPE SUPPORT */
+const cardElement = document.getElementById("card");
 
+let startX = 0;
+let endX = 0;
+
+cardElement.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+});
+
+cardElement.addEventListener("touchend", (e) => {
+  endX = e.changedTouches[0].clientX;
+
+  const diff = startX - endX;
+
+  if (Math.abs(diff) > 60) {
+    if (diff > 0) {
+      nextProduct(); // swipe left
+    } else {
+      prevProduct(); // swipe right
+    }
+  }
+});
 loadProducts();
 </script>
 
