@@ -327,7 +327,60 @@ function copyGrok(){navigator.clipboard.writeText(grokText.value);}
 function openGrok(){copyGrok();window.open("https://grok.x.ai/","_blank");}
 
 searchInput.addEventListener("keypress",e=>{if(e.key==="Enter")loadProducts(searchInput.value);});
+let startX = 0;
+let endX = 0;
 
+const cardElement = document.getElementById("card");
+
+// Touch (mobile)
+cardElement.addEventListener("touchstart", (e) => {
+  startX = e.changedTouches[0].screenX;
+});
+
+cardElement.addEventListener("touchend", (e) => {
+  endX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+// Mouse (desktop)
+cardElement.addEventListener("mousedown", (e) => {
+  startX = e.screenX;
+});
+
+cardElement.addEventListener("mouseup", (e) => {
+  endX = e.screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const threshold = 50;
+
+  if (endX < startX - threshold) {
+    slideNext();
+  }
+
+  if (endX > startX + threshold) {
+    slidePrev();
+  }
+}
+
+function slideNext() {
+  cardElement.classList.add("slide-left");
+
+  setTimeout(() => {
+    nextProduct();
+    cardElement.classList.remove("slide-left");
+  }, 200);
+}
+
+function slidePrev() {
+  cardElement.classList.add("slide-right");
+
+  setTimeout(() => {
+    prevProduct();
+    cardElement.classList.remove("slide-right");
+  }, 200);
+}
 if(!affiliateId)affiliateModal.style.display="flex";
 loadProducts();
 </script>
