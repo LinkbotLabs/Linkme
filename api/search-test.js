@@ -111,7 +111,11 @@ export default async function handler(req, res) {
         platform,
         title: item.title?.substring(0, 90),
         image,
-        link: item.link.split("?")[0]
+        const cleanLink = item.link
+  .split("?")[0]
+  .split("/ref=")[0];
+
+link: cleanLink
       };
     });
 
