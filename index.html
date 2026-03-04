@@ -212,7 +212,9 @@ let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
 /* STATUS */
 
 updateStatus();
-
+if(creatorUnlocked){
+  document.getElementById("supportCard").style.display = "none";
+}
 /* AFFILIATE */
 function openUnlock(){
   document.getElementById("unlockModal").style.display = "flex";
