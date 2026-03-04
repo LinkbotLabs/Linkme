@@ -133,6 +133,42 @@ body{
 <div class="card" id="card">Loading...</div>
 
 <!-- Affiliate Modal -->
+  <!-- Unlock Payment Modal -->
+<div class="modal" id="unlockModal">
+  <div class="modal-content">
+    <h3>🔓 Unlock Creator Mode</h3>
+
+    <p><strong>$19 USD – One Time</strong></p>
+
+    <p>Step 1: Send payment via Wise</p>
+
+    <a href="https://wise.com/pay/me/davids14542"
+       target="_blank"
+       class="btn btn-primary">
+       Pay $19 with Wise
+    </a>
+
+    <p style="margin-top:12px;">
+      Include your email in the payment note.
+    </p>
+
+    <p>
+      Step 2: Email screenshot to:
+      <br>
+      <strong>omnistall70@gmail.com</strong>
+    </p>
+
+    <hr style="margin:20px 0;">
+
+    <p><strong>Already Paid?</strong></p>
+    <input id="unlockCodeInput" placeholder="Enter unlock code"/>
+    <button class="btn btn-primary" onclick="activateCreator()">
+      Activate
+    </button>
+
+    <button class="btn" onclick="closeModal()">Close</button>
+  </div>
+</div>
 <div class="modal" id="affiliateModal">
 <div class="modal-content">
 <h3>Amazon Affiliate ID</h3>
