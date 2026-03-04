@@ -196,6 +196,17 @@ let products=[],currentIndex=0;
 const DEFAULT_AFFILIATE_ID = "davidshort-20"; // <-- your real ID
 let affiliateId = localStorage.getItem("affiliateId") || "";
 let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
+  function updateStatus(){
+  const el = document.getElementById("affiliateStatus");
+
+  if(creatorUnlocked){
+    el.innerHTML = "🟢 Creator Mode Active";
+    el.style.color = "green";
+  }else{
+    el.innerHTML = "🔒 Free Mode (Float Rising Affiliate)";
+    el.style.color = "#b45309";
+  }
+}
 /* STATUS */
 
 updateStatus();
