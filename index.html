@@ -284,47 +284,7 @@ a.href=url;a.download="float-card.png";a.click();
 }
 
 /* GROK */
-function buildMasterPrompt(p){
-const title=p.title.toLowerCase();
-let problem="Everyday frustration";
-let outcome="Instant visible improvement";
-let hook="This changes everything.";
 
-if(title.includes("glasses")||title.includes("blue light")){
-problem="Eye strain from long hours on screens";
-outcome="Clear, comfortable vision with reduced blue light fatigue";
-hook="Your eyes will thank you.";
-}
-
-return {name:p.title,rating:p.rating,problem,outcome,hook};
-}
-
-function createGrokVideo(){
-if(!affiliateId){alert("Affiliate ID required.");return;}
-if(!products.length)return;
-
-const p=products[currentIndex];
-const master=buildMasterPrompt(p);
-
-grokText.value=`Create a 6-second viral vertical ad for ${master.name}.
-Show the problem: ${master.problem}.
-Show the solution: ${master.outcome}.
-Voiceover: "${master.name} is going viral with ${master.rating} stars. ${master.hook}"
-No text. Under 6 seconds.`;
-
-grokModal.style.display="flex";
-}
-
-
-function copyGrok(){
-navigator.clipboard.writeText(grokText.value);
-alert("Copied ✅");
-}
-
-function openGrok(){
-copyGrok();
-window.open("https://grok.x.ai/","_blank");
-}
 
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
