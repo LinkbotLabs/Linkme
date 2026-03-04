@@ -95,7 +95,35 @@ body{
   <div class="wave"></div>
   <h1>Float Rising</h1>
 </div>
+<!-- SUPPORT FLOAT RISING CARD -->
+<div class="card" id="supportCard" style="border:1px solid var(--border);">
 
+  <div class="product-title" style="text-align:center;">
+    Support Float Rising
+  </div>
+
+  <div class="rich" style="text-align:center; font-size:15px;">
+    Create beautiful product cards, high-converting images, 
+    and 6-second lifestyle videos — ready to share to Pinterest 
+    with the link baked in.
+  </div>
+
+  <div class="rich" style="text-align:center; font-size:14px; color:var(--muted);">
+    The free version uses the Float Rising affiliate ID on shared links.
+    <br><br>
+    Unlock Creator Mode to add your own affiliate credentials 
+    and keep 100% of your commissions.
+  </div>
+
+  <button class="btn btn-primary" onclick="openAffiliate()">
+    🔓 Unlock Creator Mode
+  </button>
+
+  <button class="btn" onclick="this.parentElement.style.display='none'">
+    Continue with Free Version
+  </button>
+
+</div>
 <div class="header">
   <button onclick="openAffiliate()">Set Your Affiliate ID</button>
   <div id="affiliateStatus" class="status"></div>
