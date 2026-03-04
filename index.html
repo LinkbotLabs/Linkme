@@ -209,7 +209,9 @@ function updateStatus(){
 updateStatus();
 
 /* AFFILIATE */
-function openAffiliate(){affiliateModal.style.display="flex";}
+function openUnlock(){
+  document.getElementById("unlockModal").style.display = "flex";
+}
 function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
 
 function saveAffiliate(){
