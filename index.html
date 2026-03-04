@@ -216,7 +216,6 @@ function openUnlock(){
   document.getElementById("unlockModal").style.display = "flex";
 }
 function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
-
 function saveAffiliate(){
 
 if(!localStorage.getItem("creatorUnlocked")){
@@ -237,6 +236,7 @@ closeModal();
 updateStatus();
 renderProduct();
 }
+
 if(!val.includes("-")){affiliateError.innerText="Format example: yourname-20";return;}
 affiliateId=val;
 localStorage.setItem("affiliateId",val);
