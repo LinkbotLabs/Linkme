@@ -157,7 +157,8 @@ body{
 
 <script>
 let products=[],currentIndex=0;
-let affiliateId=localStorage.getItem("affiliateId")||"";
+const DEFAULT_AFFILIATE_ID = "davidshort-20"; // <-- your real ID
+let affiliateId = localStorage.getItem("affiliateId") || "";
 
 /* STATUS */
 function updateStatus(){
