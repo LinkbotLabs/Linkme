@@ -284,8 +284,275 @@ a.href=url;a.download="float-card.png";a.click();
 }
 
 /* ===============================
-   
+  /* ===============================
+   GROK – SMART VIDEO ENGINE (FIXED)
+   =============================== */
 
+
+/* ===============================
+   SMART PRODUCT INTELLIGENCE
+   =============================== */
+
+function buildMasterPrompt(p){
+  const title = (p.title || "").toLowerCase();
+
+  let categoryHint = "a better way to handle everyday tasks";
+  let outcome = "a smoother, more enjoyable routine";
+
+  const rules = [
+    {
+      keywords:["glasses","blue light","screen","monitor"],
+      categoryHint:"a better way to handle long screen time",
+      outcome:"clearer, more comfortable vision"
+    },
+    {
+      keywords:["vacuum","mop","clean","floor"],
+      categoryHint:"cleaning your space",
+      outcome:"faster, easier cleaning"
+    },
+    {
+      keywords:["camera","instax","polaroid","photo"],
+      categoryHint:"a better way to capture moments",
+      outcome:"memories you can actually hold"
+    },
+    {
+      keywords:["posture","back","chair","lumbar"],
+      categoryHint:"a better way to sit and work",
+      outcome:"more natural posture and comfort"
+    },
+    {
+      keywords:["skin","face","beauty","serum"],
+      categoryHint:"a better way to care for your skin",
+      outcome:"a naturally refreshed look"
+    },
+    {
+      keywords:["kitchen","cook","knife","food"],
+      categoryHint:"a better way to prep meals",
+      outcome:"faster, smoother cooking"
+    }
+  ];
+
+  rules.forEach(rule=>{
+    if(rule.keywords.some(k=>title.includes(k))){
+      categoryHint = rule.categoryHint;
+      outcome = rule.outcome;
+    }
+  });
+
+  return {
+    name: p.title,
+    categoryHint,
+    outcome
+  };
+}
+
+
+/* ===============================
+   STATIC HOOK IMAGE STYLES (NEW)
+   =============================== */
+
+const hookImageStyles = [
+`Bright minimal modern home.
+Airy daylight.
+Clean neutral tones.`,
+
+`Cozy living room setting.
+Soft window light.
+Calm atmosphere.`,
+
+`Modern apartment interior.
+Natural daylight.
+Simple composition.`,
+
+`Morning routine environment.
+Coffee nearby.
+Soft natural lighting.`,
+
+`Minimal workspace setup.
+Laptop open.
+Neutral aesthetic.`
+];
+
+
+/* ===============================
+   HOOK TEMPLATES (IMAGE + VIDEO SAFE)
+   =============================== */
+
+const hookTemplates = [
+  () => `I didn’t know I needed a better way to handle everyday tasks… but now I reach for it daily.`,
+  () => `I almost scrolled past it… and I’m glad I didn’t.`,
+  () => `I didn’t expect it to become part of my routine… but here we are.`,
+  () => `It’s funny how one small change can make everything easier.`,
+  () => `Sometimes you don’t realize what’s missing… until it’s not.`,
+  () => `I didn’t plan on upgrading anything… but this just made sense.`,
+  () => `I didn’t go online looking for it… but somehow I knew.`
+];
+
+
+/* ===============================
+   SOLUTION TEMPLATES (PRODUCT AWARE)
+   =============================== */
+
+const solutionTemplates = [
+  m => `Meet the ${m.name}. Designed for ${m.outcome}.`,
+  m => `${m.name}. Built for ${m.outcome}.`,
+  m => `${m.name}. A smarter way to improve ${m.categoryHint}.`,
+  m => `${m.name}. Less effort. Better results.`,
+  m => `Now I use the ${m.name}. And it shows.`,
+  m => `${m.name}. One small upgrade — real impact.`,
+  m => `${m.name}. Thoughtfully made for ${m.outcome}.`,
+  m => `It’s the ${m.name}. And honestly, it just works.`
+];
+
+
+/* ===============================
+   VIDEO STYLE ROTATION
+   =============================== */
+
+const videoStyles = [
+`Natural documentary-style footage.
+Soft window light.
+Real home environment.`,
+
+`Slow living aesthetic.
+Warm sunlight.
+Intentional slow movements.`,
+
+`Golden hour warmth.
+Soft shadows.
+Relaxed atmosphere.`,
+
+`Close-up detail shots.
+Hands interacting naturally.`,
+
+`Clean modern interior.
+Product shown naturally in use.`
+];
+
+
+/* ===============================
+   STATIC HOOK IMAGE GENERATOR (NEW)
+   =============================== */
+
+function createGrokHookImage(){
+  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  if(!products.length) return;
+
+  const style = hookImageStyles[Math.floor(Math.random()*hookImageStyles.length)];
+  const template = hookTemplates[Math.floor(Math.random()*hookTemplates.length)];
+  const hook = template();
+
+  grokText.value = `
+Create a high-resolution vertical lifestyle image.
+
+${style}
+
+Show a person casually browsing online on a phone or laptop.
+Do NOT show any specific product.
+Do NOT show brand names.
+Do NOT imply gender.
+
+Mood:
+Calm, natural, relaxed.
+Authentic lifestyle moment.
+
+No text on image.
+
+This image represents the feeling:
+"${hook}"
+`;
+
+  grokModal.style.display = "flex";
+}
+
+
+/* ===============================
+   HOOK VIDEO GENERATOR (6s)
+   =============================== */
+
+function createGrokHook(){
+  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  if(!products.length) return;
+
+  const style = hookImageStyles[Math.floor(Math.random()*hookImageStyles.length)];
+  const template = hookTemplates[Math.floor(Math.random()*hookTemplates.length)];
+  const hook = template();
+
+  grokText.value = `
+Create a 6-second vertical lifestyle video.
+
+${style}
+
+Show a person casually browsing online.
+Do NOT show the product.
+Do NOT show brand names.
+Do NOT imply gender.
+
+Voiceover:
+Softly speaking American narrator.
+Warm, calm, relaxed pacing.
+
+"${hook}"
+
+No text on screen.
+Under 6 seconds.
+`;
+
+  grokModal.style.display = "flex";
+}
+
+
+/* ===============================
+   SOLUTION VIDEO GENERATOR (6s PRODUCT)
+   =============================== */
+
+function createGrokSolution(){
+  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  if(!products.length) return;
+
+  const p = products[currentIndex];
+  const m = buildMasterPrompt(p);
+
+  const style = videoStyles[Math.floor(Math.random()*videoStyles.length)];
+  const template = solutionTemplates[Math.floor(Math.random()*solutionTemplates.length)];
+  const solution = template(m);
+
+  grokText.value = `
+Create a 6-second vertical lifestyle product video.
+
+${style}
+
+Show the ${m.name} naturally in use.
+Visually demonstrate ${m.outcome}.
+Keep it authentic and lifestyle-focused.
+
+Voiceover:
+Softly speaking American narrator.
+Calm and confident tone.
+
+"${solution}"
+
+No text on screen.
+Under 6 seconds.
+`;
+
+  grokModal.style.display = "flex";
+}
+
+
+/* ===============================
+   COPY + OPEN GROK
+   =============================== */
+
+function copyGrok(){
+  navigator.clipboard.writeText(grokText.value);
+  alert("Copied ✅");
+}
+
+function openGrok(){
+  copyGrok();
+  window.open("https://x.ai/grok","_blank");
+}
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
 });
