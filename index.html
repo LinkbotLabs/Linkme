@@ -328,6 +328,17 @@ window.open("https://grok.x.ai/","_blank");
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
 });
+  function nextProduct(){
+  if(!products.length) return;
+  currentIndex = (currentIndex + 1) % products.length;
+  renderProduct();
+}
+
+function prevProduct(){
+  if(!products.length) return;
+  currentIndex = (currentIndex - 1 + products.length) % products.length;
+  renderProduct();
+}
 /* SWIPE SUPPORT */
 const cardElement = document.getElementById("card");
 
