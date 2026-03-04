@@ -235,7 +235,7 @@ card.innerHTML=`
 }
 /* SHARE LINK */
 async function shareLink(){
-if(!affiliateId){alert("Affiliate ID required.");return;}
+
 if(!products.length)return;
 
 const p=products[currentIndex];
@@ -257,7 +257,7 @@ alert("Copy this link:\n"+smallLink);
 
 /* SHARE PINTEREST */
 async function sharePinterest(){
-if(!affiliateId){alert("Affiliate ID required.");return;}
+
 if(!products.length)return;
 
 const p=products[currentIndex];
@@ -286,7 +286,7 @@ window.open(pinterestUrl,"_blank");
 
 /* SHARE CARD */
 async function shareCard(){
-if(!affiliateId){alert("Affiliate ID required.");return;}
+
 if(!products.length)return;
 
 const p=products[currentIndex];
@@ -465,7 +465,7 @@ Product shown naturally in use.`
    =============================== */
 
 function createGrokHookImage(){
-  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  
   if(!products.length) return;
 
   const style = hookImageStyles[Math.floor(Math.random()*hookImageStyles.length)];
@@ -501,7 +501,7 @@ This image represents the feeling:
    =============================== */
 
 function createGrokHook(){
-  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  
   if(!products.length) return;
 
   const style = hookImageStyles[Math.floor(Math.random()*hookImageStyles.length)];
@@ -537,7 +537,7 @@ Under 6 seconds.
    =============================== */
 
 function createGrokSolution(){
-  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  
   if(!products.length) return;
 
   const p = products[currentIndex];
