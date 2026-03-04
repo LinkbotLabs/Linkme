@@ -311,6 +311,12 @@ p.sold=Math.floor(Math.random()*1200+300);
 p.urgency=Math.floor(Math.random()*10+3);
 
 card.innerHTML=`
+${creatorUnlocked ? `
+  <div class="creator-badge">
+    <div class="mini-wave"></div>
+    <span>Float Rising</span>
+  </div>
+` : ``}
 <img src="${p.image}">
 <div class="product-title">${p.title}</div>
 <div class="hook">${generateHook(p.title)}</div>
