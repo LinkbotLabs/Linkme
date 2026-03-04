@@ -379,7 +379,56 @@ window.open(pinterestUrl,"_blank");
 }
 
 /* SHARE CARD */
-  
+  async function saveCardImage(){
+if(!products.length)return;
+
+try{
+
+const p=products[currentIndex];
+const template=document.getElementById("squareTemplate");
+
+template.innerHTML=`
+<div style="padding:120px;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:center;">
+<h1 style="font-family:Playfair Display;font-size:70px;">${p.title}</h1>
+<img src="${p.image}" style="width:70%;margin:40px auto;border-radius:20px;">
+<div style="margin-top:40px;font-size:42px;font-weight:700;">TAP TO SHOP</div>
+${!creatorUnlocked ? `<div class="watermark">Float Rising</div>` : ``}
+</div>`;
+
+await new Promise(r=>setTimeout(r,300));
+
+const canvas=await html2canvas(template,{useCORS:true,scale:2});
+const dataUrl=canvas.toDataURL("image/png");
+
+// Convert base64 → blob (Safari safe)
+const response=await fetch(dataUrl);
+const blob=await response.blob();
+
+const file=new File([blob],"float-product-card.png",{type:"image/png"});
+
+// Try native share first (best UX)
+if(navigator.share){
+await navigator.share({
+files:[file],
+title:p.title
+});
+return;
+}
+
+// Fallback download
+const a=document.createElement("a");
+a.href=dataUrl;
+a.download="float-product-card.png";
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+
+}catch(err){
+alert("Image failed. Try again.");
+console.error(err);
+}
+}
+
 
 
 
