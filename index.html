@@ -379,7 +379,18 @@ window.open(pinterestUrl,"_blank");
 }
 
 /* SHARE CARD */
-  
+  function saveCardImage(){
+  if(!products.length) return;
+
+  const p = products[currentIndex];
+
+  const url = `/api/og?title=${encodeURIComponent(p.title)}
+  &image=${encodeURIComponent(p.image)}
+  &rating=${p.rating}
+  &reviews=${p.reviews}`;
+
+  window.open(url, "_blank");
+}
 
 
 /* GROK – SIMPLE 6s VIDEO PROMPT */
