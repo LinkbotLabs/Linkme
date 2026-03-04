@@ -284,82 +284,10 @@ a.href=url;a.download="float-card.png";a.click();
 }
 
 
-/* GROK */
+
 /* GROK SPLIT VIDEO MODE */
 
-function buildMasterPrompt(p){
-  const title = p.title.toLowerCase();
-  let problem = "everyday frustration";
-  let outcome = "a simple improvement";
-  let hookLine = "There’s a better way.";
 
-  if(title.includes("glasses") || title.includes("blue light")){
-    problem = "long hours on screens causing eye strain";
-    outcome = "reduced blue light fatigue and clearer vision";
-    hookLine = "Your eyes will feel the difference.";
-  }
-
-  return {
-    name: p.title,
-    rating: p.rating,
-    problem,
-    outcome,
-    hookLine
-  };
-}
-
-function createGrokVideos(){
-  if(!affiliateId){alert("Affiliate ID required.");return;}
-  if(!products.length)return;
-
-  const p = products[currentIndex];
-  const master = buildMasterPrompt(p);
-
-  /* VIDEO 1 – PROBLEM HOOK */
-  let prompt1 = "";
-  prompt1 += "Create a 6-second vertical cinematic ad.\n\n";
-  prompt1 += "Focus ONLY on the problem. Do not show the product.\n";
-  prompt1 += "Soft natural lighting. Close-up lifestyle shots. Calm pacing.\n\n";
-  prompt1 += "Voiceover tone: warm, measured, natural breathing.\n";
-  prompt1 += "Do not rush delivery.\n\n";
-  prompt1 += "Voiceover:\n";
-  prompt1 += "\"Long hours on screens... can be exhausting.\n";
-  prompt1 += "The strain builds.\n";
-  prompt1 += "You feel it.\"\n\n";
-  prompt1 += "No text on screen. Under 6 seconds.";
-
-  /* VIDEO 2 – SOLUTION */
-  let prompt2 = "";
-  prompt2 += "Create a 6-second vertical cinematic product reveal.\n\n";
-  prompt2 += "Show the product naturally in use.\n";
-  prompt2 += "Soft premium aesthetic. Slow camera movement.\n\n";
-  prompt2 += "Voiceover tone: calm, confident, relaxed.\n";
-  prompt2 += "Natural pauses between lines.\n\n";
-  prompt2 += "Voiceover:\n";
-  prompt2 += "\"There’s a better way.\n";
-  prompt2 += master.name + " helps with " + master.problem + ".\n";
-  prompt2 += master.hookLine + "\"\n\n";
-  prompt2 += "No text on screen. Under 6 seconds.";
-
-  grokText.value =
-    "🎥 VIDEO 1 – PROBLEM\n\n" +
-    prompt1 +
-    "\n\n-----------------------------\n\n" +
-    "🎥 VIDEO 2 – SOLUTION\n\n" +
-    prompt2;
-
-  grokModal.style.display = "flex";
-}
-
-function copyGrok(){
-  navigator.clipboard.writeText(grokText.value);
-  alert("Copied both scripts ✅");
-}
-
-function openGrok(){
-  copyGrok();
-  window.open("https://x.ai/grok","_blank");
-}
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
 });
