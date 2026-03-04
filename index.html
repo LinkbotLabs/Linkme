@@ -161,10 +161,7 @@ const DEFAULT_AFFILIATE_ID = "davidshort-20"; // <-- your real ID
 let affiliateId = localStorage.getItem("affiliateId") || "";
 
 /* STATUS */
-function updateStatus(){
-affiliateStatus.innerHTML=affiliateId?"Affiliate: "+affiliateId:"Affiliate Required";
-affiliateStatus.style.color=affiliateId?"green":"#b45309";
-}
+
 updateStatus();
 
 /* AFFILIATE */
