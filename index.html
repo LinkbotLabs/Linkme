@@ -184,11 +184,6 @@ localStorage.setItem("affiliateId",val);
 closeModal();updateStatus();renderProduct();
 }
 
-function appendAffiliate(url){
-if(!affiliateId)return url;
-if(url.includes("tag="+affiliateId))return url;
-return url+(url.includes("?")?"&":"?")+"tag="+affiliateId;
-}
 
 /* LOAD PRODUCTS */
 async function loadProducts(q=""){
