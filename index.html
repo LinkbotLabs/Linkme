@@ -15,6 +15,32 @@
   --muted:#6b7280;
   --border:#e5e7eb;
 }
+  .creator-badge{
+  position:absolute;
+  top:18px;
+  right:18px;
+  background:rgba(255,255,255,0.9);
+  backdrop-filter:blur(6px);
+  padding:8px 14px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.creator-badge .mini-wave{
+  width:28px;
+  height:6px;
+  border-top:2px solid #111;
+  border-radius:100% 100% 0 0;
+}
+
+.creator-badge span{
+  font-family:'Playfair Display';
+  font-size:12px;
+  letter-spacing:.5px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:'Inter',sans-serif;
