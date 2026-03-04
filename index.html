@@ -252,7 +252,17 @@ renderProduct();
 function generateHook(title){
 return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
 }
+function activateCreator(){
+  const code = document.getElementById("unlockCodeInput").value.trim();
 
+  if(code === "CREATOR19"){
+    localStorage.setItem("creatorUnlocked","true");
+    alert("Creator Mode Activated ✅");
+    location.reload();
+  } else {
+    alert("Invalid Code");
+  }
+}
 /* RENDER */
 function renderProduct(){
 if(!products.length){card.innerHTML="No products found.";return;}
