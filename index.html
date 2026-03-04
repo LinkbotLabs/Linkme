@@ -283,78 +283,8 @@ a.href=url;a.download="float-card.png";a.click();
 }
 }
 
+
 /* GROK */
-/* GROK */
-function buildMasterPrompt(p){
-  const title = p.title.toLowerCase();
-
-  let problem = "Everyday frustration";
-  let outcome = "A simple upgrade that works";
-
-  if(title.includes("glasses") || title.includes("blue light")){
-    problem = "Long hours on screens";
-    outcome = "More comfortable vision with reduced eye strain";
-  }
-
-  return { 
-    name: p.title,
-    problem,
-    outcome
-  };
-}
-
-function createGrokVideo(){
-  if(!affiliateId){alert("Affiliate ID required.");return;}
-  if(!products.length)return;
-
-  const p = products[currentIndex];
-  const master = buildMasterPrompt(p);
-
-  grokText.value = `
-Create a 6-second vertical product ad.
-
-Visual style:
-Soft natural lighting.
-Cinematic close-ups.
-Premium, minimal aesthetic.
-Slow camera movement.
-
-Voiceover tone:
-Calm. Clear. Confident.
-Relaxed pacing.
-Natural breathing between sentences.
-No announcer voice.
-No hype energy.
-
-Structure:
-Open with the problem.
-Pause.
-Reveal the product in use.
-End with a clean hero shot.
-
-Voiceover:
-"${master.problem}?
-You feel it.
-${master.name} helps…
-and makes a real difference."
-
-No text on screen.
-No captions.
-No subtitles.
-Under 6 seconds.
-`;
-
-  grokModal.style.display = "flex";
-}
-
-function copyGrok(){
-  navigator.clipboard.writeText(grokText.value);
-}
-
-function openGrok(){
-  navigator.clipboard.writeText(grokText.value);
-  window.open("https://x.ai/grok","_blank");
-}
 
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
