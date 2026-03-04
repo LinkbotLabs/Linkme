@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
 <meta property="og:title" content="${escapeHtml(product.title)}" />
 <meta property="og:description" content="Trending gadget on Float Rising. Tap to shop." />
-<meta property="og:image" content="${product.image}" />
+<meta property="og:image" content="${siteUrl}/api/card-image?id=${id}" />
 <meta property="og:url" content="${siteUrl}/api/share-page?id=${id}" />
 <meta name="twitter:card" content="summary_large_image" />
 
