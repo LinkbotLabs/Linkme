@@ -184,7 +184,13 @@ localStorage.setItem("affiliateId",val);
 closeModal();updateStatus();renderProduct();
 }
 
+function appendAffiliate(url){
+  const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
 
+  if(url.includes("tag=")) return url;
+
+  return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
+}
 /* LOAD PRODUCTS */
 async function loadProducts(q=""){
 card.innerHTML="Loading...";
