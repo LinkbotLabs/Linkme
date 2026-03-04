@@ -193,6 +193,7 @@ card.innerHTML=`
 <br>✔ Viral trending gadget
 </div>
 
+card.innerHTML = `
 <div class="cta-box">LIMITED STOCK — SHOP NOW</div>
 
 <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now</button>
@@ -201,8 +202,8 @@ card.innerHTML=`
 <button class="btn" onclick="shareCard()">Share Full Card</button>
 <button class="btn" onclick="createGrokHook()">🎥 Generate Hook</button>
 <button class="btn btn-primary" onclick="createGrokSolution()">✨ Generate Solution</button>
+`;
 }
-
 /* SHARE LINK */
 async function shareLink(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
