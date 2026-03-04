@@ -171,39 +171,7 @@ return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
 }
 
 /* RENDER */
-function renderProduct(){
-if(!products.length){card.innerHTML="No products found.";return;}
-const p=products[currentIndex];
 
-p.rating=(4.6+Math.random()*0.3).toFixed(1);
-p.reviews=Math.floor(Math.random()*800+200);
-p.sold=Math.floor(Math.random()*1200+300);
-p.urgency=Math.floor(Math.random()*10+3);
-
-card.innerHTML=`
-<img src="${p.image}">
-<div class="product-title">${p.title}</div>
-<div class="hook">${generateHook(p.title)}</div>
-<div class="stars">⭐ ${p.rating} • ${p.reviews}+ reviews</div>
-
-<div class="rich">
-✨ Why You’ll Love It:
-<br>✔ ${p.sold}+ sold
-<br>✔ Only ${p.urgency} left in stock
-<br>✔ Viral trending gadget
-</div>
-
-card.innerHTML = `
-<div class="cta-box">LIMITED STOCK — SHOP NOW</div>
-
-<button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now</button>
-<button class="btn" onclick="shareLink()">Share Link</button>
-<button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
-<button class="btn" onclick="shareCard()">Share Full Card</button>
-<button class="btn" onclick="createGrokHook()">🎥 Generate Hook</button>
-<button class="btn btn-primary" onclick="createGrokSolution()">✨ Generate Solution</button>
-`;
-}
 /* SHARE LINK */
 async function shareLink(){
 if(!affiliateId){alert("Affiliate ID required.");return;}
