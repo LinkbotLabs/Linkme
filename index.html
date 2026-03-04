@@ -215,7 +215,25 @@ function openUnlock(){
 function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
 
 function saveAffiliate(){
-const val=affiliateInput.value.trim();
+
+if(!localStorage.getItem("creatorUnlocked")){
+  alert("Please unlock Creator Mode first.");
+  return;
+}
+
+const val = affiliateInput.value.trim();
+
+if(!val.includes("-")){
+  affiliateError.innerText="Format example: yourname-20";
+  return;
+}
+
+affiliateId = val;
+localStorage.setItem("affiliateId",val);
+closeModal();
+updateStatus();
+renderProduct();
+}
 if(!val.includes("-")){affiliateError.innerText="Format example: yourname-20";return;}
 affiliateId=val;
 localStorage.setItem("affiliateId",val);
