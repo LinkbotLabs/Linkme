@@ -34,6 +34,7 @@ export default async function handler(req, res) {
 <meta property="og:description" content="Trending gadget on Float Rising. Tap to shop." />
 <meta property="og:image" content="${siteUrl}/api/card-image?id=${id}" />
 <meta property="og:url" content="${siteUrl}/api/share-page?id=${id}" />
+<meta property="og:type" content="product" />
 <meta name="twitter:card" content="summary_large_image" />
 
 <meta http-equiv="refresh" content="0; url=${redirectUrl}" />
