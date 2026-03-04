@@ -286,7 +286,256 @@ a.href=url;a.download="float-card.png";a.click();
 
 
 /* ===============================
- 
+ /* ===============================
+   GROK – SMART SPLIT VIDEO ENGINE
+   =============================== */
+
+
+/* ===============================
+   SMART PRODUCT INTELLIGENCE
+   =============================== */
+
+function buildMasterPrompt(p){
+  const title = (p.title || "").toLowerCase();
+
+  // Universal fallback (works for any category)
+  let categoryHint = "a better way to handle everyday tasks";
+  let outcome = "a smoother, more enjoyable routine";
+
+  const rules = [
+    {
+      keywords:["glasses","blue light","screen","monitor"],
+      categoryHint:"a better way to handle long screen time",
+      outcome:"clearer, more comfortable vision"
+    },
+    {
+      keywords:["vacuum","mop","clean","floor"],
+      categoryHint:"a better way to clean your space",
+      outcome:"faster, easier cleaning"
+    },
+    {
+      keywords:["camera","instax","polaroid","photo"],
+      categoryHint:"a better way to capture moments",
+      outcome:"memories you can actually hold"
+    },
+    {
+      keywords:["posture","back","chair","lumbar"],
+      categoryHint:"a better way to sit and work",
+      outcome:"more natural posture and comfort"
+    },
+    {
+      keywords:["skin","face","beauty","serum"],
+      categoryHint:"a better way to care for your skin",
+      outcome:"a naturally refreshed look"
+    },
+    {
+      keywords:["kitchen","cook","knife","food"],
+      categoryHint:"a better way to prep meals",
+      outcome:"faster, smoother cooking"
+    }
+  ];
+
+  rules.forEach(rule=>{
+    if(rule.keywords.some(k=>title.includes(k))){
+      categoryHint = rule.categoryHint;
+      outcome = rule.outcome;
+    }
+  });
+
+  return {
+    name: p.title,
+    categoryHint,
+    outcome
+  };
+}
+
+
+/* ===============================
+   HOOK PROMPTS (10 ROTATING)
+   =============================== */
+
+const hookTemplates = [
+
+`"I didn’t think I needed ${m.categoryHint}… but now I use it every day."`,
+
+`"I wasn’t looking for ${m.categoryHint}… and now it’s part of my routine."`,
+
+`"I almost skipped ${m.categoryHint}… now I wouldn’t."`,
+
+`"I didn’t expect much from ${m.categoryHint}… but it made a difference."`,
+
+`"I didn’t plan on upgrading to ${m.categoryHint}… now I’m glad I did."`,
+
+`"It turns out ${m.categoryHint} changes more than you think."`,
+
+`"I didn’t realize ${m.categoryHint} could feel this simple."`,
+
+`"Sometimes ${m.categoryHint} is all it takes."`,
+
+`"I didn’t think about ${m.categoryHint}… until I tried it."`,
+
+`"I didn’t know I needed ${m.categoryHint}… but now I reach for it daily."`
+];
+
+
+/* ===============================
+   SOLUTION PROMPTS (10 ROTATING)
+   =============================== */
+
+const solutionTemplates = [
+
+`"Meet the ${m.name}. Designed for ${m.outcome}."`,
+
+`"${m.name}. Built for ${m.outcome}."`,
+
+`"${m.name}. A smarter way to experience ${m.categoryHint.replace("a better way to ","")}."`,
+
+`"${m.name}. Simple. Practical. Effective."`,
+
+`"Now I use the ${m.name}. And it shows."`,
+
+`"${m.name}. One small upgrade — real impact."`,
+
+`"${m.name}. It just fits into the routine."`,
+
+`"${m.name}. Less effort. Better results."`,
+
+`"${m.name}. Thoughtfully made for ${m.outcome}."`,
+
+`"It’s the ${m.name}. And honestly, it just works."`
+];
+
+
+/* ===============================
+   VIDEO STYLE ROTATION (10)
+   =============================== */
+
+const videoStyles = [
+
+`Natural documentary-style footage.
+Real home environment.
+Soft window light.
+Slight handheld movement.`,
+
+`Slow living aesthetic.
+Morning routine setting.
+Warm sunlight.
+Intentional slow movements.`,
+
+`Bright minimal modern home.
+Airy daylight.
+Clean composition.`,
+
+`Casual vertical social style.
+Authentic and natural lighting.`,
+
+`Golden hour warmth.
+Soft shadows.
+Relaxed atmosphere.`,
+
+`First-person POV routine moment.
+Quiet ambient sound.`,
+
+`Cozy domestic setting.
+Muted earthy tones.`,
+
+`Clean kitchen or workspace scene.
+Natural side lighting.`,
+
+`Close-up detail shots.
+Hands interacting naturally.`,
+
+`Everyday unpolished home moment.
+Natural light only.`
+];
+
+
+/* ===============================
+   HOOK GENERATOR
+   =============================== */
+
+function createGrokHook(){
+  if(!affiliateId){alert("Affiliate ID required.");return;}
+  if(!products.length)return;
+
+  const p = products[currentIndex];
+  const m = buildMasterPrompt(p);
+
+  const style = videoStyles[Math.floor(Math.random()*videoStyles.length)];
+  const template = hookTemplates[Math.floor(Math.random()*hookTemplates.length)];
+  const hook = eval("`" + template + "`");
+
+  grokText.value = `
+Create a 6-second vertical lifestyle video.
+
+${style}
+
+Do not clearly show the product yet.
+Focus on natural routine moments.
+
+Voiceover:
+Softly speaking American narrator.
+Warm, calm, relaxed pacing.
+
+${hook}
+
+No text on screen.
+Under 6 seconds.
+`;
+
+  grokModal.style.display="flex";
+}
+
+
+/* ===============================
+   SOLUTION GENERATOR
+   =============================== */
+
+function createGrokSolution(){
+  if(!affiliateId){alert("Affiliate ID required.");return;}
+  if(!products.length)return;
+
+  const p = products[currentIndex];
+  const m = buildMasterPrompt(p);
+
+  const style = videoStyles[Math.floor(Math.random()*videoStyles.length)];
+  const template = solutionTemplates[Math.floor(Math.random()*solutionTemplates.length)];
+  const solution = eval("`" + template + "`");
+
+  grokText.value = `
+Create a 6-second vertical lifestyle product reveal.
+
+${style}
+
+Show the product naturally in use.
+
+Voiceover:
+Softly speaking American narrator.
+Calm and confident tone.
+
+${solution}
+
+No text on screen.
+Under 6 seconds.
+`;
+
+  grokModal.style.display="flex";
+}
+
+
+/* ===============================
+   COPY + OPEN GROK
+   =============================== */
+
+function copyGrok(){
+  navigator.clipboard.writeText(grokText.value);
+  alert("Copied ✅");
+}
+
+function openGrok(){
+  copyGrok();
+  window.open("https://x.ai/grok","_blank");
+}
 
 searchInput.addEventListener("keypress",e=>{
 if(e.key==="Enter")loadProducts(searchInput.value);
