@@ -379,7 +379,34 @@ window.open(pinterestUrl,"_blank");
 }
 
 /* SHARE CARD */
+async function saveCardImage(){
+if(!products.length)return;
 
+const p=products[currentIndex];
+const template=document.getElementById("squareTemplate");
+
+template.innerHTML=`
+<div style="padding:120px;text-align:center;height:100%;display:flex;flex-direction:column;justify-content:center;">
+<h1 style="font-family:Playfair Display;font-size:70px;">${p.title}</h1>
+<img src="${p.image}" style="width:70%;margin:40px auto;border-radius:20px;">
+<div style="margin-top:40px;font-size:42px;font-weight:700;">TAP TO SHOP</div>
+<div class="watermark">Float Rising</div>
+</div>`;
+
+await new Promise(r=>setTimeout(r,300));
+
+const canvas=await html2canvas(template,{useCORS:true,scale:2});
+const dataUrl=canvas.toDataURL("image/png");
+
+const link=document.createElement("a");
+link.href=dataUrl;
+link.download="float-product-card.png";
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+
+alert("Image saved ✅ Upload it to Grok to create your video.");
+}
 /* GROK – SIMPLE 6s VIDEO PROMPT */
 function createGrokVideoPrompt(){
 if(!products.length)return;
