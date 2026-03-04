@@ -125,7 +125,9 @@ body{
 
 </div>
 <div class="header">
-  <button onclick="openUnlock()">Creator Mode</button>
+  <button onclick="creatorUnlocked ? document.getElementById('affiliateModal').style.display='flex' : openUnlock()">
+  Creator Mode
+</button>
   <div id="affiliateStatus" class="status"></div>
   <input id="searchInput" placeholder="Search trending gadgets..."/>
 </div>
