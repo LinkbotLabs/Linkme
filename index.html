@@ -1,281 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Float Rising</title>
-<meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-<style>
-:root{
-  --bg:#f4f4f2;
-  --card:#f9f9f7;
-  --muted:#6b7280;
-  --border:#e5e7eb;
-}
-  .creator-badge{
-  position:absolute;
-  top:18px;
-  right:18px;
-  background:rgba(255,255,255,0.9);
-  backdrop-filter:blur(6px);
-  padding:8px 14px;
-  border-radius:999px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.creator-badge .mini-wave{
-  width:28px;
-  height:6px;
-  border-top:2px solid #111;
-  border-radius:100% 100% 0 0;
-}
-
-.creator-badge span{
-  font-family:'Playfair Display';
-  font-size:12px;
-  letter-spacing:.5px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  color:#111;
-}
-.brand{text-align:center;margin-bottom:30px;}
-.wave{width:120px;height:20px;margin:0 auto 10px;border-top:2px solid #111;border-radius:100% 100% 0 0;}
-.brand h1{font-family:'Playfair Display';font-size:32px;letter-spacing:1.5px;}
-
-.header{width:100%;max-width:420px;margin-bottom:24px;}
-.header input,.header button{
-  width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);
-  margin-bottom:8px;font-size:15px;
-}
-.header button{background:#111;color:white;border:none;font-weight:600;cursor:pointer;}
-
-.status{text-align:center;font-size:13px;margin:6px 0;}
-
-.card{
-  width:100%;max-width:420px;background:var(--card);
-  border-radius:24px;padding:28px 24px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.06);
-  margin-bottom:24px;
-}
-.card img{
-  width:100%;border-radius:16px;margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-.product-title{
-  font-family:'Playfair Display';
-  font-size:22px;text-align:center;margin-bottom:12px;
-}
-.hook{text-align:center;color:var(--muted);margin-bottom:16px;}
-.rich{font-size:14px;line-height:1.6;margin:12px 0;}
-.stars{text-align:center;font-size:14px;margin:10px 0;}
-.cta-box{
-  background:#111;color:white;
-  padding:14px;border-radius:14px;
-  text-align:center;margin:16px 0;
-  font-weight:600;
-}
-.btn{
-  width:100%;padding:14px;border-radius:14px;
-  border:1px solid var(--border);
-  background:white;margin-bottom:10px;font-weight:600;cursor:pointer;
-}
-.btn-primary{background:#111;color:white;border:none;}
-
-.modal{
-  position:fixed;inset:0;background:rgba(0,0,0,0.6);
-  display:none;align-items:center;justify-content:center;
-}
-.modal-content{
-  background:white;padding:28px;border-radius:20px;
-  width:90%;max-width:420px;text-align:center;
-}
-.modal textarea{
-  width:100%;height:180px;margin:12px 0;padding:12px;
-  border-radius:12px;border:1px solid var(--border);
-}
-.error{color:red;font-size:13px;margin-top:6px;}
-
-.share-template{position:absolute;left:-9999px;background:white;}
-.watermark{
-  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
-  font-size:18px;color:#9ca3af;opacity:.7;
-}
-</style>
-</head>
-<body>
-
-<div class="brand">
-  <div class="wave"></div>
-  <h1>Float Rising</h1>
-</div>
-<!-- SUPPORT FLOAT RISING CARD -->
-<div class="card" id="supportCard" style="border:1px solid var(--border);">
-
-  <div class="product-title" style="text-align:center;">
-    Support Float Rising
-  </div>
-
-  <div class="rich" style="text-align:center; font-size:15px;">
-    Create beautiful product cards, high-converting images, 
-    and 6-second lifestyle videos — ready to share to Pinterest 
-    with the link baked in.
-  </div>
-
-  <div class="rich" style="text-align:center; font-size:14px; color:var(--muted);">
-    The free version uses the Float Rising affiliate ID on shared links.
-    <br><br>
-    Unlock Creator Mode to add your own affiliate credentials 
-    and keep 100% of your commissions.
-  </div>
-
-  <button class="btn btn-primary" onclick="openUnlock()">
-    🔓 Unlock Creator Mode
-  </button>
-
-  <button class="btn" onclick="this.parentElement.style.display='none'">
-    Continue with Free Version
-  </button>
-
-</div>
-<div class="header">
-  <button onclick="creatorUnlocked ? document.getElementById('affiliateModal').style.display='flex' : openUnlock()">
-  Creator Mode
-</button>
-  <div id="affiliateStatus" class="status"></div>
-  <input id="searchInput" placeholder="Search trending gadgets..."/>
-</div>
-
-<div class="card" id="card">Loading...</div>
-
-<!-- Affiliate Modal -->
-  <!-- Unlock Payment Modal -->
-<div class="modal" id="unlockModal">
-  <div class="modal-content">
-    <h3>🔓 Unlock Creator Mode</h3>
-
-    <p><strong>$19 USD – One Time</strong></p>
-
-    <p>Step 1: Send payment via Wise</p>
-
-    <a href="https://wise.com/pay/me/davids14542"
-       target="_blank"
-       class="btn btn-primary">
-       Pay $19 with Wise
-    </a>
-
-    <p style="margin-top:12px;">
-      Include your email in the payment note.
-    </p>
-
-    <p>
-      Step 2: Email screenshot to:
-      <br>
-      <strong>omnistall70@gmail.com</strong>
-    </p>
-
-    <hr style="margin:20px 0;">
-
-    <p><strong>Already Paid?</strong></p>
-    <input id="unlockCodeInput" placeholder="Enter unlock code"/>
-    <button class="btn btn-primary" onclick="activateCreator()">
-      Activate
-    </button>
-
-    <button class="btn" onclick="closeModal()">Close</button>
-  </div>
-</div>
-<div class="modal" id="affiliateModal">
-<div class="modal-content">
-<h3>Amazon Affiliate ID</h3>
-<input id="affiliateInput" placeholder="yourname-20"/>
-<div id="affiliateError" class="error"></div>
-<button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
-</div>
-</div>
-
-<!-- Grok Modal -->
-<div class="modal" id="grokModal">
-<div class="modal-content">
-<h3>6s Viral Video Script</h3>
-<textarea id="grokText"></textarea>
-<button class="btn" onclick="copyGrok()">Copy</button>
-<button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
-<button class="btn" onclick="closeModal()">Close</button>
-</div>
-</div>
-
-<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
-
 <script>
 let products=[],currentIndex=0;
-const DEFAULT_AFFILIATE_ID = "davidshort-20"; // <-- your real ID
-let affiliateId = localStorage.getItem("affiliateId") || "";
-let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
-  function updateStatus(){
-  const el = document.getElementById("affiliateStatus");
 
-  if(creatorUnlocked){
-    el.innerHTML = "🟢 Creator Mode Active";
-    el.style.color = "green";
-  }else{
-    el.innerHTML = "🔒 Free Mode (Float Rising Affiliate)";
-    el.style.color = "#b45309";
-  }
-}
+const DEFAULT_AFFILIATE_ID="davidshort-20";
+let affiliateId=localStorage.getItem("affiliateId")||"";
+let creatorUnlocked=localStorage.getItem("creatorUnlocked")==="true";
+
 /* STATUS */
-
+function updateStatus(){
+const el=document.getElementById("affiliateStatus");
+if(creatorUnlocked){
+el.innerHTML="🟢 Creator Mode Active";
+el.style.color="green";
+}else{
+el.innerHTML="🔒 Free Mode (Float Rising Affiliate)";
+el.style.color="#b45309";
+}}
 updateStatus();
 if(creatorUnlocked){
-  document.getElementById("supportCard").style.display = "none";
+document.getElementById("supportCard").style.display="none";
 }
-/* AFFILIATE */
+
+/* UNLOCK */
 function openUnlock(){
-  document.getElementById("unlockModal").style.display = "flex";
+document.getElementById("unlockModal").style.display="flex";
 }
-function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
+function closeModal(){
+document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
+}
+function activateCreator(){
+const code=document.getElementById("unlockCodeInput").value.trim();
+if(code==="CREATOR19"){
+localStorage.setItem("creatorUnlocked","true");
+alert("Creator Mode Activated ✅");
+location.reload();
+}else alert("Invalid Code");
+}
+
+/* AFFILIATE */
 function saveAffiliate(){
-
-if(!localStorage.getItem("creatorUnlocked")){
-  alert("Please unlock Creator Mode first.");
-  return;
+if(!creatorUnlocked){
+alert("Please unlock Creator Mode first.");
+return;
 }
-
-const val = affiliateInput.value.trim();
-
+const val=affiliateInput.value.trim();
 if(!val.includes("-")){
-  affiliateError.innerText="Format example: yourname-20";
-  return;
+affiliateError.innerText="Format example: yourname-20";
+return;
 }
-
-affiliateId = val;
+affiliateId=val;
 localStorage.setItem("affiliateId",val);
 closeModal();
 updateStatus();
 renderProduct();
 }
-
-
-
 function appendAffiliate(url){
-  const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
-
-  if(url.includes("tag=")) return url;
-
-  return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
+const activeId=affiliateId||DEFAULT_AFFILIATE_ID;
+if(url.includes("tag="))return url;
+return url+(url.includes("?")?"&":"?")+"tag="+activeId;
 }
+
 /* LOAD PRODUCTS */
 async function loadProducts(q=""){
 card.innerHTML="Loading...";
@@ -289,20 +72,13 @@ renderProduct();
 function generateHook(title){
 return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
 }
-function activateCreator(){
-  const code = document.getElementById("unlockCodeInput").value.trim();
 
-  if(code === "CREATOR19"){
-    localStorage.setItem("creatorUnlocked","true");
-    alert("Creator Mode Activated ✅");
-    location.reload();
-  } else {
-    alert("Invalid Code");
-  }
-}
 /* RENDER */
 function renderProduct(){
-if(!products.length){card.innerHTML="No products found.";return;}
+if(!products.length){
+card.innerHTML="No products found.";
+return;
+}
 const p=products[currentIndex];
 
 p.rating=(4.6+Math.random()*0.3).toFixed(1);
@@ -311,12 +87,12 @@ p.sold=Math.floor(Math.random()*1200+300);
 p.urgency=Math.floor(Math.random()*10+3);
 
 card.innerHTML=`
-${creatorUnlocked ? `
-  <div class="creator-badge">
-    <div class="mini-wave"></div>
-    <span>Float Rising</span>
-  </div>
-` : ``}
+${creatorUnlocked?`
+<div class="creator-badge">
+<div class="mini-wave"></div>
+<span>Float Rising</span>
+</div>`:``}
+
 <img src="${p.image}">
 <div class="product-title">${p.title}</div>
 <div class="hook">${generateHook(p.title)}</div>
@@ -335,16 +111,13 @@ ${creatorUnlocked ? `
 <button class="btn" onclick="shareLink()">Share Link</button>
 <button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
 <button class="btn" onclick="shareCard()">Share Full Card</button>
-<button class="btn" onclick="createGrokHookImage()">🖼 Generate Hook Image</button>
-<button class="btn" onclick="createGrokHook()">🎥 Generate Hook</button>
-<button class="btn btn-primary" onclick="createGrokSolution()">✨ Generate Solution</button>
+<button class="btn btn-primary" onclick="createGrokVideoPrompt()">🎥 Generate 6s Video Prompt</button>
 `;
 }
+
 /* SHARE LINK */
 async function shareLink(){
-
 if(!products.length)return;
-
 const p=products[currentIndex];
 
 const res=await fetch("/api/share",{
@@ -357,16 +130,12 @@ const smallLink=window.location.origin+"/s.html?id="+data.id;
 
 if(navigator.share){
 navigator.share({title:p.title,text:smallLink});
-}else{
-alert("Copy this link:\n"+smallLink);
-}
+}else alert("Copy this link:\n"+smallLink);
 }
 
 /* SHARE PINTEREST */
 async function sharePinterest(){
-
 if(!products.length)return;
-
 const p=products[currentIndex];
 
 const res=await fetch("/api/share",{
@@ -375,7 +144,7 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({...p,link:appendAffiliate(p.link)})
 });
 const data=await res.json();
-const smallLink = window.location.origin + "/api/share-page?id=" + data.id;
+const smallLink=window.location.origin+"/api/share-page?id="+data.id;
 
 const description=`${p.title} 🔥
 ⭐ ${p.rating} stars
@@ -393,9 +162,7 @@ window.open(pinterestUrl,"_blank");
 
 /* SHARE CARD */
 async function shareCard(){
-
 if(!products.length)return;
-
 const p=products[currentIndex];
 const template=document.getElementById("squareTemplate");
 
@@ -411,7 +178,7 @@ await new Promise(r=>setTimeout(r,400));
 const canvas=await html2canvas(template,{useCORS:true,scale:2});
 const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));
 
-if(navigator.canShare && navigator.canShare({files:[new File([blob],"card.png",{type:"image/png"})]})){
+if(navigator.canShare&&navigator.canShare({files:[new File([blob],"card.png",{type:"image/png"})]})){
 await navigator.share({files:[new File([blob],"card.png",{type:"image/png"})],title:p.title});
 }else{
 const url=URL.createObjectURL(blob);
@@ -420,315 +187,73 @@ a.href=url;a.download="float-card.png";a.click();
 }
 }
 
-/* ===============================
-  /* ===============================
-   GROK – SMART VIDEO ENGINE (FIXED)
-   =============================== */
+/* GROK – SIMPLE 6s VIDEO PROMPT */
+function createGrokVideoPrompt(){
+if(!products.length)return;
+const p=products[currentIndex];
 
+grokText.value=`
+Create a 6-second vertical 9:16 product video using the uploaded product card image.
 
-/* ===============================
-   SMART PRODUCT INTELLIGENCE
-   =============================== */
+Structure:
+- Start with the full product card centered.
+- Slow cinematic zoom in.
+- The product image pops slightly forward in soft 3D depth.
+- Add subtle floating shadow.
+- Cut to 2–3 quick lifestyle shots showing real use.
+- End back on the product card with smooth zoom.
 
-function buildMasterPrompt(p){
-  const title = (p.title || "").toLowerCase();
+Style:
+Clean, modern, premium.
+Soft natural lighting.
+No text overlays.
+No added logos.
 
-  let categoryHint = "a better way to handle everyday tasks";
-  let outcome = "a smoother, more enjoyable routine";
-
-  const rules = [
-    {
-      keywords:["glasses","blue light","screen","monitor"],
-      categoryHint:"a better way to handle long screen time",
-      outcome:"clearer, more comfortable vision"
-    },
-    {
-      keywords:["vacuum","mop","clean","floor"],
-      categoryHint:"cleaning your space",
-      outcome:"faster, easier cleaning"
-    },
-    {
-      keywords:["camera","instax","polaroid","photo"],
-      categoryHint:"a better way to capture moments",
-      outcome:"memories you can actually hold"
-    },
-    {
-      keywords:["posture","back","chair","lumbar"],
-      categoryHint:"a better way to sit and work",
-      outcome:"more natural posture and comfort"
-    },
-    {
-      keywords:["skin","face","beauty","serum"],
-      categoryHint:"a better way to care for your skin",
-      outcome:"a naturally refreshed look"
-    },
-    {
-      keywords:["kitchen","cook","knife","food"],
-      categoryHint:"a better way to prep meals",
-      outcome:"faster, smoother cooking"
-    }
-  ];
-
-  rules.forEach(rule=>{
-    if(rule.keywords.some(k=>title.includes(k))){
-      categoryHint = rule.categoryHint;
-      outcome = rule.outcome;
-    }
-  });
-
-  return {
-    name: p.title,
-    categoryHint,
-    outcome
-  };
-}
-
-
-/* ===============================
-   STATIC HOOK IMAGE STYLES (NEW)
-   =============================== */
-
-const hookImageStyles = [
-`Bright minimal modern home.
-Airy daylight.
-Clean neutral tones.`,
-
-`Cozy living room setting.
-Soft window light.
-Calm atmosphere.`,
-
-`Modern apartment interior.
-Natural daylight.
-Simple composition.`,
-
-`Morning routine environment.
-Coffee nearby.
-Soft natural lighting.`,
-
-`Minimal workspace setup.
-Laptop open.
-Neutral aesthetic.`
-];
-
-
-/* ===============================
-   HOOK TEMPLATES (IMAGE + VIDEO SAFE)
-   =============================== */
-
-const hookTemplates = [
-  () => `I didn’t know I needed a better way to handle everyday tasks… but now I reach for it daily.`,
-  () => `I almost scrolled past it… and I’m glad I didn’t.`,
-  () => `I didn’t expect it to become part of my routine… but here we are.`,
-  () => `It’s funny how one small change can make everything easier.`,
-  () => `Sometimes you don’t realize what’s missing… until it’s not.`,
-  () => `I didn’t plan on upgrading anything… but this just made sense.`,
-  () => `I didn’t go online looking for it… but somehow I knew.`
-];
-
-
-/* ===============================
-   SOLUTION TEMPLATES (PRODUCT AWARE)
-   =============================== */
-
-const solutionTemplates = [
-  m => `Meet the ${m.name}. Designed for ${m.outcome}.`,
-  m => `${m.name}. Built for ${m.outcome}.`,
-  m => `${m.name}. A smarter way to improve ${m.categoryHint}.`,
-  m => `${m.name}. Less effort. Better results.`,
-  m => `Now I use the ${m.name}. And it shows.`,
-  m => `${m.name}. One small upgrade — real impact.`,
-  m => `${m.name}. Thoughtfully made for ${m.outcome}.`,
-  m => `It’s the ${m.name}. And honestly, it just works.`
-];
-
-
-/* ===============================
-   VIDEO STYLE ROTATION
-   =============================== */
-
-const videoStyles = [
-`Natural documentary-style footage.
-Soft window light.
-Real home environment.`,
-
-`Slow living aesthetic.
-Warm sunlight.
-Intentional slow movements.`,
-
-`Golden hour warmth.
-Soft shadows.
-Relaxed atmosphere.`,
-
-`Close-up detail shots.
-Hands interacting naturally.`,
-
-`Clean modern interior.
-Product shown naturally in use.`
-];
-
-
-/* ===============================
-   STATIC HOOK IMAGE GENERATOR (NEW)
-   =============================== */
-
-function createGrokHookImage(){
-  
-  if(!products.length) return;
-
-  const style = hookImageStyles[Math.floor(Math.random()*hookImageStyles.length)];
-  const template = hookTemplates[Math.floor(Math.random()*hookTemplates.length)];
-  const hook = template();
-
-  grokText.value = `
-Create a high-resolution vertical lifestyle image.
-
-${style}
-
-Show a person casually browsing online on a phone or laptop.
-Do NOT show any specific product.
-Do NOT show brand names.
-Do NOT imply gender.
-
-Mood:
-Calm, natural, relaxed.
-Authentic lifestyle moment.
-
-No text on image.
-
-This image represents the feeling:
-"${hook}"
-`;
-
-  grokModal.style.display = "flex";
-}
-
-
-/* ===============================
-   HOOK VIDEO GENERATOR (6s)
-   =============================== */
-
-function createGrokHook(){
-  
-  if(!products.length) return;
-
-  const style = hookImageStyles[Math.floor(Math.random()*hookImageStyles.length)];
-  const template = hookTemplates[Math.floor(Math.random()*hookTemplates.length)];
-  const hook = template();
-
-  grokText.value = `
-Create a 6-second vertical lifestyle video.
-
-${style}
-
-Show a person casually browsing online.
-Do NOT show the product.
-Do NOT show brand names.
-Do NOT imply gender.
-
-Voiceover:
-Softly speaking American narrator.
-Warm, calm, relaxed pacing.
-
-"${hook}"
-
-No text on screen.
+Energy:
+Pinterest-ready.
 Under 6 seconds.
+Designed to drive clicks.
 `;
 
-  grokModal.style.display = "flex";
+document.querySelector("#grokModal h3").innerText="6s Product Video Prompt";
+document.getElementById("grokModal").style.display="flex";
 }
-
-
-/* ===============================
-   SOLUTION VIDEO GENERATOR (6s PRODUCT)
-   =============================== */
-
-function createGrokSolution(){
-  
-  if(!products.length) return;
-
-  const p = products[currentIndex];
-  const m = buildMasterPrompt(p);
-
-  const style = videoStyles[Math.floor(Math.random()*videoStyles.length)];
-  const template = solutionTemplates[Math.floor(Math.random()*solutionTemplates.length)];
-  const solution = template(m);
-
-  grokText.value = `
-Create a 6-second vertical lifestyle product video.
-
-${style}
-
-Show the ${m.name} naturally in use.
-Visually demonstrate ${m.outcome}.
-Keep it authentic and lifestyle-focused.
-
-Voiceover:
-Softly speaking American narrator.
-Calm and confident tone.
-
-"${solution}"
-
-No text on screen.
-Under 6 seconds.
-`;
-
-  grokModal.style.display = "flex";
-}
-
-
-/* ===============================
-   COPY + OPEN GROK
-   =============================== */
 
 function copyGrok(){
-  navigator.clipboard.writeText(grokText.value);
-  alert("Copied ✅");
+navigator.clipboard.writeText(grokText.value);
+alert("Copied ✅");
 }
-
 function openGrok(){
-  copyGrok();
-  window.open("https://x.ai/grok","_blank");
-}
-searchInput.addEventListener("keypress",e=>{
-if(e.key==="Enter")loadProducts(searchInput.value);
-});
-  function nextProduct(){
-  if(!products.length) return;
-  currentIndex = (currentIndex + 1) % products.length;
-  renderProduct();
+copyGrok();
+window.open("https://x.ai/grok","_blank");
 }
 
+/* SWIPE */
+function nextProduct(){
+if(!products.length)return;
+currentIndex=(currentIndex+1)%products.length;
+renderProduct();
+}
 function prevProduct(){
-  if(!products.length) return;
-  currentIndex = (currentIndex - 1 + products.length) % products.length;
-  renderProduct();
+if(!products.length)return;
+currentIndex=(currentIndex-1+products.length)%products.length;
+renderProduct();
 }
-/* SWIPE SUPPORT */
-const cardElement = document.getElementById("card");
 
-let startX = 0;
-let endX = 0;
+const cardElement=document.getElementById("card");
+let startX=0,endX=0;
 
-cardElement.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].clientX;
+cardElement.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+cardElement.addEventListener("touchend",e=>{
+endX=e.changedTouches[0].clientX;
+const diff=startX-endX;
+if(Math.abs(diff)>60){
+if(diff>0)nextProduct();
+else prevProduct();
+}
 });
 
-cardElement.addEventListener("touchend", (e) => {
-  endX = e.changedTouches[0].clientX;
-
-  const diff = startX - endX;
-
-  if (Math.abs(diff) > 60) {
-    if (diff > 0) {
-      nextProduct(); // swipe left
-    } else {
-      prevProduct(); // swipe right
-    }
-  }
-});
 loadProducts();
 </script>
-
-</body>
-</html>
