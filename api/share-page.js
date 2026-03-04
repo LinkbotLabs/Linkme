@@ -35,6 +35,8 @@ export default async function handler(req, res) {
 <meta property="og:image" content="${siteUrl}/api/card-image?id=${id}" />
 <meta property="og:url" content="${siteUrl}/api/share-page?id=${id}" />
 <meta property="og:type" content="product" />
+<meta property="og:site_name" content="Float Rising" />
+<meta name="robots" content="index, follow" />
 <meta name="twitter:card" content="summary_large_image" />
 
 <meta http-equiv="refresh" content="0; url=${redirectUrl}" />
