@@ -375,7 +375,7 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({...p,link:appendAffiliate(p.link)})
 });
 const data=await res.json();
-const smallLink=window.location.origin+"/s.html?id="+data.id;
+const smallLink = window.location.origin + "/api/share-page?id=" + data.id;
 
 const description=`${p.title} 🔥
 ⭐ ${p.rating} stars
