@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 <meta property="og:url" content="${siteUrl}/api/share-page?id=${id}" />
 <meta name="twitter:card" content="summary_large_image" />
 
-<meta http-equiv="refresh" content="0; url=${redirectUrl}" />
+<meta http-equiv="refresh" content="3; url=${redirectUrl}" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
