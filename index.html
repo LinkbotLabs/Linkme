@@ -283,7 +283,219 @@ a.href=url;a.download="float-card.png";a.click();
 }
 }
 
+/* ===============================
+   GROK – SMART VIDEO ENGINE (FIXED)
+   =============================== */
 
+
+/* ===============================
+   SMART PRODUCT INTELLIGENCE
+   =============================== */
+
+function buildMasterPrompt(p){
+  const title = (p.title || "").toLowerCase();
+
+  let categoryHint = "a better way to handle everyday tasks";
+  let outcome = "a smoother, more enjoyable routine";
+
+  const rules = [
+    {
+      keywords:["glasses","blue light","screen","monitor"],
+      categoryHint:"a better way to handle long screen time",
+      outcome:"clearer, more comfortable vision"
+    },
+    {
+      keywords:["vacuum","mop","clean","floor"],
+      categoryHint:"a better way to clean your space",
+      outcome:"faster, easier cleaning"
+    },
+    {
+      keywords:["camera","instax","polaroid","photo"],
+      categoryHint:"a better way to capture moments",
+      outcome:"memories you can actually hold"
+    },
+    {
+      keywords:["posture","back","chair","lumbar"],
+      categoryHint:"a better way to sit and work",
+      outcome:"more natural posture and comfort"
+    },
+    {
+      keywords:["skin","face","beauty","serum"],
+      categoryHint:"a better way to care for your skin",
+      outcome:"a naturally refreshed look"
+    },
+    {
+      keywords:["kitchen","cook","knife","food"],
+      categoryHint:"a better way to prep meals",
+      outcome:"faster, smoother cooking"
+    }
+  ];
+
+  rules.forEach(rule=>{
+    if(rule.keywords.some(k=>title.includes(k))){
+      categoryHint = rule.categoryHint;
+      outcome = rule.outcome;
+    }
+  });
+
+  return {
+    name: p.title,
+    categoryHint,
+    outcome
+  };
+}
+
+
+/* ===============================
+   HOOK TEMPLATES (FUNCTION BASED)
+   =============================== */
+
+const hookTemplates = [
+  m => `I didn’t think I needed ${m.categoryHint}… but now I use it every day.`,
+  m => `I wasn’t looking for ${m.categoryHint}… and now it’s part of my routine.`,
+  m => `I almost skipped ${m.categoryHint}… now I wouldn’t.`,
+  m => `I didn’t expect much from ${m.categoryHint}… but it made a difference.`,
+  m => `I didn’t plan on upgrading to ${m.categoryHint}… now I’m glad I did.`,
+  m => `It turns out ${m.categoryHint} changes more than you think.`,
+  m => `I didn’t realize ${m.categoryHint} could feel this simple.`,
+  m => `Sometimes ${m.categoryHint} is all it takes.`,
+  m => `I didn’t think about ${m.categoryHint}… until I tried it.`,
+  m => `I didn’t know I needed ${m.categoryHint}… but now I reach for it daily.`
+];
+
+
+/* ===============================
+   SOLUTION TEMPLATES (FUNCTION BASED)
+   =============================== */
+
+const solutionTemplates = [
+  m => `Meet the ${m.name}. Designed for ${m.outcome}.`,
+  m => `${m.name}. Built for ${m.outcome}.`,
+  m => `${m.name}. A smarter way to experience ${m.categoryHint.replace("a better way to ","")}.`,
+  m => `${m.name}. Simple. Practical. Effective.`,
+  m => `Now I use the ${m.name}. And it shows.`,
+  m => `${m.name}. One small upgrade — real impact.`,
+  m => `${m.name}. It just fits into the routine.`,
+  m => `${m.name}. Less effort. Better results.`,
+  m => `${m.name}. Thoughtfully made for ${m.outcome}.`,
+  m => `It’s the ${m.name}. And honestly, it just works.`
+];
+
+
+/* ===============================
+   VIDEO STYLE ROTATION
+   =============================== */
+
+const videoStyles = [
+`Natural documentary-style footage.
+Real home environment.
+Soft window light.
+Slight handheld movement.`,
+
+`Slow living aesthetic.
+Morning routine setting.
+Warm sunlight.
+Intentional slow movements.`,
+
+`Bright minimal modern home.
+Airy daylight.
+Clean composition.`,
+
+`Casual vertical social style.
+Authentic and natural lighting.`,
+
+`Golden hour warmth.
+Soft shadows.
+Relaxed atmosphere.`,
+
+`First-person POV routine moment.
+Quiet ambient sound.`,
+
+`Cozy domestic setting.
+Muted earthy tones.`,
+
+`Clean kitchen or workspace scene.
+Natural side lighting.`,
+
+`Close-up detail shots.
+Hands interacting naturally.`,
+
+`Everyday unpolished home moment.
+Natural light only.`
+];
+
+
+/* ===============================
+   HOOK GENERATOR
+   =============================== */
+
+function createGrokHook(){
+  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  if(!products.length) return;
+
+  const p = products[currentIndex];
+  const m = buildMasterPrompt(p);
+
+  const style = videoStyles[Math.floor(Math.random()*videoStyles.length)];
+  const template = hookTemplates[Math.floor(Math.random()*hookTemplates.length)];
+  const hook = template(m);
+
+  grokText.value = `
+Create a 6-second vertical lifestyle video.
+
+${style}
+
+Do not clearly show the product yet.
+Focus on natural routine moments.
+
+Voiceover:
+Softly speaking American narrator.
+Warm, calm, relaxed pacing.
+
+${hook}
+
+No text on screen.
+Under 6 seconds.
+`;
+
+  grokModal.style.display = "flex";
+}
+
+
+/* ===============================
+   SOLUTION GENERATOR
+   =============================== */
+
+function createGrokSolution(){
+  if(!affiliateId){ alert("Affiliate ID required."); return; }
+  if(!products.length) return;
+
+  const p = products[currentIndex];
+  const m = buildMasterPrompt(p);
+
+  const style = videoStyles[Math.floor(Math.random()*videoStyles.length)];
+  const template = solutionTemplates[Math.floor(Math.random()*solutionTemplates.length)];
+  const solution = template(m);
+
+  grokText.value = `
+Create a 6-second vertical lifestyle product reveal.
+
+${style}
+
+Show the product naturally in use.
+
+Voiceover:
+Softly speaking American narrator.
+Calm and confident tone.
+
+${solution}
+
+No text on screen.
+Under 6 seconds.
+`;
+
+  grokModal.style.display = "flex";
+}
 
 
 
