@@ -237,11 +237,7 @@ updateStatus();
 renderProduct();
 }
 
-if(!val.includes("-")){affiliateError.innerText="Format example: yourname-20";return;}
-affiliateId=val;
-localStorage.setItem("affiliateId",val);
-closeModal();updateStatus();renderProduct();
-}
+
 
 function appendAffiliate(url){
   const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
