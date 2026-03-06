@@ -533,6 +533,47 @@ Generate 6s Video
 <button class="btn" onclick="nextProduct()">
 Next Product
 </button>
+function sharePinterest(){
+
+const p=products[currentIndex]
+
+const url=appendAffiliate(p.link)
+
+const text=`${p.title} 🔥 Trending gadget`
+
+const pinterest=
+"https://www.pinterest.com/pin/create/button/?" +
+"url="+encodeURIComponent(url) +
+"&media="+encodeURIComponent(p.image) +
+"&description="+encodeURIComponent(text)
+
+window.open(pinterest,"_blank")
+
+}
+
+
+function createGrokVideoPrompt(){
+
+const p=products[currentIndex]
+
+grokText.value=
+`Create a 6 second vertical 9:16 product video.
+
+Product: ${p.title}
+
+Start with the product image centered.
+Slow cinematic zoom.
+Show 2 quick lifestyle scenes.
+End on the product image.
+
+Style: modern, clean, premium.
+Lighting: soft natural light.
+No logos.
+Designed for Pinterest or TikTok.`
+
+document.getElementById("grokModal").style.display="flex"
+
+}
 /* SWIPE */
 
 function nextProduct(){
