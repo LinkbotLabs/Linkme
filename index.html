@@ -107,6 +107,19 @@ body{
   font-weight:700;
   letter-spacing:1px;
 }
+  .brand-watermark {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  color: #9ca3af;           /* muted gray */
+  opacity: 0.6;
+  pointer-events: none;     /* doesn't block clicks */
+  letter-spacing: 0.5px;
+  z-index: 1;
+}
 .btn{
   width:100%;padding:14px;border-radius:14px;
   border:1px solid var(--border);
