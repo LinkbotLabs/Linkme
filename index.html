@@ -121,10 +121,51 @@ body{
   position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
   font-size:18px;color:#9ca3af;opacity:.7;
 }
+  #infoTab{
+  position:fixed;
+  left:0;
+  top:40%;
+  z-index:9999;
+}
+
+#infoToggle{
+  background:#111;
+  color:#fff;
+  border:none;
+  padding:12px 14px;
+  cursor:pointer;
+  border-radius:0 8px 8px 0;
+}
+
+#infoPanel{
+  position:fixed;
+  left:-260px;
+  top:0;
+  width:260px;
+  height:100%;
+  background:#fff;
+  padding:20px;
+  box-shadow:2px 0 10px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+
+#infoPanel.open{
+  left:0;
+}
 </style>
 </head>
 <body>
+<div id="infoTab">
+  <button id="infoToggle">ℹ️</button>
 
+  <div id="infoPanel">
+    <h2>About Float Rising</h2>
+    <p>
+      Discover trending gadgets, viral Amazon finds, and unique products
+      people are loving right now. Click any product to explore and shop.
+    </p>
+  </div>
+</div>
 <div class="brand">
   <div class="wave"></div>
   <h1>Float Rising</h1>
