@@ -49,28 +49,74 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Day-based offset for daily revolving variety
-    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / ONE_DAY);
-    const startIndex = dayOfYear % keywords.length;
+  // Day-based offset for revolving variety
+  const dayOfYear = Math.floor((now - new Date(new Date(now).getFullYear(), 0, 0)) / ONE_DAY);
+  const startIndex = dayOfYear % keywords.length;
 
-    // Parallel fetch from 5 keywords
-    const numToFetch = 5;
-    const promises = [];
+  // Fetch from 5 keywords in parallel
+  const numToFetch = 5;
+  const promises = [];
 
-    for (let i = 0; i < numToFetch; i++) {
-      const kwIndex = (startIndex + i) % keywords.length;
-      const kw = keywords[kwIndex];
-      const query = `${kw} site:amazon.com -book -novel -kindle`;
+  for (let i = 0; i < numToFetch; i++) {
+    const kwIndex = (startIndex + i) % keywords.length;
+    const kw = keywords[kwIndex];
+    const query = `${kw} site:amazon.com -book -novel -kindle`;
 
-      promises.push(
-        fetch(
-          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
-        )
-          .then(res => res.ok ? res.json() : { items: [] })
-          .catch(() => ({ items: [] }))
-      );
-    }
+    promises.push(
+      fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+      )
+        .then(res => res.ok ? res.json() : { items: [] })
+        .catch(() => ({ items: [] }))
+    );
+  }
 
+  const allResponses = await Promise.all(promises);
+  let allItems = allResponses.flatMap(r => r.items || []);
+
+  // Deduplicate by ASIN + strict filter
+  const seenASIN = new Set();
+  const uniqueItems = allItems.filter(item => {
+    if (!item.link || !item.link.includes("amazon.com")) return false;
+
+    const cleanLink = normalizeAmazonLink(item.link);
+    const dpMatch = cleanLink.match(/\/dp\/([A-Z0-9]{10})/);
+    const gpMatch = cleanLink.match(/\/gp\/product\/([A-Z0-9]{10})/);
+    const asin = dpMatch?.[1] || gpMatch?.[1];
+
+    if (!asin || seenASIN.has(asin)) return false;
+
+    seenASIN.add(asin);
+    return true;
+  });
+
+  // Map to products
+  const products = uniqueItems.map((item, i) => {
+    const image =
+      item.pagemap?.cse_thumbnail?.[0]?.src ||
+      item.pagemap?.cse_image?.[0]?.src ||
+      "https://via.placeholder.com/600x600?text=Float+Pick";
+
+    return {
+      id: `${now}-${i}`,
+      title: cleanTitle(item.title),
+      image,
+      link: normalizeAmazonLink(item.link)
+    };
+  }).slice(0, 30);
+
+  cache.timestamp = now;
+  cache.data = products;
+
+  return res.status(200).json({ products });
+
+} catch (error) {
+  console.error("Search handler error:", error);
+  return res.status(500).json({
+    error: "Search failed",
+    details: error.message
+  });
+}
     const allResponses = await Promise.all(promises);
     let allItems = allResponses.flatMap(r => r.items || []);
 
