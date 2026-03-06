@@ -555,6 +555,15 @@ window.open(pinterest,"_blank")
 
 
 function createGrokVideoPrompt(){
+ function copyGrok(){
+navigator.clipboard.writeText(grokText.value)
+alert("Prompt copied")
+}
+
+function openGrok(){
+navigator.clipboard.writeText(grokText.value)
+window.open("https://grok.x.ai","_blank")
+}
 
 const p=products[currentIndex]
 
