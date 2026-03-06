@@ -526,6 +526,14 @@ else prevProduct();
 });
 
 loadProducts();
+  <script>
+const btn = document.getElementById("infoToggle");
+const panel = document.getElementById("infoPanel");
+
+btn.onclick = () => {
+  panel.classList.toggle("open");
+};
+
 </script>
   </body>
 </html>
