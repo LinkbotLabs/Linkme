@@ -383,7 +383,14 @@ updateStatus()
 
 /* MODALS */
 
+function openUnlock(){
 
+// close the side info panel if open
+document.getElementById("infoPanel").classList.remove("open");
+
+document.getElementById("unlockModal").style.display="flex";
+
+}
 
 function closeModal(){
 document.querySelectorAll(".modal").forEach(m=>m.style.display="none")
