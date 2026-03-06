@@ -1,4 +1,4 @@
-let cache = {
+const cache = {
   timestamp: 0,
   data: null
 };
@@ -6,14 +6,11 @@ let cache = {
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
 const keywords = [
-  "amazon must have gadgets",
-  "tiktok made me buy it amazon",
-  "amazon viral kitchen tools",
-  "amazon problem solving gadgets",
-  "amazon cool gadgets under 50",
-  "amazon life hacks gadgets",
-  "amazon smart home gadgets",
-  "amazon car gadgets trending"
+  "amazon trending gadgets",
+  "viral kitchen gadgets amazon",
+  "amazon best seller tech",
+  "tiktok viral home gadgets amazon",
+  "amazon impulse buy gadgets"
 ];
 
 export default async function handler(req, res) {
@@ -22,7 +19,7 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  // Return cached products
+  // Return cached products if fresh
   if (cache.data && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({ products: cache.data });
   }
@@ -32,11 +29,10 @@ export default async function handler(req, res) {
     const activeKeyword =
       keywords[Math.floor(Math.random() * keywords.length)];
 
-    const query =
-      `${activeKeyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
+    const query = `${activeKeyword} site:amazon.com -book -novel -kindle`;
 
     const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=20`
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
     );
 
     const data = await googleRes.json();
@@ -51,20 +47,19 @@ export default async function handler(req, res) {
       return res.status(200).json({ products: [] });
     }
 
+    // Filter only valid Amazon product links
     const filtered = data.items.filter(item =>
       item.link &&
       item.link.includes("amazon.com") &&
       (item.link.includes("/dp/") || item.link.includes("/gp/product/"))
     );
 
-    const products = filtered.slice(0, 10).map((item, i) => {
-
-      const asin = extractASIN(item.link);
+    const products = filtered.map((item, i) => {
 
       const image =
-        item.pagemap?.cse_image?.[0]?.src ||
         item.pagemap?.cse_thumbnail?.[0]?.src ||
-        (asin ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg` : "https://via.placeholder.com/600x600?text=Float+Pick");
+        item.pagemap?.cse_image?.[0]?.src ||
+        "https://via.placeholder.com/600x600?text=Float+Pick";
 
       const cleanLink = normalizeAmazonLink(item.link);
 
@@ -74,7 +69,6 @@ export default async function handler(req, res) {
         image,
         link: cleanLink
       };
-
     });
 
     cache.timestamp = now;
@@ -93,7 +87,7 @@ export default async function handler(req, res) {
 
 /* ------------------ HELPERS ------------------ */
 
-function cleanTitle(title = "") {
+function cleanTitle(title) {
   return title
     .replace("- Amazon.com", "")
     .replace("| Amazon", "")
@@ -102,22 +96,21 @@ function cleanTitle(title = "") {
     .trim();
 }
 
-function extractASIN(url) {
-  try {
-    const match = url.match(/\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/);
-    return match ? (match[1] || match[2]) : null;
-  } catch {
-    return null;
-  }
-}
-
 function normalizeAmazonLink(url) {
   try {
-    const asin = extractASIN(url);
+    const parsed = new URL(url);
 
-    if (!asin) return url;
+    // Extract ASIN
+    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
+    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
 
+    const asin = dpMatch?.[1] || gpMatch?.[1];
+
+    if (!asin) return parsed.origin;
+
+    // Return clean canonical product URL
     return `https://www.amazon.com/dp/${asin}`;
+
   } catch {
     return url;
   }
