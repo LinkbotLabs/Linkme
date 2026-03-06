@@ -553,7 +553,38 @@ window.open(pinterest,"_blank")
 
 }
 
+function createGrokVideoPrompt(){
 
+const p = products[currentIndex]
+
+grokText.value =
+`Create a 6 second vertical 9:16 product video.
+
+Product: ${p.title}
+
+Start with the product image centered.
+Slow cinematic zoom.
+Show 2 quick lifestyle scenes.
+End on the product image.
+
+Style: modern, clean, premium.
+Lighting: soft natural light.
+No logos.
+Designed for Pinterest or TikTok.`
+
+document.getElementById("grokModal").style.display="flex"
+
+}
+
+function copyGrok(){
+navigator.clipboard.writeText(grokText.value)
+alert("Prompt copied")
+}
+
+function openGrok(){
+navigator.clipboard.writeText(grokText.value)
+window.open("https://grok.x.ai","_blank")
+}
 
 const p=products[currentIndex]
 
