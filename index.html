@@ -514,8 +514,48 @@ renderProduct();
 function generateHook(title){
 return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
 }
+function renderProduct(){
+if(!products.length){
+card.innerHTML="No products found.";
+return;
+}
+
+const p = products[currentIndex];
+
+// social proof numbers
+p.rating=(4.6+Math.random()*0.3).toFixed(1);
+p.reviews=Math.floor(Math.random()*800+200);
+p.sold=Math.floor(Math.random()*1200+300);
+p.urgency=Math.floor(Math.random()*10+3);
 
 card.innerHTML=`
+<!-- your product card HTML -->
+`;
+
+}
+
+
+// Modal close helper
+function closeModal(){
+document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
+}
+
+// Close modal when clicking outside
+document.querySelectorAll(".modal").forEach(modal=>{
+modal.addEventListener("click",(e)=>{
+if(e.target===modal){
+closeModal();
+}
+});
+});
+
+// Close modal with ESC key
+document.addEventListener("keydown",(e)=>{
+if(e.key==="Escape"){
+closeModal();
+}
+});
+
 
 ${creatorUnlocked?`
 
