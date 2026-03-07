@@ -135,7 +135,7 @@ const asin = asinMatch?.[1] || asinMatch?.[2];
 
 const image =
   asin
-    ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`
+    ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._AC_SL600_.jpg`
     : item.pagemap?.cse_image?.[0]?.src ||
       item.pagemap?.cse_thumbnail?.[0]?.src ||
       "https://via.placeholder.com/600x600?text=Float+Pick";
