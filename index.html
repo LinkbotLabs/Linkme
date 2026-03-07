@@ -703,7 +703,19 @@ const j = Math.floor(Math.random() * (i + 1));
 [arr[i], arr[j]] = [arr[j], arr[i]];
 }
 }
+/* AUTO PRODUCT ROTATION */
 
+let autoTimer;
+
+function startAutoScroll(){
+
+clearInterval(autoTimer);
+
+autoTimer = setInterval(()=>{
+nextProduct();
+},8000); // 8 seconds
+
+}
 animateCreators();
 
 loadProducts();
