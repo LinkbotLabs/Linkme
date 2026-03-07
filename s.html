@@ -24,7 +24,21 @@ if (!id) {
         document.getElementById("app").innerHTML = "<p style='color:red;'>Product not found or expired.</p>";
         return;
       }
+// Use saved stats if available, otherwise use soft social proof
+const rating = p.rating || (4.5 + Math.random() * 0.4).toFixed(1);
+const reviews = p.reviews || Math.floor(Math.random() * 500 + 150);
 
+// remove fake sales + stock numbers
+const sold = null;
+const urgency = null;
+
+const hooks = [
+`This Product Is Going Viral 🔥`,
+`TikTok Made This Go Viral`,
+`Amazon Shoppers Love This`,
+`Trending Amazon Find`,
+`People Can't Stop Buying This`
+];
     
 const hook = hooks[Math.floor(Math.random() * hooks.length)];
 
