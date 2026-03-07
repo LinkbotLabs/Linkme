@@ -7,7 +7,30 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 
 /* ------------------ DISCOVERY KEYWORDS ------------------ */
 
+const keywords = [
 
+"jellycat plush keychain phone charm",
+"magnetic phone mount car desk holder",
+"collagen mask peptide sheet mask hydrogel",
+"solar power bank portable charger foldable solar",
+"back stretcher spine decompressor yoga wheel",
+"dumpling maker sushi roller kitchen tool",
+"slime kit kinetic sand sensory toy",
+"long distance touch bracelet couple lamp",
+"self watering planter led grow light hydroponic kit",
+"rfid blocking wallet anti theft wallet",
+"led nail lamp uv gel dryer",
+"portable espresso maker manual coffee",
+"smart ring fitness tracker sleep monitor",
+"holographic projector fan display",
+"infrared sauna blanket portable detox",
+"smart makeup mirror ar virtual try on",
+"mini portable blender smoothie maker",
+"sunset projection lamp room decor",
+"electric spin scrubber cleaning brush",
+"automatic pan stirrer kitchen gadget"
+
+];
 
 /* ------------------ VIRAL FALLBACK POOL ------------------ */
 /* This prevents empty feeds + avoids API quota limits */
