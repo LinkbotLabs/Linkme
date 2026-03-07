@@ -102,7 +102,21 @@ export default async function handler(req, res) {
 
     let allItems = [];
 
-    
+   for (const keyword of selected) {
+
+  const query =
+    `${keyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
+
+  const googleRes = await fetch(
+    `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+  );
+
+  const data = await googleRes.json();
+
+  if (data.items) {
+    allItems = allItems.concat(data.items);
+  }
+} 
     /* ---------- FILTER AMAZON PRODUCT LINKS ---------- */
 
     const filtered = allItems.filter(item =>
