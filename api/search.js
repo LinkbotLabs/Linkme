@@ -105,7 +105,7 @@ export default async function handler(req, res) {
     for (const keyword of selected) {
 
       const query =
-        `${keyword} site:amazon.com ("/dp/" OR "/gp/product/") -book -novel -kindle`;
+        site:amazon.com inurl:/dp/
 
       const googleRes = await fetch(
         `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
