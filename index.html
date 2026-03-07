@@ -528,8 +528,57 @@ p.reviews=Math.floor(Math.random()*800+200);
 p.sold=Math.floor(Math.random()*1200+300);
 p.urgency=Math.floor(Math.random()*10+3);
 
-card.innerHTML=`
-<!-- your product card HTML -->
+  card.innerHTML=`
+
+${creatorUnlocked?`
+
+<div class="creator-badge">
+<div class="mini-wave"></div>
+<span>Float Rising</span>
+</div>
+
+`:``}
+
+<div class="viral-badge">VIRAL FIND</div>
+
+<img src="${p.image}" loading="lazy">
+
+<div class="product-title">${p.title}</div>
+
+<div class="hook">${generateHook(p.title)}</div>
+
+<div class="stars">⭐ ${p.rating} • ${p.reviews}+ reviews</div>
+
+<div class="rich">
+✨ Why You’ll Love It:
+<br>✔ ${p.sold}+ sold
+<br>✔ Only ${p.urgency} left in stock
+<br>✔ Viral trending gadget
+</div>
+
+<div class="cta-box"
+onclick="window.open('${appendAffiliate(p.link)}','_blank')"
+style="cursor:pointer;">
+🔥 See Why This Is Going Viral
+</div>
+
+<button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Check Price on Amazon →</button>
+
+<button class="btn" onclick="shareLink()">Share Link</button>
+
+<button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
+
+<button class="btn" onclick="takeScreenshotHint()">📸 Take Screenshot</button>
+
+<button class="btn btn-primary" onclick="createGrokVideoPrompt()">🎥 Generate 6s Video Prompt</button>
+
+${!creatorUnlocked ? `
+<button class="btn" onclick="openUnlock()" 
+style="background:#f9fafb;color:#6b7280;border-style:dashed;">
+🔒 Use Your Own Affiliate ID
+</button>
+` : ``}
+
 `;
 
 }
