@@ -307,7 +307,27 @@ font-size:18px;
 color:#9ca3af;
 opacity:.7;
 }
+#nextBtn{
+position:fixed;
+bottom:30px;
+left:50%;
+transform:translateX(-50%);
+background:linear-gradient(90deg,#6366f1,#a855f7);
+color:white;
+border:none;
+padding:16px 26px;
+border-radius:999px;
+font-weight:700;
+font-size:15px;
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+cursor:pointer;
+z-index:999;
+transition:.2s;
+}
 
+#nextBtn:hover{
+transform:translateX(-50%) scale(1.05);
+}
 /* MOBILE */
 
 @media(max-width:420px){
