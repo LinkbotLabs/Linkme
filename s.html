@@ -31,7 +31,15 @@ if (!id) {
       const sold = p.sold || Math.floor(Math.random() * 1200 + 300);
       const urgency = p.urgency || Math.floor(Math.random() * 10 + 3);
 
-      const hook = `This ${p.title.split(" ")[0]} Is Going Viral 🔥`;
+      const hooks = [
+`This Product Is Going Viral 🔥`,
+`People Can't Stop Buying This`,
+`Why Is Everyone Buying This?`,
+`This Viral Find Is Trending`,
+`Collectors Are Loving This`
+];
+
+const hook = hooks[Math.floor(Math.random() * hooks.length)];
 
       document.getElementById("app").innerHTML = `
         <div style="background:white; border-radius:28px; padding:32px 24px; box-shadow:0 25px 60px rgba(0,0,0,0.08); position:relative;">
