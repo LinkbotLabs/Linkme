@@ -432,7 +432,10 @@ Activate
 <div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
   <button id="nextBtn">🔥 Next Viral Product</button>
 <script>
-
+document.getElementById("nextBtn").addEventListener("click",()=>{
+nextProduct();
+startAutoScroll();
+});
 /* ===== ORIGINAL ENGINE – UNCHANGED ===== */
 
 let products=[],currentIndex=0;
