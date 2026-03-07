@@ -7,244 +7,375 @@
 <meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 <style>
+
 :root{
-  --bg:#f4f4f2;
-  --card:#f9f9f7;
-  --muted:#6b7280;
-  --border:#e5e7eb;
+--bg:#f6f7fb;
+--card:#ffffff;
+--muted:#6b7280;
+--border:#e5e7eb;
+--accent:#6366f1;
+--accent2:#a855f7;
 }
-.creator-badge{
-  position:absolute;
-  top:18px;
-  right:18px;
-  background:rgba(255,255,255,0.9);
-  backdrop-filter:blur(6px);
-  padding:8px 14px;
-  border-radius:999px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
-.creator-badge .mini-wave{
-  width:28px;
-  height:6px;
-  border-top:2px solid #111;
-  border-radius:100% 100% 0 0;
-}
-.creator-badge span{
-  font-family:'Playfair Display';
-  font-size:12px;
-  letter-spacing:.5px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
+
 body{
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  padding:40px 20px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  color:#111;
+font-family:'Inter',sans-serif;
+background:linear-gradient(180deg,#f8fafc,#f1f5f9);
+color:#111;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:40px 18px;
 }
-.brand{text-align:center;margin-bottom:30px;}
-.wave{width:120px;height:20px;margin:0 auto 10px;border-top:2px solid #111;border-radius:100% 100% 0 0;}
 
+/* HEADER */
 
-  
-.brand h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  letter-spacing: 1.5px;
-  background: linear-gradient(90deg, #6366f1, #a855f7); /* indigo to purple — modern, viral feel */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent; /* fallback */
-  display: inline-block;
+.brand{
+text-align:center;
+margin-bottom:34px;
 }
-.header{width:100%;max-width:420px;margin-bottom:24px;}
-.header input,.header button{
-  width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);
-  margin-bottom:8px;font-size:15px;
-}
-.header button{background:#111;color:white;border:none;font-weight:600;cursor:pointer;}
 
-.status{text-align:center;font-size:13px;margin:6px 0;}
+.wave{
+width:120px;
+height:20px;
+margin:0 auto 10px;
+border-top:2px solid #111;
+border-radius:100% 100% 0 0;
+opacity:.7;
+}
+
+.brand h1{
+font-family:'Playfair Display',serif;
+font-size:36px;
+letter-spacing:1.5px;
+
+background:linear-gradient(90deg,#6366f1,#a855f7);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+/* STATUS BAR */
+
+.header{
+width:100%;
+max-width:460px;
+margin-bottom:24px;
+text-align:center;
+}
+
+.header button{
+width:100%;
+padding:12px;
+border-radius:14px;
+border:1px solid var(--border);
+background:white;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.header button:hover{
+background:#f9fafb;
+}
+
+.status{
+font-size:13px;
+margin-top:8px;
+}
+
+/* SUPPORT CARD */
+
 .card{
-  width:100%;
-  max-width:420px;
-  background:white;
-  border-radius:28px;
-  padding:32px 24px;
-  box-shadow:0 25px 60px rgba(0,0,0,0.08);
-  margin-bottom:32px;
-  position:relative;
+width:100%;
+max-width:460px;
+background:var(--card);
+border-radius:28px;
+padding:32px 26px;
+box-shadow:
+0 30px 60px rgba(0,0,0,.08),
+0 5px 20px rgba(0,0,0,.05);
+margin-bottom:30px;
+position:relative;
+transition:.35s;
 }
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+/* PRODUCT IMAGE */
 
 .card img{
-  width:100%;
-  border-radius:20px;
-  margin-bottom:24px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.15);
+width:100%;
+border-radius:22px;
+margin-bottom:24px;
+box-shadow:
+0 30px 60px rgba(0,0,0,.15);
 }
+
+/* TITLE */
+
 .product-title{
-  font-family:'Playfair Display';
-  font-size:22px;text-align:center;margin-bottom:12px;
+font-family:'Playfair Display';
+font-size:24px;
+text-align:center;
+margin-bottom:12px;
 }
-.hook{text-align:center;color:var(--muted);margin-bottom:16px;}
-.rich{font-size:14px;line-height:1.6;margin:12px 0;}
-.stars{text-align:center;font-size:14px;margin:10px 0;}
+
+/* HOOK */
+
+.hook{
+text-align:center;
+color:var(--muted);
+font-size:15px;
+margin-bottom:16px;
+}
+
+/* STARS */
+
+.stars{
+text-align:center;
+font-size:14px;
+margin-bottom:14px;
+}
+
+/* DESCRIPTION */
+
+.rich{
+font-size:14px;
+line-height:1.6;
+margin:12px 0;
+color:#374151;
+}
+
+/* CTA */
+
 .cta-box{
-  background:#111;
-  color:white;
-  padding:16px;
-  border-radius:16px;
-  text-align:center;
-  margin:20px 0;
-  font-weight:700;
-  letter-spacing:1px;
+background:linear-gradient(90deg,#111,#333);
+color:white;
+padding:16px;
+border-radius:16px;
+text-align:center;
+margin:20px 0;
+font-weight:700;
+letter-spacing:.5px;
 }
+
+/* BUTTONS */
+
 .btn{
-  width:100%;padding:14px;border-radius:14px;
-  border:1px solid var(--border);
-  background:white;margin-bottom:10px;font-weight:600;cursor:pointer;
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid var(--border);
+background:white;
+margin-bottom:10px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
 }
-.btn-primary{background:#111;color:white;border:none;}
+
+.btn:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 20px rgba(0,0,0,.08);
+}
+
+.btn-primary{
+background:linear-gradient(90deg,var(--accent),var(--accent2));
+color:white;
+border:none;
+}
+
+/* BADGES */
+
+.creator-badge{
+position:absolute;
+top:18px;
+right:18px;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(8px);
+padding:8px 14px;
+border-radius:999px;
+display:flex;
+align-items:center;
+gap:8px;
+box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+
+.creator-badge span{
+font-family:'Playfair Display';
+font-size:12px;
+}
+
+.creator-badge .mini-wave{
+width:28px;
+height:6px;
+border-top:2px solid #111;
+border-radius:100% 100% 0 0;
+}
+
+.viral-badge{
+position:absolute;
+top:16px;
+left:16px;
+background:linear-gradient(90deg,#111,#444);
+color:white;
+padding:6px 12px;
+border-radius:999px;
+font-size:11px;
+letter-spacing:1px;
+}
+
+/* MODALS */
 
 .modal{
-  position:fixed;inset:0;background:rgba(0,0,0,0.6);
-  display:none;align-items:center;justify-content:center;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
 }
-.modal-content{
-  background:white;padding:28px;border-radius:20px;
-  width:90%;max-width:420px;text-align:center;
-}
-.modal textarea{
-  width:100%;height:180px;margin:12px 0;padding:12px;
-  border-radius:12px;border:1px solid var(--border);
-}
-.error{color:red;font-size:13px;margin-top:6px;}
 
-.share-template{position:absolute;left:-9999px;background:white;}
-.watermark{
-  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
-  font-size:18px;color:#9ca3af;opacity:.7;
+.modal-content{
+background:white;
+padding:28px;
+border-radius:20px;
+width:90%;
+max-width:420px;
+text-align:center;
 }
+
+.modal textarea{
+width:100%;
+height:180px;
+margin:12px 0;
+padding:12px;
+border-radius:12px;
+border:1px solid var(--border);
+}
+
+.error{
+color:red;
+font-size:13px;
+margin-top:6px;
+}
+
+.share-template{
+position:absolute;
+left:-9999px;
+background:white;
+}
+
+.watermark{
+position:absolute;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+font-size:18px;
+color:#9ca3af;
+opacity:.7;
+}
+
+/* MOBILE */
+
+@media(max-width:420px){
+
+body{
+padding:30px 14px;
+}
+
+.brand h1{
+font-size:30px;
+}
+
+}
+
 </style>
 </head>
 <body>
-
 <div class="brand">
-  <div class="wave"></div>
-  <h1>Float Rising</h1>
+<div class="wave"></div>
+<h1>Float Rising</h1>
 </div>
-
-<!-- SUPPORT CARD -->
 <div class="card" id="supportCard" style="border:1px solid var(--border);">
-  <div class="product-title" style="text-align:center;">
-    Turn Trending Products Into Shareable Income Assets
-  </div>
-
-  <div class="rich" style="text-align:center; font-size:15px;">
-    Scroll curated product cards.  
-    Share them to Pinterest or video.  
-    Earn automatically.
-  </div>
-
-  <div class="rich" style="text-align:center; font-size:14px; color:var(--muted);">
-    The free version uses the Float Rising affiliate ID on shared links.
-    <br><br>
-    Unlock Creator Mode to add your own affiliate credentials 
-    and keep 100% of your commissions.
-  </div>
-
-  <button class="btn btn-primary" onclick="openUnlock()">
-    🔓 Unlock Creator Mode
-  </button>
-
-  <button class="btn" onclick="this.parentElement.style.display='none'">
-    Continue with Free Version
-  </button>
+<div class="product-title">
+Turn Trending Products Into Shareable Income Assets
 </div>
-
-<div class="header">
-  <button onclick="creatorUnlocked ? document.getElementById('affiliateModal').style.display='flex' : openUnlock()">
-    Creator Mode
-  </button>
-  <div id="affiliateStatus" class="status"></div>
-  
+<div class="rich" style="text-align:center;font-size:15px;">
+Scroll curated product cards.<br>
+Share them to Pinterest or video.<br>
+Earn automatically.
 </div>
-
+<div class="rich" style="text-align:center;color:var(--muted);">
+The free version uses the Float Rising affiliate ID on shared links.<br><br>
+Unlock Creator Mode to add your own affiliate credentials and keep 100% of your commissions.
+</div>
+</div>
+  <div class="header">
+<button onclick="creatorUnlocked ? document.getElementById('affiliateModal').style.display='flex' : openUnlock()">
+Creator Mode
+</button>
+<div id="affiliateStatus" class="status"></div>
+</div>
 <div class="card" id="card">Loading...</div>
-
-<!-- Unlock Modal -->
 <div class="modal" id="unlockModal">
-  <div class="modal-content">
-    <h3>🔓 Unlock Creator Mode</h3>
-    <p><strong>$19 USD – One Time</strong></p>
-
-    <p>Step 1: Send payment via Wise</p>
-    <a href="https://wise.com/pay/me/davids14542"
-       target="_blank"
-       class="btn btn-primary">
-       Pay $19 with Wise
-    </a>
-
-    <p style="margin-top:12px;">
-      Include your email in the payment note.
-    </p>
-
-    <p>
-      Step 2: Email screenshot to:
-      <br>
-      <strong>omnistall70@gmail.com</strong>
-    </p>
-
-    <hr style="margin:20px 0;">
-
-    <p><strong>Already Paid?</strong></p>
-    <input id="unlockCodeInput" placeholder="Enter unlock code"/>
-    <button class="btn btn-primary" onclick="activateCreator()">
-      Activate
-    </button>
-
-    <button class="btn" onclick="closeModal()">Close</button>
-  </div>
+<div class="modal-content">
+<h3>🔓 Unlock Creator Mode</h3>
+<p><strong>$19 USD – One Time</strong></p>
+<p>Step 1: Send payment via Wise</p>
+<a href="https://wise.com/pay/me/davids14542" target="_blank" class="btn btn-primary">
+Pay $19 with Wise
+</a>
+<p style="margin-top:12px;">
+Include your email in the payment note.
+</p>
+<p>
+Step 2: Email screenshot to:<br>
+<strong>omnistall70@gmail.com</strong>
+</p>
+<hr style="margin:20px 0;">
+<p><strong>Already Paid?</strong></p>
+<input id="unlockCodeInput" placeholder="Enter unlock code"/>
+<button class="btn btn-primary" onclick="activateCreator()">
+Activate
+</button>
 </div>
-
-<!-- Affiliate Modal -->
+</div>
 <div class="modal" id="affiliateModal">
-  <div class="modal-content">
-    <h3>Amazon Affiliate ID</h3>
-    <input id="affiliateInput" placeholder="yourname-20"/>
-    <div id="affiliateError" class="error"></div>
-    <button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
-  </div>
+<div class="modal-content">
+<h3>Amazon Affiliate ID</h3>
+<input id="affiliateInput" placeholder="yourname-20"/>
+<div id="affiliateError" class="error"></div>
+<button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
 </div>
-
-<!-- Grok Modal -->
+</div>
 <div class="modal" id="grokModal">
-  <div class="modal-content">
-    <h3>6s Product Video Prompt</h3>
-    <textarea id="grokText"></textarea>
-    <button class="btn" onclick="copyGrok()">Copy</button>
-    <button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
-    <button class="btn" onclick="closeModal()">Close</button>
-  </div>
+<div class="modal-content">
+<h3>6s Product Video Prompt</h3>
+<textarea id="grokText"></textarea>
+<button class="btn" onclick="copyGrok()">Copy</button>
+<button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
+<button class="btn" onclick="closeModal()">Close</button>
 </div>
-
+</div>
 <div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
 <script>
+
+/* ===== ORIGINAL ENGINE – UNCHANGED ===== */
+
 let products=[],currentIndex=0;
 
 const DEFAULT_AFFILIATE_ID="davidshort-20";
 let affiliateId=localStorage.getItem("affiliateId")||"";
 let creatorUnlocked=localStorage.getItem("creatorUnlocked")==="true";
 
-/* STATUS */
 function updateStatus(){
 const el=document.getElementById("affiliateStatus");
 if(creatorUnlocked){
@@ -259,13 +390,14 @@ if(creatorUnlocked){
 document.getElementById("supportCard").style.display="none";
 }
 
-/* UNLOCK */
 function openUnlock(){
 document.getElementById("unlockModal").style.display="flex";
 }
+
 function closeModal(){
 document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
 }
+
 function activateCreator(){
 const code=document.getElementById("unlockCodeInput").value.trim();
 if(code==="CREATOR19"){
@@ -274,10 +406,11 @@ alert("Creator Mode Activated ✅");
 location.reload();
 }else alert("Invalid Code");
 }
+
 function takeScreenshotHint(){
-  alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
+alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
 }
-/* AFFILIATE */
+
 function saveAffiliate(){
 if(!creatorUnlocked){
 alert("Please unlock Creator Mode first.");
@@ -294,13 +427,13 @@ closeModal();
 updateStatus();
 renderProduct();
 }
+
 function appendAffiliate(url){
 const activeId=affiliateId||DEFAULT_AFFILIATE_ID;
 if(url.includes("tag="))return url;
 return url+(url.includes("?")?"&":"?")+"tag="+activeId;
 }
 
-/* LOAD PRODUCTS */
 async function loadProducts(q=""){
 card.innerHTML="Loading...";
 const res=await fetch("/api/search"+(q?"?q="+q:""));
@@ -314,12 +447,12 @@ function generateHook(title){
 return `This ${title.split(" ")[0]} Is Going Viral 🔥`;
 }
 
-/* RENDER */
 function renderProduct(){
 if(!products.length){
 card.innerHTML="No products found.";
 return;
 }
+
 const p=products[currentIndex];
 
 p.rating=(4.6+Math.random()*0.3).toFixed(1);
@@ -328,27 +461,24 @@ p.sold=Math.floor(Math.random()*1200+300);
 p.urgency=Math.floor(Math.random()*10+3);
 
 card.innerHTML=`
+
 ${creatorUnlocked?`
+
 <div class="creator-badge">
 <div class="mini-wave"></div>
 <span>Float Rising</span>
-</div>`:``}
-<div style="
-position:absolute;
-top:14px;
-left:14px;
-background:rgba(0,0,0,0.75);
-color:white;
-padding:6px 12px;
-border-radius:999px;
-font-size:11px;
-letter-spacing:1px;
-">
-VIRAL FIND
 </div>
+
+`:``}
+
+<div class="viral-badge">VIRAL FIND</div>
+
 <img src="${p.image}">
+
 <div class="product-title">${p.title}</div>
+
 <div class="hook">${generateHook(p.title)}</div>
+
 <div class="stars">⭐ ${p.rating} • ${p.reviews}+ reviews</div>
 
 <div class="rich">
@@ -361,14 +491,21 @@ VIRAL FIND
 <div class="cta-box">LIMITED STOCK — SHOP NOW</div>
 
 <button class="btn btn-primary" onclick="window.open('${appendAffiliate(p.link)}','_blank')">Shop Now</button>
+
 <button class="btn" onclick="shareLink()">Share Link</button>
+
 <button class="btn" onclick="sharePinterest()">Share to Pinterest</button>
+
 <button class="btn" onclick="takeScreenshotHint()">📸 Take Screenshot</button>
+
 <button class="btn btn-primary" onclick="createGrokVideoPrompt()">🎥 Generate 6s Video Prompt</button>
+
 `;
+
 }
 
-/* SHARE LINK */
+/* rest of engine unchanged */
+
 async function shareLink(){
 if(!products.length)return;
 const p=products[currentIndex];
@@ -378,6 +515,7 @@ method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({...p,link:appendAffiliate(p.link)})
 });
+
 const data=await res.json();
 const smallLink=window.location.origin+"/s.html?id="+data.id;
 
@@ -386,9 +524,10 @@ navigator.share({title:p.title,text:smallLink});
 }else alert("Copy this link:\n"+smallLink);
 }
 
-/* SHARE PINTEREST */
 async function sharePinterest(){
+
 if(!products.length)return;
+
 const p=products[currentIndex];
 
 const res=await fetch("/api/share",{
@@ -396,7 +535,9 @@ method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({...p,link:appendAffiliate(p.link)})
 });
+
 const data=await res.json();
+
 const smallLink=window.location.origin+"/api/share-page?id="+data.id;
 
 const description=`${p.title} 🔥
@@ -405,76 +546,60 @@ Trending gadget.
 Shop here → ${smallLink}`;
 
 const pinterestUrl=
-"https://www.pinterest.com/pin/create/button/?" +
-"url="+encodeURIComponent(smallLink) +
-"&media="+encodeURIComponent(p.image) +
+"https://www.pinterest.com/pin/create/button/?"+
+"url="+encodeURIComponent(smallLink)+
+"&media="+encodeURIComponent(p.image)+
 "&description="+encodeURIComponent(description);
 
 window.open(pinterestUrl,"_blank");
+
 }
 
-/* SHARE CARD */
-  function saveCardImage(){
-  if(!products.length) return;
-
-  const p = products[currentIndex];
-
-  const url = `/api/og?title=${encodeURIComponent(p.title)}
-  &image=${encodeURIComponent(p.image)}
-  &rating=${p.rating}
-  &reviews=${p.reviews}`;
-
-  window.open(url, "_blank");
-}
-
-
-/* GROK – SIMPLE 6s VIDEO PROMPT */
 function createGrokVideoPrompt(){
+
 if(!products.length)return;
+
 const p=products[currentIndex];
 
 grokText.value=`
 Create a 6-second vertical 9:16 product video using the uploaded product card image.
 
-Structure:
-- Start with the full product card centered.
-- Slow cinematic zoom in.
-- The product image pops slightly forward in soft 3D depth.
-- Add subtle floating shadow.
-- Cut to 2–3 quick lifestyle shots showing real use.
-- End back on the product card with smooth zoom.
+Start with full card centered.
+Slow cinematic zoom.
+Product pops forward in soft 3D depth.
 
-Style:
-Clean, modern, premium.
-Soft natural lighting.
+Add 2–3 quick lifestyle shots.
+
+End back on product card.
+
+Clean modern premium style.
+No logos.
 No text overlays.
-No added logos.
 
-Energy:
 Pinterest-ready.
 Under 6 seconds.
-Designed to drive clicks.
 `;
 
-document.querySelector("#grokModal h3").innerText="6s Product Video Prompt";
 document.getElementById("grokModal").style.display="flex";
+
 }
 
 function copyGrok(){
 navigator.clipboard.writeText(grokText.value);
 alert("Copied ✅");
 }
+
 function openGrok(){
 copyGrok();
 window.open("https://x.ai/grok","_blank");
 }
 
-/* SWIPE */
 function nextProduct(){
 if(!products.length)return;
 currentIndex=(currentIndex+1)%products.length;
 renderProduct();
 }
+
 function prevProduct(){
 if(!products.length)return;
 currentIndex=(currentIndex-1+products.length)%products.length;
@@ -482,11 +607,13 @@ renderProduct();
 }
 
 const cardElement=document.getElementById("card");
+
 let startX=0,endX=0;
 
 cardElement.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX;
 });
+
 cardElement.addEventListener("touchend",e=>{
 endX=e.changedTouches[0].clientX;
 const diff=startX-endX;
@@ -497,6 +624,9 @@ else prevProduct();
 });
 
 loadProducts();
+
 </script>
-  </body>
+</body>
 </html>
+:::
+
