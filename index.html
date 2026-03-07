@@ -553,7 +553,7 @@ ${creatorUnlocked ? `
 
 <div class="viral-badge">VIRAL FIND</div>
 
-<img src="${p.image}" loading="lazy">
+<img src="${p.image || ''}" alt="${p.title}" loading="lazy">
 
 <div class="product-title">${p.title}</div>
 
