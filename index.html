@@ -589,14 +589,7 @@ function closeModal(){
 document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
 }
 
-// Close modal when clicking outside
-document.querySelectorAll(".modal").forEach(modal=>{
-modal.addEventListener("click",(e)=>{
-if(e.target===modal){
-closeModal();
-}
-});
-});
+
 
 // Close modal with ESC key
 document.addEventListener("keydown",(e)=>{
