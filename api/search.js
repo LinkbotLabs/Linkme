@@ -54,7 +54,33 @@ const VIRAL_PRODUCTS = [
     link: "https://www.amazon.com/dp/B07P7YVQX2"
   }
 ];
+/* ------------------ AMAZON TRENDING SOURCE ------------------ */
 
+async function getMoversAndShakers() {
+
+  try {
+
+    const res = await fetch("https://www.amazon.com/gp/movers-and-shakers");
+    const html = await res.text();
+
+    const matches = [...html.matchAll(/\/dp\/([A-Z0-9]{10})/g)];
+
+    const asins = [...new Set(matches.map(m => m[1]))].slice(0, 20);
+
+    return asins.map((asin, i) => ({
+      id: `mover-${i}`,
+      title: "Trending Amazon Product",
+      image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SCLZZZZZZZ_.jpg`,
+      link: `https://www.amazon.com/dp/${asin}`
+    }));
+
+  } catch {
+
+    return [];
+
+  }
+
+}
 export default async function handler(req, res) {
 
   res.setHeader("Cache-Control", "no-store");
