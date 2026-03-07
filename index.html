@@ -431,8 +431,28 @@ Activate
 </div>
 <div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
   <button id="nextBtn">🔥 Next Viral Product</button>
+
 <script>
 
+document.getElementById("nextBtn").addEventListener("click",()=>{
+  nextProduct();
+  startAutoScroll();
+});
+
+/* AUTO CLOSE UNLOCK BOX AFTER 6 SECONDS */
+
+function openUnlock(){
+  const modal = document.getElementById("unlockModal");
+  modal.style.display = "flex";
+
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 6000);
+}
+
+/* ===== ORIGINAL ENGINE – UNCHANGED ===== */
+
+let products=[],currentIndex=0;
 
 
 const DEFAULT_AFFILIATE_ID="davidshort-20";
