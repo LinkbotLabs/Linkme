@@ -25,20 +25,7 @@ if (!id) {
         return;
       }
 
-      // Use saved stats if available, fallback to randomized like main app
-      const rating = p.rating || (4.6 + Math.random() * 0.3).toFixed(1);
-      const reviews = p.reviews || Math.floor(Math.random() * 800 + 200);
-      const sold = p.sold || Math.floor(Math.random() * 1200 + 300);
-      const urgency = p.urgency || Math.floor(Math.random() * 10 + 3);
-
-      const hooks = [
-`This Product Is Going Viral 🔥`,
-`People Can't Stop Buying This`,
-`Why Is Everyone Buying This?`,
-`This Viral Find Is Trending`,
-`Collectors Are Loving This`
-];
-
+    
 const hook = hooks[Math.floor(Math.random() * hooks.length)];
 
       document.getElementById("app").innerHTML = `
