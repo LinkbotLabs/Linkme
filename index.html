@@ -663,6 +663,19 @@ if(diff>0)nextProduct();
 else prevProduct();
 }
 });
+function animateCreators(){
+
+let el=document.getElementById("creatorCount");
+let base=1200+Math.floor(Math.random()*200);
+
+setInterval(()=>{
+base+=Math.floor(Math.random()*3);
+el.innerText=base;
+},4000);
+
+}
+
+animateCreators();
 
 loadProducts();
 
