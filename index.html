@@ -650,9 +650,18 @@ window.open("https://x.ai/grok","_blank");
 }
 
 function nextProduct(){
-if(!products.length)return;
-currentIndex=(currentIndex+1)%products.length;
+
+if(!products.length) return;
+
+currentIndex++;
+
+if(currentIndex >= products.length){
+currentIndex = 0;
+shuffle(products);
+}
+
 renderProduct();
+
 }
 
 function prevProduct(){
