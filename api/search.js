@@ -151,8 +151,8 @@ export default async function handler(req, res) {
       id: `fallback-${i}`,
       ...p
     }));
-
-    const combined = [...products, ...fallback];
+const movers = await getMoversAndShakers();
+    const combined = [...products, ...movers, ...fallback];
 
     /* ---------- REMOVE DUPLICATE ASINS ---------- */
 
