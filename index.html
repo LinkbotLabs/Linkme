@@ -117,6 +117,23 @@ box-shadow:
 0 60px 120px rgba(0,0,0,.18),
 0 20px 40px rgba(0,0,0,.10);
 }
+  .card::after{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:3px;
+
+background:linear-gradient(
+90deg,
+#6366f1,
+#8b5cf6,
+#ec4899
+);
+
+opacity:.9;
+}
 /* PRODUCT IMAGE */
 
 .card img{
