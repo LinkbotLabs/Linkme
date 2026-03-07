@@ -1,97 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Float Rising Product</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body style="font-family:'Inter',sans-serif; background:#f4f4f2; margin:0; padding:20px; display:flex; justify-content:center; align-items:center; min-height:100vh; color:#111;">
 
-<div id="app" style="width:100%; max-width:420px;">Loading product...</div>
+<head>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Float Rising Product</title>
+
+<!-- Pinterest / Social Preview -->
+<meta property="og:title" content="Viral Amazon Finds"/>
+<meta property="og:description" content="Trending products people are discovering right now."/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://linkmetagshop.vercel.app/preview.jpg"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body style="font-family:'Inter',sans-serif;background:#f4f4f2;margin:0;padding:20px;display:flex;justify-content:center;align-items:center;min-height:100vh;color:#111;">
+
+<div id="app" style="width:100%;max-width:420px;">Loading product...</div>
 
 <script>
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
-if (!id) {
-  document.getElementById("app").innerHTML = "<p style='color:red;'>Missing product ID.</p>";
-} else {
-  fetch("/api/get?id=" + id)
-    .then(res => res.json())
-    .then(p => {
-      if (p.error || !p.title) {
-        document.getElementById("app").innerHTML = "<p style='color:red;'>Product not found or expired.</p>";
-        return;
-      }
-// Use saved stats if available, otherwise use soft social proof
-const rating = p.rating || (4.5 + Math.random() * 0.4).toFixed(1);
-const reviews = p.reviews || Math.floor(Math.random() * 500 + 150);
+if(!id){
 
-// remove fake sales + stock numbers
-const sold = null;
-const urgency = null;
+document.getElementById("app").innerHTML =
+"<p style='color:red;'>Missing product ID.</p>";
 
-const hooks = [
+}else{
+
+fetch("/api/get?id="+id)
+
+.then(res=>res.json())
+
+.then(p=>{
+
+if(p.error||!p.title){
+
+document.getElementById("app").innerHTML =
+"<p style='color:red;'>Product not found or expired.</p>";
+
+return;
+
+}
+
+/* ---------- SOCIAL PROOF ---------- */
+
+const rating =
+p.rating||(4.5+Math.random()*0.4).toFixed(1);
+
+const reviews =
+p.reviews||Math.floor(Math.random()*500+150);
+
+const hooks=[
+
 `This Product Is Going Viral 🔥`,
 `TikTok Made This Go Viral`,
 `Amazon Shoppers Love This`,
 `Trending Amazon Find`,
 `People Can't Stop Buying This`
+
 ];
-    
-const hook = hooks[Math.floor(Math.random() * hooks.length)];
 
-      document.getElementById("app").innerHTML = `
-        <div style="background:white; border-radius:28px; padding:32px 24px; box-shadow:0 25px 60px rgba(0,0,0,0.08); position:relative;">
-          <!-- Viral badge -->
-          <div style="position:absolute; top:14px; left:14px; background:rgba(0,0,0,0.75); color:white; padding:6px 12px; border-radius:999px; font-size:11px; letter-spacing:1px;">
-            VIRAL FIND
-          </div>
+const hook=hooks[Math.floor(Math.random()*hooks.length)];
 
-          <!-- Image (bigger/full-width) -->
-          <img src="${p.image}" style="width:100%; border-radius:20px; margin-bottom:24px; box-shadow:0 20px 50px rgba(0,0,0,0.15); display:block;">
+/* ---------- PRODUCT CARD ---------- */
 
-          <!-- Title -->
-          <div style="font-family:'Playfair Display',serif; font-size:22px; text-align:center; margin-bottom:12px;">
-            ${p.title}
-          </div>
+document.getElementById("app").innerHTML=`
 
-          <!-- Hook -->
-          <div style="text-align:center; color:#6b7280; margin-bottom:16px; font-size:16px;">
-            ${hook}
-          </div>
+<div style="background:white;border-radius:28px;padding:32px 24px;box-shadow:0 25px 60px rgba(0,0,0,0.08);position:relative;">
 
-          <!-- Stars -->
-          <div style="text-align:center; font-size:14px; margin:10px 0;">
-            ⭐ ${rating} • ${reviews}+ reviews
-          </div>
+<div style="position:absolute;top:14px;left:14px;background:rgba(0,0,0,0.75);color:white;padding:6px 12px;border-radius:999px;font-size:11px;letter-spacing:1px;">
+VIRAL FIND
+</div>
 
-          <!-- Why You’ll Love It -->
-          <div style="font-size:14px; line-height:1.6; margin:12px 0;">
-            ✨ Why You’ll Love It:<br>
-            ✔ ${sold}+ sold<br>
-            ✔ Only ${urgency} left in stock<br>
-            ✔ Viral trending gadget
-          </div>
+<img src="${p.image}" style="width:100%;border-radius:20px;margin-bottom:24px;box-shadow:0 20px 50px rgba(0,0,0,0.15);display:block;">
 
-          <a href="${p.link}" target="_blank"
+<div style="font-family:'Playfair Display',serif;font-size:22px;text-align:center;margin-bottom:12px;">
+${p.title}
+</div>
+
+<div style="text-align:center;color:#6b7280;margin-bottom:16px;font-size:16px;">
+${hook}
+</div>
+
+<div style="text-align:center;font-size:14px;margin:10px 0;">
+⭐ ${rating} • ${reviews}+ reviews
+</div>
+
+<div style="font-size:14px;line-height:1.6;margin:12px 0;">
+✨ Why You’ll Love It:<br>
+✔ Trending on Amazon<br>
+✔ Viral product people are discovering<br>
+✔ Popular gadget right now
+</div>
+
+<a href="${p.link}" target="_blank"
 style="display:block;background:#111;color:white;padding:16px;border-radius:16px;text-align:center;font-weight:700;text-decoration:none;margin:20px 0;">
 🔥 See Why This Is Going Viral
 </a>
+
+<button id="pinBtn"
+style="display:block;width:100%;background:#E60023;color:white;padding:14px;border-radius:16px;text-align:center;font-weight:700;border:none;margin-bottom:10px;cursor:pointer;">
+📌 Save To Pinterest
+</button>
+
 <a href="/"
 style="display:block;text-align:center;margin-top:14px;font-size:14px;color:#555;text-decoration:none;font-weight:500;">
 🔥 Next Viral Product
 </a>
-          
-        </div>
-      `;
-    })
-    .catch(err => {
-      console.error("Load error:", err);
-      document.getElementById("app").innerHTML = "<p style='color:red;'>Error loading product. Try refreshing or return to the main page.</p>";
-    });
+
+</div>
+
+`;
+
+/* ---------- PINTEREST SHARE ---------- */
+
+document.getElementById("pinBtn").addEventListener("click",()=>{
+
+const url=encodeURIComponent(window.location.href);
+
+const media=encodeURIComponent(p.image);
+
+const description=
+encodeURIComponent(p.title+" 🔥 Viral Amazon Find");
+
+const pinURL=
+`https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`;
+
+window.open(pinURL,"_blank");
+
+});
+
+})
+
+.catch(err=>{
+
+console.error("Load error:",err);
+
+document.getElementById("app").innerHTML=
+"<p style='color:red;'>Error loading product. Try refreshing or return to the main page.</p>";
+
+});
+
 }
+
 </script>
 
 </body>
