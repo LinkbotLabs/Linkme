@@ -519,7 +519,7 @@ async function loadProducts(q=""){
 card.innerHTML="Loading...";
 const res=await fetch("/api/search"+(q?"?q="+q:""));
 const data=await res.json();
-products=(data.products||[]).filter(p=>p.link);
+products=(data.products||[]).filter(p=>p.link && p.image);
 currentIndex=0;
 renderProduct();
 }
