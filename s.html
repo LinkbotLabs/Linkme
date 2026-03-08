@@ -52,7 +52,49 @@ return title
 }
 
 /* ---------- GENERATE BULLETS ---------- */
+function generateBullets(title){
 
+title = title.toLowerCase();
+
+/* Phone accessories */
+
+if(title.includes("phone") || title.includes("holder") || title.includes("mount")){
+return `
+📸 Perfect for photos and video<br>
+📱 Hands-free viewing anywhere<br>
+✈️ Great for flights, desks, and travel
+`;
+}
+
+/* Model kits / Gundam */
+
+if(title.includes("gundam") || title.includes("model") || title.includes("bandai")){
+return `
+🧩 Highly detailed collectible model<br>
+🎨 Fun and relaxing to build<br>
+⚙️ Poseable parts for display
+`;
+}
+
+/* Kitchen gadgets */
+
+if(title.includes("kitchen") || title.includes("slicer") || title.includes("cutter")){
+return `
+🍳 Makes cooking faster and easier<br>
+⏱️ Saves time preparing meals<br>
+🧼 Easy to clean and store
+`;
+}
+
+/* Default fallback */
+
+return `
+🔥 Trending product people love<br>
+⭐ Highly rated by shoppers<br>
+✨ Popular viral Amazon find
+`;
+
+}
 
 
 const sentences = desc
