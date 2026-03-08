@@ -24,6 +24,31 @@
 
 <script>
 
+/* ---------- GENERATE BULLETS FROM DESCRIPTION ---------- */
+
+function generateBullets(desc){
+
+if(!desc){
+return `
+✔ Trending product people love<br>
+✔ Viral gadget gaining popularity<br>
+✔ Amazon shoppers are buying this
+`;
+}
+
+const sentences = desc
+.replace(/\n/g," ")
+.split(/[.!?]/)
+.map(s=>s.trim())
+.filter(s=>s.length>20)
+.slice(0,3);
+
+return sentences.map(s=>`✔ ${s}`).join("<br>");
+
+}
+
+/* ---------- LOAD PRODUCT ---------- */
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
@@ -95,9 +120,7 @@ ${hook}
 
 <div style="font-size:14px;line-height:1.6;margin:12px 0;">
 ✨ Why You’ll Love It:<br>
-✔ Trending on Amazon<br>
-✔ Viral product people are discovering<br>
-✔ Popular gadget right now
+${generateBullets(p.description)}
 </div>
 
 <a href="${p.link}" target="_blank"
