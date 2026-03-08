@@ -97,18 +97,6 @@ return `
 }
 
 
-const sentences = desc
-.replace(/\n/g," ")
-.split(/[.!?]/)
-.map(s=>s.trim())
-.filter(s=>s.length>20)
-.slice(0,3);
-
-const icons=["📸","📱","✨"];
-
-return sentences.map((s,i)=>`${icons[i]||"✔"} ${s}`).join("<br>");
-
-}
 
 /* ---------- LOAD PRODUCT ---------- */
 
