@@ -1,35 +1,92 @@
-Float rising - product card saas engine 
+Float Rising — Viral Product Card Engine
 
-**Live site https://linkmetagshop.vercel.app/
+Live App: https://linkmetagshop.vercel.app/
 
-An in depth clever product card sharing tool  for content crestors and advertisers to quickly share and pin products daily on pinterest  free version uses float rising advertising .
+Float Rising is a lightweight product discovery and sharing engine that generates beautiful, ready-to-share product cards for creators, marketers, and affiliate publishers.
 
+Creators can quickly discover trending products and share optimized product cards to platforms like Pinterest, social media, or messaging apps.
 
+The free version shares cards using the Float Rising affiliate ID.
+Creator Mode unlocks personal affiliate monetization.
 
-### Features
-- 🔍 **Product cards curated by hot viral , top selling , most money spent , tik tok viral , ect
-  
-  paid version $19 auto aphend and bake in your commission url to our product cards .
-  - cards are shareable for all users .
-    
+⸻
 
-### How to Use
+🚀 Features
 
-8. Share anywhere – viewers see your curated products with your affiliate links 
+• 🔍 Trending Product Discovery
+Products are curated from trending searches including viral gadgets, top selling items, and social-media trends.
 
-### Tech Stack
-- Pure HTML + CSS + JavaScript (no backend)
-- Hosted on Vercel
-- Libraries:reddis, LZString (compressed sharing), QRCode.js
-- Storage: Back end 
+• 🪄 Instant Product Cards
+Each product is rendered as a clean, high-converting product card ready for sharing.
 
-### Why Open Source?
-Built for the curation and creator field , use to create beutiful product pins or monetise.
+• 📌 Pinterest-Ready Sharing
+Generate product cards perfect for Pinterest pins and social sharing.
 
-### Support / Feedback
-- Found it useful? Consider supporting via the **Support via Wise** or **Buy Me a Coffee** buttons inside the app.
-- Issues / feature requests? Open an issue here or DM on X/TikTok @linkbotlabs
+• 🔗 Smart Affiliate Linking
+Free version uses the Float Rising affiliate ID.
+Creator Mode automatically embeds your own affiliate ID into product links.
 
-Happy earning! 🚀
+• 🎥 AI Video Prompt Generator
+Generate quick prompts for creating short product videos using AI tools.
 
-Made by float rising in conjunction with LBL
+• 📱 Mobile-First Interface
+Swipe through products and share instantly.
+
+⸻
+
+💼 Creator Mode ($19 one-time)
+
+Unlock Creator Mode to:
+
+• Use your own Amazon affiliate ID
+• Keep 100% of affiliate commissions
+• Generate monetized share links
+• Use product cards for your own content channels
+
+⸻
+
+🧠 How It Works
+	1.	Discover trending products
+	2.	Generate a shareable product card
+	3.	Share the card to Pinterest, social media, or messaging apps
+	4.	Earn affiliate commissions from clicks
+
+⸻
+
+🛠 Tech Stack
+
+• HTML
+• CSS
+• Vanilla JavaScript
+• Hosted on Vercel
+
+Libraries used:
+
+• Redis (share storage)
+• LZString (compressed share links)
+• QRCode.js
+
+⸻
+
+🌍 Why This Exists
+
+Creators often spend hours searching for products to promote.
+
+Float Rising simplifies the process by turning trending products into ready-to-share monetizable cards in seconds.
+
+⸻
+
+💬 Support / Feedback
+
+If you find Float Rising useful:
+
+• Support the project via the Wise or Buy Me a Coffee buttons inside the app
+• Submit issues or feature requests on GitHub
+• Connect on X / TikTok: @linkbotlabs
+
+⸻
+
+🚀 Built by
+
+Float Rising
+In collaboration with LBL
