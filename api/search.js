@@ -55,36 +55,40 @@ export default async function handler(req, res) {
       return res.status(200).json({ products: [] });
     }
 
-    // Filter valid Amazon product links
+    // Filter Amazon product links
     const filtered = data.items.filter(item =>
       item.link &&
       item.link.includes("amazon.com") &&
-      (item.link.includes("/dp/") || item.link.includes("/gp/product/"))
+      item.link.match(/\/(dp|gp\/product)\//)
     );
 
-    const products = filtered.map((item, i) => {
+    const products = filtered
+      .map((item, i) => {
 
-      const image =
-        item.pagemap?.cse_thumbnail?.[0]?.src ||
-        item.pagemap?.cse_image?.[0]?.src ||
-        "https://via.placeholder.com/600x600?text=Viral+Pick";
+        const image =
+          item.pagemap?.cse_image?.[0]?.src ||
+          item.pagemap?.cse_thumbnail?.[0]?.src;
 
-      const description =
-        item.snippet ||
-        item.pagemap?.metatags?.[0]?.["og:description"] ||
-        "Trending product people are buying right now.";
+        // Skip results without images
+        if (!image) return null;
 
-      const cleanLink = normalizeAmazonLink(item.link);
+        const description =
+          item.snippet ||
+          item.pagemap?.metatags?.[0]?.["og:description"] ||
+          "Trending product people are buying right now.";
 
-      return {
-        id: `${now}-${i}`,
-        title: cleanTitle(item.title),
-        description: description.substring(0, 140),
-        image,
-        link: cleanLink
-      };
+        const cleanLink = normalizeAmazonLink(item.link);
 
-    });
+        return {
+          id: `${now}-${i}`,
+          title: cleanTitle(item.title),
+          description: description.substring(0, 140),
+          image,
+          link: cleanLink
+        };
+
+      })
+      .filter(Boolean);
 
     cache.timestamp = now;
     cache.data = products;
@@ -129,8 +133,6 @@ function normalizeAmazonLink(url) {
     return `https://www.amazon.com/dp/${asin}`;
 
   } catch {
-
     return url;
-
   }
 }
