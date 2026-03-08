@@ -8,6 +8,8 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 /* ------------------ DISCOVERY KEYWORDS ------------------ */
 
 const keywords = [
+
+  // Core discovery
   "amazon trending gadgets",
   "viral kitchen gadgets amazon",
   "amazon best seller tech",
@@ -21,40 +23,59 @@ const keywords = [
   "amazon best seller kitchen tools 2026",
   "tiktok viral wellness gadgets amazon",
   "amazon movers and shakers gadgets",
-  "amazon best seller home gadgets"
+  "amazon best seller home gadgets",
+
+  // Viral niches
+  "tiktok viral plush accessories amazon",
+  "jellycat plush keychain amazon",
+  "magnetic phone mount car amazon viral",
+  "collagen peptide face mask amazon",
+  "solar power bank portable charger amazon",
+  "back stretcher spine decompressor amazon",
+  "tiktok fusion food tools amazon",
+  "asmr slime kit amazon viral",
+  "long distance touch bracelet amazon",
+  "mini hydroponic plant grower amazon",
+  "rfid blocking wallet amazon",
+  "led nail lamp uv amazon",
+  "portable espresso maker amazon",
+  "smart ring fitness tracker amazon"
+
 ];
 
-/* ------------------ VIRAL FALLBACK POOL ------------------ */
-/* This prevents empty feeds + avoids API quota limits */
+/* ------------------ VIRAL FALLBACK PRODUCTS ------------------ */
 
 const VIRAL_PRODUCTS = [
+
   {
     title: "Dash Mini Waffle Maker",
-    image: "https://m.media-amazon.com/images/I/71T2Xh9p0zL._AC_SL1500_.jpg",
+    image: "https://images-na.ssl-images-amazon.com/images/I/71T2Xh9p0zL._SL1500_.jpg",
     link: "https://www.amazon.com/dp/B010TCP3SC"
   },
   {
     title: "Sunset Projection Lamp",
-    image: "https://m.media-amazon.com/images/I/61c5dXnGZBL._AC_SL1500_.jpg",
+    image: "https://images-na.ssl-images-amazon.com/images/I/61c5dXnGZBL._SL1500_.jpg",
     link: "https://www.amazon.com/dp/B08QZ7F1VZ"
   },
   {
     title: "Electric Spin Scrubber",
-    image: "https://m.media-amazon.com/images/I/71rC9Yh8BQL._AC_SL1500_.jpg",
+    image: "https://images-na.ssl-images-amazon.com/images/I/71rC9Yh8BQL._SL1500_.jpg",
     link: "https://www.amazon.com/dp/B09BHZL8H8"
   },
   {
     title: "Portable Blender Smoothie Maker",
-    image: "https://m.media-amazon.com/images/I/71hM0yJq9mL._AC_SL1500_.jpg",
+    image: "https://images-na.ssl-images-amazon.com/images/I/71hM0yJq9mL._SL1500_.jpg",
     link: "https://www.amazon.com/dp/B08C7M1T8F"
   },
   {
     title: "Heated Eyelash Curler",
-    image: "https://m.media-amazon.com/images/I/61p+q1uAqBL._AC_SL1500_.jpg",
+    image: "https://images-na.ssl-images-amazon.com/images/I/61p+q1uAqBL._SL1500_.jpg",
     link: "https://www.amazon.com/dp/B07P7YVQX2"
   }
+
 ];
-/* ------------------ AMAZON TRENDING SOURCE ------------------ */
+
+/* ------------------ AMAZON MOVERS & SHAKERS ------------------ */
 
 async function getMoversAndShakers() {
 
@@ -70,7 +91,7 @@ async function getMoversAndShakers() {
     return asins.map((asin, i) => ({
       id: `mover-${i}`,
       title: "Trending Amazon Product",
-      image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SCLZZZZZZZ_.jpg`,
+      image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`,
       link: `https://www.amazon.com/dp/${asin}`
     }));
 
@@ -81,6 +102,9 @@ async function getMoversAndShakers() {
   }
 
 }
+
+/* ------------------ MAIN API HANDLER ------------------ */
+
 export default async function handler(req, res) {
 
   res.setHeader("Cache-Control", "no-store");
@@ -90,55 +114,68 @@ export default async function handler(req, res) {
   /* ---------- CACHE ---------- */
 
   if (cache.data && now - cache.timestamp < ONE_DAY) {
+
     return res.status(200).json({ products: cache.data });
+
   }
 
   try {
 
-    /* ---------- PICK MULTIPLE KEYWORDS ---------- */
+    /* ---------- RANDOM KEYWORDS ---------- */
 
     const shuffled = [...keywords].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 3);
+    const selected = shuffled.slice(0, 5);
 
     let allItems = [];
 
-   for (const keyword of selected) {
+    for (const keyword of selected) {
 
-  const query =
-    `${keyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
+      const query =
+        `${keyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
 
-  const googleRes = await fetch(
-    `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
-  );
+      const googleRes = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+      );
 
-  const data = await googleRes.json();
+      const data = await googleRes.json();
 
-  if (data.items) {
-    allItems = allItems.concat(data.items);
-  }
-} 
-    /* ---------- FILTER AMAZON PRODUCT LINKS ---------- */
+      if (data.items) {
+
+        allItems = allItems.concat(data.items);
+
+      }
+
+    }
+
+    /* ---------- FILTER AMAZON LINKS ---------- */
 
     const filtered = allItems.filter(item =>
-  item.link &&
-  item.link.includes("amazon.com") &&
-  (item.link.includes("/dp/") || item.link.includes("/gp/product/")) &&
-  item.title &&
-  item.title.length > 20
-);
+
+      item.link &&
+      item.link.includes("amazon.com") &&
+      (item.link.includes("/dp/") || item.link.includes("/gp/product/")) &&
+      item.title &&
+      item.title.length > 20
+
+    );
+
     /* ---------- MAP PRODUCTS ---------- */
 
     const products = filtered.map((item, i) => {
 
-      const asinMatch = item.link.match(/\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/);
-const asin = asinMatch?.[1] || asinMatch?.[2];
+      const asinMatch = item.link.match(
+        /\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/
+      );
 
-const image =
-  asin
-    ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`
-    : item.pagemap?.cse_image?.[0]?.src ||
-      item.pagemap?.cse_thumbnail?.[0]?.src ||
-      "https://via.placeholder.com/600x600?text=Float+Pick";
+      const asin = asinMatch?.[1] || asinMatch?.[2];
+
+      const image =
+        asin
+          ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`
+          : item.pagemap?.cse_image?.[0]?.src ||
+            item.pagemap?.cse_thumbnail?.[0]?.src ||
+            "https://via.placeholder.com/600x600?text=Float+Pick";
+
       const cleanLink = normalizeAmazonLink(item.link);
 
       return {
@@ -147,15 +184,18 @@ const image =
         image,
         link: cleanLink
       };
+
     });
 
-    /* ---------- ADD FALLBACK VIRAL PRODUCTS ---------- */
+    /* ---------- ADD MOVERS + FALLBACK ---------- */
+
+    const movers = await getMoversAndShakers();
 
     const fallback = VIRAL_PRODUCTS.map((p, i) => ({
       id: `fallback-${i}`,
       ...p
     }));
-const movers = await getMoversAndShakers();
+
     const combined = [...products, ...movers, ...fallback];
 
     /* ---------- REMOVE DUPLICATE ASINS ---------- */
@@ -175,13 +215,14 @@ const movers = await getMoversAndShakers();
       seen.add(asin);
 
       return true;
+
     });
 
     /* ---------- SHUFFLE FEED ---------- */
 
     unique.sort(() => 0.5 - Math.random());
 
-    /* ---------- SAVE CACHE ---------- */
+    /* ---------- CACHE ---------- */
 
     cache.timestamp = now;
     cache.data = unique;
@@ -189,8 +230,6 @@ const movers = await getMoversAndShakers();
     return res.status(200).json({ products: unique });
 
   } catch (error) {
-
-    /* ---------- IF GOOGLE FAILS USE FALLBACK ---------- */
 
     const fallback = VIRAL_PRODUCTS.map((p, i) => ({
       id: `fallback-${i}`,
@@ -206,12 +245,14 @@ const movers = await getMoversAndShakers();
 /* ------------------ HELPERS ------------------ */
 
 function cleanTitle(title) {
+
   return title
     .replace("- Amazon.com", "")
     .replace("| Amazon", "")
     .split("|")[0]
     .substring(0, 80)
     .trim();
+
 }
 
 function normalizeAmazonLink(url) {
