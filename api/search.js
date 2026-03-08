@@ -196,7 +196,13 @@ export default async function handler(req, res) {
 
       const cleanLink = normalizeAmazonLink(item.link);
 
-      
+    return {
+  id: `${now}-${i}`,
+  title: cleanTitle(item.title),
+  description: item.snippet || "",
+  image,
+  link: cleanLink
+};  
 
     });
 
