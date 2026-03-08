@@ -494,7 +494,7 @@ if(!creatorUnlocked){
 alert("Please unlock Creator Mode first.");
 return;
 }
-const val=affiliateInput.value.trim();
+const val=document.getElementById("affiliateInput").value.trim();
 if(!val.includes("-")){
 affiliateError.innerText="Format example: yourname-20";
 return;
