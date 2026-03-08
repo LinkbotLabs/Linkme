@@ -1,6 +1,6 @@
 const cache = {
   timestamp: 0,
-  data: null
+  data: []
 };
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 
   /* ---------- RETURN CACHE IF STILL FRESH ---------- */
 
-  if (cache.data && now - cache.timestamp < ONE_DAY) {
+  if (cache.data.length && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({ products: cache.data });
   }
 
@@ -92,7 +92,7 @@ export default async function handler(req, res) {
 
 
     if (allItems.length === 0) {
-      return res.status(200).json({ products: [] });
+      return res.status(200).json({ products: cache.data });
     }
 
 
@@ -104,9 +104,6 @@ export default async function handler(req, res) {
       !item.link.includes("/s?") &&
       item.link.match(/\/(dp|gp\/product)\//)
     );
-
-
-    const seen = new Set();
 
 
     const products = filtered
@@ -133,10 +130,6 @@ export default async function handler(req, res) {
         const cleanLink = normalizeAmazonLink(item.link);
 
         const title = cleanTitle(item.title);
-
-
-        if (seen.has(cleanLink)) return null;
-        seen.add(cleanLink);
 
 
         /* prioritize gadget style products */
@@ -166,17 +159,44 @@ export default async function handler(req, res) {
       .sort((a, b) => b.score - a.score)
 
 
-      /* feed size */
+      /* limit daily discoveries */
 
       .slice(0, 18);
 
 
 
+    /* ---------------- MERGE WITH EXISTING DATABASE ---------------- */
+
+    const existing = cache.data || [];
+
+    const merged = [...existing, ...products];
+
+
+    /* ---------------- REMOVE DUPLICATES ---------------- */
+
+    const unique = [];
+    const seen = new Set();
+
+    for (const p of merged) {
+
+      if (seen.has(p.link)) continue;
+
+      seen.add(p.link);
+
+      unique.push(p);
+
+    }
+
+
+    /* ---------------- LIMIT TOTAL DATABASE SIZE ---------------- */
+
+    cache.data = unique.slice(-300);
+
+
     cache.timestamp = now;
-    cache.data = products;
 
 
-    return res.status(200).json({ products });
+    return res.status(200).json({ products: cache.data });
 
 
   } catch (error) {
