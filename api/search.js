@@ -152,7 +152,7 @@ export default async function handler(req, res) {
         `${keyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
 
       const googleRes = await fetch(
-        
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.GOOGLE_CX}&q=${encodeURIComponent(query)}&num=10`  
       );
 
       const data = await googleRes.json();
