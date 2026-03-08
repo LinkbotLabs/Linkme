@@ -115,7 +115,7 @@ fetch("/api/get?id="+id)
 .then(res=>res.json())
 
 .then(p=>{
-
+document.querySelector('meta[property="og:image"]').setAttribute("content", p.image);
 if(p.error||!p.title){
 
 document.getElementById("app").innerHTML =
