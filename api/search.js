@@ -9,7 +9,6 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 
 const keywords = [
 
-  // Core discovery
   "amazon trending gadgets",
   "viral kitchen gadgets amazon",
   "amazon best seller tech",
@@ -25,7 +24,6 @@ const keywords = [
   "amazon movers and shakers gadgets",
   "amazon best seller home gadgets",
 
-  // Viral niches
   "tiktok viral plush accessories amazon",
   "jellycat plush keychain amazon",
   "magnetic phone mount car amazon viral",
@@ -40,38 +38,6 @@ const keywords = [
   "led nail lamp uv amazon",
   "portable espresso maker amazon",
   "smart ring fitness tracker amazon"
-
-];
-
-/* ------------------ VIRAL FALLBACK PRODUCTS ------------------ */
-
-const VIRAL_PRODUCTS = [
-
-  {
-    title: "Dash Mini Waffle Maker",
-    image: "https://images-na.ssl-images-amazon.com/images/I/71T2Xh9p0zL._SL1500_.jpg",
-    link: "https://www.amazon.com/dp/B010TCP3SC"
-  },
-  {
-    title: "Sunset Projection Lamp",
-    image: "https://images-na.ssl-images-amazon.com/images/I/61c5dXnGZBL._SL1500_.jpg",
-    link: "https://www.amazon.com/dp/B08QZ7F1VZ"
-  },
-  {
-    title: "Electric Spin Scrubber",
-    image: "https://images-na.ssl-images-amazon.com/images/I/71rC9Yh8BQL._SL1500_.jpg",
-    link: "https://www.amazon.com/dp/B09BHZL8H8"
-  },
-  {
-    title: "Portable Blender Smoothie Maker",
-    image: "https://images-na.ssl-images-amazon.com/images/I/71hM0yJq9mL._SL1500_.jpg",
-    link: "https://www.amazon.com/dp/B08C7M1T8F"
-  },
-  {
-    title: "Heated Eyelash Curler",
-    image: "https://images-na.ssl-images-amazon.com/images/I/61p+q1uAqBL._SL1500_.jpg",
-    link: "https://www.amazon.com/dp/B07P7YVQX2"
-  }
 
 ];
 
@@ -103,6 +69,62 @@ async function getMoversAndShakers() {
 
 }
 
+/* ------------------ REDDIT VIRAL PRODUCTS ------------------ */
+
+async function getRedditProducts() {
+
+  try {
+
+    const subreddits = [
+      "AmazonFinds",
+      "BuyItForLife",
+      "DidntKnowIWantedThat",
+      "DamnThatsInteresting"
+    ];
+
+    let products = [];
+
+    for (const sub of subreddits) {
+
+      const res = await fetch(
+        `https://www.reddit.com/r/${sub}/hot.json?limit=25`
+      );
+
+      const data = await res.json();
+
+      const posts = data?.data?.children || [];
+
+      posts.forEach((post, i) => {
+
+        const url = post.data.url || "";
+
+        const asinMatch = url.match(/\/dp\/([A-Z0-9]{10})/);
+
+        if (!asinMatch) return;
+
+        const asin = asinMatch[1];
+
+        products.push({
+          id: `reddit-${sub}-${i}`,
+          title: post.data.title,
+          image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`,
+          link: `https://www.amazon.com/dp/${asin}`
+        });
+
+      });
+
+    }
+
+    return products.slice(0, 20);
+
+  } catch {
+
+    return [];
+
+  }
+
+}
+
 /* ------------------ MAIN API HANDLER ------------------ */
 
 export default async function handler(req, res) {
@@ -111,8 +133,6 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  /* ---------- CACHE ---------- */
-
   if (cache.data && now - cache.timestamp < ONE_DAY) {
 
     return res.status(200).json({ products: cache.data });
@@ -120,8 +140,6 @@ export default async function handler(req, res) {
   }
 
   try {
-
-    /* ---------- RANDOM KEYWORDS ---------- */
 
     const shuffled = [...keywords].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, 5);
@@ -187,16 +205,12 @@ export default async function handler(req, res) {
 
     });
 
-    /* ---------- ADD MOVERS + FALLBACK ---------- */
+    /* ---------- EXTRA SOURCES ---------- */
 
     const movers = await getMoversAndShakers();
+    const reddit = await getRedditProducts();
 
-    const fallback = VIRAL_PRODUCTS.map((p, i) => ({
-      id: `fallback-${i}`,
-      ...p
-    }));
-
-    const combined = [...products, ...movers, ...fallback];
+    const combined = [...products, ...movers, ...reddit];
 
     /* ---------- REMOVE DUPLICATE ASINS ---------- */
 
@@ -218,25 +232,16 @@ export default async function handler(req, res) {
 
     });
 
-    /* ---------- SHUFFLE FEED ---------- */
-
     unique.sort(() => 0.5 - Math.random());
-
-    /* ---------- CACHE ---------- */
 
     cache.timestamp = now;
     cache.data = unique;
 
     return res.status(200).json({ products: unique });
 
-  } catch (error) {
+  } catch {
 
-    const fallback = VIRAL_PRODUCTS.map((p, i) => ({
-      id: `fallback-${i}`,
-      ...p
-    }));
-
-    return res.status(200).json({ products: fallback });
+    return res.status(200).json({ products: [] });
 
   }
 
