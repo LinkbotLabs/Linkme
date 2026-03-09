@@ -805,52 +805,7 @@ async function shareLink(){
   /* ===== PINTEREST HELPERS ===== */
 
 
-function generatePinterestDescription(p,link){
-
-const templates=[
-
-`${p.title} is trending right now.
-
-⭐ ${p.rating} stars
-🔥 ${p.sold}+ sold
-
-${generateViralPinHook(p.title)}
-
-See why people are buying it:
-${link}
-
-#amazonfinds #tiktokmademebuyit #viralproducts`,
-
-`People can't stop buying this ${p.title}.
-
-⭐ Rated ${p.rating}
-📦 ${p.sold}+ sold
-
-${generateViralPinHook(p.title)}
-
-View the product here:
-${link}
-
-#amazonmusthaves #trendingproducts #gadgets`,
-
-`This ${p.title} is blowing up online.
-
-✔ ${p.sold}+ sold
-⭐ ${p.rating} star reviews
-
-${generateViralPinHook(p.title)}
-
-See the product here:
-${link}
-
-#amazonfavorites #tiktokfinds #viralproducts`
-
-];
-
-return templates[Math.floor(Math.random()*templates.length)];
-
-}
-if(!products.length)return;
+!products.length)return;
 const p=products[currentIndex];
 
 const res=await fetch("/api/share",{
