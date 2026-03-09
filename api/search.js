@@ -27,7 +27,7 @@ const queries = [
   "amazon weird gadgets site:amazon.com",
   "amazon problem solving gadgets site:amazon.com",
   "amazon cleaning gadgets viral site:amazon.com",
-  "amazon travel gadgets site:amazon.com"
+  "amazon travel gadgets site:amazon.com",
 /* NEW VIRAL PRODUCT NICHES */
 
 "jellycat plush keychain phone charm site:amazon.com",
