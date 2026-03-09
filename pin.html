@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pin</title>
+<style>
+
+body{
+margin:0;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+font-family:sans-serif;
+}
+
+.pin{
+width:1000px;
+height:1500px;
+background:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:60px;
+box-sizing:border-box;
+}
+
+img{
+max-width:90%;
+max-height:900px;
+object-fit:contain;
+}
+
+h1{
+font-size:60px;
+text-align:center;
+margin-top:40px;
+}
+
+.brand{
+margin-top:40px;
+font-size:30px;
+opacity:0.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="pin">
+
+<img id="img">
+
+<h1 id="title"></h1>
+
+<div class="brand">Float Rising</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(location.search);
+
+document.getElementById("img").src = params.get("img");
+document.getElementById("title").innerText = params.get("title");
+
+</script>
+
+</body>
+</html>
