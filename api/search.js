@@ -3,7 +3,7 @@ const cache = {
   data: []
 };
 
-const ONE_DAY = 1000 * 60 * 60 * 24;
+const CACHE_TIME = 1000 * 60 * 60 * 6; // 6 hours
 
 
 /* ---------------- VIRAL SEARCH QUERIES ---------------- */
