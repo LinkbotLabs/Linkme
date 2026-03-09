@@ -186,7 +186,7 @@ export default async function handler(req, res) {
 
       /* limit daily discoveries */
 
-      .slice(0, 18);
+      .slice(0, 24);
 
 
 
