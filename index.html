@@ -775,7 +775,7 @@ return title
 .trim();
 }
 function generatePinterestDescription(p,link){
-
+const title = cleanTitle(p.title);
 const templates=[
 
 `${p.title} is trending right now.
