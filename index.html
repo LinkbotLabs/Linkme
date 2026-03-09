@@ -873,7 +873,25 @@ const pinterestUrl =
 window.open(pinterestUrl,"_blank");
 
 }
+function copyPinterestDescription(){
 
+if(!products.length) return;
+
+const p = products[currentIndex];
+
+const link = window.location.origin + "/s.html?id=preview";
+
+const title = generatePinterestTitle(p.title);
+
+const description = generatePinterestDescription(p,link);
+
+const text = title + "\n\n" + description;
+
+navigator.clipboard.writeText(text);
+
+alert("Pinterest caption copied ✅");
+
+}
 function createGrokVideoPrompt(){
 
 if(!products.length)return;
