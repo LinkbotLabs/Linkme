@@ -851,7 +851,7 @@ const description = generatePinterestDescription(p,smallLink);
 const pinterestUrl =
 "https://www.pinterest.com/pin/create/button/?" +
 "url=" + encodeURIComponent(smallLink) +
-"&media=" + encodeURIComponent(p.image) +
+"&media=" + encodeURIComponent(window.location.origin + "/pin.html?img=" + encodeURIComponent(p.image) + "&title=" + encodeURIComponent(p.title)) +
 "&description=" + encodeURIComponent(title + "\n\n" + description);
 
 window.open(pinterestUrl,"_blank");
