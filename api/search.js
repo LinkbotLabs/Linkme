@@ -28,7 +28,25 @@ const queries = [
   "amazon problem solving gadgets site:amazon.com",
   "amazon cleaning gadgets viral site:amazon.com",
   "amazon travel gadgets site:amazon.com"
+/* NEW VIRAL PRODUCT NICHES */
 
+"jellycat plush keychain phone charm site:amazon.com",
+"magnetic phone mount car desk holder site:amazon.com",
+"collagen mask peptide sheet mask hydrogel mask site:amazon.com",
+"solar power bank portable charger foldable solar site:amazon.com",
+"back stretcher spine decompressor yoga wheel site:amazon.com",
+"dumpling maker sushi roller scallion pancake maker site:amazon.com",
+"slime kit kinetic sand jellyfish lamp site:amazon.com",
+"long distance touch bracelet couple lamp site:amazon.com",
+"self watering planter led grow light hydroponic kit site:amazon.com",
+"rfid blocking wallet anti theft wallet site:amazon.com",
+"led nail lamp uv gel dryer site:amazon.com",
+"portable espresso maker manual coffee grinder site:amazon.com",
+"smart ring fitness tracker sleep monitor site:amazon.com",
+"holographic projector fan display site:amazon.com",
+"nmn supplement resveratrol longevity site:amazon.com",
+"infrared sauna blanket portable detox site:amazon.com",
+"smart makeup mirror ar virtual try on site:amazon.com"
 ];
 
 
