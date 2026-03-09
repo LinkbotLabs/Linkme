@@ -800,57 +800,7 @@ return templates[Math.floor(Math.random()*templates.length)];
 
 /* ===== YOUR EXISTING FUNCTION ===== */
 
-async function shareLink(){
 
-  /* ===== PINTEREST HELPERS ===== */
-
-
-!products.length)return;
-const p=products[currentIndex];
-
-const res=await fetch("/api/share",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({...p,link:appendAffiliate(p.link)})
-});
-
-const data=await res.json();
-const smallLink=window.location.origin+"/s.html?id="+data.id;
-
-if(navigator.share){
-navigator.share({title:p.title,text:smallLink});
-}else alert("Copy this link:\n"+smallLink);
-}
-
-async function sharePinterest(){
-
-if(!products.length)return;
-
-const p=products[currentIndex];
-
-const res=await fetch("/api/share",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({...p,link:appendAffiliate(p.link)})
-});
-
-const data=await res.json();
-
-const smallLink=window.location.origin+"/api/share-page?id="+data.id;
-
-const title = generatePinterestTitle(p.title);
-
-const description = generatePinterestDescription(p,smallLink);
-
-const pinterestUrl=
-"https://www.pinterest.com/pin/create/button/?"+
-"url="+encodeURIComponent(smallLink)+
-"&media="+encodeURIComponent(p.image)+
-"&description="+encodeURIComponent(title+"\n\n"+description);
-
-window.open(pinterestUrl,"_blank");
-
-}
 
 function createGrokVideoPrompt(){
 
