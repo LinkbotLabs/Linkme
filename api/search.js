@@ -68,7 +68,7 @@ const viralWords = [
   "organizer",
   "kitchen",
   "tool",
-  "travel"
+  "travel",
   "lamp",
   "projector",
   "decor",
