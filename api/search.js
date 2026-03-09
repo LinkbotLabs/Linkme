@@ -95,7 +95,7 @@ export default async function handler(req, res) {
 
     const selectedQueries = queries
       .sort(() => 0.5 - Math.random())
-      .slice(0, 3);
+      .slice(0, 4);
 
 
     let allItems = [];
