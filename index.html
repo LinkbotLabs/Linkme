@@ -751,7 +751,13 @@ const hooks = [
 return hooks[Math.floor(Math.random()*hooks.length)];
 
 }
-
+function cleanTitle(title){
+return title
+.replace("Amazon.com:","")
+.replace("Visit the","")
+.replace("Store","")
+.trim();
+}
 function generatePinterestTitle(title){
 
 const templates=[
