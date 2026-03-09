@@ -615,7 +615,10 @@ products=(data.products||[]).filter(p=>p.link && p.image);
 currentIndex=0;
 renderProduct();
 }
-
+function generateHook(title){
+const shortTitle = title.split(" ").slice(0,3).join(" ");
+return `🔥 This ${shortTitle} Is Going Viral`;
+}
 
 function renderProduct(){
 
