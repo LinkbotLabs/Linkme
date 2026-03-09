@@ -167,7 +167,9 @@ export default async function handler(req, res) {
 
         const titleLower = title.toLowerCase();
 
-        
+        const score = viralWords.reduce((count, word) => {
+  return titleLower.includes(word) ? count + 1 : count;
+}, 0);
 
 
         return {
