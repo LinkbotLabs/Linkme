@@ -836,7 +836,9 @@ const data=await res.json();
 
 const smallLink=window.location.origin+"/api/share-page?id="+data.id;
 
+const title = generatePinterestTitle(p.title);
 
+const description = generatePinterestDescription(p,smallLink);
 
 const pinterestUrl=
 "https://www.pinterest.com/pin/create/button/?"+
