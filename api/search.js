@@ -133,7 +133,7 @@ export default async function handler(req, res) {
       item.link &&
       item.link.includes("amazon.com") &&
       !item.link.includes("/s?") &&
-      item.link.match(/\/(dp|gp\/product)\//)
+      item.link.includes("/dp/")
     );
 
 
