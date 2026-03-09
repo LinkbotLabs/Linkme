@@ -58,7 +58,6 @@ const queries = [
 
 
 /* -------- WORDS COMMON IN VIRAL GADGET PRODUCTS -------- */
-
 const viralWords = [
   "gadget",
   "portable",
@@ -71,6 +70,7 @@ const viralWords = [
   "tool",
   "travel"
 ];
+
 
 
 /* ---------------- API HANDLER ---------------- */
