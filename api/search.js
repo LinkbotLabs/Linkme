@@ -46,14 +46,14 @@ const queries = [
 "holographic projector fan display site:amazon.com",
 "nmn supplement resveratrol longevity site:amazon.com",
 "infrared sauna blanket portable detox site:amazon.com",
-"smart makeup mirror ar virtual try on site:amazon.com"
+"smart makeup mirror ar virtual try on site:amazon.com",
 "led sunset lamp aesthetic room decor site:amazon.com",
 "galaxy projector night light site:amazon.com",
 "mini thermal photo printer site:amazon.com",
 "reusable water balloons summer toys site:amazon.com",
 "magnetic screen door mesh site:amazon.com",
 "cordless mini chainsaw garden tool site:amazon.com",
-"adjustable laptop stand aluminum site:amazon.com"
+"adjustable laptop stand aluminum site:amazon.com",
 ];
 
 
