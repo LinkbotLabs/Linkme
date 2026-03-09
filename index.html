@@ -12,13 +12,13 @@ Creator Product Cards</title>
 <style>
 .top-banner{
 width:100%;
-height:100px;
+height:200px;
 overflow:hidden;
 }
 
 .top-banner img{
 width:100%;
-height:300px;
+height:100px;
 object-fit:cover;
 object-position:center;
 }
@@ -865,7 +865,7 @@ const description = generatePinterestDescription(p,smallLink);
 const pinterestUrl =
 "https://www.pinterest.com/pin/create/button/?" +
 "url=" + encodeURIComponent(smallLink) +
-"&media=" + encodeURIComponent(window.location.origin + "/pin.html?img=" + encodeURIComponent(p.image) + "&title=" + encodeURIComponent(p.title)) +
+"&media=" + encodeURIComponent(p.image)
 "&description=" + encodeURIComponent(title + "\n\n" + description);
 
 window.open(pinterestUrl,"_blank");
