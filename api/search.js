@@ -84,7 +84,7 @@ export default async function handler(req, res) {
 
   /* ---------- RETURN CACHE IF STILL FRESH ---------- */
 
-  if (cache.data.length && now - cache.timestamp < ONE_DAY) {
+  if (cache.data.length && now - cache.timestamp < CACHE_TIME) {
     return res.status(200).json({ products: cache.data });
   }
 
