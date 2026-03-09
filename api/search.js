@@ -58,6 +58,18 @@ const queries = [
 
 
 /* -------- WORDS COMMON IN VIRAL GADGET PRODUCTS -------- */
+const viralWords = [
+  "gadget",
+  "portable",
+  "mini",
+  "electric",
+  "automatic",
+  "cleaner",
+  "organizer",
+  "kitchen",
+  "tool",
+  "travel"
+];
 
 
 
