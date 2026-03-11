@@ -149,7 +149,15 @@ export default async function handler(req, res) {
 
     /* -------- FILTER REAL AMAZON PRODUCT LINKS -------- */
 
-    
+   const filtered = allItems.filter(item =>
+  item.link &&
+  item.link.includes("amazon.com") &&
+  !item.link.includes("/s?") &&
+  (
+    item.link.includes("/dp/") ||
+    item.link.includes("/gp/product/")
+  )
+); 
 
     const products = filtered
       .map((item, i) => {
