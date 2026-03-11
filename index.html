@@ -679,7 +679,30 @@ checkCreatorUnlock();
 
 }
 
+function updatePointsDisplay(){
 
+const el = document.getElementById("creatorPoints");
+const bar = document.getElementById("creatorBar");
+
+if(el){
+el.innerText = creatorPoints + " / 200";
+}
+
+if(bar){
+
+let percent = (creatorPoints / 200) * 100;
+
+if(percent > 100) percent = 100;
+
+bar.style.width = percent + "%";
+
+}
+
+if(creatorPoints >= 200){
+alert("🎉 Creator Mode Unlocked!");
+}
+
+}
 function checkCreatorUnlock(){
 
 if(creatorPoints >= 200 && !creatorUnlocked){
