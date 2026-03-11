@@ -184,13 +184,7 @@ export default async function handler(req, res) {
 
       /* boost viral gadget titles */
 
-      .sort((a, b) => b.score - a.score)
-
-      /* limit daily discoveries */
-
-      .slice(0, 24);
-
-
+      .
 
     /* ---------------- MERGE WITH EXISTING DATABASE ---------------- */
 
