@@ -80,7 +80,25 @@ const viralWords = [
   "smart"
 ];
 
-
+const nicheKeywords = [
+  "lamp",
+  "projector",
+  "organizer",
+  "cleaner",
+  "printer",
+  "wallet",
+  "coffee",
+  "espresso",
+  "beauty",
+  "mask",
+  "fitness",
+  "charger",
+  "solar",
+  "ring",
+  "toy",
+  "garden",
+  "kitchen"
+];
 /* ---------------- API HANDLER ---------------- */
 
 export default async function handler(req, res) {
