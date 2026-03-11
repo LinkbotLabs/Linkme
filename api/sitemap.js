@@ -1,35 +1,42 @@
 export default async function handler(req, res) {
 
-  const base = "https://linkmetagshop.vercel.app";
+const base = "https://linkmetagshop.vercel.app";
 
-  try {
+try {
 
-    const response = await fetch(`${base}/api/search`);
-    const data = await response.json();
+const response = await fetch(`${base}/api/search`);
+const data = await response.json();
 
-    const products = data.products || [];
+const products = data.products || [];
 
-    const urls = products.map(p => {
-      return `
-      <url>
-        <loc>${base}/s.html?id=${p.id}</loc>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-      </url>`;
-    }).join("");
+const urls = products.map(p => `
+<url>
+<loc>${base}/s.html?id=${p.id}</loc>
+<changefreq>daily</changefreq>
+<priority>0.8</priority>
+</url>
+`).join("");
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    ${urls}
-    </urlset>`;
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>${base}</loc>
+<changefreq>daily</changefreq>
+<priority>1.0</priority>
+</url>
+${urls}
+</urlset>`;
 
-    res.setHeader("Content-Type", "text/xml");
-    res.status(200).send(xml);
+res.setHeader("Content-Type", "application/xml");
+res.status(200).send(xml);
 
-  } catch (error) {
+} catch (error) {
 
-    res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`);
+res.setHeader("Content-Type", "application/xml");
 
-  }
+res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`);
+
+}
+
 }
