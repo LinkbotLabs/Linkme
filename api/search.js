@@ -3,66 +3,54 @@ const cache = {
   data: []
 };
 
-const CACHE_TIME = 1000 * 60 * 60 * 6; // 6 hours
+const CACHE_TIME = 1000 * 60 * 60 * 6;
 
 
-/* ---------------- VIRAL SEARCH QUERIES ---------------- */
+/* ---------------- VIRAL SOURCES ---------------- */
 
 const queries = [
 
-"amazon trending gadgets site:amazon.com -book -novel -kindle",
-"viral kitchen gadgets amazon site:amazon.com -book -novel -kindle",
-"tiktok made me buy it amazon gadgets site:amazon.com -book -novel -kindle",
-"amazon impulse buy gadgets site:amazon.com -book -novel -kindle",
+/* AMAZON TREND DATA */
 
-/* piggyback Amazon ranking pages */
+"site:amazon.com/gp/movers-and-shakers",
+"site:amazon.com/gp/movers-and-shakers kitchen",
+"site:amazon.com/gp/movers-and-shakers home",
+"site:amazon.com/gp/movers-and-shakers electronics",
 
-"site:amazon.com \"best sellers in\" kitchen gadgets",
-"site:amazon.com \"movers and shakers\" gadgets",
-"site:amazon.com \"most wished for\" gadgets",
+/* TIKTOK VIRAL SIGNALS */
 
-/* viral niches */
+"tiktok made me buy it amazon gadget",
+"viral tiktok gadget amazon",
+"tiktok cleaning gadget amazon",
+"tiktok kitchen gadget amazon",
+"tiktok amazon home gadget",
 
-"amazon gadgets under $25 site:amazon.com",
-"amazon weird gadgets site:amazon.com",
+/* PINTEREST STYLE VIRAL PRODUCTS */
+
 "amazon problem solving gadgets site:amazon.com",
-"amazon cleaning gadgets viral site:amazon.com",
-"amazon travel gadgets site:amazon.com",
+"amazon life hack gadget site:amazon.com",
+"amazon must have gadgets site:amazon.com",
 
-/* NEW VIRAL PRODUCT NICHES */
+/* KNOWN VIRAL PRODUCT CATEGORIES */
 
-"jellycat plush keychain phone charm site:amazon.com",
-"magnetic phone mount car desk holder site:amazon.com",
-"collagen mask peptide sheet mask hydrogel mask site:amazon.com",
-"solar power bank portable charger foldable solar site:amazon.com",
-"back stretcher spine decompressor yoga wheel site:amazon.com",
-"dumpling maker sushi roller scallion pancake maker site:amazon.com",
-"slime kit kinetic sand jellyfish lamp site:amazon.com",
-"long distance touch bracelet couple lamp site:amazon.com",
-"self watering planter led grow light hydroponic kit site:amazon.com",
-"rfid blocking wallet anti theft wallet site:amazon.com",
-"led nail lamp uv gel dryer site:amazon.com",
-"portable espresso maker manual coffee grinder site:amazon.com",
-"smart ring fitness tracker sleep monitor site:amazon.com",
-"holographic projector fan display site:amazon.com",
-"nmn supplement resveratrol longevity site:amazon.com",
-"infrared sauna blanket portable detox site:amazon.com",
-"smart makeup mirror ar virtual try on site:amazon.com",
-"led sunset lamp aesthetic room decor site:amazon.com",
-"galaxy projector night light site:amazon.com",
-"mini thermal photo printer site:amazon.com",
-"reusable water balloons summer toys site:amazon.com",
+"vegetable chopper kitchen gadget site:amazon.com",
+"electric spin scrubber cleaner site:amazon.com",
+"portable blender usb rechargeable site:amazon.com",
+"mini thermal label printer site:amazon.com",
+"automatic soap dispenser touchless site:amazon.com",
 "magnetic screen door mesh site:amazon.com",
-"cordless mini chainsaw garden tool site:amazon.com",
-"adjustable laptop stand aluminum site:amazon.com",
+"car seat gap filler organizer site:amazon.com",
+"cordless handheld vacuum car site:amazon.com"
 
 ];
 
 
-/* -------- WORDS COMMON IN VIRAL GADGET PRODUCTS -------- */
+/* ---------------- VIRAL WORD SIGNALS ---------------- */
 
 const viralWords = [
   "gadget",
+  "viral",
+  "must",
   "portable",
   "mini",
   "electric",
@@ -71,36 +59,12 @@ const viralWords = [
   "organizer",
   "kitchen",
   "tool",
-  "travel",
-  "lamp",
-  "projector",
-  "decor",
-  "aesthetic",
-  "led",
-  "smart"
-];
-
-
-/* -------- PRODUCT NICHE DETECTION -------- */
-
-const nicheKeywords = [
-  "lamp",
-  "projector",
-  "organizer",
-  "cleaner",
-  "printer",
-  "wallet",
-  "coffee",
-  "espresso",
-  "beauty",
-  "mask",
-  "fitness",
-  "charger",
-  "solar",
-  "ring",
-  "toy",
-  "garden",
-  "kitchen"
+  "smart",
+  "wireless",
+  "rechargeable",
+  "foldable",
+  "adjustable",
+  "multifunction"
 ];
 
 
@@ -112,15 +76,11 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  /* ---------- RETURN CACHE IF STILL FRESH ---------- */
-
   if (cache.data.length && now - cache.timestamp < CACHE_TIME) {
     return res.status(200).json({ products: cache.data });
   }
 
   try {
-
-    /* pick 5 queries randomly */
 
     const shuffled = [...queries].sort(() => 0.5 - Math.random());
     const selectedQueries = shuffled.slice(0, 5);
@@ -141,80 +101,68 @@ export default async function handler(req, res) {
 
     }
 
-    if (allItems.length === 0) {
+    if (!allItems.length) {
       return res.status(200).json({ products: cache.data });
     }
 
-    /* -------- FILTER AMAZON LINKS -------- */
+
+    /* -------- STRICT AMAZON PRODUCT FILTER -------- */
 
     const filtered = allItems.filter(item =>
       item.link &&
       item.link.includes("amazon.com") &&
-      !item.link.includes("/s?")
+      (
+        item.link.includes("/dp/") ||
+        item.link.includes("/gp/product/")
+      )
     );
 
 
-    const products = filtered
-      .map((item, i) => {
+    const products = filtered.map((item, i) => {
 
-        const rawImage =
-          item.pagemap?.cse_image?.[0]?.src ||
-          item.pagemap?.metatags?.[0]?.["og:image"] ||
-          item.pagemap?.cse_thumbnail?.[0]?.src;
+      const rawImage =
+        item.pagemap?.cse_image?.[0]?.src ||
+        item.pagemap?.metatags?.[0]?.["og:image"] ||
+        item.pagemap?.cse_thumbnail?.[0]?.src;
 
-        if (!rawImage) return null;
+      if (!rawImage) return null;
 
-        const image = upgradeAmazonImage(rawImage);
+      const image = upgradeAmazonImage(rawImage);
 
-        const description =
-          item.snippet ||
-          item.pagemap?.metatags?.[0]?.["og:description"] ||
-          "Trending Amazon product people are buying right now.";
+      const description =
+        item.snippet ||
+        item.pagemap?.metatags?.[0]?.["og:description"] ||
+        "Trending Amazon product going viral right now.";
 
-        const cleanLink = normalizeAmazonLink(item.link);
+      const link = normalizeAmazonLink(item.link);
 
-        const title = cleanTitle(item.title);
+      const title = cleanTitle(item.title);
 
-        const titleLower = title.toLowerCase();
+      const titleLower = title.toLowerCase();
 
-        const niche =
-          nicheKeywords.find(word => titleLower.includes(word)) || "other";
+      const score = viralWords.reduce((count, word) => {
+        return titleLower.includes(word) ? count + 1 : count;
+      }, 0);
 
-        const score = viralWords.reduce((count, word) => {
-          return titleLower.includes(word) ? count + 1 : count;
-        }, 0);
+      return {
+        id: `${now}-${i}`,
+        title,
+        description: description.substring(0, 140),
+        image,
+        link,
+        score
+      };
 
-        return {
-          id: `${now}-${i}`,
-          title,
-          description: description.substring(0, 140),
-          image,
-          link: cleanLink,
-          score,
-          niche
-        };
-
-      })
-      .filter(Boolean)
-
-      /* boost viral gadget titles */
-
-      .sort((a, b) => b.score - a.score)
-
-      /* add randomness */
-
-      .sort(() => 0.5 - Math.random())
-
-      .slice(0, 24);
+    })
+    .filter(Boolean)
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,24);
 
 
-    /* ---------------- MERGE WITH EXISTING DATABASE ---------------- */
+    /* -------- MERGE + REMOVE DUPES -------- */
 
     const existing = cache.data || [];
     const merged = [...existing, ...products];
-
-
-    /* ---------------- REMOVE DUPLICATES ---------------- */
 
     const unique = [];
     const seen = new Set();
@@ -228,9 +176,6 @@ export default async function handler(req, res) {
       unique.push(p);
 
     }
-
-
-    /* ---------------- LIMIT DATABASE SIZE ---------------- */
 
     cache.data = unique.slice(-300);
     cache.timestamp = now;
@@ -249,7 +194,7 @@ export default async function handler(req, res) {
 }
 
 
-/* ---------------- HELPER FUNCTIONS ---------------- */
+/* ---------------- HELPERS ---------------- */
 
 function cleanTitle(title) {
 
@@ -286,8 +231,6 @@ function normalizeAmazonLink(url) {
 
 }
 
-
-/* upgrade Amazon thumbnails */
 
 function upgradeAmazonImage(url) {
   return url.replace(/\._.*_\./, ".");
