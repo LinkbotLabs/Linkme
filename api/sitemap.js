@@ -9,13 +9,13 @@ const data = await response.json();
 
 const products = data.products || [];
 
-const urls = products.map(p => {
-return `<url>
+const urls = products.map(p => `
+<url>
 <loc>${base}/s.html?id=${p.id}</loc>
 <changefreq>daily</changefreq>
 <priority>0.8</priority>
-</url>`;
-}).join("");
+</url>
+`).join("");
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -37,13 +37,12 @@ res.end();
 
 } catch (error) {
 
-const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-</urlset>`;
-
 res.setHeader("Content-Type", "application/xml");
-res.statusCode = 200;
-res.write(xml);
+
+res.write(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+</urlset>`);
+
 res.end();
 
 }
