@@ -196,6 +196,7 @@ const niche =
           image,
           link: cleanLink,
           score
+          niche
         };
 
       })
