@@ -295,6 +295,26 @@ font-size:15px;
 
 </button>
 
+<button id="shareBtn"
+style="
+display:block;
+width:100%;
+background:#6366f1;
+color:white;
+padding:14px;
+border-radius:16px;
+text-align:center;
+font-weight:700;
+border:none;
+cursor:pointer;
+margin-bottom:12px;
+font-size:15px;
+">
+
+📲 Share Anywhere
+
+</button>
+
 <!-- AFFILIATE PROMO INSERT -->
 
 <div style="
@@ -367,16 +387,40 @@ Created with Float Rising
 document.getElementById("pinBtn").addEventListener("click",()=>{
 
 const url=encodeURIComponent(window.location.href);
-
 const media=encodeURIComponent(p.image);
-
-const description=
-encodeURIComponent(cleanTitle(p.title)+" 🔥 Viral Amazon Find");
+const description=encodeURIComponent(cleanTitle(p.title)+" 🔥 Viral Amazon Find");
 
 const pinURL=
 `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`;
 
 window.open(pinURL,"_blank");
+
+});
+
+/* ---------- SHARE ANYWHERE ---------- */
+
+document.getElementById("shareBtn").addEventListener("click",async()=>{
+
+const shareData={
+title:cleanTitle(p.title),
+text:"Check out this viral Amazon find 🔥",
+url:window.location.href
+};
+
+if(navigator.share){
+
+try{
+await navigator.share(shareData);
+}catch(err){
+console.log("Share cancelled");
+}
+
+}else{
+
+navigator.clipboard.writeText(window.location.href);
+alert("Link copied! Share it anywhere.");
+
+}
 
 });
 
