@@ -640,7 +640,47 @@ const card = document.getElementById("card");
 const DEFAULT_AFFILIATE_ID="davidshort-21";
 let affiliateId=localStorage.getItem("affiliateId")||"";
 let creatorUnlocked=localStorage.getItem("creatorUnlocked")==="true";
+/* ===== CREATOR POINT SYSTEM ===== */
 
+let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
+
+function addPoints(points){
+
+creatorPoints += points;
+
+localStorage.setItem("creatorPoints", creatorPoints);
+
+updatePointsDisplay();
+
+checkCreatorUnlock();
+
+}
+
+function updatePointsDisplay(){
+
+const el = document.getElementById("creatorPoints");
+
+if(el){
+el.innerText = creatorPoints + " / 200";
+}
+
+}
+
+function checkCreatorUnlock(){
+
+if(creatorPoints >= 200 && !creatorUnlocked){
+
+creatorUnlocked = true;
+
+localStorage.setItem("creatorUnlocked","true");
+
+alert("🚀 Creator Mode Unlocked!");
+
+location.reload();
+
+}
+
+}
 function updateStatus(){
 const el=document.getElementById("affiliateStatus");
 if(creatorUnlocked){
