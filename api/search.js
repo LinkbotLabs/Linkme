@@ -80,6 +80,9 @@ const viralWords = [
   "smart"
 ];
 
+
+/* -------- PRODUCT NICHE DETECTION -------- */
+
 const nicheKeywords = [
   "lamp",
   "projector",
@@ -99,6 +102,8 @@ const nicheKeywords = [
   "garden",
   "kitchen"
 ];
+
+
 /* ---------------- API HANDLER ---------------- */
 
 export default async function handler(req, res) {
@@ -107,25 +112,20 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-
   /* ---------- RETURN CACHE IF STILL FRESH ---------- */
 
   if (cache.data.length && now - cache.timestamp < CACHE_TIME) {
     return res.status(200).json({ products: cache.data });
   }
 
-
   try {
 
     /* pick 5 queries randomly */
 
     const shuffled = [...queries].sort(() => 0.5 - Math.random());
-
     const selectedQueries = shuffled.slice(0, 5);
 
-
     let allItems = [];
-
 
     for (const query of selectedQueries) {
 
@@ -141,20 +141,18 @@ export default async function handler(req, res) {
 
     }
 
-
     if (allItems.length === 0) {
       return res.status(200).json({ products: cache.data });
     }
 
+    /* -------- FILTER AMAZON LINKS -------- */
 
-    /* -------- FILTER REAL AMAZON PRODUCT LINKS -------- */
+    const filtered = allItems.filter(item =>
+      item.link &&
+      item.link.includes("amazon.com") &&
+      !item.link.includes("/s?")
+    );
 
-  const filtered = allItems.filter(item =>
-  item.link &&
-  item.link.includes("amazon.com") &&
-  !item.link.includes("/s?")
-); 
-); 
 
     const products = filtered
       .map((item, i) => {
@@ -177,16 +175,14 @@ export default async function handler(req, res) {
 
         const title = cleanTitle(item.title);
 
-
-        /* prioritize gadget style products */
-
         const titleLower = title.toLowerCase();
-const niche =
-  nicheKeywords.find(word => titleLower.includes(word)) || "other";
+
+        const niche =
+          nicheKeywords.find(word => titleLower.includes(word)) || "other";
+
         const score = viralWords.reduce((count, word) => {
           return titleLower.includes(word) ? count + 1 : count;
         }, 0);
-
 
         return {
           id: `${now}-${i}`,
@@ -194,7 +190,7 @@ const niche =
           description: description.substring(0, 140),
           image,
           link: cleanLink,
-          score
+          score,
           niche
         };
 
@@ -205,16 +201,16 @@ const niche =
 
       .sort((a, b) => b.score - a.score)
 
-/* add randomness so one niche doesn't dominate */
+      /* add randomness */
 
-.sort(() => 0.5 - Math.random())
+      .sort(() => 0.5 - Math.random())
 
-.slice(0, 24);
+      .slice(0, 24);
+
 
     /* ---------------- MERGE WITH EXISTING DATABASE ---------------- */
 
     const existing = cache.data || [];
-
     const merged = [...existing, ...products];
 
 
@@ -234,15 +230,12 @@ const niche =
     }
 
 
-    /* ---------------- LIMIT TOTAL DATABASE SIZE ---------------- */
+    /* ---------------- LIMIT DATABASE SIZE ---------------- */
 
     cache.data = unique.slice(-300);
-
     cache.timestamp = now;
 
-
     return res.status(200).json({ products: cache.data });
-
 
   } catch (error) {
 
@@ -257,7 +250,6 @@ const niche =
 
 
 /* ---------------- HELPER FUNCTIONS ---------------- */
-
 
 function cleanTitle(title) {
 
@@ -278,7 +270,6 @@ function normalizeAmazonLink(url) {
     const parsed = new URL(url);
 
     const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
-
     const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
 
     const asin = dpMatch?.[1] || gpMatch?.[1];
@@ -296,10 +287,8 @@ function normalizeAmazonLink(url) {
 }
 
 
-/* upgrade Amazon thumbnails to full images */
+/* upgrade Amazon thumbnails */
 
 function upgradeAmazonImage(url) {
-
   return url.replace(/\._.*_\./, ".");
-
 }
