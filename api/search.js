@@ -6,60 +6,57 @@ const cache = {
 const CACHE_TIME = 1000 * 60 * 60 * 6; // 6 hours
 
 
-/* ---------------- CATEGORY QUERY POOLS ---------------- */
+/* ---------------- VIRAL SEARCH QUERIES ---------------- */
 
-const queryPools = {
+const queries = [
 
-  gadgets:[
-    "amazon trending gadgets site:amazon.com -book -novel -kindle",
-    "tiktok made me buy it amazon gadgets site:amazon.com",
-    "amazon impulse buy gadgets site:amazon.com",
-    "amazon weird gadgets site:amazon.com"
-  ],
+"amazon trending gadgets site:amazon.com -book -novel -kindle",
+"viral kitchen gadgets amazon site:amazon.com -book -novel -kindle",
+"tiktok made me buy it amazon gadgets site:amazon.com -book -novel -kindle",
+"amazon impulse buy gadgets site:amazon.com -book -novel -kindle",
 
-  kitchen:[
-    "viral kitchen gadgets amazon site:amazon.com",
-    "dumpling maker sushi roller scallion pancake maker site:amazon.com",
-    "amazon cleaning gadgets viral site:amazon.com"
-  ],
+/* piggyback Amazon ranking pages */
 
-  decor:[
-    "led sunset lamp aesthetic room decor site:amazon.com",
-    "galaxy projector night light site:amazon.com"
-  ],
+"site:amazon.com \"best sellers in\" kitchen gadgets",
+"site:amazon.com \"movers and shakers\" gadgets",
+"site:amazon.com \"most wished for\" gadgets",
 
-  tech:[
-    "mini thermal photo printer site:amazon.com",
-    "magnetic phone mount car desk holder site:amazon.com",
-    "smart ring fitness tracker sleep monitor site:amazon.com",
-    "holographic projector fan display site:amazon.com"
-  ],
+/* viral niches */
 
-  wellness:[
-    "collagen mask peptide sheet mask hydrogel mask site:amazon.com",
-    "infrared sauna blanket portable detox site:amazon.com",
-    "nmn supplement resveratrol longevity site:amazon.com"
-  ],
+"amazon gadgets under $25 site:amazon.com",
+"amazon weird gadgets site:amazon.com",
+"amazon problem solving gadgets site:amazon.com",
+"amazon cleaning gadgets viral site:amazon.com",
+"amazon travel gadgets site:amazon.com",
 
-  tools:[
-    "cordless mini chainsaw garden tool site:amazon.com",
-    "adjustable laptop stand aluminum site:amazon.com",
-    "back stretcher spine decompressor yoga wheel site:amazon.com"
-  ],
+/* NEW VIRAL PRODUCT NICHES */
 
-  fun:[
-    "slime kit kinetic sand jellyfish lamp site:amazon.com",
-    "reusable water balloons summer toys site:amazon.com",
-    "jellycat plush keychain phone charm site:amazon.com"
-  ],
+"jellycat plush keychain phone charm site:amazon.com",
+"magnetic phone mount car desk holder site:amazon.com",
+"collagen mask peptide sheet mask hydrogel mask site:amazon.com",
+"solar power bank portable charger foldable solar site:amazon.com",
+"back stretcher spine decompressor yoga wheel site:amazon.com",
+"dumpling maker sushi roller scallion pancake maker site:amazon.com",
+"slime kit kinetic sand jellyfish lamp site:amazon.com",
+"long distance touch bracelet couple lamp site:amazon.com",
+"self watering planter led grow light hydroponic kit site:amazon.com",
+"rfid blocking wallet anti theft wallet site:amazon.com",
+"led nail lamp uv gel dryer site:amazon.com",
+"portable espresso maker manual coffee grinder site:amazon.com",
+"smart ring fitness tracker sleep monitor site:amazon.com",
+"holographic projector fan display site:amazon.com",
+"nmn supplement resveratrol longevity site:amazon.com",
+"infrared sauna blanket portable detox site:amazon.com",
+"smart makeup mirror ar virtual try on site:amazon.com",
+"led sunset lamp aesthetic room decor site:amazon.com",
+"galaxy projector night light site:amazon.com",
+"mini thermal photo printer site:amazon.com",
+"reusable water balloons summer toys site:amazon.com",
+"magnetic screen door mesh site:amazon.com",
+"cordless mini chainsaw garden tool site:amazon.com",
+"adjustable laptop stand aluminum site:amazon.com",
 
-  lifestyle:[
-    "rfid blocking wallet anti theft wallet site:amazon.com",
-    "portable espresso maker manual coffee grinder site:amazon.com",
-    "self watering planter led grow light hydroponic kit site:amazon.com"
-  ]
-
-};
+];
 
 
 /* -------- WORDS COMMON IN VIRAL GADGET PRODUCTS -------- */
@@ -102,11 +99,11 @@ export default async function handler(req, res) {
 
   try {
 
-    /* pick 1 query per category */
+    /* pick 5 queries randomly */
 
-    const selectedQueries = Object.values(queryPools).map(pool =>
-      pool[Math.floor(Math.random() * pool.length)]
-    );
+    const shuffled = [...queries].sort(() => 0.5 - Math.random());
+
+    const selectedQueries = shuffled.slice(0, 5);
 
 
     let allItems = [];
@@ -150,18 +147,14 @@ export default async function handler(req, res) {
           item.pagemap?.metatags?.[0]?.["og:image"] ||
           item.pagemap?.cse_thumbnail?.[0]?.src;
 
-
         if (!rawImage) return null;
 
-
         const image = upgradeAmazonImage(rawImage);
-
 
         const description =
           item.snippet ||
           item.pagemap?.metatags?.[0]?.["og:description"] ||
           "Trending Amazon product people are buying right now.";
-
 
         const cleanLink = normalizeAmazonLink(item.link);
 
@@ -189,13 +182,11 @@ export default async function handler(req, res) {
       })
       .filter(Boolean)
 
-
       /* boost viral gadget titles */
 
       .sort((a, b) => b.score - a.score)
 
-
-      /* limit new discoveries */
+      /* limit daily discoveries */
 
       .slice(0, 24);
 
@@ -227,7 +218,6 @@ export default async function handler(req, res) {
     /* ---------------- LIMIT TOTAL DATABASE SIZE ---------------- */
 
     cache.data = unique.slice(-300);
-
 
     cache.timestamp = now;
 
