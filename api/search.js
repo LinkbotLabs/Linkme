@@ -182,7 +182,8 @@ export default async function handler(req, res) {
         /* prioritize gadget style products */
 
         const titleLower = title.toLowerCase();
-
+const niche =
+  nicheKeywords.find(word => titleLower.includes(word)) || "other";
         const score = viralWords.reduce((count, word) => {
           return titleLower.includes(word) ? count + 1 : count;
         }, 0);
