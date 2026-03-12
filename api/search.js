@@ -6,41 +6,73 @@ const cache = {
 const CACHE_TIME = 1000 * 60 * 60 * 6;
 
 
-/* ---------------- VIRAL DISCOVERY SOURCES ---------------- */
-
 /* ---------------- DISCOVERY SEARCH QUERIES ---------------- */
 
 const queries = [
 
-/* Amazon discovery */
+/* AMAZON RISING */
 
 "site:amazon.com/gp/movers-and-shakers",
 "site:amazon.com/gp/movers-and-shakers kitchen",
 "site:amazon.com/gp/movers-and-shakers home",
+"site:amazon.com/gp/movers-and-shakers electronics",
+"best selling gadgets amazon",
+"amazon must have gadgets",
 
-"best selling gadgets amazon 2025 site:amazon.com",
-"amazon must have gadgets site:amazon.com",
-"cool gadgets amazon under 50 site:amazon.com",
-
-/* TikTok discovery */
+/* TIKTOK VIRAL */
 
 "tiktok made me buy it amazon gadget",
-"viral tiktok gadget amazon",
+"viral tiktok amazon gadget",
+"amazon gadget trending tiktok",
 "tiktok cleaning gadget amazon",
-"site:tiktok.com amazon gadget",
+"tiktok kitchen gadget amazon",
 
-/* Problem solving */
+/* BLOG DISCOVERY */
 
-"amazon problem solving gadgets site:amazon.com",
-"amazon life hack gadget site:amazon.com",
-"didnt know i needed this amazon gadget",
+"best amazon gadgets 2025",
+"must have amazon gadgets",
+"genius amazon products that make life easier",
+"cool amazon gadgets you didnt know you needed",
+"amazon problem solving gadgets",
 
-/* Niche discovery */
+/* NICHE VIRAL */
 
-"amazon kitchen gadget trending site:amazon.com",
-"amazon car gadget trending site:amazon.com",
-"amazon desk gadget setup site:amazon.com",
-"amazon cleaning gadget trending site:amazon.com"
+"amazon cleaning gadget trending",
+"amazon car gadget trending",
+"amazon desk gadget setup",
+"amazon kitchen tool trending",
+"amazon travel gadget trending",
+
+/* PINTEREST STYLE */
+
+"amazon aesthetic desk gadgets",
+"amazon cozy home gadgets",
+"amazon organization gadgets",
+"amazon small space gadgets",
+
+/* HIGH COMMISSION */
+
+"best espresso machine amazon",
+"best vacuum cleaner amazon",
+"best coffee gadget amazon",
+"best kitchen appliance amazon",
+
+/* REDDIT VIRAL */
+
+"site:reddit.com amazon gadget",
+"site:reddit.com amazon find gadget",
+"site:reddit.com must have amazon gadget",
+"site:reddit.com cool amazon gadget",
+
+/* TIKTOK HASHTAG VIRAL */
+
+"site:tiktok.com #tiktokmademebuyit amazon",
+"site:tiktok.com #amazonfinds gadget",
+"site:tiktok.com #amazonmusthaves gadget",
+"site:tiktok.com #viralproduct amazon",
+"site:tiktok.com #problemsolver gadget",
+"site:tiktok.com #lifehack gadget",
+"site:tiktok.com #kitchengadget amazon"
 
 ];
 
@@ -48,103 +80,94 @@ const queries = [
 /* ---------------- VIRAL SIGNAL WORDS ---------------- */
 
 const viralWords = [
-
-"gadget","viral","must","portable","mini","electric",
-"automatic","smart","wireless","rechargeable",
-"foldable","adjustable","multifunction",
-
-"cool","genius","hack","problem solving",
-"life hack","tiktok","amazon find",
-"game changer"
-
+"gadget","viral","must","portable","mini",
+"electric","automatic","smart","wireless",
+"rechargeable","foldable","adjustable",
+"multifunction","cool","genius","hack",
+"problem solving","life hack","tiktok",
+"amazon find","game changer"
 ];
 
 
 /* ---------------- PROBLEM SOLVER WORDS ---------------- */
 
 const problemWords = [
-
 "cleaner","organizer","holder","opener",
-"scrubber","chopper","slicer",
-"rack","storage","dispenser",
-"vacuum","remover","scale"
-
+"scrubber","chopper","slicer","rack",
+"storage","dispenser","vacuum",
+"remover","scale","brush"
 ];
 
 
-/* ---------------- HIGH COMMISSION SIGNALS ---------------- */
+/* ---------------- HIGH COMMISSION ---------------- */
 
 const commissionWords = [
-
 "vacuum","espresso","printer","tool",
-"charger","smart","coffee","kitchen",
-"air fryer","blender","projector",
-"camera","security"
-
+"charger","coffee","kitchen","air fryer",
+"blender","projector","camera",
+"security","coffee maker"
 ];
 
 
 /* ---------------- NEW PRODUCT SIGNALS ---------------- */
 
 const newProductWords = [
-
 "2025","2024","new","latest","upgraded"
-
 ];
 
 
-/* ---------------- BANNED SATURATED PRODUCTS ---------------- */
+/* ---------------- BANNED PRODUCTS ---------------- */
 
 const bannedWords = [
-
 "nail lamp",
 "gel nail",
 "uv nail",
 "galaxy projector",
 "night light projector"
-
 ];
 
 
 /* ---------------- NICHE DETECTION ---------------- */
 
 const nicheKeywords = [
-
-/* original */
-
-"kitchen","cleaner","organizer",
-"printer","vacuum","coffee",
-"travel","car","garden",
-"fitness","desk",
-
-/* your niche list */
-
-"plush","kawaii","phone mount",
-"collagen","mask","solar",
-"power bank","back stretcher",
-"dumpling","sushi","slime",
-"bracelet","hydroponic",
-"rfid","wallet","espresso",
-"smart ring","holographic",
-"sauna","biohacking",
-"makeup mirror",
-
-/* additional viral niches */
-
-"projector","eye massager",
-"fabric shaver","lint remover",
-"luggage scale","soap dispenser",
-"pet hair","kettle",
+"kitchen","cleaner","organizer","printer","vacuum",
+"coffee","travel","car","garden","fitness",
+"desk","plush","kawaii","phone mount",
+"collagen","mask","solar","power bank",
+"back stretcher","dumpling","sushi",
+"bracelet","hydroponic","rfid","wallet",
+"espresso","smart ring","holographic",
+"sauna","biohacking","makeup mirror",
+"projector","eye massager","fabric shaver",
+"lint remover","luggage scale",
+"soap dispenser","pet hair","kettle",
 "screwdriver","makeup organizer",
-"water bottle","mug warmer",
-"led lights","neck fan",
-"cable organizer","jar opener",
+"water bottle","mug warmer","led lights",
+"neck fan","cable organizer","jar opener",
 "garment steamer","hand warmer",
 "kitchen scale","cleaning brush"
-
 ];
 
-const MAX_PER_NICHE = 2;
+
+/* ---------------- TIKTOK TREND WORDS ---------------- */
+
+const tiktokTrendWords = [
+"tiktok",
+"tiktok made me buy",
+"amazon finds",
+"viral product",
+"must have",
+"trending product",
+"viral gadget",
+"tiktok gadget",
+"tiktok amazon",
+"amazon must have"
+];
+
+
+const MAX_PER_NICHE = 5;
+
+
 /* ---------------- API HANDLER ---------------- */
 
 export default async function handler(req, res) {
@@ -159,8 +182,10 @@ return res.status(200).json({products:cache.data});
 
 try{
 
+/* ---------------- 70% SEARCH QUOTA CONTROL ---------------- */
+
 const shuffled=[...queries].sort(()=>0.5-Math.random());
-const selectedQueries=shuffled.slice(0,6);
+const selectedQueries=shuffled.slice(0,14);
 
 let allItems=[];
 
@@ -183,19 +208,16 @@ return res.status(200).json({products:cache.data});
 }
 
 
-/* -------- STRICT AMAZON PRODUCT FILTER -------- */
+/* -------- AMAZON FILTER -------- */
 
 const filtered=allItems.filter(item=>
 item.link &&
-item.link.includes("amazon.com") &&
-(
-item.link.includes("/dp/") ||
-item.link.includes("/gp/product/")
-)
+item.link.includes("amazon.") &&
+!item.link.includes("/s?")
 );
 
 
-/* -------- VIRAL PRODUCT ENGINE -------- */
+/* -------- PRODUCT ENGINE -------- */
 
 const nicheCounts={};
 const titleKeys=new Set();
@@ -215,15 +237,9 @@ const image=upgradeAmazonImage(rawImage);
 const title=cleanTitle(item.title);
 const titleLower=title.toLowerCase();
 
-
-/* BAN BAD PRODUCTS */
-
 if(bannedWords.some(word=>titleLower.includes(word))){
 return null;
 }
-
-
-/* NORMALIZE LINK */
 
 const link=normalizeAmazonLink(item.link);
 const asin=extractASIN(link);
@@ -237,9 +253,9 @@ if(!asinCount[asin]) asinCount[asin]=0;
 asinCount[asin]++;
 
 
-/* SIMILAR TITLE FILTER */
+/* DUPLICATE TITLE CONTROL */
 
-const titleKey=titleLower.split(" ").slice(0,3).join(" ");
+const titleKey=titleLower.split(" ").slice(0,2).join(" ");
 
 if(titleKeys.has(titleKey)){
 return null;
@@ -262,27 +278,22 @@ return null;
 nicheCounts[niche]++;
 
 
-/* SCORING SYSTEM */
+/* SCORING ENGINE */
 
 const viralScore=viralWords.reduce((c,w)=>titleLower.includes(w)?c+1:c,0);
-
 const problemScore=problemWords.reduce((c,w)=>titleLower.includes(w)?c+1:c,0);
-
 const commissionScore=commissionWords.reduce((c,w)=>titleLower.includes(w)?c+1:c,0);
-
 const newScore=newProductWords.reduce((c,w)=>titleLower.includes(w)?c+1:c,0);
-
 const trendScore=asinCount[asin] || 1;
-
-
-/* FINAL SCORE */
+const tiktokScore=tiktokTrendWords.reduce((c,w)=>titleLower.includes(w)?c+1:c,0);
 
 const score =
 viralScore +
 problemScore*2 +
 commissionScore +
 newScore +
-trendScore;
+trendScore +
+tiktokScore*2;
 
 
 /* DESCRIPTION */
@@ -307,10 +318,10 @@ asin
 })
 .filter(Boolean)
 .sort((a,b)=>b.score-a.score)
-.slice(0,24);
+.slice(0,60);
 
 
-/* -------- MERGE WITH CACHE -------- */
+/* -------- CACHE MERGE -------- */
 
 const existing=cache.data||[];
 const merged=[...existing,...products];
@@ -327,7 +338,7 @@ unique.push(p);
 
 }
 
-cache.data=unique.slice(-300);
+cache.data=unique.slice(-500);
 cache.timestamp=now;
 
 return res.status(200).json({products:cache.data});
@@ -364,10 +375,9 @@ try{
 
 const parsed=new URL(url);
 
-const dpMatch=parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
-const gpMatch=parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
+const match=parsed.pathname.match(/\/(dp|gp\/product)\/([A-Z0-9]{10})/);
 
-const asin=dpMatch?.[1] || gpMatch?.[1];
+const asin=match?.[2];
 
 if(!asin) return parsed.origin;
 
