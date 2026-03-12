@@ -21,13 +21,6 @@ const queries = [
 "amazon problem solving gadgets site:amazon.com",
 "amazon life hack gadget site:amazon.com",
 
-"vegetable chopper kitchen gadget site:amazon.com",
-"electric spin scrubber cleaner site:amazon.com",
-"portable blender usb rechargeable site:amazon.com",
-"mini thermal label printer site:amazon.com",
-"magnetic screen door mesh site:amazon.com",
-"car seat gap filler organizer site:amazon.com",
-"cordless handheld vacuum car site:amazon.com"
 
 ];
 
