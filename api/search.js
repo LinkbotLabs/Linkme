@@ -8,19 +8,39 @@ const CACHE_TIME = 1000 * 60 * 60 * 6;
 
 /* ---------------- VIRAL DISCOVERY SOURCES ---------------- */
 
+/* ---------------- DISCOVERY SEARCH QUERIES ---------------- */
+
 const queries = [
+
+/* Amazon discovery */
 
 "site:amazon.com/gp/movers-and-shakers",
 "site:amazon.com/gp/movers-and-shakers kitchen",
 "site:amazon.com/gp/movers-and-shakers home",
 
+"best selling gadgets amazon 2025 site:amazon.com",
+"amazon must have gadgets site:amazon.com",
+"cool gadgets amazon under 50 site:amazon.com",
+
+/* TikTok discovery */
+
 "tiktok made me buy it amazon gadget",
 "viral tiktok gadget amazon",
 "tiktok cleaning gadget amazon",
+"site:tiktok.com amazon gadget",
+
+/* Problem solving */
 
 "amazon problem solving gadgets site:amazon.com",
 "amazon life hack gadget site:amazon.com",
+"didnt know i needed this amazon gadget",
 
+/* Niche discovery */
+
+"amazon kitchen gadget trending site:amazon.com",
+"amazon car gadget trending site:amazon.com",
+"amazon desk gadget setup site:amazon.com",
+"amazon cleaning gadget trending site:amazon.com"
 
 ];
 
@@ -28,59 +48,103 @@ const queries = [
 /* ---------------- VIRAL SIGNAL WORDS ---------------- */
 
 const viralWords = [
+
 "gadget","viral","must","portable","mini","electric",
 "automatic","smart","wireless","rechargeable",
-"foldable","adjustable","multifunction"
+"foldable","adjustable","multifunction",
+
+"cool","genius","hack","problem solving",
+"life hack","tiktok","amazon find",
+"game changer"
+
 ];
 
 
 /* ---------------- PROBLEM SOLVER WORDS ---------------- */
 
 const problemWords = [
+
 "cleaner","organizer","holder","opener",
 "scrubber","chopper","slicer",
-"rack","storage","dispenser","vacuum"
+"rack","storage","dispenser",
+"vacuum","remover","scale"
+
 ];
 
 
 /* ---------------- HIGH COMMISSION SIGNALS ---------------- */
 
 const commissionWords = [
+
 "vacuum","espresso","printer","tool",
-"charger","smart","coffee","kitchen"
+"charger","smart","coffee","kitchen",
+"air fryer","blender","projector",
+"camera","security"
+
 ];
 
 
 /* ---------------- NEW PRODUCT SIGNALS ---------------- */
 
 const newProductWords = [
+
 "2025","2024","new","latest","upgraded"
+
 ];
 
 
 /* ---------------- BANNED SATURATED PRODUCTS ---------------- */
 
 const bannedWords = [
+
 "nail lamp",
 "gel nail",
 "uv nail",
 "galaxy projector",
 "night light projector"
+
 ];
 
 
 /* ---------------- NICHE DETECTION ---------------- */
 
 const nicheKeywords = [
+
+/* original */
+
 "kitchen","cleaner","organizer",
 "printer","vacuum","coffee",
 "travel","car","garden",
-"fitness","desk"
+"fitness","desk",
+
+/* your niche list */
+
+"plush","kawaii","phone mount",
+"collagen","mask","solar",
+"power bank","back stretcher",
+"dumpling","sushi","slime",
+"bracelet","hydroponic",
+"rfid","wallet","espresso",
+"smart ring","holographic",
+"sauna","biohacking",
+"makeup mirror",
+
+/* additional viral niches */
+
+"projector","eye massager",
+"fabric shaver","lint remover",
+"luggage scale","soap dispenser",
+"pet hair","kettle",
+"screwdriver","makeup organizer",
+"water bottle","mug warmer",
+"led lights","neck fan",
+"cable organizer","jar opener",
+"garment steamer","hand warmer",
+"kitchen scale","cleaning brush"
+
 ];
 
 const MAX_PER_NICHE = 2;
-
-
 /* ---------------- API HANDLER ---------------- */
 
 export default async function handler(req, res) {
