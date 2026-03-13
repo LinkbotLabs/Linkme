@@ -1,4 +1,4 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -31,7 +31,7 @@ DOCTYPE html>
 </head>
 <body class="bg-gray-50 min-h-screen font-sans text-gray-900 antialiased">
 
-  <!-- Slim Hero – fast on mobile -->
+  <!-- Slim Hero -->
   <header class="text-center pt-6 pb-4 px-4 bg-white border-b border-gray-100">
     <img src="/float-rising-logo.svg" alt="Float Rising" class="mx-auto h-14 mb-3" />
     <h1 class="text-4xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -47,10 +47,10 @@ DOCTYPE html>
     </div>
   </header>
 
-  <!-- Sticky Tabs – swipeable on mobile -->
+  <!-- Sticky Tabs -->
   <nav class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
     <div class="flex overflow-x-auto scrollbar-hide px-2">
-      <button data-tab="discover" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap" aria-selected="true">
+      <button data-tab="discover" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap active" aria-selected="true">
         Discover
       </button>
       <button data-tab="how" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap">
@@ -62,10 +62,10 @@ DOCTYPE html>
     </div>
   </nav>
 
-  <!-- Tab Content -->
-  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+  <!-- Tab Panels -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-6">
 
-    <!-- Discover Tab – product is the star -->
+    <!-- Discover Tab -->
     <div id="tab-discover" class="tab-panel">
       <div class="text-center mb-6">
         <div class="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm sm:text-base font-semibold shadow">
@@ -73,11 +73,11 @@ DOCTYPE html>
         </div>
       </div>
 
-      <div id="card" class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+      <div id="card" class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden min-h-[500px]">
         Loading...
       </div>
 
-      <!-- Creator Tools – compact on mobile -->
+      <!-- Creator Tools -->
       <div class="mt-8 bg-white rounded-2xl shadow border border-gray-100 p-6">
         <h3 class="text-xl font-bold text-center mb-5">Creator Tools</h3>
         <div class="grid grid-cols-2 gap-4">
@@ -108,16 +108,16 @@ DOCTYPE html>
       <div class="bg-white rounded-3xl shadow p-8">
         <h2 class="text-3xl font-playfair font-bold text-center mb-8">How It Works</h2>
         <ol class="space-y-6 text-base sm:text-lg">
-          <li class="flex items-start"><span class="font-bold text-3xl mr-4 text-primary">1️⃣</span> Discover viral products</li>
-          <li class="flex items-start"><span class="font-bold text-3xl mr-4 text-primary">2️⃣</span> Share pins & product cards</li>
-          <li class="flex items-start"><span class="font-bold text-3xl mr-4 text-primary">3️⃣</span> Unlock Creator Mode</li>
+          <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-primary">1️⃣</span> Discover viral products</li>
+          <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-primary">2️⃣</span> Share pins & product cards</li>
+          <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-primary">3️⃣</span> Unlock Creator Mode</li>
         </ol>
 
         <div class="mt-10 text-center text-lg sm:text-xl font-medium">
           🔥 <strong><span id="creatorCount">1284</span> creators</strong> using Float Rising
         </div>
 
-        <div class="mt-10">
+        <div class="mt-12">
           <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
           <ul class="space-y-4 text-base sm:text-lg">
             <li>📌 Pin → 1 point</li>
@@ -175,12 +175,12 @@ DOCTYPE html>
     </div>
   </main>
 
-  <!-- Floating Next Button – always visible -->
+  <!-- Floating Next Button -->
   <button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-primary to-accent text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg">
     🔥 Next Product
   </button>
 
-  <!-- Modals (kept compact for mobile) -->
+  <!-- Modals -->
   <div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
       <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
@@ -192,7 +192,7 @@ DOCTYPE html>
       <p class="text-center mb-6">Email screenshot to <strong>omnistall70@gmail.com</strong></p>
       <hr class="my-6" />
       <p class="font-medium text-center mb-4">Already paid?</p>
-      <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg" />
+      <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
       <button onclick="activateCreator()" class="w-full py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition text-lg">Activate</button>
     </div>
   </div>
@@ -200,7 +200,7 @@ DOCTYPE html>
   <div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
       <h3 class="text-2xl font-bold text-center mb-6">Amazon Affiliate ID</h3>
-      <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg" />
+      <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
       <div id="affiliateError" class="text-red-600 text-center mb-4"></div>
       <button onclick="saveAffiliate()" class="w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition text-lg">Save</button>
     </div>
@@ -209,7 +209,7 @@ DOCTYPE html>
   <div id="grokModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
     <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
       <h3 class="text-2xl font-bold text-center mb-4">6s Video Prompt</h3>
-      <textarea id="grokText" class="w-full h-48 p-4 border border-gray-300 rounded-xl mb-6 text-base resize-none"></textarea>
+      <textarea id="grokText" class="w-full h-48 p-4 border border-gray-300 rounded-xl mb-6 text-base resize-none focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
       <div class="grid grid-cols-3 gap-4">
         <button onclick="copyGrok()" class="py-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition text-base">Copy</button>
         <button onclick="openGrok()" class="py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition text-base">Open Grok</button>
@@ -217,116 +217,10 @@ DOCTYPE html>
       </div>
     </div>
   </div>
-<div class="cta-box">
-🚀 Unlock Creator Mode
-</div>
 
-<div class="rich" style="text-align:center">
-
-Creator Mode lets you:
-
-<br><br>
-
-✔ Add your own Amazon Affiliate ID  
-✔ Keep 100% of commissions  
-✔ Turn every pin into an income asset  
-✔ Monetize unlimited content
-
-</div>
-
-<div class="rich" style="text-align:center;color:#6b7280">
-
-Free users share with the <strong>Float Rising affiliate network</strong>.  
-Creator Mode lets you monetize your own audience.
-
-</div>
-
-</div>
-</div>
-  <div id="trending-bar">
-🔥 Trending Right Now: Viral Product Discovery
-</div>
-
-<div class="info-block">
-⚡ <strong>Act Fast</strong><br><br>
-
-Creators get a limited window to share each viral product.
-
-<br><br>
-
-Once a product reaches maximum distribution,
-our system rotates in the next trending find.
-
-<br><br>
-
-<strong>New viral products drop daily.</strong>
-
-</div>
-
-<div class="card" id="card">Loading...</div>
-
-<div class="card" id="supportCard" style="border:1px solid var(--border);">
-<div class="product-title">
-Turn Trending Products Into Shareable Income Assets
-</div>
-
-<div class="rich" style="text-align:center;font-size:15px;">
-Scroll curated product cards.<br>
-Share them to Pinterest or video.<br>
-Earn automatically.
-</div>
-
-<div class="rich" style="text-align:center;color:var(--muted);">
-The free version uses the Float Rising affiliate ID on shared links.<br><br>
-Unlock Creator Mode to add your own affiliate credentials and keep 100% of your commissions.
-</div>
-
-</div>
-<div class="modal" id="unlockModal">
-<div class="modal-content">
-<h3>🔓 Unlock Creator Mode</h3>
-<p><strong>$19 USD – One Time</strong></p>
-<p>Step 1: Send payment via Wise</p>
-<a href="https://wise.com/pay/me/davids14542" target="_blank" class="btn btn-primary">
-Pay $19 with Wise
-</a>
-<p style="margin-top:12px;">
-Include your email in the payment note.
-</p>
-<p>
-Step 2: Email screenshot to:<br>
-<strong>omnistall70@gmail.com</strong>
-</p>
-<hr style="margin:20px 0;">
-<p><strong>Already Paid?</strong></p>
-<input id="unlockCodeInput" placeholder="Enter unlock code"/>
-<button class="btn btn-primary" onclick="activateCreator()">
-Activate
-</button>
-</div>
-</div>
-<div class="modal" id="affiliateModal">
-<div class="modal-content">
-<h3>Amazon Affiliate ID</h3>
-<input id="affiliateInput" placeholder="yourname-20"/>
-<div id="affiliateError" class="error"></div>
-<button class="btn btn-primary" onclick="saveAffiliate()">Save</button>
-</div>
-</div>
-<div class="modal" id="grokModal">
-<div class="modal-content">
-<h3>6s Product Video Prompt</h3>
-<textarea id="grokText"></textarea>
-<button class="btn" onclick="copyGrok()">Copy</button>
-<button class="btn btn-primary" onclick="openGrok()">Copy & Open Grok</button>
-<button class="btn" onclick="closeModal()">Close</button>
-</div>
-</div>
-<div id="squareTemplate" class="share-template" style="width:1080px;height:1080px;"></div>
-  <button id="nextBtn">🔥 Next Viral Product</button>
-
-<script>
-document.querySelectorAll('.tab-btn').forEach(btn => {
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => {
           b.classList.remove('border-primary', 'text-primary');
@@ -339,115 +233,110 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
       });
     });
 
-document.getElementById("nextBtn").addEventListener("click",()=>{
+    // Your full original JavaScript logic
+    document.getElementById("nextBtn").addEventListener("click",()=>{
       nextProduct();
       startAutoScroll();
     });
 
     function openUnlock(){
-      const modal = document.getElementById("unlockModal");
-      modal.style.display = "flex";
-      setTimeout(() => { modal.style.display = "none"; }, 6000);
+      document.getElementById("unlockModal").classList.remove("hidden");
+      setTimeout(() => { document.getElementById("unlockModal").classList.add("hidden"); }, 6000);
     }
 
-    let products=[],currentIndex=0;
+    let products = [], currentIndex = 0;
     const card = document.getElementById("card");
 
-    const DEFAULT_AFFILIATE_ID="davidshort-21";
-    let affiliateId=localStorage.getItem("affiliateId")||"";
-    let creatorUnlocked=localStorage.getItem("creatorUnlocked")==="true";
+    const DEFAULT_AFFILIATE_ID = "davidshort-21";
+    let affiliateId = localStorage.getItem("affiliateId") || "";
+    let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
 
     let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
 
-    function addPoints(points){
+    function addPoints(points) {
       creatorPoints += points;
       localStorage.setItem("creatorPoints", creatorPoints);
       updatePointsDisplay();
       checkCreatorUnlock();
     }
 
-    function updatePointsDisplay(){
+    function updatePointsDisplay() {
       const el = document.getElementById("creatorPoints");
       const bar = document.getElementById("creatorBar");
-      if(el) el.innerText = creatorPoints + " / 200";
-      if(bar){
+      if (el) el.innerText = creatorPoints + " / 200";
+      if (bar) {
         let percent = (creatorPoints / 200) * 100;
-        if(percent > 100) percent = 100;
+        if (percent > 100) percent = 100;
         bar.style.width = percent + "%";
       }
-      if(creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
+      if (creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
     }
 
-    function checkCreatorUnlock(){
-      if(creatorPoints >= 200 && !creatorUnlocked){
+    function checkCreatorUnlock() {
+      if (creatorPoints >= 200 && !creatorUnlocked) {
         creatorUnlocked = true;
-        localStorage.setItem("creatorUnlocked","true");
+        localStorage.setItem("creatorUnlocked", "true");
         alert("🚀 Creator Mode Unlocked!");
         location.reload();
       }
     }
 
-    function updateStatus(){
-      const el=document.getElementById("affiliateStatus");
-      if(creatorUnlocked){
-        el.innerHTML="🟢 Creator Mode Active";
-        el.style.color="green";
-      }else{
-        el.innerHTML="🆓 Free Mode Active";
-        el.style.color="#b45309";
+    function updateStatus() {
+      const el = document.getElementById("affiliateStatus");
+      if (creatorUnlocked) {
+        el.innerHTML = "🟢 Creator Mode Active";
+        el.style.color = "green";
+      } else {
+        el.innerHTML = "🆓 Free Mode Active";
+        el.style.color = "#b45309";
       }
     }
     updateStatus();
 
-    if(creatorUnlocked){
-      const support = document.getElementById("supportCard");
-      if(support) support.style.display="none";
-    }
-
-    function activateCreator(){
-      const code=document.getElementById("unlockCodeInput").value.trim();
-      if(code==="CREATOR19"){
-        localStorage.setItem("creatorUnlocked","true");
+    function activateCreator() {
+      const code = document.getElementById("unlockCodeInput").value.trim();
+      if (code === "CREATOR19") {
+        localStorage.setItem("creatorUnlocked", "true");
         alert("Creator Mode Activated ✅");
         location.reload();
-      }else alert("Invalid Code");
+      } else alert("Invalid Code");
     }
 
-    function takeScreenshotHint(){
+    function takeScreenshotHint() {
       alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
     }
 
-    function saveAffiliate(){
-      if(!creatorUnlocked){
+    function saveAffiliate() {
+      if (!creatorUnlocked) {
         alert("Please unlock Creator Mode first.");
         return;
       }
-      const val=document.getElementById("affiliateInput").value.trim();
-      if(!val.includes("-")){
-        document.getElementById("affiliateError").innerText="Format example: yourname-20";
+      const val = document.getElementById("affiliateInput").value.trim();
+      if (!val.includes("-")) {
+        document.getElementById("affiliateError").innerText = "Format example: yourname-20";
         return;
       }
-      affiliateId=val;
-      localStorage.setItem("affiliateId",val);
-      closeModal();
+      affiliateId = val;
+      localStorage.setItem("affiliateId", val);
+      document.getElementById("affiliateModal").classList.add("hidden");
       updateStatus();
       renderProduct();
     }
 
-    function appendAffiliate(url){
-      const activeId=affiliateId||DEFAULT_AFFILIATE_ID;
-      if(url.includes("tag=")) return url;
+    function appendAffiliate(url) {
+      const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
+      if (url.includes("tag=")) return url;
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
 
-    async function loadProducts(q=""){
+    async function loadProducts(q = "") {
       card.innerHTML = "Loading...";
-      try{
-        const res = await fetch("/api/search"+(q?"?q="+q:""));
-        if(!res.ok) throw new Error("API error");
+      try {
+        const res = await fetch("/api/search" + (q ? "?q=" + q : ""));
+        if (!res.ok) throw new Error("API error");
         const data = await res.json();
         products = (data.products || []).filter(p => p.link && p.image);
-        if(products.length === 0){
+        if (products.length === 0) {
           card.innerHTML = "No products found.";
           return;
         }
@@ -455,7 +344,7 @@ document.getElementById("nextBtn").addEventListener("click",()=>{
         currentIndex = 0;
         renderProduct();
         startAutoScroll();
-      }catch(err){
+      } catch (err) {
         console.error(err);
         card.innerHTML = `
           <div class="text-center p-12 text-gray-600">
@@ -466,12 +355,12 @@ document.getElementById("nextBtn").addEventListener("click",()=>{
       }
     }
 
-    function generateHook(title){
+    function generateHook(title) {
       const shortTitle = title.split(" ").slice(0,3).join(" ");
       return `🔥 This ${shortTitle} Is Going Viral`;
     }
 
-   function renderProduct() {
+    function renderProduct() {
       if (!products.length) {
         card.innerHTML = '<div class="p-10 text-center text-gray-600 text-lg">No products found.</div>';
         return;
@@ -531,16 +420,17 @@ document.getElementById("nextBtn").addEventListener("click",()=>{
           </div>
         </div>
       `;
-    } 
-    function closeModal(){
-      document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
+    }
+
+    function closeModal() {
+      document.querySelectorAll('#unlockModal, #affiliateModal, #grokModal').forEach(m => m.classList.add('hidden'));
     }
 
     document.addEventListener("keydown", e => {
-      if(e.key === "Escape") closeModal();
+      if (e.key === "Escape") closeModal();
     });
 
-    // ── Your Pinterest / sharing / Grok helpers ──
+    // Pinterest / sharing / Grok helpers (your original code)
     function generateViralPinHook(title){
       const word = title.split(" ")[0];
       const hooks = [
@@ -632,7 +522,7 @@ Structure:
 Include short on-screen text captions.
 Make it optimized for Pinterest, TikTok and Facebook Reels.
       `;
-      document.getElementById("grokModal").style.display="flex";
+      document.getElementById("grokModal").classList.remove("hidden");
     }
 
     function copyGrok(){
@@ -696,10 +586,12 @@ Make it optimized for Pinterest, TikTok and Facebook Reels.
       autoTimer = setInterval(() => { nextProduct(); }, 8000);
     }
 
-    // Kick-off
+    // Initial calls
     animateCreators();
     loadProducts();
     updatePointsDisplay();
+    updateStatus();
+    startAutoScroll();
   </script>
 </body>
 </html>
