@@ -317,3 +317,382 @@ Activate
 
 <script>
 
+document.getElementById("nextBtn").addEventListener("click",()=>{
+      nextProduct();
+      startAutoScroll();
+    });
+
+    function openUnlock(){
+      const modal = document.getElementById("unlockModal");
+      modal.style.display = "flex";
+      setTimeout(() => { modal.style.display = "none"; }, 6000);
+    }
+
+    let products=[],currentIndex=0;
+    const card = document.getElementById("card");
+
+    const DEFAULT_AFFILIATE_ID="davidshort-21";
+    let affiliateId=localStorage.getItem("affiliateId")||"";
+    let creatorUnlocked=localStorage.getItem("creatorUnlocked")==="true";
+
+    let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
+
+    function addPoints(points){
+      creatorPoints += points;
+      localStorage.setItem("creatorPoints", creatorPoints);
+      updatePointsDisplay();
+      checkCreatorUnlock();
+    }
+
+    function updatePointsDisplay(){
+      const el = document.getElementById("creatorPoints");
+      const bar = document.getElementById("creatorBar");
+      if(el) el.innerText = creatorPoints + " / 200";
+      if(bar){
+        let percent = (creatorPoints / 200) * 100;
+        if(percent > 100) percent = 100;
+        bar.style.width = percent + "%";
+      }
+      if(creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
+    }
+
+    function checkCreatorUnlock(){
+      if(creatorPoints >= 200 && !creatorUnlocked){
+        creatorUnlocked = true;
+        localStorage.setItem("creatorUnlocked","true");
+        alert("🚀 Creator Mode Unlocked!");
+        location.reload();
+      }
+    }
+
+    function updateStatus(){
+      const el=document.getElementById("affiliateStatus");
+      if(creatorUnlocked){
+        el.innerHTML="🟢 Creator Mode Active";
+        el.style.color="green";
+      }else{
+        el.innerHTML="🆓 Free Mode Active";
+        el.style.color="#b45309";
+      }
+    }
+    updateStatus();
+
+    if(creatorUnlocked){
+      const support = document.getElementById("supportCard");
+      if(support) support.style.display="none";
+    }
+
+    function activateCreator(){
+      const code=document.getElementById("unlockCodeInput").value.trim();
+      if(code==="CREATOR19"){
+        localStorage.setItem("creatorUnlocked","true");
+        alert("Creator Mode Activated ✅");
+        location.reload();
+      }else alert("Invalid Code");
+    }
+
+    function takeScreenshotHint(){
+      alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
+    }
+
+    function saveAffiliate(){
+      if(!creatorUnlocked){
+        alert("Please unlock Creator Mode first.");
+        return;
+      }
+      const val=document.getElementById("affiliateInput").value.trim();
+      if(!val.includes("-")){
+        document.getElementById("affiliateError").innerText="Format example: yourname-20";
+        return;
+      }
+      affiliateId=val;
+      localStorage.setItem("affiliateId",val);
+      closeModal();
+      updateStatus();
+      renderProduct();
+    }
+
+    function appendAffiliate(url){
+      const activeId=affiliateId||DEFAULT_AFFILIATE_ID;
+      if(url.includes("tag=")) return url;
+      return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
+    }
+
+    async function loadProducts(q=""){
+      card.innerHTML = "Loading...";
+      try{
+        const res = await fetch("/api/search"+(q?"?q="+q:""));
+        if(!res.ok) throw new Error("API error");
+        const data = await res.json();
+        products = (data.products || []).filter(p => p.link && p.image);
+        if(products.length === 0){
+          card.innerHTML = "No products found.";
+          return;
+        }
+        shuffle(products);
+        currentIndex = 0;
+        renderProduct();
+        startAutoScroll();
+      }catch(err){
+        console.error(err);
+        card.innerHTML = `
+          <div class="text-center p-12 text-gray-600">
+            ⚠️ Product feed loading...<br><br>
+            <button onclick="loadProducts()" class="px-8 py-4 bg-gray-800 text-white rounded-xl hover:bg-gray-700">Reload</button>
+          </div>
+        `;
+      }
+    }
+
+    function generateHook(title){
+      const shortTitle = title.split(" ").slice(0,3).join(" ");
+      return `🔥 This ${shortTitle} Is Going Viral`;
+    }
+
+    function renderProduct(){
+      if(!products.length){
+        card.innerHTML = '<div class="p-12 text-center text-gray-600">No products found.</div>';
+        return;
+      }
+
+      const p = products[currentIndex];
+      p.rating = (4.6 + Math.random()*0.3).toFixed(1);
+      p.reviews = Math.floor(Math.random()*800 + 200);
+      p.sold = Math.floor(Math.random()*1200 + 300);
+      p.urgency = Math.floor(Math.random()*10 + 3);
+
+      card.innerHTML = `
+        <div class="relative">
+          ${creatorUnlocked ? `
+            <div class="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-5 py-2 rounded-full shadow-lg flex items-center gap-3 text-sm font-medium">
+              <div class="w-8 h-2 bg-neutral rounded-full"></div>
+              <span>Float Rising</span>
+            </div>
+          ` : ''}
+
+          <div class="absolute top-6 left-6 bg-gradient-to-r from-neutral to-gray-800 text-white px-5 py-2 rounded-full text-sm font-medium tracking-wide shadow-md">
+            VIRAL FIND
+          </div>
+
+          <img src="${p.image || 'https://via.placeholder.com/800?text=Product'}" alt="${p.title}" class="w-full h-96 sm:h-[500px] object-cover" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/800?text=Product'" />
+
+          <div class="p-8 sm:p-12">
+            <h2 class="text-3xl sm:text-4xl font-playfair font-bold text-center mb-6">${p.title}</h2>
+            <p class="text-center text-xl text-gray-600 mb-8">${generateHook(p.title)}</p>
+
+            ${p.description ? `<p class="text-gray-700 text-lg leading-relaxed mb-8">${p.description}</p>` : ''}
+
+            <div class="text-center text-yellow-500 text-xl font-medium mb-8">
+              ⭐ ${p.rating} • ${p.reviews}+ reviews
+            </div>
+
+            <div class="bg-gray-50 rounded-2xl p-8 mb-10 text-lg text-gray-700">
+              ✨ Why You’ll Love It:<br>
+              ✔ ${p.sold}+ sold<br>
+              ✔ Only ${p.urgency} left in stock<br>
+              ✔ Viral trending gadget
+            </div>
+
+            <div onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="bg-gradient-to-r from-neutral to-gray-800 text-white py-6 px-10 rounded-2xl text-center font-bold text-xl cursor-pointer hover:opacity-90 transition mb-6">
+              🔥 See Why This Is Going Viral
+            </div>
+
+            <button onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="w-full py-6 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:opacity-90 transition text-xl">
+              Check Price on Amazon →
+            </button>
+
+            <div class="mt-12 text-center uppercase tracking-widest text-gray-500 font-semibold text-sm">Creator Tools</div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+              <button onclick="shareLink()" class="py-5 border border-gray-300 rounded-2xl hover:bg-gray-50 transition text-lg">Share Link</button>
+              <button onclick="copyPinterestDescription()" class="py-5 border border-gray-300 rounded-2xl hover:bg-gray-50 transition text-lg">📋 Copy Pinterest Caption</button>
+              <button onclick="sharePinterest()" class="py-5 border border-gray-300 rounded-2xl hover:bg-gray-50 transition text-lg">Share to Pinterest</button>
+              <button onclick="takeScreenshotHint()" class="py-5 border border-gray-300 rounded-2xl hover:bg-gray-50 transition text-lg">📸 Screenshot for Pinterest</button>
+            </div>
+
+            <button onclick="createGrokVideoPrompt()" class="w-full mt-10 py-6 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:opacity-90 transition flex items-center justify-center gap-4 text-xl">
+              <span>🎥</span> Generate 6s Video Prompt
+            </button>
+
+            ${!creatorUnlocked ? `
+              <button onclick="openUnlock()" class="w-full mt-8 py-6 border-2 border-dashed border-gray-400 text-gray-700 font-medium rounded-2xl hover:bg-gray-50 transition text-xl">
+                🔒 Use Your Own Affiliate ID
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function closeModal(){
+      document.querySelectorAll(".modal").forEach(m => m.style.display = "none");
+    }
+
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape") closeModal();
+    });
+
+    // ── Your Pinterest / sharing / Grok helpers ──
+    function generateViralPinHook(title){
+      const word = title.split(" ")[0];
+      const hooks = [
+        `This ${word} is going viral for a reason.`,
+        `TikTok users can't stop buying this ${word}.`,
+        `One simple ${word} that solves a daily problem.`,
+        `People are obsessed with this ${word}.`,
+        `This ${word} sold out twice last month.`
+      ];
+      return hooks[Math.floor(Math.random()*hooks.length)];
+    }
+
+    function generatePinterestTitle(title){
+      const templates=[
+        `TikTok Made Me Buy This ${title}`,
+        `Viral Amazon Find: ${title}`,
+        `${title} Everyone Is Talking About`,
+        `This ${title} Is Going Viral 🔥`,
+        `Amazon Must Have: ${title}`,
+        `${title} That Solves a Big Problem`,
+        `Trending Gadget: ${title}`
+      ];
+      return templates[Math.floor(Math.random()*templates.length)];
+    }
+
+    function cleanTitle(title){
+      return title.replace("Amazon.com:","").replace("Visit the","").replace("Store","").trim();
+    }
+
+    function generatePinterestDescription(p,link){
+      const title = cleanTitle(p.title);
+      const templates=[
+        `${p.title} is trending right now.\n\n⭐ ${p.rating} stars\n🔥 ${p.sold}+ sold\n\n${generateViralPinHook(p.title)}\n\nSee why people are buying it:\n${link}\n\n#amazonfinds #tiktokmademebuyit #viralproducts`,
+        `People can't stop buying this ${p.title}.\n\n⭐ Rated ${p.rating}\n📦 ${p.sold}+ sold\n\n${generateViralPinHook(p.title)}\n\nView the product here:\n${link}\n\n#amazonmusthaves #trendingproducts #gadgets`,
+        `This ${p.title} is blowing up online.\n✔ ${p.sold}+ sold\n⭐ ${p.rating} star reviews\n\n${generateViralPinHook(p.title)}\n\nSee the product here:\n${link}\n\n#amazonfavorites #tiktokfinds #viralproducts`
+      ];
+      return templates[Math.floor(Math.random()*templates.length)];
+    }
+
+    async function shareLink(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
+      const data = await res.json();
+      const smallLink = window.location.origin + "/s.html?id=" + data.id;
+      if(navigator.share){
+        navigator.share({title:p.title,text:smallLink});
+      }else{
+        alert("Copy this link:\n" + smallLink);
+      }
+      addPoints(1);
+    }
+
+    async function sharePinterest(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
+      const data = await res.json();
+      const smallLink = window.location.origin + "/s.html?id=" + data.id;
+      const title = generatePinterestTitle(p.title);
+      const description = generatePinterestDescription(p,smallLink);
+      const pinterestUrl = "https://www.pinterest.com/pin/create/button/?" +
+        "url=" + encodeURIComponent(smallLink) +
+        "&media=" + encodeURIComponent(p.image) +
+        "&description=" + encodeURIComponent(title + "\n\n" + description);
+      window.open(pinterestUrl,"_blank");
+    }
+
+    function copyPinterestDescription(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const link = window.location.origin + "/s.html?id=preview";
+      const title = generatePinterestTitle(p.title);
+      const description = generatePinterestDescription(p,link);
+      navigator.clipboard.writeText(title + "\n\n" + description);
+      alert("Pinterest caption copied ✅");
+    }
+
+    function createGrokVideoPrompt(){
+      if(!products.length) return;
+      const p=products[currentIndex];
+      document.getElementById("grokText").value=`
+Create a 6-second vertical 9:16 product video using the uploaded product card image.
+Structure:
+0-2 seconds: attention grabbing hook
+2-5 seconds: show the product in use
+5-6 seconds: curiosity ending or call to action
+
+Include short on-screen text captions.
+Make it optimized for Pinterest, TikTok and Facebook Reels.
+      `;
+      document.getElementById("grokModal").style.display="flex";
+    }
+
+    function copyGrok(){
+      navigator.clipboard.writeText(document.getElementById("grokText").value);
+      alert("Copied ✅");
+    }
+
+    function openGrok(){
+      copyGrok();
+      window.open("https://x.ai/grok","_blank");
+    }
+
+    function nextProduct(){
+      if(!products.length) return;
+      currentIndex++;
+      if(currentIndex >= products.length){
+        currentIndex = 0;
+        shuffle(products);
+      }
+      renderProduct();
+    }
+
+    function prevProduct(){
+      if(!products.length) return;
+      currentIndex = (currentIndex - 1 + products.length) % products.length;
+      renderProduct();
+    }
+
+    const cardElement = document.getElementById("card");
+    let startX=0, endX=0;
+
+    cardElement.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
+    cardElement.addEventListener("touchend", e => {
+      endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      if(Math.abs(diff) > 60){
+        if(diff > 0) nextProduct();
+        else prevProduct();
+      }
+    });
+
+    function animateCreators(){
+      let el = document.getElementById("creatorCount");
+      let base = 1200 + Math.floor(Math.random()*200);
+      setInterval(() => {
+        base += Math.floor(Math.random()*3);
+        el.innerText = base;
+      }, 4000);
+    }
+
+    function shuffle(arr){
+      for(let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    let autoTimer;
+    function startAutoScroll(){
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => { nextProduct(); }, 8000);
+    }
+
+    // Kick-off
+    animateCreators();
+    loadProducts();
+    updatePointsDisplay();
+  </script>
+</body>
+</html>
