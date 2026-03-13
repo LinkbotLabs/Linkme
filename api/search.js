@@ -209,11 +209,13 @@ return res.status(200).json({products:cache.data});
 
 
 /* -------- AMAZON FILTER -------- */
-
-const filtered=allItems.filter(item=>
-item.link &&
-item.link.includes("amazon.") &&
-!item.link.includes("/s?")
+const filtered = allItems.filter(item =>
+  item.link &&
+  item.link.includes("amazon.") &&
+  (
+    item.link.includes("/dp/") ||
+    item.link.includes("/gp/product/")
+  )
 );
 
 
@@ -375,7 +377,7 @@ try{
 
 const parsed=new URL(url);
 
-const match=parsed.pathname.match(/\/(dp|gp\/product)\/([A-Z0-9]{10})/);
+const match=url.match(/\/dp\/([A-Za-z0-9]{10})/);
 
 const asin=match?.[2];
 
