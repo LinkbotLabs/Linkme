@@ -829,14 +829,7 @@ if(url.includes("tag="))return url;
 return url+(url.includes("?")?"&":"?")+"tag="+activeId;
 }
 
-async function loadProducts(q=""){
-card.innerHTML="Loading...";
-const res=await fetch("/api/search"+(q?"?q="+q:""));
-const data=await res.json();
-products=(data.products||[]).filter(p=>p.link && p.image);
-currentIndex=0;
-renderProduct();
-}
+
 function generateHook(title){
 const shortTitle = title.split(" ").slice(0,3).join(" ");
 return `🔥 This ${shortTitle} Is Going Viral`;
