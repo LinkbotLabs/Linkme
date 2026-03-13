@@ -1,9 +1,3 @@
-const cache = {
-  timestamp: 0,
-  data: null
-};
-
-const const ONE_DAY = 0;
 
 /* ------------------ DISCOVERY KEYWORDS ------------------ */
 
