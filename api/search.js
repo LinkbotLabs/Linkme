@@ -3,213 +3,136 @@ const cache = {
   data: null
 };
 
-const ONE_DAY = 0; // Disabled as requested — fresh every time
+const ONE_DAY = 1000 * 60 * 60 * 24;
 
-/* ------------------ KEYWORDS (more for better hit rate) ------------------ */
 const keywords = [
-  "amazon movers and shakers gadgets 2026",
-  "amazon best sellers viral gadgets 2026",
-  "tiktok viral amazon products 2026",
-  "pinterest trending amazon finds 2026",
-  "amazon new releases tech gadgets 2026",
-  "viral kitchen gadgets tiktok amazon 2026",
-  "amazon impulse buy gadgets viral 2026",
-  "jellycat plush keychain phone charm amazon viral",
-  "collagen peptide hydrogel face mask amazon viral",
-  "magnetic phone mount car viral tiktok amazon",
-  "solar power bank foldable portable charger amazon",
-  "back stretcher spine decompressor yoga amazon",
-  "dumpling maker sushi roller tiktok amazon",
-  "asmr slime kit kinetic sand amazon viral",
-  "long distance touch bracelet amazon",
-  "mini hydroponic grow kit amazon",
-  "rfid blocking wallet amazon viral",
-  "led nail lamp uv amazon",
-  "portable espresso maker amazon viral",
-  "smart ring fitness tracker amazon",
-  "holographic projector fan amazon viral",
-  "nmn resveratrol supplement amazon",
-  "infrared sauna blanket amazon",
-  "ar smart makeup mirror amazon",
-  "medicube toner pads viral amazon",
-  "viral tumbler water bottle amazon 2026",
-  "high waisted leggings amazon viral",
-  "tiktok viral beauty amazon 2026",
-  "amazon viral wellness gadgets 2026"
+  "amazon trending gadgets",
+  "viral kitchen gadgets amazon",
+  "amazon best seller tech",
+  "tiktok viral home gadgets amazon",
+  "amazon impulse buy gadgets",
+  "amazon trending gadgets 2026",
+  "viral amazon kitchen finds 2026",
+  "tiktok viral beauty products amazon",
+  "amazon viral tech gadgets 2026",
+  "trending amazon impulse buys 2026",
+  "amazon best seller kitchen tools 2026",
+  "tiktok viral wellness gadgets amazon"
 ];
 
-/* ------------------ AMAZON SCRAPER (higher-res images) ------------------ */
-async function scrapeAmazonPage(url, limit = 20) {
-  try {
-    const res = await fetch(url);
-    if (!res.ok) return [];
-    const html = await res.text();
-
-    const matches = [...html.matchAll(/\/dp\/([A-Z0-9]{10})/g)];
-    const asins = [...new Set(matches.map(m => m[1]))].slice(0, limit);
-
-    return asins.map((asin, i) => ({
-      id: `amzn-${asin}-${i}`,
-      title: "Trending Product", // fallback
-      image: `https://m.media-amazon.com/images/I/${asin}._AC_SL1500_.jpg`, // ← best quality
-      link: `https://www.amazon.com/dp/${asin}`,
-      source: url.includes('movers') ? 'movers' : url.includes('best-sellers') ? 'bestsellers' : url.includes('new-releases') ? 'newreleases' : 'amazon',
-      description: "",
-      score: url.includes('new-releases') ? 4.0 : url.includes('movers') ? 3.5 : 2.5
-    }));
-  } catch (e) {
-    console.error('Scrape failed:', url, e);
-    return [];
-  }
-}
-
-/* ------------------ REDDIT (use selftext for description) ------------------ */
-async function getRedditProducts() {
-  try {
-    const subreddits = [
-      "AmazonFinds", "BuyItForLife", "DidntKnowIWantedThat", "DamnThatsInteresting",
-      "mildlyinteresting", "oddlysatisfying", "tiktokshop", "AmazonVine", "AmazonVineReviews"
-    ];
-
-    let products = [];
-
-    for (const sub of subreddits) {
-      const res = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=60`);
-      if (!res.ok) continue;
-      const data = await res.json();
-      const posts = data?.data?.children || [];
-
-      posts.forEach((post, i) => {
-        const url = post.data.url || "";
-        const asinMatch = url.match(/\/dp\/([A-Z0-9]{10})/);
-        if (!asinMatch) return;
-
-        const asin = asinMatch[1];
-        const desc = post.data.selftext?.trim().substring(0, 400) || "";
-
-        products.push({
-          id: `reddit-${sub}-${i}`,
-          title: post.data.title.substring(0, 120).trim(),
-          image: `https://m.media-amazon.com/images/I/${asin}._AC_SL1500_.jpg`,
-          link: `https://www.amazon.com/dp/${asin}`,
-          source: 'reddit',
-          description: desc || "Viral find from Reddit",
-          score: desc.length > 100 ? 2.8 : 2.2
-        });
-      });
-    }
-
-    return products.slice(0, 30);
-  } catch (e) {
-    console.error('Reddit fetch failed:', e);
-    return [];
-  }
-}
-
-/* ------------------ MAIN HANDLER ------------------ */
 export default async function handler(req, res) {
-  res.setHeader("Cache-Control", "no-store, max-age=0");
+
+  res.setHeader("Cache-Control", "no-store");
 
   const now = Date.now();
 
+  // Return cached products if fresh
+  if (cache.data && now - cache.timestamp < ONE_DAY) {
+    return res.status(200).json({ products: cache.data });
+  }
+
   try {
-    const shuffled = [...keywords].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 12); // more keywords = better chance of good snippets
 
-    let allItems = [];
+    const activeKeyword =
+      keywords[Math.floor(Math.random() * keywords.length)];
 
-    for (const keyword of selected) {
-      const query = `${keyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
-      try {
-        const googleRes = await fetch(
-          `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`
-        );
-        if (!googleRes.ok) continue;
-        const data = await googleRes.json();
-        if (data.items) allItems = allItems.concat(data.items);
-      } catch (e) {
-        console.error(`Google failed for "${keyword}":`, e);
-      }
+    const query =
+      `${activeKeyword} site:amazon.com -book -novel -kindle`;
+
+    const googleRes = await fetch(
+      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+    );
+
+    const data = await googleRes.json();
+
+    if (!googleRes.ok) {
+      return res.status(googleRes.status).json({
+        error: data.error?.message || "Google API error"
+      });
     }
 
-    // Google products – allow short descriptions now
-    const googleProducts = allItems
-      .map((item, i) => {
-        const asinMatch = item.link.match(/\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/);
-        const asin = asinMatch?.[1] || asinMatch?.[2];
-        if (!asin) return null;
+    if (!data.items || data.items.length === 0) {
+      return res.status(200).json({ products: [] });
+    }
 
-        const desc = (item.snippet || "").trim();
+    // Filter Amazon product links
+    const filtered = data.items.filter(item =>
+      item.link &&
+      item.link.includes("amazon.com") &&
+      item.link.match(/\/(dp|gp\/product)\//)
+    );
+
+    const products = filtered
+      .map((item, i) => {
+
+        const image =
+          item.pagemap?.cse_image?.[0]?.src ||
+          item.pagemap?.cse_thumbnail?.[0]?.src;
+
+        // Skip results without images
+        if (!image) return null;
+
+        const description =
+          item.snippet ||
+          item.pagemap?.metatags?.[0]?.["og:description"] ||
+          "Trending product people are buying right now.";
+
+        const cleanLink = normalizeAmazonLink(item.link);
+
         return {
-          id: `google-${now}-${i}`,
+          id: `${now}-${i}`,
           title: cleanTitle(item.title),
-          description: desc || "Viral Amazon find – check details on page",
-          image: `https://m.media-amazon.com/images/I/${asin}._AC_SL1500_.jpg`,
-          link: `https://www.amazon.com/dp/${asin}`,
-          source: 'keyword',
-          score: desc.length > 150 ? 3.0 : desc.length > 50 ? 2.5 : 2.0
+          description: description.substring(0, 140),
+          image,
+          link: cleanLink
         };
+
       })
       .filter(Boolean);
 
-    // Scrape Amazon & Reddit
-    const movers = await scrapeAmazonPage("https://www.amazon.com/gp/movers-and-shakers", 25);
-    const bestSellers = await scrapeAmazonPage("https://www.amazon.com/Best-Sellers/zgbs", 20);
-    const newReleases = await scrapeAmazonPage("https://www.amazon.com/gp/new-releases", 30);
+    cache.timestamp = now;
+    cache.data = products;
 
-    const reddit = await getRedditProducts();
+    return res.status(200).json({ products });
 
-    // Combine + weight
-    const combined = [
-      ...newReleases.map(p => ({ ...p, score: 4.0 })),
-      ...movers.map(p => ({ ...p, score: 3.5 })),
-      ...googleProducts.map(p => ({ ...p, score: p.score })),
-      ...reddit.map(p => ({ ...p, score: p.score })),
-      ...bestSellers.map(p => ({ ...p, score: 2.0 }))
-    ];
+  } catch (error) {
 
-    // Dedupe – keep best description + score
-    const seen = new Map();
-    const unique = combined.filter(p => {
-      const asinMatch = p.link.match(/\/dp\/([A-Z0-9]{10})/);
-      if (!asinMatch) return true;
-      const asin = asinMatch[1];
-
-      if (seen.has(asin)) {
-        const ex = seen.get(asin);
-        if ((p.description?.length || 0) > (ex.description?.length || 0) ||
-            (p.score || 0) > (ex.score || 0)) {
-          seen.set(asin, p);
-        }
-        return false;
-      }
-
-      seen.set(asin, p);
-      return true;
+    return res.status(500).json({
+      error: "Search failed",
+      details: error.message
     });
 
-    // Sort + trim
-    unique.sort((a, b) => b.score - a.score || Math.random() - 0.5);
-    const finalProducts = unique.slice(0, 80);
-
-    return res.status(200).json({ products: finalProducts });
-
-  } catch (e) {
-    console.error('Handler error:', e);
-    return res.status(200).json({ 
-      products: [], 
-      error: 'Fetch failed – check logs or try again later' 
-    });
   }
+
 }
 
+
 /* ------------------ HELPERS ------------------ */
+
 function cleanTitle(title) {
   return title
-    .replace(/- Amazon\.com.*$/i, '')
-    .replace(/\| Amazon.*/i, '')
-    .replace(/Amazon\.com: |Amazon : /gi, '')
-    .split('|')[0]
-    .substring(0, 120)
-    .trim() || "Viral Amazon Find";
+    .replace("- Amazon.com", "")
+    .replace("| Amazon", "")
+    .split("|")[0]
+    .substring(0, 80)
+    .trim();
+}
+
+function normalizeAmazonLink(url) {
+  try {
+
+    const parsed = new URL(url);
+
+    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
+    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
+
+    const asin = dpMatch?.[1] || gpMatch?.[1];
+
+    if (!asin) return parsed.origin;
+
+    return `https://www.amazon.com/dp/${asin}`;
+
+  } catch {
+    return url;
+  }
 }
