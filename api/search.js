@@ -87,7 +87,7 @@ async function getRedditProducts() {
     for (const sub of subreddits) {
 
       const res = await fetch(
-        `https://www.reddit.com/r/${sub}/hot.json?limit=25`
+        `https://www.reddit.com/r/${sub}/hot.json?limit=50`
       );
 
       const data = await res.json();
@@ -152,7 +152,7 @@ export default async function handler(req, res) {
         `${keyword} site:amazon.com inurl:/dp/ -book -novel -kindle`;
 
       const googleRes = await fetch(
-        
+        `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`
       );
 
       const data = await googleRes.json();
@@ -179,32 +179,36 @@ export default async function handler(req, res) {
 
     /* ---------- MAP PRODUCTS ---------- */
 
-    const products = filtered.map((item, i) => {
+    const products = filtered
+      .map((item, i) => {
 
-      const asinMatch = item.link.match(
-        /\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/
-      );
+        const asinMatch = item.link.match(
+          /\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/
+        );
 
-      const asin = asinMatch?.[1] || asinMatch?.[2];
+        const asin = asinMatch?.[1] || asinMatch?.[2];
 
-      const image =
-        asin
-          ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`
-          : item.pagemap?.cse_image?.[0]?.src ||
-            item.pagemap?.cse_thumbnail?.[0]?.src ||
-            "https://via.placeholder.com/600x600?text=Float+Pick";
+        const image =
+          asin
+            ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`
+            : item.pagemap?.cse_image?.[0]?.src ||
+              item.pagemap?.cse_thumbnail?.[0]?.src ||
+              null;
 
-      const cleanLink = normalizeAmazonLink(item.link);
+        if (!image) return null;
 
-    return {
-  id: `${now}-${i}`,
-  title: cleanTitle(item.title),
-  description: item.snippet || "",
-  image,
-  link: cleanLink
-};  
+        const cleanLink = normalizeAmazonLink(item.link);
 
-    });
+        return {
+          id: `${now}-${i}`,
+          title: cleanTitle(item.title),
+          description: item.snippet || "",
+          image,
+          link: cleanLink
+        };
+
+      })
+      .filter(Boolean);
 
     /* ---------- EXTRA SOURCES ---------- */
 
