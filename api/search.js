@@ -8,6 +8,7 @@ const CACHE_TIME = 1000 * 60 * 60 * 6;
 
 
 /* ---------------- FALLBACK PRODUCT DATABASE (100) ---------------- */
+
 const fallbackProducts = [
 
 /* TIKTOK VIRAL */
@@ -32,11 +33,6 @@ const fallbackProducts = [
 {title:"Mini Portable Projector",asin:"B08R6Q8F7T"},
 {title:"Magnetic Cable Organizer Clips",asin:"B09K3V7H5M"},
 {title:"Rechargeable Hand Warmer",asin:"B08JZ3Y9W7"},
-{title:"Portable Blender Bottle Mixer",asin:"B08Y8V7R5P"},
-{title:"Under Cabinet Jar Opener",asin:"B000X6K9J8"},
-{title:"Cord Organizer for Kitchen Appliances",asin:"B09Z3F7L5S"},
-{title:"Adjustable Phone Stand Desk Holder",asin:"B07F8S18D5"},
-{title:"Portable Smoothie Blender Cup",asin:"B08C9F6R7H"},
 
 /* HIGH COMMISSION */
 
@@ -50,21 +46,6 @@ const fallbackProducts = [
 {title:"Portable Monitor USB-C Display",asin:"B08CVQ5SD9"},
 {title:"Smart Security Camera Indoor",asin:"B07X6C9RMF"},
 {title:"Digital Kitchen Scale Precision",asin:"B06X9NQ8GX"},
-{title:"Electric Gooseneck Kettle",asin:"B07QW4B7S6"},
-{title:"Smart LED Desk Lamp",asin:"B07VJZ6L6X"},
-{title:"Compact Air Purifier HEPA",asin:"B07VVK39F7"},
-{title:"Professional Blender Smoothie Maker",asin:"B07CX95VRT"},
-{title:"Milk Frother Electric Automatic",asin:"B07K6L2G8Y"},
-{title:"Sous Vide Precision Cooker",asin:"B07L9SW6GT"},
-{title:"Electric Lunch Box Food Heater",asin:"B07QY9J9PQ"},
-{title:"Smart Mug Temperature Control",asin:"B07NLRJ1QJ"},
-{title:"Portable Power Station Battery",asin:"B08JH5SKQ8"},
-{title:"Wireless Charging Station 3 in 1",asin:"B08Z3J4N5C"},
-{title:"Compact Espresso Coffee Grinder",asin:"B07CSKGLMM"},
-{title:"Digital Air Fryer Oven Combo",asin:"B09J7H2P4G"},
-{title:"Smart WiFi Light Switch",asin:"B07HGW8N7R"},
-{title:"Portable Espresso Maker Travel",asin:"B07TR5N1Q8"},
-{title:"Countertop Ice Maker Machine",asin:"B07H7SGQ52"},
 
 /* PROBLEM SOLVER */
 
@@ -78,21 +59,6 @@ const fallbackProducts = [
 {title:"Pan Lid Organizer Rack",asin:"B08F3N7H8M"},
 {title:"Dish Drying Rack Compact",asin:"B07VJ4Y6P7"},
 {title:"Sink Drain Hair Catcher",asin:"B07PB5M8DS"},
-{title:"Reusable Food Storage Bags",asin:"B08G8Y7L9N"},
-{title:"Foldable Laundry Basket",asin:"B07Y1S8L5P"},
-{title:"Kitchen Drawer Knife Organizer",asin:"B07F9Y7P5S"},
-{title:"Makeup Organizer Storage Box",asin:"B07Y5Z6M2T"},
-{title:"Desk Cable Organizer Tray",asin:"B08C2J4F6T"},
-{title:"Bathroom Counter Organizer",asin:"B08Q3Z8F6X"},
-{title:"Fridge Egg Storage Drawer",asin:"B08R5H6J9M"},
-{title:"Closet Shelf Divider Set",asin:"B07P5X7N8T"},
-{title:"Expandable Pot Organizer Rack",asin:"B07H7V5P9M"},
-{title:"Magnetic Fridge Storage Shelf",asin:"B08C5F3Y9T"},
-{title:"Laundry Folding Board Tool",asin:"B07Z5J4P8F"},
-{title:"Pantry Can Organizer Rack",asin:"B08N4L2P7T"},
-{title:"Under Bed Storage Containers",asin:"B07X2F8N4M"},
-{title:"Kitchen Wrap Organizer Box",asin:"B09C3V7L6S"},
-{title:"Expandable Sink Dish Rack",asin:"B07V6R8P4S"},
 
 /* NEW TRENDS */
 
@@ -105,28 +71,16 @@ const fallbackProducts = [
 {title:"Digital Measuring Cup Kitchen",asin:"B07S5L3T2R"},
 {title:"Portable Label Printer Mini",asin:"B08Q7J5P3M"},
 {title:"Smart LED Mirror Makeup",asin:"B07X3L6F2P"},
-{title:"Electric Heated Lunch Box",asin:"B07QY9J9PQ"},
-{title:"Digital Food Nutrition Scale",asin:"B07FCZSC41"},
-{title:"Automatic Stirring Mug",asin:"B07V6XK9S8"},
-{title:"Portable Blender Smoothie Cup",asin:"B08CX6H4T1"},
-{title:"Smart WiFi Aroma Diffuser",asin:"B07P9T7F2M"},
-{title:"Mini Photo Printer Smartphone",asin:"B08J5H3L7R"},
-{title:"LED Sunset Projection Lamp",asin:"B08X1J6L5R"},
-{title:"Wireless Lavalier Microphone",asin:"B08P2D3T4R"},
-{title:"Portable Ice Maker Countertop",asin:"B07H7SGQ52"},
-{title:"Smart Plug Energy Monitor",asin:"B07RCNB2L3"},
-{title:"Digital Tape Measure Laser",asin:"B08M4Z8F2N"},
-{title:"Portable Espresso Maker",asin:"B07TR5N1Q8"},
-{title:"Self Cleaning Water Bottle",asin:"B08N3F6J7P"},
-{title:"Smart Bedside Alarm Clock",asin:"B07H4Y8N3T"},
-{title:"Wireless Charging Desk Lamp",asin:"B08C2J4F6T"},
-{title:"Mini Electric Screwdriver Set",asin:"B08C7K6P5R"}
+{title:"Electric Heated Lunch Box",asin:"B07QY9J9PQ"}
 
 ];
+
+
 
 /* ---------------- GOOGLE DISCOVERY QUERIES ---------------- */
 
 const queries = [
+
 "site:amazon.com/gp/movers-and-shakers",
 "site:amazon.com/gp/movers-and-shakers kitchen",
 "site:amazon.com/gp/movers-and-shakers electronics",
@@ -141,7 +95,9 @@ const queries = [
 "site:reddit.com amazon find gadget",
 "amazon organization gadgets",
 "amazon desk setup gadgets"
+
 ];
+
 
 
 /* ---------------- API HANDLER ---------------- */
@@ -157,6 +113,8 @@ return res.status(200).json({products:cache.data});
 }
 
 try{
+
+/* -------- GOOGLE SEED DISCOVERY -------- */
 
 const shuffled=[...queries].sort(()=>0.5-Math.random());
 const selectedQueries=shuffled.slice(0,14);
@@ -179,22 +137,31 @@ allItems=[...allItems,...data.items];
 
 }
 
+
+
 /* -------- EXTRACT ASIN SEEDS -------- */
 
 let seedASINs=[];
 
 for(const item of allItems){
+
 const asin=extractASIN(item.link);
+
 if(asin){
 seedASINs.push(asin);
 }
+
 }
 
-/* SAFETY FALLBACK */
+
+
+/* -------- SAFETY SEEDS -------- */
 
 if(seedASINs.length === 0){
 seedASINs = fallbackProducts.slice(0,20).map(p=>p.asin);
 }
+
+
 
 /* -------- AMAZON GRAPH EXPANSION -------- */
 
@@ -202,52 +169,74 @@ let expandedASINs=[...seedASINs];
 
 for(const asin of seedASINs){
 
-expandedASINs.push(asin);
 expandedASINs.push(generateNeighborASIN(asin));
 expandedASINs.push(generateNeighborASIN(asin));
 expandedASINs.push(generateNeighborASIN(asin));
 
 }
+
+
 
 /* -------- CATEGORY HARVEST EXPANSION -------- */
 
 const categorySeeds=["B08","B07","B09","B0A","B0B"];
 
 for(const prefix of categorySeeds){
+
 for(let i=0;i<50;i++){
+
 expandedASINs.push(prefix+randomASIN());
+
 }
+
 }
+
+
 
 /* -------- ADD FALLBACK DATABASE -------- */
 
 const fallbackASINs=fallbackProducts.map(p=>p.asin);
 expandedASINs=[...expandedASINs,...fallbackASINs];
 
+
+
 /* -------- REMOVE DUPLICATES -------- */
 
 const uniqueASINs=[...new Set(expandedASINs)];
 
-/* LIMIT DISCOVERY POOL */
 
-const limitedASINs = uniqueASINs.slice(0,1000);
 
-/* -------- BUILD PRODUCT LIST -------- */
+/* -------- FALLBACK TITLE MAP -------- */
 
 const fallbackMap={};
+
 fallbackProducts.forEach(p=>{
 fallbackMap[p.asin]=p.title;
 });
 
-const products=limitedASINs.slice(0,300).map((asin,i)=>({
 
-id:`${now}-${i}`,
 
-title:fallbackMap[asin] || "Trending Amazon Product",
+/* -------- BUILD PRODUCT LIST WITH IMAGE CHECK -------- */
+
+const products=[];
+
+for(const asin of uniqueASINs){
+
+if(products.length>=300) break;
+
+const image=await findWorkingImage(asin);
+
+if(!image) continue;
+
+products.push({
+
+id:`${now}-${products.length}`,
+
+title:fallbackMap[asin] || "Amazon Viral Find",
 
 description:"Trending product people are discovering right now.",
 
-image:`https://m.media-amazon.com/images/P/${asin}.jpg`,
+image,
 
 link:`https://www.amazon.com/dp/${asin}`,
 
@@ -255,7 +244,11 @@ score:1,
 
 asin
 
-}));
+});
+
+}
+
+
 
 /* -------- CACHE -------- */
 
@@ -276,12 +269,49 @@ details:error.message
 }
 
 
+
+/* ---------------- IMAGE FINDER ---------------- */
+
+async function findWorkingImage(asin){
+
+const urls=[
+
+`https://m.media-amazon.com/images/P/${asin}.jpg`,
+`https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg`,
+`https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=${asin}&Format=_SL250_`
+
+];
+
+for(const url of urls){
+
+try{
+
+const res=await fetch(url,{method:"HEAD"});
+
+if(res.ok){
+return url;
+}
+
+}catch{}
+
+}
+
+return null;
+
+}
+
+
+
 /* ---------------- HELPERS ---------------- */
 
 function extractASIN(url){
+
 if(!url) return null;
+
 const match=url.match(/\/(dp|gp\/product)\/([A-Za-z0-9]{10})/);
+
 return match ? match[2] : null;
+
 }
 
 function generateNeighborASIN(asin){
@@ -289,12 +319,16 @@ return asin.slice(0,8)+randomChars(2);
 }
 
 function randomChars(n){
+
 const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 let str="";
+
 for(let i=0;i<n;i++){
 str+=chars[Math.floor(Math.random()*chars.length)];
 }
+
 return str;
+
 }
 
 function randomASIN(){
