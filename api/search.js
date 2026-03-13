@@ -3,7 +3,7 @@ const cache = {
   data: null
 };
 
-const ONE_DAY = 24 * 60 * 60 * 1000; // 24 hours in ms
+
 
 /* ------------------ KEYWORDS (expanded + 2026 signals) ------------------ */
 const keywords = [
