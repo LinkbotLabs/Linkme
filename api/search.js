@@ -3,11 +3,10 @@ const cache = {
   data: null
 };
 
-const ONE_DAY = 0;  // cache never survives even one second
+const ONE_DAY = 0; // Disabled as requested — fresh every time
 
-/* ------------------ KEYWORDS (expanded + 2026 signals) ------------------ */
+/* ------------------ KEYWORDS (more for better hit rate) ------------------ */
 const keywords = [
-  // General high-velocity viral / trending
   "amazon movers and shakers gadgets 2026",
   "amazon best sellers viral gadgets 2026",
   "tiktok viral amazon products 2026",
@@ -15,37 +14,31 @@ const keywords = [
   "amazon new releases tech gadgets 2026",
   "viral kitchen gadgets tiktok amazon 2026",
   "amazon impulse buy gadgets viral 2026",
-
-  // Your core niches
   "jellycat plush keychain phone charm amazon viral",
-  "magnetic phone mount car viral tiktok amazon",
   "collagen peptide hydrogel face mask amazon viral",
+  "magnetic phone mount car viral tiktok amazon",
   "solar power bank foldable portable charger amazon",
   "back stretcher spine decompressor yoga amazon",
-  "dumpling maker sushi roller fusion food tool tiktok amazon",
-  "asmr slime kit kinetic sand jellyfish lamp amazon viral",
-  "long distance touch bracelet couple lamp amazon",
-  "mini hydroponic grow kit led self watering planter amazon",
-  "rfid blocking anti theft wallet amazon viral",
-  "led nail lamp uv gel dryer amazon",
-  "portable espresso maker manual coffee amazon viral",
-  "smart ring fitness tracker oura alternative amazon",
-  "holographic projector fan display amazon viral",
-  "nmn resveratrol biohacking longevity supplement amazon",
-  "infrared portable sauna blanket detox amazon",
-  "ar smart makeup mirror virtual try on amazon",
-
-  // 2026 viral / high-commission extras
+  "dumpling maker sushi roller tiktok amazon",
+  "asmr slime kit kinetic sand amazon viral",
+  "long distance touch bracelet amazon",
+  "mini hydroponic grow kit amazon",
+  "rfid blocking wallet amazon viral",
+  "led nail lamp uv amazon",
+  "portable espresso maker amazon viral",
+  "smart ring fitness tracker amazon",
+  "holographic projector fan amazon viral",
+  "nmn resveratrol supplement amazon",
+  "infrared sauna blanket amazon",
+  "ar smart makeup mirror amazon",
   "medicube toner pads viral amazon",
-  "viral water bottle tumbler amazon 2026",
-  "high waisted leggings pockets amazon viral",
-  "wrinkle release spray amazon viral",
-  "vitamin c korean skincare pads amazon viral",
-  "tiktok viral beauty products amazon 2026",
+  "viral tumbler water bottle amazon 2026",
+  "high waisted leggings amazon viral",
+  "tiktok viral beauty amazon 2026",
   "amazon viral wellness gadgets 2026"
 ];
 
-/* ------------------ AMAZON PAGE SCRAPER ------------------ */
+/* ------------------ AMAZON SCRAPER (higher-res images) ------------------ */
 async function scrapeAmazonPage(url, limit = 20) {
   try {
     const res = await fetch(url);
@@ -57,12 +50,12 @@ async function scrapeAmazonPage(url, limit = 20) {
 
     return asins.map((asin, i) => ({
       id: `amzn-${asin}-${i}`,
-      title: "Trending Amazon Product",
-      image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL800_.jpg`, // ← sharper image
+      title: "Trending Product", // fallback
+      image: `https://m.media-amazon.com/images/I/${asin}._AC_SL1500_.jpg`, // ← best quality
       link: `https://www.amazon.com/dp/${asin}`,
       source: url.includes('movers') ? 'movers' : url.includes('best-sellers') ? 'bestsellers' : url.includes('new-releases') ? 'newreleases' : 'amazon',
-      description: "", // scraped pages don't give desc → rely on Google for real text
-      score: url.includes('new-releases') ? 3.5 : url.includes('movers') ? 3.0 : 2.0
+      description: "",
+      score: url.includes('new-releases') ? 4.0 : url.includes('movers') ? 3.5 : 2.5
     }));
   } catch (e) {
     console.error('Scrape failed:', url, e);
@@ -70,18 +63,18 @@ async function scrapeAmazonPage(url, limit = 20) {
   }
 }
 
-/* ------------------ REDDIT VIRAL PRODUCTS ------------------ */
+/* ------------------ REDDIT (use selftext for description) ------------------ */
 async function getRedditProducts() {
   try {
     const subreddits = [
       "AmazonFinds", "BuyItForLife", "DidntKnowIWantedThat", "DamnThatsInteresting",
-      "mildlyinteresting", "oddlysatisfying", "tiktokshop", "AmazonVine"
+      "mildlyinteresting", "oddlysatisfying", "tiktokshop", "AmazonVine", "AmazonVineReviews"
     ];
 
     let products = [];
 
     for (const sub of subreddits) {
-      const res = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=50`);
+      const res = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=60`);
       if (!res.ok) continue;
       const data = await res.json();
       const posts = data?.data?.children || [];
@@ -92,19 +85,21 @@ async function getRedditProducts() {
         if (!asinMatch) return;
 
         const asin = asinMatch[1];
+        const desc = post.data.selftext?.trim().substring(0, 400) || "";
+
         products.push({
           id: `reddit-${sub}-${i}`,
-          title: post.data.title.substring(0, 100).trim(),
-          image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL800_.jpg`,
+          title: post.data.title.substring(0, 120).trim(),
+          image: `https://m.media-amazon.com/images/I/${asin}._AC_SL1500_.jpg`,
           link: `https://www.amazon.com/dp/${asin}`,
           source: 'reddit',
-          description: post.data.selftext?.substring(0, 300) || "", // sometimes reddit has descriptions
-          score: 2.2
+          description: desc || "Viral find from Reddit",
+          score: desc.length > 100 ? 2.8 : 2.2
         });
       });
     }
 
-    return products.slice(0, 25);
+    return products.slice(0, 30);
   } catch (e) {
     console.error('Reddit fetch failed:', e);
     return [];
@@ -117,15 +112,9 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  // Serve cache if fresh
-  if (cache.data && now - cache.timestamp < ONE_DAY) {
-    return res.status(200).json({ products: cache.data });
-  }
-
   try {
-    // Shuffle + take more keywords for variety (still <100/day quota)
     const shuffled = [...keywords].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 10);
+    const selected = shuffled.slice(0, 12); // more keywords = better chance of good snippets
 
     let allItems = [];
 
@@ -135,52 +124,51 @@ export default async function handler(req, res) {
         const googleRes = await fetch(
           `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${process.env.GOOGLE_API_KEY}&cx=${process.env.GOOGLE_CX}`
         );
+        if (!googleRes.ok) continue;
         const data = await googleRes.json();
         if (data.items) allItems = allItems.concat(data.items);
       } catch (e) {
-        console.error(`Google search failed for "${keyword}":`, e);
+        console.error(`Google failed for "${keyword}":`, e);
       }
     }
 
-    // Google products – prefer longer descriptions
+    // Google products – allow short descriptions now
     const googleProducts = allItems
       .map((item, i) => {
         const asinMatch = item.link.match(/\/dp\/([A-Z0-9]{10})|\/gp\/product\/([A-Z0-9]{10})/);
         const asin = asinMatch?.[1] || asinMatch?.[2];
         if (!asin) return null;
 
-        const desc = item.snippet || "";
-        if (desc.length < 50) return null; // skip near-empty descriptions
-
+        const desc = (item.snippet || "").trim();
         return {
           id: `google-${now}-${i}`,
           title: cleanTitle(item.title),
-          description: desc,
-          image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL800_.jpg`,
+          description: desc || "Viral Amazon find – check details on page",
+          image: `https://m.media-amazon.com/images/I/${asin}._AC_SL1500_.jpg`,
           link: `https://www.amazon.com/dp/${asin}`,
           source: 'keyword',
-          score: 2.2 + (desc.length / 1000) // tiny bonus for richer snippets
+          score: desc.length > 150 ? 3.0 : desc.length > 50 ? 2.5 : 2.0
         };
       })
       .filter(Boolean);
 
-    // Amazon sources
-    const movers = await scrapeAmazonPage("https://www.amazon.com/gp/movers-and-shakers", 20);
+    // Scrape Amazon & Reddit
+    const movers = await scrapeAmazonPage("https://www.amazon.com/gp/movers-and-shakers", 25);
     const bestSellers = await scrapeAmazonPage("https://www.amazon.com/Best-Sellers/zgbs", 20);
-    const newReleases = await scrapeAmazonPage("https://www.amazon.com/gp/new-releases", 25); // more weight here
+    const newReleases = await scrapeAmazonPage("https://www.amazon.com/gp/new-releases", 30);
 
     const reddit = await getRedditProducts();
 
     // Combine + weight
     const combined = [
-      ...newReleases.map(p => ({ ...p, score: 3.8 })),   // strongest priority: new & fresh
-      ...movers.map(p => ({ ...p, score: 3.2 })),
-      ...googleProducts.map(p => ({ ...p, score: p.score || 2.5 })),
-      ...reddit.map(p => ({ ...p, score: 2.3 })),
-      ...bestSellers.map(p => ({ ...p, score: 1.8 }))
+      ...newReleases.map(p => ({ ...p, score: 4.0 })),
+      ...movers.map(p => ({ ...p, score: 3.5 })),
+      ...googleProducts.map(p => ({ ...p, score: p.score })),
+      ...reddit.map(p => ({ ...p, score: p.score })),
+      ...bestSellers.map(p => ({ ...p, score: 2.0 }))
     ];
 
-    // Deduplicate – keep the one with best description & score
+    // Dedupe – keep best description + score
     const seen = new Map();
     const unique = combined.filter(p => {
       const asinMatch = p.link.match(/\/dp\/([A-Z0-9]{10})/);
@@ -188,10 +176,10 @@ export default async function handler(req, res) {
       const asin = asinMatch[1];
 
       if (seen.has(asin)) {
-        const existing = seen.get(asin);
-        if ((p.description?.length || 0) > (existing.description?.length || 0) ||
-            (p.score || 0) > (existing.score || 0)) {
-          seen.set(asin, p); // replace with better version
+        const ex = seen.get(asin);
+        if ((p.description?.length || 0) > (ex.description?.length || 0) ||
+            (p.score || 0) > (ex.score || 0)) {
+          seen.set(asin, p);
         }
         return false;
       }
@@ -200,20 +188,18 @@ export default async function handler(req, res) {
       return true;
     });
 
-    // Final sort: high score → random freshness
+    // Sort + trim
     unique.sort((a, b) => b.score - a.score || Math.random() - 0.5);
-
-    // Trim to reasonable size (frontend can handle 50–80 nicely)
     const finalProducts = unique.slice(0, 80);
-
-    cache.timestamp = now;
-    cache.data = finalProducts;
 
     return res.status(200).json({ products: finalProducts });
 
   } catch (e) {
-    console.error('API handler crashed:', e);
-    return res.status(200).json({ products: [], error: 'Backend fetch failed – try again soon' });
+    console.error('Handler error:', e);
+    return res.status(200).json({ 
+      products: [], 
+      error: 'Fetch failed – check logs or try again later' 
+    });
   }
 }
 
@@ -225,5 +211,5 @@ function cleanTitle(title) {
     .replace(/Amazon\.com: |Amazon : /gi, '')
     .split('|')[0]
     .substring(0, 120)
-    .trim();
+    .trim() || "Viral Amazon Find";
 }
