@@ -30,7 +30,25 @@
   <link rel="icon" href="/float-rising-logo.svg" />
 </head>
 <body class="bg-gray-50 min-h-screen font-sans text-gray-900 antialiased">
+<div id="floatingTools" class="fixed right-4 bottom-28 z-50 flex flex-col gap-3">
 
+  <button onclick="sharePinterest()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    📌
+  </button>
+
+  <button onclick="copyPinterestDescription()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    📋
+  </button>
+
+  <button onclick="shareLink()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    🔗
+  </button>
+
+  <button onclick="createGrokVideoPrompt()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    🎥
+  </button>
+
+</div>
   <!-- Slim Hero -->
   <header class="text-center pt-6 pb-4 px-4 bg-white border-b border-gray-100">
     <img src="/float-rising-logo.svg" alt="Float Rising" class="mx-auto h-14 mb-3" />
