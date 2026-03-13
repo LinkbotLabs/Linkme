@@ -46,6 +46,16 @@ const fallbackProducts = [
 {title:"Portable Monitor USB-C Display",asin:"B08CVQ5SD9"},
 {title:"Smart Security Camera Indoor",asin:"B07X6C9RMF"},
 {title:"Digital Kitchen Scale Precision",asin:"B06X9NQ8GX"},
+{title:"Electric Gooseneck Kettle",asin:"B07QW4B7S6"},
+{title:"Smart LED Desk Lamp",asin:"B07VJZ6L6X"},
+{title:"Compact Air Purifier HEPA",asin:"B07VVK39F7"},
+{title:"Professional Blender Smoothie Maker",asin:"B07CX95VRT"},
+{title:"Milk Frother Electric Automatic",asin:"B07K6L2G8Y"},
+{title:"Sous Vide Precision Cooker",asin:"B07L9SW6GT"},
+{title:"Electric Lunch Box Food Heater",asin:"B07QY9J9PQ"},
+{title:"Smart Mug Temperature Control",asin:"B07NLRJ1QJ"},
+{title:"Portable Power Station Battery",asin:"B08JH5SKQ8"},
+{title:"Wireless Charging Station 3 in 1",asin:"B08Z3J4N5C"},
 
 /* PROBLEM SOLVER */
 
@@ -59,6 +69,16 @@ const fallbackProducts = [
 {title:"Pan Lid Organizer Rack",asin:"B08F3N7H8M"},
 {title:"Dish Drying Rack Compact",asin:"B07VJ4Y6P7"},
 {title:"Sink Drain Hair Catcher",asin:"B07PB5M8DS"},
+{title:"Reusable Food Storage Bags",asin:"B08G8Y7L9N"},
+{title:"Foldable Laundry Basket",asin:"B07Y1S8L5P"},
+{title:"Kitchen Drawer Knife Organizer",asin:"B07F9Y7P5S"},
+{title:"Makeup Organizer Storage Box",asin:"B07Y5Z6M2T"},
+{title:"Desk Cable Organizer Tray",asin:"B08C2J4F6T"},
+{title:"Bathroom Counter Organizer",asin:"B08Q3Z8F6X"},
+{title:"Fridge Egg Storage Drawer",asin:"B08R5H6J9M"},
+{title:"Closet Shelf Divider Set",asin:"B07P5X7N8T"},
+{title:"Expandable Pot Organizer Rack",asin:"B07H7V5P9M"},
+{title:"Magnetic Fridge Storage Shelf",asin:"B08C5F3Y9T"},
 
 /* NEW TRENDS */
 
@@ -71,8 +91,17 @@ const fallbackProducts = [
 {title:"Digital Measuring Cup Kitchen",asin:"B07S5L3T2R"},
 {title:"Portable Label Printer Mini",asin:"B08Q7J5P3M"},
 {title:"Smart LED Mirror Makeup",asin:"B07X3L6F2P"},
-{title:"Electric Heated Lunch Box",asin:"B07QY9J9PQ"}
-
+{title:"Electric Heated Lunch Box",asin:"B07QY9J9PQ"},
+{title:"Digital Food Nutrition Scale",asin:"B07FCZSC41"},
+{title:"Automatic Stirring Mug",asin:"B07V6XK9S8"},
+{title:"Portable Blender Smoothie Cup",asin:"B08CX6H4T1"},
+{title:"Smart WiFi Aroma Diffuser",asin:"B07P9T7F2M"},
+{title:"Mini Photo Printer Smartphone",asin:"B08J5H3L7R"},
+{title:"LED Sunset Projection Lamp",asin:"B08X1J6L5R"},
+{title:"Wireless Lavalier Microphone",asin:"B08P2D3T4R"},
+{title:"Portable Ice Maker Countertop",asin:"B07H7SGQ52"},
+{title:"Smart Plug Energy Monitor",asin:"B07RCNB2L3"},
+{title:"Digital Tape Measure Laser",asin:"B08M4Z8F2N"}
 ];
 
 
@@ -80,7 +109,6 @@ const fallbackProducts = [
 /* ---------------- GOOGLE DISCOVERY QUERIES ---------------- */
 
 const queries = [
-
 "site:amazon.com/gp/movers-and-shakers",
 "site:amazon.com/gp/movers-and-shakers kitchen",
 "site:amazon.com/gp/movers-and-shakers electronics",
@@ -95,7 +123,6 @@ const queries = [
 "site:reddit.com amazon find gadget",
 "amazon organization gadgets",
 "amazon desk setup gadgets"
-
 ];
 
 
@@ -113,8 +140,6 @@ return res.status(200).json({products:cache.data});
 }
 
 try{
-
-/* -------- GOOGLE SEED DISCOVERY -------- */
 
 const shuffled=[...queries].sort(()=>0.5-Math.random());
 const selectedQueries=shuffled.slice(0,14);
@@ -155,15 +180,15 @@ seedASINs.push(asin);
 
 
 
-/* -------- SAFETY SEEDS -------- */
+/* -------- SAFETY SEED -------- */
 
-if(seedASINs.length === 0){
-seedASINs = fallbackProducts.slice(0,20).map(p=>p.asin);
+if(seedASINs.length===0){
+seedASINs=fallbackProducts.slice(0,20).map(p=>p.asin);
 }
 
 
 
-/* -------- AMAZON GRAPH EXPANSION -------- */
+/* -------- EXPANSION -------- */
 
 let expandedASINs=[...seedASINs];
 
@@ -177,23 +202,21 @@ expandedASINs.push(generateNeighborASIN(asin));
 
 
 
-/* -------- CATEGORY HARVEST EXPANSION -------- */
+/* -------- CATEGORY EXPANSION -------- */
 
 const categorySeeds=["B08","B07","B09","B0A","B0B"];
 
 for(const prefix of categorySeeds){
 
 for(let i=0;i<50;i++){
-
 expandedASINs.push(prefix+randomASIN());
-
 }
 
 }
 
 
 
-/* -------- ADD FALLBACK DATABASE -------- */
+/* -------- ADD FALLBACK -------- */
 
 const fallbackASINs=fallbackProducts.map(p=>p.asin);
 expandedASINs=[...expandedASINs,...fallbackASINs];
@@ -206,7 +229,7 @@ const uniqueASINs=[...new Set(expandedASINs)];
 
 
 
-/* -------- FALLBACK TITLE MAP -------- */
+/* -------- TITLE MAP -------- */
 
 const fallbackMap={};
 
@@ -216,7 +239,7 @@ fallbackMap[p.asin]=p.title;
 
 
 
-/* -------- BUILD PRODUCT LIST WITH IMAGE CHECK -------- */
+/* -------- BUILD PRODUCT LIST -------- */
 
 const products=[];
 
@@ -224,9 +247,11 @@ for(const asin of uniqueASINs){
 
 if(products.length>=300) break;
 
-const image=await findWorkingImage(asin);
+let image=await findWorkingImage(asin);
 
-if(!image) continue;
+if(!image){
+image="https://via.placeholder.com/600x600?text=Amazon+Product";
+}
 
 products.push({
 
@@ -275,11 +300,9 @@ details:error.message
 async function findWorkingImage(asin){
 
 const urls=[
-
 `https://m.media-amazon.com/images/P/${asin}.jpg`,
 `https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg`,
 `https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=${asin}&Format=_SL250_`
-
 ];
 
 for(const url of urls){
