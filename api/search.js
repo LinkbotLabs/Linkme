@@ -9,53 +9,53 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 
 const keywords = [
 
-  "amazon trending gadgets",
-  "viral kitchen gadgets amazon",
-  "amazon best seller tech",
-  "tiktok viral home gadgets amazon",
-  "amazon impulse buy gadgets",
-  "amazon trending gadgets 2026",
-  "viral amazon kitchen finds 2026",
-  "tiktok viral beauty products amazon",
-  "amazon viral tech gadgets 2026",
-  "trending amazon impulse buys 2026",
-  "amazon best seller kitchen tools 2026",
-  "tiktok viral wellness gadgets amazon",
-  "amazon movers and shakers gadgets",
-  "amazon best seller home gadgets",
+"amazon trending gadgets",
+"viral kitchen gadgets amazon",
+"amazon best seller tech",
+"tiktok viral home gadgets amazon",
+"amazon impulse buy gadgets",
+"amazon trending gadgets 2026",
+"viral amazon kitchen finds 2026",
+"tiktok viral beauty products amazon",
+"amazon viral tech gadgets 2026",
+"trending amazon impulse buys 2026",
+"amazon best seller kitchen tools 2026",
+"tiktok viral wellness gadgets amazon",
+"amazon movers and shakers gadgets",
+"amazon best seller home gadgets",
 
-  "tiktok viral plush accessories amazon",
-  "jellycat plush keychain amazon",
-  "magnetic phone mount car amazon viral",
-  "collagen peptide face mask amazon",
-  "solar power bank portable charger amazon",
-  "back stretcher spine decompressor amazon",
-  "tiktok fusion food tools amazon",
-  "asmr slime kit amazon viral",
-  "long distance touch bracelet amazon",
-  "mini hydroponic plant grower amazon",
-  "rfid blocking wallet amazon",
-  "led nail lamp uv amazon",
-  "portable espresso maker amazon",
-  "smart ring fitness tracker amazon"
+"tiktok viral plush accessories amazon",
+"jellycat plush keychain amazon",
+"magnetic phone mount car amazon viral",
+"collagen peptide face mask amazon",
+"solar power bank portable charger amazon",
+"back stretcher spine decompressor amazon",
+"tiktok fusion food tools amazon",
+"asmr slime kit amazon viral",
+"long distance touch bracelet amazon",
+"mini hydroponic plant grower amazon",
+"rfid blocking wallet amazon",
+"led nail lamp uv amazon",
+"portable espresso maker amazon",
+"smart ring fitness tracker amazon"
 
 ];
 
-/* ------------------ AMAZON MOVERS & SHAKERS ------------------ */
+/* ------------------ AMAZON PAGE SCRAPER ------------------ */
 
-async function getMoversAndShakers() {
+async function scrapeAmazonPage(url, limit = 20) {
 
   try {
 
-    const res = await fetch("https://www.amazon.com/gp/movers-and-shakers");
+    const res = await fetch(url);
     const html = await res.text();
 
     const matches = [...html.matchAll(/\/dp\/([A-Z0-9]{10})/g)];
 
-    const asins = [...new Set(matches.map(m => m[1]))].slice(0, 20);
+    const asins = [...new Set(matches.map(m => m[1]))].slice(0, limit);
 
     return asins.map((asin, i) => ({
-      id: `mover-${i}`,
+      id: `${asin}-${i}`,
       title: "Trending Amazon Product",
       image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`,
       link: `https://www.amazon.com/dp/${asin}`
@@ -165,21 +165,9 @@ export default async function handler(req, res) {
 
     }
 
-    /* ---------- FILTER AMAZON LINKS ---------- */
+    /* ---------- GOOGLE PRODUCTS ---------- */
 
-    const filtered = allItems.filter(item =>
-
-      item.link &&
-      item.link.includes("amazon.com") &&
-      (item.link.includes("/dp/") || item.link.includes("/gp/product/")) &&
-      item.title &&
-      item.title.length > 20
-
-    );
-
-    /* ---------- MAP PRODUCTS ---------- */
-
-    const products = filtered
+    const googleProducts = allItems
       .map((item, i) => {
 
         const asinMatch = item.link.match(
@@ -188,34 +176,45 @@ export default async function handler(req, res) {
 
         const asin = asinMatch?.[1] || asinMatch?.[2];
 
-        const image =
-          asin
-            ? `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`
-            : item.pagemap?.cse_image?.[0]?.src ||
-              item.pagemap?.cse_thumbnail?.[0]?.src ||
-              null;
-
-        if (!image) return null;
-
-        const cleanLink = normalizeAmazonLink(item.link);
+        if (!asin) return null;
 
         return {
           id: `${now}-${i}`,
           title: cleanTitle(item.title),
           description: item.snippet || "",
-          image,
-          link: cleanLink
+          image: `https://images-na.ssl-images-amazon.com/images/P/${asin}.01._SL500_.jpg`,
+          link: `https://www.amazon.com/dp/${asin}`
         };
 
       })
       .filter(Boolean);
 
-    /* ---------- EXTRA SOURCES ---------- */
+    /* ---------- AMAZON SOURCES ---------- */
 
-    const movers = await getMoversAndShakers();
+    const movers = await scrapeAmazonPage(
+      "https://www.amazon.com/gp/movers-and-shakers",
+      20
+    );
+
+    const bestSellers = await scrapeAmazonPage(
+      "https://www.amazon.com/Best-Sellers/zgbs",
+      20
+    );
+
+    const newReleases = await scrapeAmazonPage(
+      "https://www.amazon.com/gp/new-releases",
+      20
+    );
+
     const reddit = await getRedditProducts();
 
-    const combined = [...products, ...movers, ...reddit];
+    const combined = [
+      ...googleProducts,
+      ...movers,
+      ...bestSellers,
+      ...newReleases,
+      ...reddit
+    ];
 
     /* ---------- REMOVE DUPLICATE ASINS ---------- */
 
@@ -262,28 +261,5 @@ function cleanTitle(title) {
     .split("|")[0]
     .substring(0, 80)
     .trim();
-
-}
-
-function normalizeAmazonLink(url) {
-
-  try {
-
-    const parsed = new URL(url);
-
-    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
-    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
-
-    const asin = dpMatch?.[1] || gpMatch?.[1];
-
-    if (!asin) return parsed.origin;
-
-    return `https://www.amazon.com/dp/${asin}`;
-
-  } catch {
-
-    return url;
-
-  }
 
 }
