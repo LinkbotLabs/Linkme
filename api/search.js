@@ -26,74 +26,74 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  // Return cached products if fresh
   if (cache.data && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({ products: cache.data });
   }
 
   try {
 
-    const activeKeyword =
-      keywords[Math.floor(Math.random() * keywords.length)];
+    const shuffledKeywords = keywords.sort(() => 0.5 - Math.random()).slice(0,4);
 
-    const query =
-      `${activeKeyword} site:amazon.com -book -novel -kindle`;
+    const discovered = [];
+    const seenASIN = new Set();
 
-    const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
-    );
+    for (const keyword of shuffledKeywords) {
 
-    const data = await googleRes.json();
+      const query = `${keyword} site:amazon.com -book -kindle`;
 
-    if (!googleRes.ok) {
-      return res.status(googleRes.status).json({
-        error: data.error?.message || "Google API error"
-      });
-    }
+      const googleRes = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+      );
 
-    if (!data.items || data.items.length === 0) {
-      return res.status(200).json({ products: [] });
-    }
+      const data = await googleRes.json();
 
-    // Filter Amazon product links
-    const filtered = data.items.filter(item =>
-      item.link &&
-      item.link.includes("amazon.com") &&
-      item.link.match(/\/(dp|gp\/product)\//)
-    );
+      if (!data.items) continue;
 
-    const products = filtered
-      .map((item, i) => {
+      for (const item of data.items) {
+
+        const link = item.link || "";
+
+        const asin = extractASIN(link);
+
+        if (!asin) continue;
+
+        if (seenASIN.has(asin)) continue;
 
         const image =
           item.pagemap?.cse_image?.[0]?.src ||
           item.pagemap?.cse_thumbnail?.[0]?.src;
 
-        // Skip results without images
-        if (!image) return null;
+        if (!image) continue;
 
         const description =
           item.snippet ||
           item.pagemap?.metatags?.[0]?.["og:description"] ||
           "Trending product people are buying right now.";
 
-        const cleanLink = normalizeAmazonLink(item.link);
+        const cleanLink = `https://www.amazon.com/dp/${asin}`;
 
-        return {
-          id: `${now}-${i}`,
+        discovered.push({
+          id: `${asin}`,
           title: cleanTitle(item.title),
           description: description.substring(0, 140),
           image,
           link: cleanLink
-        };
+        });
 
-      })
-      .filter(Boolean);
+        seenASIN.add(asin);
+
+        if (discovered.length >= 50) break;
+
+      }
+
+      if (discovered.length >= 50) break;
+
+    }
 
     cache.timestamp = now;
-    cache.data = products;
+    cache.data = discovered;
 
-    return res.status(200).json({ products });
+    return res.status(200).json({ products: discovered });
 
   } catch (error) {
 
@@ -107,7 +107,7 @@ export default async function handler(req, res) {
 }
 
 
-/* ------------------ HELPERS ------------------ */
+/* ---------------- HELPERS ---------------- */
 
 function cleanTitle(title) {
   return title
@@ -118,7 +118,8 @@ function cleanTitle(title) {
     .trim();
 }
 
-function normalizeAmazonLink(url) {
+function extractASIN(url) {
+
   try {
 
     const parsed = new URL(url);
@@ -126,13 +127,10 @@ function normalizeAmazonLink(url) {
     const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
     const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
 
-    const asin = dpMatch?.[1] || gpMatch?.[1];
-
-    if (!asin) return parsed.origin;
-
-    return `https://www.amazon.com/dp/${asin}`;
+    return dpMatch?.[1] || gpMatch?.[1] || null;
 
   } catch {
-    return url;
+    return null;
   }
+
 }
