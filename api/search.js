@@ -1,4 +1,9 @@
+const cache = {
+  timestamp: 0,
+  data: null
+};
 
+const ONE_DAY = 0;
 /* ------------------ DISCOVERY KEYWORDS ------------------ */
 
 const keywords = [
