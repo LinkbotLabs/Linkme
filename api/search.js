@@ -37,6 +37,7 @@ const fallbackProducts = [
 {title:"Cord Organizer for Kitchen Appliances",asin:"B09Z3F7L5S"},
 {title:"Adjustable Phone Stand Desk Holder",asin:"B07F8S18D5"},
 {title:"Portable Smoothie Blender Cup",asin:"B08C9F6R7H"},
+
 /* HIGH COMMISSION */
 
 {title:"Robot Vacuum Cleaner Smart Mapping",asin:"B08SP5GYJP"},
@@ -64,6 +65,7 @@ const fallbackProducts = [
 {title:"Smart WiFi Light Switch",asin:"B07HGW8N7R"},
 {title:"Portable Espresso Maker Travel",asin:"B07TR5N1Q8"},
 {title:"Countertop Ice Maker Machine",asin:"B07H7SGQ52"},
+
 /* PROBLEM SOLVER */
 
 {title:"Under Sink Organizer Rack",asin:"B08NPK3X3Z"},
@@ -91,7 +93,8 @@ const fallbackProducts = [
 {title:"Under Bed Storage Containers",asin:"B07X2F8N4M"},
 {title:"Kitchen Wrap Organizer Box",asin:"B09C3V7L6S"},
 {title:"Expandable Sink Dish Rack",asin:"B07V6R8P4S"},
-  /* NEW TRENDS */
+
+/* NEW TRENDS */
 
 {title:"Smart Ring Fitness Tracker",asin:"B0B5V3L2R7"},
 {title:"Hydroponic Indoor Garden Kit",asin:"B07BRKT56T"},
@@ -120,31 +123,25 @@ const fallbackProducts = [
 {title:"Mini Electric Screwdriver Set",asin:"B08C7K6P5R"}
 
 ];
+
 /* ---------------- GOOGLE DISCOVERY QUERIES ---------------- */
 
 const queries = [
-
 "site:amazon.com/gp/movers-and-shakers",
 "site:amazon.com/gp/movers-and-shakers kitchen",
 "site:amazon.com/gp/movers-and-shakers electronics",
 "best amazon gadgets 2025",
 "amazon must have gadgets",
-
 "tiktok made me buy it amazon gadget",
 "viral tiktok amazon gadget",
 "tiktok kitchen gadget amazon",
-
 "amazon problem solving gadgets",
 "cool amazon gadgets you didnt know you needed",
-
 "site:reddit.com amazon gadget",
 "site:reddit.com amazon find gadget",
-
 "amazon organization gadgets",
 "amazon desk setup gadgets"
-
 ];
-
 
 
 /* ---------------- API HANDLER ---------------- */
@@ -160,8 +157,6 @@ return res.status(200).json({products:cache.data});
 }
 
 try{
-
-/* -------- GOOGLE SEED DISCOVERY -------- */
 
 const shuffled=[...queries].sort(()=>0.5-Math.random());
 const selectedQueries=shuffled.slice(0,14);
@@ -184,23 +179,22 @@ allItems=[...allItems,...data.items];
 
 }
 
-
-
 /* -------- EXTRACT ASIN SEEDS -------- */
 
 let seedASINs=[];
 
 for(const item of allItems){
-
 const asin=extractASIN(item.link);
-
 if(asin){
 seedASINs.push(asin);
 }
-
 }
 
+/* SAFETY FALLBACK */
 
+if(seedASINs.length === 0){
+seedASINs = fallbackProducts.slice(0,20).map(p=>p.asin);
+}
 
 /* -------- AMAZON GRAPH EXPANSION -------- */
 
@@ -209,79 +203,59 @@ let expandedASINs=[...seedASINs];
 for(const asin of seedASINs){
 
 expandedASINs.push(asin);
-
-/* simulate related discovery nodes */
-
 expandedASINs.push(generateNeighborASIN(asin));
 expandedASINs.push(generateNeighborASIN(asin));
 expandedASINs.push(generateNeighborASIN(asin));
 
 }
-
-
 
 /* -------- CATEGORY HARVEST EXPANSION -------- */
 
-const categorySeeds = [
-"B08","B07","B09","B0A","B0B"
-];
+const categorySeeds=["B08","B07","B09","B0A","B0B"];
 
 for(const prefix of categorySeeds){
-
 for(let i=0;i<50;i++){
-
-expandedASINs.push(prefix + randomASIN());
-
+expandedASINs.push(prefix+randomASIN());
 }
-
 }
-
-
 
 /* -------- ADD FALLBACK DATABASE -------- */
-  
 
-const fallbackASINs = fallbackProducts.map(p => p.asin);
-
-expandedASINs = [...expandedASINs, ...fallbackASINs];
-
-
+const fallbackASINs=fallbackProducts.map(p=>p.asin);
+expandedASINs=[...expandedASINs,...fallbackASINs];
 
 /* -------- REMOVE DUPLICATES -------- */
 
 const uniqueASINs=[...new Set(expandedASINs)];
 
+/* LIMIT DISCOVERY POOL */
 
+const limitedASINs = uniqueASINs.slice(0,1000);
 
 /* -------- BUILD PRODUCT LIST -------- */
 
-/* -------- BUILD PRODUCT LIST -------- */
-
-const fallbackMap = {};
-fallbackProducts.forEach(p => {
-  fallbackMap[p.asin] = p.title;
+const fallbackMap={};
+fallbackProducts.forEach(p=>{
+fallbackMap[p.asin]=p.title;
 });
 
-const products = uniqueASINs.slice(0,300).map((asin,i)=>({
+const products=limitedASINs.slice(0,300).map((asin,i)=>({
 
-  id:`${now}-${i}`,
+id:`${now}-${i}`,
 
-  title: fallbackMap[asin] || "Trending Amazon Product",
+title:fallbackMap[asin] || "Trending Amazon Product",
 
-  description:"Trending product people are discovering right now.",
+description:"Trending product people are discovering right now.",
 
-  image:`https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg`,
+image:`https://m.media-amazon.com/images/P/${asin}.jpg`,
 
-  link:`https://www.amazon.com/dp/${asin}`,
+link:`https://www.amazon.com/dp/${asin}`,
 
-  score:1,
+score:1,
 
-  asin
+asin
 
 }));
-
-
-
 
 /* -------- CACHE -------- */
 
@@ -302,46 +276,27 @@ details:error.message
 }
 
 
-
 /* ---------------- HELPERS ---------------- */
 
 function extractASIN(url){
-
 if(!url) return null;
-
 const match=url.match(/\/(dp|gp\/product)\/([A-Za-z0-9]{10})/);
-
 return match ? match[2] : null;
-
 }
-
-
 
 function generateNeighborASIN(asin){
-
 return asin.slice(0,8)+randomChars(2);
-
 }
 
-
-
 function randomChars(n){
-
 const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 let str="";
-
 for(let i=0;i<n;i++){
 str+=chars[Math.floor(Math.random()*chars.length)];
 }
-
 return str;
-
 }
 
-
-
 function randomASIN(){
-
 return randomChars(8);
-
 }
