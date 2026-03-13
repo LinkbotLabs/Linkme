@@ -1,4 +1,222 @@
+DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Float Rising – Viral Product Discovery</title>
+  <meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            accent: '#a855f7',
+            neutral: '#111827',
+          },
+          fontFamily: {
+            playfair: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <link rel="icon" href="/float-rising-logo.svg" />
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-900 antialiased">
+
+  <!-- Slim Hero – fast on mobile -->
+  <header class="text-center pt-6 pb-4 px-4 bg-white border-b border-gray-100">
+    <img src="/float-rising-logo.svg" alt="Float Rising" class="mx-auto h-14 mb-3" />
+    <h1 class="text-4xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+      Float Rising
+    </h1>
+    <p class="text-base font-medium text-gray-700 mt-1">
+      Viral finds for creators
+    </p>
+    <div class="flex justify-center mt-3">
+      <a href="https://www.producthunt.com/products/float-rising?utm_source=badge&utm_medium=badge&utm_campaign=badge-float-rising" target="_blank" rel="noopener noreferrer">
+        <img alt="Float Rising on Product Hunt" width="200" height="45" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1085675&theme=light">
+      </a>
+    </div>
+  </header>
+
+  <!-- Sticky Tabs – swipeable on mobile -->
+  <nav class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+    <div class="flex overflow-x-auto scrollbar-hide px-2">
+      <button data-tab="discover" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap" aria-selected="true">
+        Discover
+      </button>
+      <button data-tab="how" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap">
+        How It Works
+      </button>
+      <button data-tab="unlock" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap">
+        Unlock Mode
+      </button>
+    </div>
+  </nav>
+
+  <!-- Tab Content -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+
+    <!-- Discover Tab – product is the star -->
+    <div id="tab-discover" class="tab-panel">
+      <div class="text-center mb-6">
+        <div class="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm sm:text-base font-semibold shadow">
+          🔥 Trending Viral Products
+        </div>
+      </div>
+
+      <div id="card" class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+        Loading...
+      </div>
+
+      <!-- Creator Tools – compact on mobile -->
+      <div class="mt-8 bg-white rounded-2xl shadow border border-gray-100 p-6">
+        <h3 class="text-xl font-bold text-center mb-5">Creator Tools</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <button onclick="shareLink()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">Share Link</button>
+          <button onclick="copyPinterestDescription()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">📋 Caption</button>
+          <button onclick="sharePinterest()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">Pinterest</button>
+          <button onclick="takeScreenshotHint()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">📸 Screenshot</button>
+        </div>
+
+        <button onclick="createGrokVideoPrompt()" class="w-full mt-6 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition flex items-center justify-center gap-3 text-base">
+          <span>🎥</span> 6s Video Prompt
+        </button>
+
+        <div class="mt-6 p-5 bg-gray-50 rounded-xl text-sm text-gray-600 text-center">
+          <strong>Quick video tip:</strong><br>Save image → upload to Grok → use prompt
+        </div>
+
+        <div id="affiliateLock" class="mt-6 hidden">
+          <button onclick="openUnlock()" class="w-full py-5 border-2 border-dashed border-gray-400 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition text-base">
+            🔒 Use Your Own Affiliate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Tab -->
+    <div id="tab-how" class="tab-panel hidden">
+      <div class="bg-white rounded-3xl shadow p-8">
+        <h2 class="text-3xl font-playfair font-bold text-center mb-8">How It Works</h2>
+        <ol class="space-y-6 text-base sm:text-lg">
+          <li class="flex items-start"><span class="font-bold text-3xl mr-4 text-primary">1️⃣</span> Discover viral products</li>
+          <li class="flex items-start"><span class="font-bold text-3xl mr-4 text-primary">2️⃣</span> Share pins & product cards</li>
+          <li class="flex items-start"><span class="font-bold text-3xl mr-4 text-primary">3️⃣</span> Unlock Creator Mode</li>
+        </ol>
+
+        <div class="mt-10 text-center text-lg sm:text-xl font-medium">
+          🔥 <strong><span id="creatorCount">1284</span> creators</strong> using Float Rising
+        </div>
+
+        <div class="mt-10">
+          <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
+          <ul class="space-y-4 text-base sm:text-lg">
+            <li>📌 Pin → 1 point</li>
+            <li>🛒 Product Card → 3 points</li>
+            <li>🎥 Video → 10 points</li>
+          </ul>
+          <p class="mt-8 text-center text-lg font-medium">
+            Reach <strong>200 points</strong> to unlock Creator Mode
+          </p>
+          <div class="mt-6 max-w-xs mx-auto">
+            <div class="text-center font-bold mb-2">
+              Points: <span id="creatorPoints">0 / 200</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+              <div id="creatorBar" class="bg-gradient-to-r from-primary to-accent h-full transition-all" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unlock Tab -->
+    <div id="tab-unlock" class="tab-panel hidden">
+      <div class="bg-white rounded-3xl shadow p-8">
+        <h2 class="text-3xl font-playfair font-bold text-center mb-8">Free vs Creator Mode</h2>
+        <div class="space-y-8">
+          <div class="bg-gray-50 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-primary mb-4">🆓 Free Mode</h3>
+            <p class="text-gray-700 text-base sm:text-lg">
+              Use Float Rising affiliate ID.<br>Earn points by sharing.
+            </p>
+          </div>
+
+          <div class="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl p-8 border border-accent/20">
+            <h3 class="text-2xl font-bold text-accent mb-4">🚀 Creator Mode</h3>
+            <ul class="space-y-4 text-base sm:text-lg">
+              <li>✔ Your own Amazon affiliate ID</li>
+              <li>✔ Keep 100% commissions</li>
+              <li>✔ Monetize every share</li>
+              <li>✔ Unlimited content</li>
+            </ul>
+            <p class="mt-8 text-gray-700 italic text-center text-base sm:text-lg">
+              Own your earnings directly.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <button onclick="openUnlock()" class="px-10 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition">
+            Unlock – $19 One-Time
+          </button>
+          <p id="affiliateStatus" class="mt-6 font-medium text-base sm:text-lg"></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Next Button – always visible -->
+  <button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-primary to-accent text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg">
+    🔥 Next Product
+  </button>
+
+  <!-- Modals (kept compact for mobile) -->
+  <div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
+      <p class="text-xl font-semibold text-center mb-6">$19 USD – One Time</p>
+      <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl text-center hover:opacity-90 transition mb-6">
+        Pay with Wise
+      </a>
+      <p class="text-center text-gray-600 mb-4">Add email in note</p>
+      <p class="text-center mb-6">Email screenshot to <strong>omnistall70@gmail.com</strong></p>
+      <hr class="my-6" />
+      <p class="font-medium text-center mb-4">Already paid?</p>
+      <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg" />
+      <button onclick="activateCreator()" class="w-full py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition text-lg">Activate</button>
+    </div>
+  </div>
+
+  <div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <h3 class="text-2xl font-bold text-center mb-6">Amazon Affiliate ID</h3>
+      <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg" />
+      <div id="affiliateError" class="text-red-600 text-center mb-4"></div>
+      <button onclick="saveAffiliate()" class="w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition text-lg">Save</button>
+    </div>
+  </div>
+
+  <div id="grokModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <h3 class="text-2xl font-bold text-center mb-4">6s Video Prompt</h3>
+      <textarea id="grokText" class="w-full h-48 p-4 border border-gray-300 rounded-xl mb-6 text-base resize-none"></textarea>
+      <div class="grid grid-cols-3 gap-4">
+        <button onclick="copyGrok()" class="py-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition text-base">Copy</button>
+        <button onclick="openGrok()" class="py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition text-base">Open Grok</button>
+        <button onclick="closeModal()" class="py-3 bg-gray-300 rounded-xl hover:bg-gray-400 transition text-base">Close</button>
+      </div>
+    </div>
+  </div>
 <div class="cta-box">
 🚀 Unlock Creator Mode
 </div>
