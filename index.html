@@ -829,7 +829,49 @@ if(url.includes("tag="))return url;
 return url+(url.includes("?")?"&":"?")+"tag="+activeId;
 }
 
+async function loadProducts(q=""){
 
+card.innerHTML = "Loading...";
+
+try{
+
+const res = await fetch("/api/search"+(q?"?q="+q:""));
+
+if(!res.ok){
+throw new Error("API error");
+}
+
+const data = await res.json();
+
+products = (data.products || []).filter(p => p.link && p.image);
+
+if(products.length === 0){
+card.innerHTML = "No products found.";
+return;
+}
+
+shuffle(products);
+
+currentIndex = 0;
+
+renderProduct();
+
+startAutoScroll();
+
+}catch(err){
+
+console.error(err);
+
+card.innerHTML = `
+<div style="text-align:center;padding:20px;">
+⚠️ Product feed loading...<br><br>
+<button onclick="loadProducts()">Reload</button>
+</div>
+`;
+
+}
+
+}
 function generateHook(title){
 const shortTitle = title.split(" ").slice(0,3).join(" ");
 return `🔥 This ${shortTitle} Is Going Viral`;
