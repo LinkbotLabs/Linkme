@@ -239,8 +239,11 @@ expandedASINs.push(prefix + randomASIN());
 
 
 /* -------- ADD FALLBACK DATABASE -------- */
+  
 
-expandedASINs=[...expandedASINs,...fallbackASINs];
+const fallbackASINs = fallbackProducts.map(p => p.asin);
+
+expandedASINs = [...expandedASINs, ...fallbackASINs];
 
 
 
@@ -252,17 +255,31 @@ const uniqueASINs=[...new Set(expandedASINs)];
 
 /* -------- BUILD PRODUCT LIST -------- */
 
-const products=uniqueASINs.slice(0,300).map((asin,i)=>({
+/* -------- BUILD PRODUCT LIST -------- */
 
-id:`${now}-${i}`,
-title:"Trending Amazon Product",
-description:"Trending product people are discovering right now.",
-image:`https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg`,
-link:`https://www.amazon.com/dp/${asin}`,
-score:1,
-asin
+const fallbackMap = {};
+fallbackProducts.forEach(p => {
+  fallbackMap[p.asin] = p.title;
+});
+
+const products = uniqueASINs.slice(0,300).map((asin,i)=>({
+
+  id:`${now}-${i}`,
+
+  title: fallbackMap[asin] || "Trending Amazon Product",
+
+  description:"Trending product people are discovering right now.",
+
+  image:`https://images-na.ssl-images-amazon.com/images/P/${asin}.jpg`,
+
+  link:`https://www.amazon.com/dp/${asin}`,
+
+  score:1,
+
+  asin
 
 }));
+
 
 
 
