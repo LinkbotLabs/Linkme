@@ -1,3 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Float Rising – Viral Product Discovery for Creators</title>
+  <meta name="google-site-verification" content="ohpzxX7bmF1anP3RvE5v_2bzhepA0UJaCJ0jLzlJBNQ" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366f1',
+            accent: '#a855f7',
+            neutral: '#111827',
+          },
+          fontFamily: {
+            playfair: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- html2canvas (if you expand screenshot features later) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <link rel="icon" href="/float-rising-logo.svg" />
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-900 antialiased">
+
+  <!-- Optional Top Banner -->
+  <div class="w-full h-24 sm:h-32 overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
+    <img src="banner.jpg" alt="Float Rising Banner" class="w-full h-full object-cover" />
+  </div>
+
+  <!-- Product Hunt Badge -->
+  <div class="flex justify-center my-8">
+    <a href="https://www.producthunt.com/products/float-rising?utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-float-rising" target="_blank" rel="noopener noreferrer">
+      <img alt="Float Rising - The viral product discovery tool for creators | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1085675&theme=light">
+    </a>
+  </div>
+
+  <!-- Hero Section with PH-integrated copy -->
+  <header class="text-center px-6 sm:px-8 max-w-4xl mx-auto pt-8 pb-16">
+    <img src="/float-rising-logo.svg" alt="Float Rising" class="mx-auto h-20 w-auto mb-8" />
+    <h1 class="text-5xl sm:text-6xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-6">
+      Float Rising
+    </h1>
+    <p class="text-2xl sm:text-3xl font-semibold text-gray-800 mb-4">
+      The viral product discovery tool for creators
+    </p>
+    <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
+      Float Rising helps creators discover viral products and instantly turn them into shareable content. Instead of spending hours searching for trending products, browse viral items and generate ready-to-share pins, cards, and videos in seconds.
+    </p>
+    <p class="text-gray-700 font-medium mb-4">
+      Perfect for: <span class="text-primary">Affiliate marketers</span> • <span class="text-primary">Pinterest creators</span> • <span class="text-primary">Social media creators</span> • <span class="text-primary">Viral product hunters</span>
+    </p>
+    <p class="text-xl font-bold text-accent">Find products → create content → share → earn.</p>
+  </header>
+
+  <!-- How It Works + Stats + Free vs Creator -->
+  <section class="px-6 sm:px-8 max-w-4xl mx-auto pb-16">
+    <div class="grid lg:grid-cols-2 gap-10">
+      <!-- How Creators Use -->
+      <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-10">
+        <h2 class="text-3xl font-playfair font-bold mb-6 text-center">How Creators Use Float Rising</h2>
+        <ol class="space-y-6 text-lg text-gray-700">
+          <li class="flex items-start"><span class="font-bold text-2xl mr-4 text-primary">1️⃣</span> Discover viral products</li>
+          <li class="flex items-start"><span class="font-bold text-2xl mr-4 text-primary">2️⃣</span> Share pins & product cards</li>
+          <li class="flex items-start"><span class="font-bold text-2xl mr-4 text-primary">3️⃣</span> Unlock Creator Mode</li>
+        </ol>
+        <div class="mt-10 text-center text-xl font-medium">
+          🔥 <strong><span id="creatorCount">1284</span> creators</strong> discovering viral products
+        </div>
+      </div>
+
+      <!-- Free vs Creator Mode -->
+      <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-10">
+        <h2 class="text-3xl font-playfair font-bold mb-8 text-center">Free vs Creator Mode</h2>
+        <div class="space-y-10">
+          <div>
+            <h3 class="text-2xl font-semibold mb-4 text-primary">🆓 Free Mode</h3>
+            <p class="text-gray-700 mb-4">
+              Discover viral products and create shareable content instantly. Share across Pinterest, TikTok, and Facebook using the Float Rising affiliate ID.
+            </p>
+            <h4 class="font-bold mb-3">Earn Creator Points</h4>
+            <ul class="space-y-2 text-gray-700">
+              <li>📌 Share a Pin → 1 point</li>
+              <li>🛒 Share a Product Card → 3 points</li>
+              <li>🎥 Share a Video → 10 points</li>
+            </ul>
+            <p class="mt-6 font-medium">Reach <strong>200 points</strong> to unlock Creator Mode.</p>
+            <div class="mt-4">
+              <div class="text-center font-bold mb-2">
+                Creator Points: <span id="creatorPoints">0 / 200</span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div id="creatorBar" class="bg-gradient-to-r from-primary to-accent h-full transition-all duration-500" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-2xl font-semibold mb-4 text-accent">🚀 Creator Mode</h3>
+            <ul class="space-y-3 text-gray-700 text-lg">
+              <li>✔ Add your own Amazon Affiliate ID</li>
+              <li>✔ Keep 100% of commissions</li>
+              <li>✔ Turn every pin into an income asset</li>
+              <li>✔ Monetize unlimited content</li>
+            </ul>
+            <p class="mt-8 text-gray-600 italic">
+              Free users share with the Float Rising affiliate network. Creator Mode lets you monetize your own audience.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <button id="creatorModeBtn" onclick="openUnlock()" class="inline-flex items-center px-10 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
+            Unlock Creator Mode
+          </button>
+          <p class="mt-4 text-gray-500">⚡ Start instantly — no signup required</p>
+          <p id="affiliateStatus" class="mt-3 font-medium"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Indicator -->
+  <div class="my-12 px-6 text-center">
+    <div class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full text-lg font-semibold tracking-wide shadow-lg">
+      🔥 Trending Right Now: Viral Product Discovery
+    </div>
+  </div>
+
+  <!-- Main Product Area -->
+  <main class="px-6 sm:px-8 max-w-3xl mx-auto pb-32">
+    <div id="card" class="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-3xl">
+      Loading...
+    </div>
+
+    <!-- Act Fast + Explanation -->
+    <div class="mt-12 bg-white rounded-3xl shadow-lg border border-gray-100 p-10 text-center">
+      <h2 class="text-3xl font-playfair font-bold mb-6">⚡ Act Fast</h2>
+      <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+        Creators get a limited window to share each viral product.<br>
+        Once a product reaches maximum distribution, our system rotates in the next trending find.<br>
+        <strong>New viral products drop daily.</strong>
+      </p>
+      <h3 class="text-2xl font-semibold mt-10 mb-4">Turn Trending Products Into Shareable Income Assets</h3>
+      <p class="text-gray-600 mb-4">
+        Scroll curated product cards. Share them to Pinterest or video. Earn automatically.
+      </p>
+      <p class="text-sm text-gray-500">
+        The free version uses the Float Rising affiliate ID on shared links.<br>
+        Unlock Creator Mode to add your own affiliate credentials and keep 100% of your commissions.
+      </p>
+    </div>
+  </main>
+
+  <!-- Floating Next Button -->
+  <button id="nextBtn" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-primary to-accent text-white font-bold px-10 py-5 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300 flex items-center gap-3 text-lg">
+    🔥 Next Viral Product
+  </button>
+
+  <!-- Modals -->
+  <div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-3xl p-10 max-w-lg w-[92%] shadow-2xl">
+      <h3 class="text-3xl font-bold mb-6 text-center">🔓 Unlock Creator Mode</h3>
+      <p class="text-2xl font-semibold text-center mb-8">$19 USD – One Time</p>
+      <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl text-center hover:opacity-90 transition mb-6">
+        Pay $19 with Wise
+      </a>
+      <p class="text-center text-gray-600 mb-4">Include your email in the payment note.</p>
+      <p class="text-center mb-8">Step 2: Email screenshot to <strong>omnistall70@gmail.com</strong></p>
+      <hr class="my-8" />
+      <p class="font-medium text-center mb-6">Already Paid?</p>
+      <input id="unlockCodeInput" placeholder="Enter unlock code" class="w-full p-5 border border-gray-300 rounded-2xl mb-6 focus:outline-none focus:ring-2 focus:ring-primary text-lg" />
+      <button onclick="activateCreator()" class="w-full py-5 bg-gray-900 text-white font-bold rounded-2xl hover:bg-gray-800 transition text-lg">Activate</button>
+    </div>
+  </div>
+
+  <div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-3xl p-10 max-w-lg w-[92%] shadow-2xl">
+      <h3 class="text-3xl font-bold mb-8 text-center">Amazon Affiliate ID</h3>
+      <input id="affiliateInput" placeholder="yourname-20" class="w-full p-5 border border-gray-300 rounded-2xl mb-6 focus:outline-none focus:ring-2 focus:ring-primary text-lg" />
+      <div id="affiliateError" class="text-red-600 text-center mb-6"></div>
+      <button onclick="saveAffiliate()" class="w-full py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:opacity-90 transition text-lg">Save</button>
+    </div>
+  </div>
+
+  <div id="grokModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-3xl p-10 max-w-lg w-[92%] shadow-2xl">
+      <h3 class="text-3xl font-bold mb-6 text-center">6s Product Video Prompt</h3>
+      <textarea id="grokText" class="w-full h-56 p-5 border border-gray-300 rounded-2xl mb-8 focus:outline-none focus:ring-2 focus:ring-primary resize-none text-lg"></textarea>
+      <div class="grid grid-cols-3 gap-6">
+        <button onclick="copyGrok()" class="py-4 bg-gray-200 rounded-2xl hover:bg-gray-300 transition text-lg">Copy</button>
+        <button onclick="openGrok()" class="py-4 bg-gradient-to-r from-primary to-accent text-white rounded-2xl hover:opacity-90 transition text-lg">Copy & Open Grok</button>
+        <button onclick="closeModal()" class="py-4 bg-gray-300 rounded-2xl hover:bg-gray-400 transition text-lg">Close</button>
+      </div>
+    </div>
+  </div>
 
 <div class="cta-box">
 🚀 Unlock Creator Mode
