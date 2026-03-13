@@ -3,7 +3,7 @@ const cache = {
   data: null
 };
 
-
+const ONE_DAY = 0;  // cache never survives even one second
 
 /* ------------------ KEYWORDS (expanded + 2026 signals) ------------------ */
 const keywords = [
