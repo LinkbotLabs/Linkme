@@ -903,7 +903,8 @@ ${creatorUnlocked ? `
 
 <div class="viral-badge">VIRAL FIND</div>
 
-<img src="${p.image || ''}" alt="${p.title}" loading="lazy">
+<img src="${p.image || ''}" alt="${p.title}" loading="lazy"
+onerror="this.src='https://via.placeholder.com/600?text=Product'">
 
 <div class="product-title">${p.title}</div>
 
