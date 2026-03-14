@@ -37,6 +37,10 @@ const keywords = [
   "amazon organization gadgets",
   "amazon cleaning gadgets",
   "amazon kitchen organization tools"
+  "amazon problem solving kitchen gadgets",
+"amazon space saving gadgets",
+"amazon cleaning hacks gadgets",
+"amazon aesthetic home gadgets"
 ];
 export default async function handler(req, res) {
 
