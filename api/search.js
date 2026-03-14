@@ -101,11 +101,7 @@ export default async function handler(req, res) {
 
     }
 
-    cache.timestamp = now;
-    cache.data = discovered;
-
-    return res.status(200).json({ products: discovered });
-
+    
   } catch (error) {
 
     return res.status(500).json({
