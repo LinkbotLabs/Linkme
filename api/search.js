@@ -23,9 +23,9 @@ const keywords = [
 export default async function handler(req, res) {
 
   res.setHeader(
-  "Cache-Control",
-  "s-maxage=86400, stale-while-revalidate"
-);
+    "Cache-Control",
+    "s-maxage=86400, stale-while-revalidate"
+  );
 
   const now = Date.now();
 
@@ -35,7 +35,9 @@ export default async function handler(req, res) {
 
   try {
 
-    const shuffledKeywords = keywords.sort(() => 0.5 - Math.random()).slice(0,4);
+    const shuffledKeywords = keywords
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
 
     const discovered = [];
     const seenASIN = new Set();
@@ -44,43 +46,52 @@ export default async function handler(req, res) {
 
       const query = `${keyword} site:amazon.com -book -kindle`;
 
-      
-      const data = await googleRes.json();
+      // pagination pages (1–10, 11–20, 21–30)
+      for (const start of [1, 11, 21]) {
 
-      if (!data.items) continue;
+        const googleRes = await fetch(
+          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
+        );
 
-      for (const item of data.items) {
+        const data = await googleRes.json();
 
-        const link = item.link || "";
+        if (!data.items) continue;
 
-        const asin = extractASIN(link);
+        for (const item of data.items) {
 
-        if (!asin) continue;
+          const link = item.link || "";
 
-        if (seenASIN.has(asin)) continue;
+          const asin = extractASIN(link);
 
-        const image =
-          item.pagemap?.cse_image?.[0]?.src ||
-          item.pagemap?.cse_thumbnail?.[0]?.src;
+          if (!asin) continue;
+          if (seenASIN.has(asin)) continue;
 
-        if (!image) continue;
+          const image =
+            item.pagemap?.cse_image?.[0]?.src ||
+            item.pagemap?.cse_thumbnail?.[0]?.src;
 
-        const description =
-          item.snippet ||
-          item.pagemap?.metatags?.[0]?.["og:description"] ||
-          "Trending product people are buying right now.";
+          if (!image) continue;
 
-        const cleanLink = `https://www.amazon.com/dp/${asin}`;
+          const description =
+            item.snippet ||
+            item.pagemap?.metatags?.[0]?.["og:description"] ||
+            "Trending product people are buying right now.";
 
-        discovered.push({
-          id: `${asin}`,
-          title: cleanTitle(item.title),
-          description: description.substring(0, 140),
-          image,
-          link: cleanLink
-        });
+          const cleanLink = `https://www.amazon.com/dp/${asin}`;
 
-        seenASIN.add(asin);
+          discovered.push({
+            id: asin,
+            title: cleanTitle(item.title),
+            description: description.substring(0, 140),
+            image,
+            link: cleanLink
+          });
+
+          seenASIN.add(asin);
+
+          if (discovered.length >= 50) break;
+
+        }
 
         if (discovered.length >= 50) break;
 
