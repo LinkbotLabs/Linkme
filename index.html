@@ -369,7 +369,7 @@ Hint: Product cards unlock after you create a pin. View your site to share them.
         const data = await res.json();
         products = (data.products || []).filter(p => p.link && p.image);
         if (products.length === 0) {
-          card.innerHTML = "No products found.";
+          card.innerHTML = "The viral shelf is being restocked. .";
           return;
         }
         shuffle(products);
