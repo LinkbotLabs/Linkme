@@ -3,6 +3,7 @@ const cache = {
   data: null,
   fetching: false
 };
+cache.timestamp = 0;
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
