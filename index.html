@@ -381,7 +381,12 @@ Hint: Product cards unlock after you create a pin. View your site to share them.
         `;
       }
     }
-
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
     function generateHook(title) {
       const shortTitle = title.split(" ").slice(0,3).join(" ");
       return `🔥 This ${shortTitle} Is Going Viral`;
