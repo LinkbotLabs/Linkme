@@ -1,6 +1,7 @@
 const cache = {
   timestamp: 0,
-  data: null
+  data: null,
+  fetching: false
 };
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -22,80 +23,123 @@ const keywords = [
 
 export default async function handler(req, res) {
 
-  res.setHeader("Cache-Control", "no-store");
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=86400, stale-while-revalidate"
+  );
 
   const now = Date.now();
 
-  // Return cached products if fresh
   if (cache.data && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({ products: cache.data });
   }
 
+  if (cache.fetching) {
+    return res.status(200).json({ products: cache.data || [] });
+  }
+
   try {
 
-    const activeKeyword =
-      keywords[Math.floor(Math.random() * keywords.length)];
+    cache.fetching = true;
 
-    const query =
-      `${activeKeyword} site:amazon.com -book -novel -kindle`;
+    const shuffledKeywords = keywords
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 4);
 
-    const googleRes = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
-    );
+    const discovered = [];
+    const seenASIN = new Set();
 
-    const data = await googleRes.json();
+    for (const keyword of shuffledKeywords) {
 
-    if (!googleRes.ok) {
-      return res.status(googleRes.status).json({
-        error: data.error?.message || "Google API error"
-      });
+      const query = `${keyword} site:amazon.com -book -kindle`;
+
+      for (const start of [1, 11, 21]) {
+
+        const googleRes = await fetch(
+          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
+        );
+
+        const data = await googleRes.json();
+
+        if (!data.items) continue;
+
+        for (const item of data.items) {
+
+          const link = item.link || "";
+          const asin = extractASIN(link);
+
+          if (!asin) continue;
+          if (seenASIN.has(asin)) continue;
+
+          const image =
+            item.pagemap?.cse_image?.[0]?.src ||
+            item.pagemap?.cse_thumbnail?.[0]?.src;
+
+          if (!image) continue;
+
+          const description =
+            item.snippet ||
+            item.pagemap?.metatags?.[0]?.["og:description"] ||
+            "Trending product people are buying right now.";
+
+          const cleanLink = `https://www.amazon.com/dp/${asin}`;
+
+          discovered.push({
+            id: asin,
+            title: cleanTitle(item.title),
+            description: description.substring(0, 140),
+            image,
+            link: cleanLink
+          });
+
+          seenASIN.add(asin);
+
+          if (discovered.length >= 50) break;
+
+        }
+
+        if (discovered.length >= 50) break;
+
+      }
+
+      if (discovered.length >= 50) break;
+
     }
 
-    if (!data.items || data.items.length === 0) {
-      return res.status(200).json({ products: [] });
+    const DAILY_LIMIT = 30;
+    const MAX_POOL = 120;
+
+    let existing = cache.data || [];
+
+    const merged = [...existing, ...discovered];
+
+    const unique = [];
+    const seen = new Set();
+
+    for (const p of merged) {
+      if (!seen.has(p.id)) {
+        seen.add(p.id);
+        unique.push(p);
+      }
     }
 
-    // Filter Amazon product links
-    const filtered = data.items.filter(item =>
-      item.link &&
-      item.link.includes("amazon.com") &&
-      item.link.match(/\/(dp|gp\/product)\//)
-    );
+    let finalProducts;
 
-    const products = filtered
-      .map((item, i) => {
-
-        const image =
-          item.pagemap?.cse_image?.[0]?.src ||
-          item.pagemap?.cse_thumbnail?.[0]?.src;
-
-        // Skip results without images
-        if (!image) return null;
-
-        const description =
-          item.snippet ||
-          item.pagemap?.metatags?.[0]?.["og:description"] ||
-          "Trending product people are buying right now.";
-
-        const cleanLink = normalizeAmazonLink(item.link);
-
-        return {
-          id: `${now}-${i}`,
-          title: cleanTitle(item.title),
-          description: description.substring(0, 140),
-          image,
-          link: cleanLink
-        };
-
-      })
-      .filter(Boolean);
+    if (unique.length >= MAX_POOL) {
+      finalProducts = unique.slice(0, DAILY_LIMIT);
+    } else {
+      finalProducts = unique.slice(0, existing.length + DAILY_LIMIT);
+    }
 
     cache.timestamp = now;
-    cache.data = products;
+    cache.data = finalProducts;
+    cache.fetching = false;
 
-    return res.status(200).json({ products });
+    return res.status(200).json({ products: finalProducts });
 
   } catch (error) {
+
+    cache.fetching = false;
 
     return res.status(500).json({
       error: "Search failed",
@@ -107,7 +151,7 @@ export default async function handler(req, res) {
 }
 
 
-/* ------------------ HELPERS ------------------ */
+/* HELPERS */
 
 function cleanTitle(title) {
   return title
@@ -118,7 +162,8 @@ function cleanTitle(title) {
     .trim();
 }
 
-function normalizeAmazonLink(url) {
+function extractASIN(url) {
+
   try {
 
     const parsed = new URL(url);
@@ -126,13 +171,10 @@ function normalizeAmazonLink(url) {
     const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
     const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
 
-    const asin = dpMatch?.[1] || gpMatch?.[1];
-
-    if (!asin) return parsed.origin;
-
-    return `https://www.amazon.com/dp/${asin}`;
+    return dpMatch?.[1] || gpMatch?.[1] || null;
 
   } catch {
-    return url;
+    return null;
   }
+
 }
