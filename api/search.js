@@ -1,6 +1,7 @@
 const cache = {
   timestamp: 0,
-  data: null
+  data: null,
+  fetching: false
 };
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
@@ -33,7 +34,13 @@ export default async function handler(req, res) {
     return res.status(200).json({ products: cache.data });
   }
 
+  if (cache.fetching) {
+    return res.status(200).json({ products: cache.data || [] });
+  }
+
   try {
+
+    cache.fetching = true;
 
     const shuffledKeywords = keywords
       .sort(() => 0.5 - Math.random())
@@ -126,10 +133,13 @@ export default async function handler(req, res) {
 
     cache.timestamp = now;
     cache.data = finalProducts;
+    cache.fetching = false;
 
     return res.status(200).json({ products: finalProducts });
 
   } catch (error) {
+
+    cache.fetching = false;
 
     return res.status(500).json({
       error: "Search failed",
