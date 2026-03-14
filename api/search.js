@@ -101,7 +101,38 @@ export default async function handler(req, res) {
 
     }
 
-    
+  const DAILY_LIMIT = 30;
+const MAX_POOL = 120;
+
+let existing = cache.data || [];
+
+// merge previous + today's discovered
+const merged = [...existing, ...discovered];
+
+// remove duplicate ASINs
+const unique = [];
+const seen = new Set();
+
+for (const p of merged) {
+  if (!seen.has(p.id)) {
+    seen.add(p.id);
+    unique.push(p);
+  }
+}
+
+let finalProducts;
+
+// grow pool until 120 then reset
+if (unique.length >= MAX_POOL) {
+  finalProducts = unique.slice(0, DAILY_LIMIT);
+} else {
+  finalProducts = unique.slice(0, existing.length + DAILY_LIMIT);
+}
+
+cache.timestamp = now;
+cache.data = finalProducts;
+
+return res.status(200).json({ products: finalProducts });  
   } catch (error) {
 
     return res.status(500).json({
