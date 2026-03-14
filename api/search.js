@@ -22,7 +22,10 @@ const keywords = [
 
 export default async function handler(req, res) {
 
-  res.setHeader("Cache-Control", "no-store");
+  res.setHeader(
+  "Cache-Control",
+  "s-maxage=86400, stale-while-revalidate"
+);
 
   const now = Date.now();
 
