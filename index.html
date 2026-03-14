@@ -357,7 +357,7 @@ Hint: Product cards unlock after you create a pin. View your site to share them.
     }
 
     async function loadProducts(q = "") {
-      card.innerHTML = "Loading...";
+      card.innerHTML = "Refreshing today's viral products...";
       try {
         const res = await fetch("/api/search" + (q ? "?q=" + q : ""));
         if (!res.ok) throw new Error("API error");
