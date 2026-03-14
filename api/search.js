@@ -6,20 +6,6 @@ const cache = {
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-const keywords = [
-  "amazon trending gadgets",
-  "viral kitchen gadgets amazon",
-  "amazon best seller tech",
-  "tiktok viral home gadgets amazon",
-  "amazon impulse buy gadgets",
-  "amazon trending gadgets 2026",
-  "viral amazon kitchen finds 2026",
-  "tiktok viral beauty products amazon",
-  "amazon viral tech gadgets 2026",
-  "trending amazon impulse buys 2026",
-  "amazon best seller kitchen tools 2026",
-  "tiktok viral wellness gadgets amazon"
-];
 
 export default async function handler(req, res) {
 
