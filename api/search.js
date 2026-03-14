@@ -46,7 +46,6 @@ export default async function handler(req, res) {
 
       const query = `${keyword} site:amazon.com -book -kindle`;
 
-      // pagination pages (1–10, 11–20, 21–30)
       for (const start of [1, 11, 21]) {
 
         const googleRes = await fetch(
@@ -60,7 +59,6 @@ export default async function handler(req, res) {
         for (const item of data.items) {
 
           const link = item.link || "";
-
           const asin = extractASIN(link);
 
           if (!asin) continue;
@@ -101,38 +99,36 @@ export default async function handler(req, res) {
 
     }
 
-  const DAILY_LIMIT = 30;
-const MAX_POOL = 120;
+    const DAILY_LIMIT = 30;
+    const MAX_POOL = 120;
 
-let existing = cache.data || [];
+    let existing = cache.data || [];
 
-// merge previous + today's discovered
-const merged = [...existing, ...discovered];
+    const merged = [...existing, ...discovered];
 
-// remove duplicate ASINs
-const unique = [];
-const seen = new Set();
+    const unique = [];
+    const seen = new Set();
 
-for (const p of merged) {
-  if (!seen.has(p.id)) {
-    seen.add(p.id);
-    unique.push(p);
-  }
-}
+    for (const p of merged) {
+      if (!seen.has(p.id)) {
+        seen.add(p.id);
+        unique.push(p);
+      }
+    }
 
-let finalProducts;
+    let finalProducts;
 
-// grow pool until 120 then reset
-if (unique.length >= MAX_POOL) {
-  finalProducts = unique.slice(0, DAILY_LIMIT);
-} else {
-  finalProducts = unique.slice(0, existing.length + DAILY_LIMIT);
-}
+    if (unique.length >= MAX_POOL) {
+      finalProducts = unique.slice(0, DAILY_LIMIT);
+    } else {
+      finalProducts = unique.slice(0, existing.length + DAILY_LIMIT);
+    }
 
-cache.timestamp = now;
-cache.data = finalProducts;
+    cache.timestamp = now;
+    cache.data = finalProducts;
 
-return res.status(200).json({ products: finalProducts });  
+    return res.status(200).json({ products: finalProducts });
+
   } catch (error) {
 
     return res.status(500).json({
@@ -145,7 +141,7 @@ return res.status(200).json({ products: finalProducts });
 }
 
 
-/* ---------------- HELPERS ---------------- */
+/* HELPERS */
 
 function cleanTitle(title) {
   return title
