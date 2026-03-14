@@ -117,6 +117,7 @@ fetch("/api/get?id="+id)
 .then(res=>res.json())
 
 .then(p=>{
+  document.title = cleanTitle(p.title) + " – Viral Amazon Find | Float Rising";
 document.querySelector('meta[property="og:image"]').setAttribute("content", p.image);
 if(p.error||!p.title){
 
