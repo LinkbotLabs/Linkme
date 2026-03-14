@@ -361,17 +361,7 @@ Hint: Product cards unlock after you create a pin. View your site to share them.
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
 
-    async function loadProducts(q = "") {
-      card.innerHTML = "Refreshing today's viral products...";
-      try {
-        const res = await fetch("/api/search" + (q ? "?q=" + q : ""));
-        if (!res.ok) throw new Error("API error");
-        const data = await res.json();
-        products = (data.products || []).filter(p => p.link && p.image);
-        if (products.length === 0) {
-          card.innerHTML = "The viral shelf is being restocked. .";
-          return;
-        }
+    
         shuffle(products);
         currentIndex = 0;
         renderProduct();
