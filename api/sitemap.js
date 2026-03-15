@@ -1,16 +1,25 @@
+import { Redis } from '@upstash/redis';
+
 export default async function handler(req, res) {
-
   const base = "https://floatrising.com";
-
   let shareIds = [];
 
+  // === NEW: Connect directly to Upstash Redis (no fetch needed) ===
+  const redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+  });
+
   try {
-    const r = await fetch(base + "/api/get");
-    const data = await r.json();
-    shareIds = data.ids || [];
-  } catch (e) {
-    console.log("Share fetch failed");
+    // Get every key that starts with "float:"
+    const keys = await redis.keys("float:*");
+    shareIds = keys.map(k => k.replace("float:", ""));
+
+    console.log(`Sitemap: Found ${shareIds.length} products`);
+  } catch (err) {
+    console.error("Redis error in sitemap:", err);
   }
+  // === END NEW PART ===
 
   const productUrls = shareIds.map(id => `
   <url>
