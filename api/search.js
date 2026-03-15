@@ -43,6 +43,7 @@ const keywords = [
   "amazon cleaning hacks gadgets",
   "amazon aesthetic home gadgets"
 ];
+
 export default async function handler(req, res) {
 
   res.setHeader(
@@ -66,7 +67,7 @@ export default async function handler(req, res) {
 
     const shuffledKeywords = keywords
       .sort(() => 0.5 - Math.random())
-      .slice(0, 2)
+      .slice(0, 2);   // reduced Google searches
 
     const discovered = [];
     const seenASIN = new Set();
@@ -75,7 +76,7 @@ export default async function handler(req, res) {
 
       const query = `${keyword} site:amazon.com -book -kindle`;
 
-      for (const start of [1])
+      for (const start of [1]) {
 
         const googleRes = await fetch(
           `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
