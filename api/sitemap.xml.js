@@ -4,7 +4,7 @@ const base = "https://floatrising.com";
 
 try {
 
-const response = await fetch(`${base}/api/search`);
+const response = await fetch("https://floatrising.com/api/search");
 const data = await response.json();
 
 const products = data.products || [];
@@ -30,20 +30,16 @@ ${urls}
 
 </urlset>`;
 
-res.setHeader("Content-Type", "application/xml");
-res.statusCode = 200;
-res.write(xml);
-res.end();
+res.status(200).setHeader("Content-Type", "application/xml");
+res.end(xml);
 
-} catch (error) {
+} catch (err) {
 
-res.setHeader("Content-Type", "application/xml");
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`;
 
-res.write(`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-</urlset>`);
-
-res.end();
+res.status(200).setHeader("Content-Type", "application/xml");
+res.end(xml);
 
 }
 
