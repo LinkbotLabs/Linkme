@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
 
-const base = "https://linkmetagshop.vercel.app";
+const base = "https://floatrising.com";
 
 try {
 
