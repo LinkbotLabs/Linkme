@@ -1,8 +1,1 @@
-{
-  "routes": [
-    {
-      "src": "/sitemap.xml",
-      "dest": "/api/sitemap.xml"
-    }
-  ]
-}
+{}
