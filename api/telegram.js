@@ -13,18 +13,16 @@ export default async function handler(req, res) {
   const product =
     data.products[Math.floor(Math.random() * data.products.length)];
 
-  const caption = `
-🔥 ${product.title}
+  const caption = `🔥 ${product.title}
 
 ${product.description}
 
 See it here 👇
-https://floatrising.com/s.html?id=${product.id}
-`;
+https://floatrising.com/s.html?id=${product.id}`;
 
   await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: chatId,
       photo: product.image,
