@@ -3,20 +3,28 @@ export const config = {
     bodyParser: true,
   },
 };
+
 export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
+  // Telegram must send POST
+  if (req.method !== "POST") {
+    return res.status(200).json({ message: "Bot ready" });
+  }
+
   try {
 
     const body = req.body || {};
+    const message = body.message;
 
-    if (!body.message) {
-      return res.status(200).json({ message: "Bot ready" });
+    if (!message) {
+      return res.status(200).json({ message: "No message received" });
     }
 
-    const chatId = body.message.chat.id;
-    const text = body.message.text;
+    const chatId = message.chat.id;
+    const text = message.text || "";
+
     // START COMMAND
     if (text === "/start") {
 
@@ -79,6 +87,7 @@ Commands:
       const shuffled = data.products.sort(() => 0.5 - Math.random());
       const products = shuffled.slice(0, 3);
 
+      // Intro message
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,19 +101,16 @@ Commands:
 
       for (const p of products) {
 
-        const productUrl =
-          `https://floatrising.com/s.html?id=${p.id}&utm_source=telegram`;
+        const productUrl = `https://floatrising.com/s.html?id=${p.id}&utm_source=telegram`;
 
-        const pinCaption =
-`Save this viral product before it sells out 🔥
+        const pinCaption = `Save this viral product before it sells out 🔥
 
 Creators are sharing this trending product right now.
 
 See the product here 👇
 ${productUrl}`;
 
-        const caption =
-`🔥 ${p.title}
+        const caption = `🔥 ${p.title}
 
 ${p.description || "Creators are sharing this trending product."}
 
@@ -135,15 +141,24 @@ ${pinCaption}`;
       }
 
       return res.status(200).json({ ok: true });
-
     }
 
-    res.status(200).json({ message: "Command ignored" });
+    // DEFAULT RESPONSE
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: "Type /pack to receive today's viral products."
+      })
+    });
+
+    return res.status(200).json({ ok: true });
 
   } catch (error) {
 
     console.error(error);
-    res.status(500).json({ error: "Bot failed" });
+    return res.status(500).json({ error: "Bot failed" });
 
   }
 
