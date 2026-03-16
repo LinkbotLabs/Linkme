@@ -1,44 +1,97 @@
 export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
 
   try {
 
-    const apiRes = await fetch("https://floatrising.com/api/search");
-    const data = await apiRes.json();
+    const body = req.body;
 
-    if (!data.products || data.products.length === 0) {
-      return res.status(200).json({ message: "No products found" });
+    if (!body.message) {
+      return res.status(200).json({ message: "No message" });
     }
 
-    // shuffle products
-    const shuffled = data.products.sort(() => 0.5 - Math.random());
+    const chatId = body.message.chat.id;
+    const text = body.message.text;
 
-    // select 3
-    const products = shuffled.slice(0, 3);
+    // START COMMAND
+    if (text === "/start") {
 
-    // HEADER MESSAGE
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: `🔥 Float Rising Creator Pack
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: `🔥 Welcome to Float Rising Creator Bot
 
-3 viral products ready for creators today.
+Creators use this bot to discover viral products and post them on Pinterest, TikTok and Reels.
 
-Pin them. Share them. Earn from them 👇`
-      })
-    });
+Commands:
 
-    // LOOP PRODUCTS
-    for (const p of products) {
+/pack → Get 3 viral products
+/site → Open Float Rising
 
-      const productUrl =
-        `https://floatrising.com/s.html?id=${p.id}&utm_source=telegram`;
+👇 Try it now`
+        })
+      });
 
-      const pinCaption =
+      return res.status(200).json({ ok: true });
+    }
+
+    // SITE COMMAND
+    if (text === "/site") {
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: "🚀 Discover viral products here",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "🔥 Open Float Rising",
+                  url: "https://floatrising.com"
+                }
+              ]
+            ]
+          }
+        })
+      });
+
+      return res.status(200).json({ ok: true });
+    }
+
+    // PACK COMMAND
+    if (text === "/pack") {
+
+      const apiRes = await fetch("https://floatrising.com/api/search");
+      const data = await apiRes.json();
+
+      if (!data.products || data.products.length === 0) {
+        return res.status(200).json({ message: "No products found" });
+      }
+
+      const shuffled = data.products.sort(() => 0.5 - Math.random());
+      const products = shuffled.slice(0, 3);
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: `🔥 Float Rising Creator Pack
+
+3 viral products creators are posting today 👇`
+        })
+      });
+
+      for (const p of products) {
+
+        const productUrl =
+          `https://floatrising.com/s.html?id=${p.id}&utm_source=telegram`;
+
+        const pinCaption =
 `Save this viral product before it sells out 🔥
 
 Creators are sharing this trending product right now.
@@ -46,55 +99,42 @@ Creators are sharing this trending product right now.
 See the product here 👇
 ${productUrl}`;
 
-      const pinIdeas =
-`📌 Pin Ideas
-
-1️⃣ Amazon Finds You Need
-2️⃣ Viral Products Creators Love
-3️⃣ TikTok Made Me Buy It`;
-
-      const caption =
+        const caption =
 `🔥 ${p.title}
 
 ${p.description || "Creators are sharing this trending product."}
 
-${pinIdeas}
-
 📌 Pinterest Caption
+
 ${pinCaption}`;
 
-      await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          photo: p.image,
-          caption: caption,
-          reply_markup: {
-            inline_keyboard: [
-              [
-                { text: "📌 Open Product Card", url: productUrl }
+        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            photo: p.image,
+            caption: caption,
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "📌 Open Product Card",
+                    url: productUrl
+                  }
+                ]
               ]
-            ]
-          }
-        })
-      });
+            }
+          })
+        });
+
+      }
+
+      return res.status(200).json({ ok: true });
 
     }
 
-    // FOOTER
-    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: `🚀 Discover more viral products
-
-https://floatrising.com`
-      })
-    });
-
-    res.status(200).json({ message: "Creator pack posted" });
+    res.status(200).json({ message: "Command ignored" });
 
   } catch (error) {
 
