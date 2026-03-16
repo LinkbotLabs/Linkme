@@ -1,12 +1,8 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/sitemap.xml",
-      "dest": "/api/sitemap"
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
     }
   ],
   "crons": [
