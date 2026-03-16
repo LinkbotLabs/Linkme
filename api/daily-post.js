@@ -4,14 +4,15 @@ export default async function handler(req, res) {
 
   try {
 
-    const response = await fetch("https://floatrising.com/api/search");
-    const data = await response.json();
+    // Get products from Float Rising
+    const apiRes = await fetch("https://floatrising.com/api/search");
+    const data = await apiRes.json();
 
     if (!data.products || data.products.length === 0) {
       return res.status(200).json({ message: "No products found" });
     }
 
-    // pick random product
+    // Pick random product
     const shuffled = data.products.sort(() => 0.5 - Math.random());
     const product = shuffled[0];
 
@@ -22,12 +23,13 @@ ${product.title}
 
 ${product.description || "Creators are sharing this trending product right now."}
 
-Explore more viral finds 👇
+🔎 Discover more viral products
 https://floatrising.com
 
-📦 Request product pack
-Daily viral finds`;
+📦 Get today's creator pack
+https://t.me/floatrisingbot?start=pack`;
 
+    // Post to Telegram channel
     await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
       method: "POST",
       headers: {
@@ -40,7 +42,7 @@ Daily viral finds`;
       })
     });
 
-    return res.status(200).json({ message: "Posted to Telegram channel" });
+    return res.status(200).json({ message: "Daily product posted" });
 
   } catch (error) {
 
