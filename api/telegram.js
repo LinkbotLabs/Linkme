@@ -8,148 +8,63 @@ export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
-  // Telegram must send POST
   if (req.method !== "POST") {
     return res.status(200).json({ message: "Bot ready" });
   }
 
   try {
 
-    const body = req.body || {};
-    const message = body.message;
+    const update = req.body;
 
-    if (!message) {
-      return res.status(200).json({ message: "No message received" });
+    console.log("Telegram update:", update);
+
+    if (!update.message) {
+      return res.status(200).json({ ok: true });
     }
 
-    const chatId = message.chat.id;
-    const text = message.text || "";
+    const chatId = update.message.chat.id;
+    const text = update.message.text || "";
 
-    // START COMMAND
     if (text === "/start") {
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           chat_id: chatId,
-          text: `🔥 Welcome to Float Rising Creator Bot
-
-Creators use this bot to discover viral products and post them on Pinterest, TikTok and Reels.
-
-Commands:
-
-/pack → Get 3 viral products
-/site → Open Float Rising
-
-👇 Try it now`
+          text: "🔥 Float Rising Bot is working.\n\nSend /pack to get 3 viral products."
         })
       });
 
       return res.status(200).json({ ok: true });
     }
 
-    // SITE COMMAND
-    if (text === "/site") {
-
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: "🚀 Discover viral products here",
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "🔥 Open Float Rising",
-                  url: "https://floatrising.com"
-                }
-              ]
-            ]
-          }
-        })
-      });
-
-      return res.status(200).json({ ok: true });
-    }
-
-    // PACK COMMAND
     if (text === "/pack") {
 
-      const apiRes = await fetch("https://floatrising.com/api/search");
-      const data = await apiRes.json();
-
-      if (!data.products || data.products.length === 0) {
-        return res.status(200).json({ message: "No products found" });
-      }
-
-      const shuffled = data.products.sort(() => 0.5 - Math.random());
-      const products = shuffled.slice(0, 3);
-
-      // Intro message
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           chat_id: chatId,
-          text: `🔥 Float Rising Creator Pack
-
-3 viral products creators are posting today 👇`
+          text: "Creator pack coming next (bot connection confirmed)."
         })
       });
-
-      for (const p of products) {
-
-        const productUrl = `https://floatrising.com/s.html?id=${p.id}&utm_source=telegram`;
-
-        const pinCaption = `Save this viral product before it sells out 🔥
-
-Creators are sharing this trending product right now.
-
-See the product here 👇
-${productUrl}`;
-
-        const caption = `🔥 ${p.title}
-
-${p.description || "Creators are sharing this trending product."}
-
-📌 Pinterest Caption
-
-${pinCaption}`;
-
-        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: chatId,
-            photo: p.image,
-            caption: caption,
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "📌 Open Product Card",
-                    url: productUrl
-                  }
-                ]
-              ]
-            }
-          })
-        });
-
-      }
 
       return res.status(200).json({ ok: true });
     }
 
-    // DEFAULT RESPONSE
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         chat_id: chatId,
-        text: "Type /pack to receive today's viral products."
+        text: "Send /pack to get viral products."
       })
     });
 
@@ -157,8 +72,9 @@ ${pinCaption}`;
 
   } catch (error) {
 
-    console.error(error);
-    return res.status(500).json({ error: "Bot failed" });
+    console.error("Bot error:", error);
+
+    return res.status(200).json({ ok: true });
 
   }
 
