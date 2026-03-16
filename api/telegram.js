@@ -23,14 +23,12 @@ export default async function handler(req, res) {
     const chatId = update.message.chat.id;
     const text = (update.message.text || "").trim();
 
-    // START COMMAND
+    // START
     if (text === "/start") {
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
           text:
@@ -45,7 +43,7 @@ Perfect for Pinterest and TikTok creators.`
       return res.status(200).json({ ok: true });
     }
 
-    // PACK COMMAND
+    // PACK
     if (text === "/pack") {
 
       const apiRes = await fetch("https://floatrising.com/api/search");
@@ -55,9 +53,7 @@ Perfect for Pinterest and TikTok creators.`
 
         await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: chatId,
             text: "No products available right now."
@@ -72,12 +68,10 @@ Perfect for Pinterest and TikTok creators.`
 
       for (const product of products) {
 
-        // Save product to Redis for share card
+        // Save product card
         const saveRes = await fetch("https://floatrising.com/api/share", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(product)
         });
 
@@ -94,26 +88,31 @@ Perfect for Pinterest and TikTok creators.`
 
 ${product.title}
 
-${product.description || "Creators are sharing this trending product right now."}
+Trending product creators are posting.
 
 View product card
 ${productUrl}
-
-📌 Share to Pinterest
-${pinterestUrl}
 
 🔎 Discover more viral finds
 https://floatrising.com`;
 
         await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: chatId,
             photo: product.image,
-            caption: caption
+            caption: caption,
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "📌 Create Pinterest Pin",
+                    url: pinterestUrl
+                  }
+                ]
+              ]
+            }
           })
         });
 
@@ -121,15 +120,13 @@ https://floatrising.com`;
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
           text:
 `📦 Creator pack delivered
 
-3 viral products ready to post.
+3 products ready for content.
 
 Come back tomorrow for the next creator pack.`
         })
@@ -138,12 +135,10 @@ Come back tomorrow for the next creator pack.`
       return res.status(200).json({ ok: true });
     }
 
-    // DEFAULT RESPONSE
+    // DEFAULT
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
         text: "Send /pack to receive today's viral creator products."
