@@ -1,68 +1,55 @@
-export const config = {
-  api: {
-    bodyParser: true
-  }
-};
-
 export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
-  // Browser test
-  if (req.method === "GET") {
-    return res.status(200).json({ message: "Bot ready" });
-  }
-
   try {
 
-    const update = req.body;
+    // Get products from your site
+    const apiRes = await fetch("https://floatrising.com/api/search");
+    const data = await apiRes.json();
 
-    console.log("TELEGRAM UPDATE:", JSON.stringify(update));
-
-    if (!update.message) {
-      return res.status(200).json({ ok: true });
+    if (!data.products || data.products.length === 0) {
+      return res.status(200).json({ message: "No products" });
     }
 
-    const chatId = update.message.chat.id;
-    const text = update.message.text || "";
+    // Pick random product
+    const shuffled = data.products.sort(() => 0.5 - Math.random());
+    const product = shuffled[0];
 
-    if (text === "/start") {
+    const caption =
+`🔥 Daily Viral Product
 
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: "🔥 Float Rising Bot is live.\n\nSend /pack to get viral products."
-        })
-      });
+${product.title}
 
-    }
+${product.description || "Creators are sharing this trending product right now."}
 
-    if (text === "/pack") {
+Explore more viral finds 👇
+https://floatrising.com
 
-      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: "Creator pack coming next."
-        })
-      });
+📦 Request product pack
+Daily viral finds`;
 
-    }
+    // Post to channel
+    await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        chat_id: "@floatviral",
+        photo: product.image,
+        caption: caption
+      })
+    });
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ message: "Posted to channel" });
 
   } catch (error) {
 
-    console.error("BOT ERROR:", error);
+    console.error("Daily post error:", error);
 
-    return res.status(200).json({ ok: true });
+    return res.status(500).json({ error: "Failed" });
 
   }
+
 }
