@@ -1,14 +1,8 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/sitemap.xml",
-      "destination": "/api/sitemap"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/daily-post",
-      "schedule": "0 */6 * * *"
+      "src": "/sitemap.xml",
+      "dest": "/api/sitemap"
     }
   ]
 }
