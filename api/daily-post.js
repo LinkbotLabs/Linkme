@@ -2,7 +2,6 @@ export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
-  // allow browser test
   if (req.method === "GET") {
     console.log("Daily post triggered manually");
   }
@@ -26,8 +25,8 @@ ${product.title}
 
 ${product.description || "Creators are sharing this trending product right now."}
 
-🔎 Discover more viral finds
-https://floatrising.com
+🔎 View product card
+https://floatrising.com/s.html?id=${product.id}&utm_source=telegram
 
 📦 Get today's creator pack
 https://t.me/floatrisingbot?start=pack`;
