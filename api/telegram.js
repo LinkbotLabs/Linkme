@@ -62,7 +62,26 @@ Perfect for Pinterest and TikTok creators.`
 
         return res.status(200).json({ ok: true });
       }
+if (text === "/more") {
 
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text:
+`🔥 Discover more viral products
+
+Browse the live product feed creators are sharing.
+
+https://floatrising.com`
+    })
+  });
+
+  return res.status(200).json({ ok: true });
+}
       const shuffled = data.products.sort(() => 0.5 - Math.random());
       const products = shuffled.slice(0, 3);
 
