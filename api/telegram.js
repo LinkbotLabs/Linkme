@@ -12,45 +12,56 @@ export default async function handler(req, res) {
       return res.status(200).json({ message: "No products found" });
     }
 
-    // Shuffle products so packs change daily
+    // shuffle products
     const shuffled = data.products.sort(() => 0.5 - Math.random());
 
-    // Take first 3
+    // select 3
     const products = shuffled.slice(0, 3);
 
-    // Header message
-    const header = `🔥 Float Rising Creator Pack
-
-3 viral products creators are posting today.
-
-Pin them. Share them. Earn from them 👇`;
-
+    // HEADER MESSAGE
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
-        text: header
+        text: `🔥 Float Rising Creator Pack
+
+3 viral products ready for creators today.
+
+Pin them. Share them. Earn from them 👇`
       })
     });
 
-    // Post each product
-    for (let i = 0; i < products.length; i++) {
-
-      const p = products[i];
+    // LOOP PRODUCTS
+    for (const p of products) {
 
       const productUrl =
         `https://floatrising.com/s.html?id=${p.id}&utm_source=telegram`;
 
-      const caption = `🔥 ${p.title}
+      const pinCaption =
+`Save this viral product before it sells out 🔥
 
-${p.description || "Creators are sharing this trending product right now."}
+Creators are sharing this trending product right now.
 
-📌 Pin this product
-📦 Share with creators
-
-👇 Open the product card
+See the product here 👇
 ${productUrl}`;
+
+      const pinIdeas =
+`📌 Pin Ideas
+
+1️⃣ Amazon Finds You Need
+2️⃣ Viral Products Creators Love
+3️⃣ TikTok Made Me Buy It`;
+
+      const caption =
+`🔥 ${p.title}
+
+${p.description || "Creators are sharing this trending product."}
+
+${pinIdeas}
+
+📌 Pinterest Caption
+${pinCaption}`;
 
       await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
         method: "POST",
@@ -71,25 +82,24 @@ ${productUrl}`;
 
     }
 
-    // Footer message
+    // FOOTER
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
-        text: `🚀 Discover more viral products creators are posting daily.
+        text: `🚀 Discover more viral products
 
 https://floatrising.com`
       })
     });
 
-    res.status(200).json({ message: "Creator Pack posted" });
+    res.status(200).json({ message: "Creator pack posted" });
 
   } catch (error) {
 
     console.error(error);
-
-    res.status(500).json({ error: "Bot failed to post" });
+    res.status(500).json({ error: "Bot failed" });
 
   }
 
