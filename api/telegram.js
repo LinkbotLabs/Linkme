@@ -1,4 +1,17 @@
+export default async function handler(req, res) {
 
+  const token = process.env.TELEGRAM_TOKEN;
+
+  try {
+
+    const body = req.body || {};
+
+    if (!body.message) {
+      return res.status(200).json({ message: "Bot ready" });
+    }
+
+    const chatId = body.message.chat.id;
+    const text = body.message.text;
     // START COMMAND
     if (text === "/start") {
 
