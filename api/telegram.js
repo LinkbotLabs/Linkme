@@ -1,54 +1,130 @@
+export const config = {
+  api: {
+    bodyParser: true
+  }
+};
+
 export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
+  // allow browser test
+  if (req.method !== "POST") {
+    return res.status(200).json({ message: "Bot ready" });
+  }
+
   try {
 
-    // Get products from your site
-    const apiRes = await fetch("https://floatrising.com/api/search");
-    const data = await apiRes.json();
+    const update = req.body;
 
-    if (!data.products || data.products.length === 0) {
-      return res.status(200).json({ message: "No products" });
+    if (!update.message) {
+      return res.status(200).json({ ok: true });
     }
 
-    // Pick random product
-    const shuffled = data.products.sort(() => 0.5 - Math.random());
-    const product = shuffled[0];
+    const chatId = update.message.chat.id;
+    const text = (update.message.text || "").trim();
 
-    const caption =
-`🔥 Daily Viral Product
+    // START COMMAND
+    if (text === "/start") {
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text:
+"🔥 Float Rising Creator Bot\n\nSend /pack to receive 3 viral products creators are posting right now."
+        })
+      });
+
+      return res.status(200).json({ ok: true });
+    }
+
+    // PACK COMMAND
+    if (text === "/pack") {
+
+      const apiRes = await fetch("https://floatrising.com/api/search");
+      const data = await apiRes.json();
+
+      if (!data.products || data.products.length === 0) {
+
+        await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: "No products available right now."
+          })
+        });
+
+        return res.status(200).json({ ok: true });
+      }
+
+      const shuffled = data.products.sort(() => 0.5 - Math.random());
+      const products = shuffled.slice(0, 3);
+
+      for (const product of products) {
+
+        const caption =
+`🔥 Creator Product
 
 ${product.title}
 
 ${product.description || "Creators are sharing this trending product right now."}
 
-Explore more viral finds 👇
-https://floatrising.com
+View product card
+https://floatrising.com/s.html?id=${product.id}&utm_source=telegram_bot`;
 
-📦 Request product pack
-Daily viral finds`;
+        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            photo: product.image,
+            caption: caption
+          })
+        });
 
-    // Post to channel
-    await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+      }
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: "📦 Creator pack delivered. Come back tomorrow for more viral products."
+        })
+      });
+
+      return res.status(200).json({ ok: true });
+    }
+
+    // DEFAULT RESPONSE
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        chat_id: "@floatviral",
-        photo: product.image,
-        caption: caption
+        chat_id: chatId,
+        text: "Send /pack to receive today's viral products."
       })
     });
 
-    return res.status(200).json({ message: "Posted to channel" });
+    return res.status(200).json({ ok: true });
 
   } catch (error) {
 
-    console.error("Daily post error:", error);
-
-    return res.status(500).json({ error: "Failed" });
+    console.error("BOT ERROR:", error);
+    return res.status(200).json({ ok: true });
 
   }
 
