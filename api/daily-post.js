@@ -2,9 +2,13 @@ export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
+  // allow browser test
+  if (req.method === "GET") {
+    console.log("Daily post triggered manually");
+  }
+
   try {
 
-    // Get products from Float Rising
     const apiRes = await fetch("https://floatrising.com/api/search");
     const data = await apiRes.json();
 
@@ -12,7 +16,6 @@ export default async function handler(req, res) {
       return res.status(200).json({ message: "No products found" });
     }
 
-    // Pick random product
     const shuffled = data.products.sort(() => 0.5 - Math.random());
     const product = shuffled[0];
 
@@ -23,13 +26,12 @@ ${product.title}
 
 ${product.description || "Creators are sharing this trending product right now."}
 
-🔎 Discover more viral products
+🔎 Discover more viral finds
 https://floatrising.com
 
 📦 Get today's creator pack
 https://t.me/floatrisingbot?start=pack`;
 
-    // Post to Telegram channel
     await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
       method: "POST",
       headers: {
@@ -42,7 +44,7 @@ https://t.me/floatrisingbot?start=pack`;
       })
     });
 
-    return res.status(200).json({ message: "Daily product posted" });
+    return res.status(200).json({ message: "Posted to Telegram channel" });
 
   } catch (error) {
 
