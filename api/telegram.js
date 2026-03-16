@@ -43,6 +43,26 @@ Perfect for Pinterest and TikTok creators.`
       return res.status(200).json({ ok: true });
     }
 
+    // MORE (discover feed)
+    if (text === "/more") {
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text:
+`🔥 Discover more viral products
+
+Browse the live product feed creators are sharing.
+
+https://floatrising.com`
+        })
+      });
+
+      return res.status(200).json({ ok: true });
+    }
+
     // PACK
     if (text === "/pack") {
 
@@ -62,26 +82,7 @@ Perfect for Pinterest and TikTok creators.`
 
         return res.status(200).json({ ok: true });
       }
-if (text === "/more") {
 
-  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text:
-`🔥 Discover more viral products
-
-Browse the live product feed creators are sharing.
-
-https://floatrising.com`
-    })
-  });
-
-  return res.status(200).json({ ok: true });
-}
       const shuffled = data.products.sort(() => 0.5 - Math.random());
       const products = shuffled.slice(0, 3);
 
@@ -97,13 +98,15 @@ https://floatrising.com`
         const saveData = await saveRes.json();
         const shareId = saveData.id;
 
-        const productUrl = `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
+        const productUrl =
+          `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
 
-       const cardImage =
-  `https://floatrising.com/api/card-image?id=${shareId}`;
+        const cardImage =
+          `https://floatrising.com/api/card-image?id=${shareId}`;
 
-const pinterestUrl =
-  `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(productUrl)}&media=${encodeURIComponent(cardImage)}&description=${encodeURIComponent(product.title)}`; 
+        const pinterestUrl =
+          `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(productUrl)}&media=${encodeURIComponent(cardImage)}&description=${encodeURIComponent(product.title)}`;
+
         const caption =
 `🔥 Creator Product
 
@@ -149,7 +152,7 @@ https://floatrising.com`;
 
 3 products ready for content.
 
-Come back tomorrow for the next creator pack.`
+Type /more to discover more viral products.`
         })
       });
 
