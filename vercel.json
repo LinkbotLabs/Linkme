@@ -1,7 +1,13 @@
+}
 {
+  "functions": {
+    "api/.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "routes": [
     {
-      "src": "/api/(.*)",
+      "src": "/api/(.)",
       "dest": "/api/$1"
     },
     {
@@ -15,4 +21,3 @@
       "schedule": "0 */6 * * *"
     }
   ]
-}
