@@ -4,5 +4,11 @@
       "src": "/sitemap.xml",
       "dest": "/api/sitemap"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/daily-post",
+      "schedule": "0 */6 * * *"
+    }
   ]
 }
