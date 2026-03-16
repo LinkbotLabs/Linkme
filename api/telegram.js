@@ -8,7 +8,6 @@ export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
-  // allow browser test
   if (req.method !== "POST") {
     return res.status(200).json({ message: "Bot ready" });
   }
@@ -35,7 +34,11 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           chat_id: chatId,
           text:
-"🔥 Float Rising Creator Bot\n\nSend /pack to receive 3 viral products creators are posting right now."
+`🔥 Float Rising Creator Bot
+
+Send /pack to receive 3 viral products creators are posting right now.
+
+Perfect for Pinterest and TikTok creators.`
         })
       });
 
@@ -69,21 +72,24 @@ export default async function handler(req, res) {
 
       for (const product of products) {
 
-  // Save product to Redis
-  const saveRes = await fetch("https://floatrising.com/api/share", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(product)
-  });
+        // Save product to Redis for share card
+        const saveRes = await fetch("https://floatrising.com/api/share", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(product)
+        });
 
-  const saveData = await saveRes.json();
-  const shareId = saveData.id;
+        const saveData = await saveRes.json();
+        const shareId = saveData.id;
 
-  const caption =
-    📌 More viral finds
-https://floatrising.com
+        const productUrl = `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
+
+        const pinterestUrl =
+          `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(productUrl)}&media=${encodeURIComponent(product.image)}&description=${encodeURIComponent(product.title)}`;
+
+        const caption =
 `🔥 Creator Product
 
 ${product.title}
@@ -91,21 +97,28 @@ ${product.title}
 ${product.description || "Creators are sharing this trending product right now."}
 
 View product card
-https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
+${productUrl}
 
-  await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      chat_id: chatId,
-      photo: product.image,
-      caption: caption
-    })
-  });
+📌 Share to Pinterest
+${pinterestUrl}
 
-}
+🔎 Discover more viral finds
+https://floatrising.com`;
+
+        await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            photo: product.image,
+            caption: caption
+          })
+        });
+
+      }
+
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: {
@@ -113,7 +126,12 @@ https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
         },
         body: JSON.stringify({
           chat_id: chatId,
-          text: "📦 Creator pack delivered. Come back tomorrow for more viral products."
+          text:
+`📦 Creator pack delivered
+
+3 viral products ready to post.
+
+Come back tomorrow for the next creator pack.`
         })
       });
 
@@ -128,7 +146,7 @@ https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
       },
       body: JSON.stringify({
         chat_id: chatId,
-        text: "Send /pack to receive today's viral products."
+        text: "Send /pack to receive today's viral creator products."
       })
     });
 
