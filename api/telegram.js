@@ -80,7 +80,11 @@ Perfect for Pinterest and TikTok creators.`
 
         const productUrl = `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
 
-        
+       const cardImage =
+  `https://floatrising.com/api/card-image?id=${shareId}`;
+
+const pinterestUrl =
+  `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(productUrl)}&media=${encodeURIComponent(cardImage)}&description=${encodeURIComponent(product.title)}`; 
         const caption =
 `🔥 Creator Product
 
