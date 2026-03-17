@@ -15,21 +15,55 @@ export default async function handler(req, res) {
       return res.status(200).json({ message: "No products found" });
     }
 
-    const shuffled = data.products.sort(() => 0.5 - Math.random());
-    const product = shuffled[0];
+    /* -------- VIRAL SCORING -------- */
+
+    const scored = data.products.map(p => {
+
+      const rating = p.rating || 4;
+      const reviews = p.reviews || 50;
+      const price = p.price || 20;
+
+      const viralScore =
+        (rating * 20) +
+        Math.log(reviews + 1) * 40 +
+        price * 0.5;
+
+      return { ...p, viralScore };
+
+    });
+
+    const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
+    const product = sorted[0];
+
+    /* -------- CREATE PRODUCT CARD -------- */
+
+    const shareRes = await fetch("https://floatrising.com/api/share", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(product)
+    });
+
+    const shareData = await shareRes.json();
+    const shareId = shareData.id;
+
+    /* -------- TELEGRAM CAPTION -------- */
 
     const caption =
-`🔥 Daily Viral Product
+`🔥 Today’s Viral Product Pick
 
 ${product.title}
 
 ${product.description || "Creators are sharing this trending product right now."}
 
 🔎 View product card
-https://floatrising.com/s.html?id=${product.id}&utm_source=telegram
+https://floatrising.com/s.html?id=${shareId}&utm_source=telegram
 
 📦 Get today's creator pack
 https://t.me/floatrisingbot?start=pack`;
+
+    /* -------- POST TO TELEGRAM -------- */
 
     await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
       method: "POST",
