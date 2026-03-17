@@ -23,7 +23,32 @@ export default async function handler(req, res) {
     const chatId = update.message.chat.id;
     const text = (update.message.text || "").trim();
 
-    // START
+    /* -------- HELPER: CLEAN + AFFILIATE -------- */
+
+    function cleanAmazonUrl(url) {
+      const tag = "davidshort-21";
+
+      try {
+        if (!url) return url;
+
+        const match = url.match(/\/dp\/([A-Z0-9]{10})/);
+
+        if (!match) {
+          const u = new URL(url);
+          u.searchParams.set("tag", tag);
+          return u.toString();
+        }
+
+        const asin = match[1];
+        return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
+
+      } catch {
+        return url;
+      }
+    }
+
+    /* -------- START -------- */
+
     if (text === "/start") {
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -43,7 +68,8 @@ Perfect for Pinterest and TikTok creators.`
       return res.status(200).json({ ok: true });
     }
 
-    // MORE
+    /* -------- MORE -------- */
+
     if (text === "/more") {
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -63,7 +89,8 @@ https://floatrising.com`
       return res.status(200).json({ ok: true });
     }
 
-    // PACK
+    /* -------- PACK -------- */
+
     if (text === "/pack") {
 
       const apiRes = await fetch("https://floatrising.com/api/search");
@@ -83,7 +110,7 @@ https://floatrising.com`
         return res.status(200).json({ ok: true });
       }
 
-      /* ---------- VIRAL SCORING ---------- */
+      /* -------- VIRAL SCORING -------- */
 
       const scored = data.products.map(p => {
 
@@ -102,13 +129,27 @@ https://floatrising.com`
 
       const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
 
-      const products = [
-        sorted[0], // viral pick
-        [...sorted].sort((a,b)=> (b.price||0)-(a.price||0))[0], // best commission
-        [...sorted].sort((a,b)=> (b.reviews||0)-(a.reviews||0))[0] // rising product
-      ];
+      /* -------- SMART PICKS (NO DUPES) -------- */
 
-      /* ---------- PACK HEADER ---------- */
+      const picks = [];
+      const usedIds = new Set();
+
+      function addPick(p) {
+        if (!p) return;
+        const key = p.url || p.title;
+        if (!usedIds.has(key)) {
+          picks.push(p);
+          usedIds.add(key);
+        }
+      }
+
+      addPick(sorted[0]); // viral
+      addPick([...sorted].sort((a,b)=> (b.price||0)-(a.price||0))[0]); // high value
+      addPick([...sorted].sort((a,b)=> (b.reviews||0)-(a.reviews||0))[0]); // social proof
+
+      const products = picks;
+
+      /* -------- HEADER -------- */
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -124,21 +165,34 @@ Today's best viral products for content creators.
         })
       });
 
-      /* ---------- SEND PRODUCTS ---------- */
+      /* -------- SEND PRODUCTS -------- */
+
+      let index = 1;
 
       for (const product of products) {
+
+        if (!product?.image) continue;
+
+        /* 🔥 INJECT AFFILIATE */
+        const productWithAffiliate = {
+          ...product,
+          link: cleanAmazonUrl(product.url || product.link)
+        };
 
         const saveRes = await fetch("https://floatrising.com/api/share", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(product)
+          body: JSON.stringify(productWithAffiliate)
         });
 
         const saveData = await saveRes.json();
+
+        if (!saveData.id) continue;
+
         const shareId = saveData.id;
 
         const productUrl =
-          `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot`;
+          `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot&utm_campaign=pack&utm_content=${index}`;
 
         const cardImage =
           `https://floatrising.com/api/card-image?id=${shareId}`;
@@ -147,17 +201,17 @@ Today's best viral products for content creators.
           `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(productUrl)}&media=${encodeURIComponent(cardImage)}&description=${encodeURIComponent(product.title)}`;
 
         const caption =
-`🔥 Creator Pick
+`🔥 Creator Pick #${index}
 
 ${product.title}
 
 Trending product creators are posting right now.
 
-View product card
+🔎 View product card
 ${productUrl}
 
-🔎 Discover more viral finds
-https://floatrising.com`;
+🚀 Ready to post on Pinterest
+Tap below 👇`;
 
         await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
           method: "POST",
@@ -179,7 +233,11 @@ https://floatrising.com`;
           })
         });
 
+        index++;
+
       }
+
+      /* -------- FOOTER -------- */
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -198,7 +256,8 @@ Type /more to discover more viral products.`
       return res.status(200).json({ ok: true });
     }
 
-    // DEFAULT
+    /* -------- DEFAULT -------- */
+
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
