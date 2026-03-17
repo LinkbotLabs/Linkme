@@ -6,6 +6,30 @@ export default async function handler(req, res) {
 
   try {
 
+    /* -------- HELPER: CLEAN + AFFILIATE LINK -------- */
+
+    function cleanAmazonUrl(url) {
+      const tag = "davidshort-21"; // ✅ YOUR TAG
+
+      try {
+        if (!url) return url;
+
+        const match = url.match(/\/dp\/([A-Z0-9]{10})/);
+
+        if (!match) {
+          const u = new URL(url);
+          u.searchParams.set("tag", tag);
+          return u.toString();
+        }
+
+        const asin = match[1];
+        return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
+
+      } catch {
+        return url;
+      }
+    }
+
     /* -------- FETCH PRODUCTS -------- */
 
     const apiRes = await fetch("https://floatrising.com/api/search");
@@ -27,7 +51,7 @@ export default async function handler(req, res) {
         (rating * 20) +
         Math.log(reviews + 1) * 40 +
         price * 0.5 +
-        Math.random() * 20; // 👈 adds variation
+        Math.random() * 20;
 
       return { ...p, viralScore };
 
@@ -35,7 +59,7 @@ export default async function handler(req, res) {
 
     const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
 
-    /* -------- SMART PICK (TOP RANGE) -------- */
+    /* -------- SMART PICK -------- */
 
     const pool = sorted.slice(0, 5);
     const product = pool[Math.floor(Math.random() * pool.length)];
@@ -47,6 +71,13 @@ export default async function handler(req, res) {
       return res.status(200).json({ message: "Skipped (no image)" });
     }
 
+    /* -------- 🔥 INJECT AFFILIATE LINK -------- */
+
+    const productWithAffiliate = {
+      ...product,
+      link: cleanAmazonUrl(product.url || product.link)
+    };
+
     /* -------- CREATE PRODUCT CARD -------- */
 
     const shareRes = await fetch("https://floatrising.com/api/share", {
@@ -54,7 +85,7 @@ export default async function handler(req, res) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(product)
+      body: JSON.stringify(productWithAffiliate)
     });
 
     const shareData = await shareRes.json();
@@ -102,7 +133,7 @@ ${product.title}
 ${product.description || "Creators are sharing this trending product right now."}
 
 🔎 View product card
-https://floatrising.com/s.html?id=${shareId}&utm_source=telegram
+https://floatrising.com/s.html?id=${shareId}&utm_source=telegram&utm_campaign=bot&utm_content=${shareId}
 
 📦 Get today's creator pack
 https://t.me/floatrisingbot?start=pack
@@ -130,7 +161,8 @@ ${cta}`;
 
     return res.status(200).json({
       message: "Posted",
-      product: product.title
+      product: product.title,
+      affiliateLink: productWithAffiliate.link
     });
 
   } catch (error) {
