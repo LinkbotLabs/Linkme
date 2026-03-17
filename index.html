@@ -599,16 +599,7 @@ function shuffle(array) {
       return title.replace("Amazon.com:","").replace("Visit the","").replace("Store","").trim();
     }
 
-    function generatePinterestDescription(p,link){
-      const title = cleanTitle(p.title);
-      const templates=[
-        `${p.title} is trending right now.\n\n⭐ ${p.rating} stars\n🔥 ${p.sold}+ sold\n\n${generateViralPinHook(p.title)}\n\nSee why people are buying it:\n${link}\n\n#amazonfinds #tiktokmademebuyit #viralproducts`,
-        `People can't stop buying this ${p.title}.\n\n⭐ Rated ${p.rating}\n📦 ${p.sold}+ sold\n\n${generateViralPinHook(p.title)}\n\nView the product here:\n${link}\n\n#amazonmusthaves #trendingproducts #gadgets`,
-        `This ${p.title} is blowing up online.\n✔ ${p.sold}+ sold\n⭐ ${p.rating} star reviews\n\n${generateViralPinHook(p.title)}\n\nSee the product here:\n${link}\n\n#amazonfavorites #tiktokfinds #viralproducts`
-      ];
-      return templates[Math.floor(Math.random()*templates.length)];
-    }
-
+    
     async function shareLink(){
       if(!products.length) return;
       const p = products[currentIndex];
