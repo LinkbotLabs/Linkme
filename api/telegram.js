@@ -43,7 +43,7 @@ Perfect for Pinterest and TikTok creators.`
       return res.status(200).json({ ok: true });
     }
 
-    // MORE (discover feed)
+    // MORE
     if (text === "/more") {
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -83,12 +83,51 @@ https://floatrising.com`
         return res.status(200).json({ ok: true });
       }
 
-      const shuffled = data.products.sort(() => 0.5 - Math.random());
-      const products = shuffled.slice(0, 3);
+      /* ---------- VIRAL SCORING ---------- */
+
+      const scored = data.products.map(p => {
+
+        const rating = p.rating || 4;
+        const reviews = p.reviews || 50;
+        const price = p.price || 20;
+
+        const viralScore =
+          (rating * 20) +
+          Math.log(reviews + 1) * 40 +
+          price * 0.5;
+
+        return { ...p, viralScore };
+
+      });
+
+      const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
+
+      const products = [
+        sorted[0], // viral pick
+        [...sorted].sort((a,b)=> (b.price||0)-(a.price||0))[0], // best commission
+        [...sorted].sort((a,b)=> (b.reviews||0)-(a.reviews||0))[0] // rising product
+      ];
+
+      /* ---------- PACK HEADER ---------- */
+
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text:
+`📦 Creator Pack Ready
+
+Today's best viral products for content creators.
+
+3 product cards coming next 👇`
+        })
+      });
+
+      /* ---------- SEND PRODUCTS ---------- */
 
       for (const product of products) {
 
-        // Save product card
         const saveRes = await fetch("https://floatrising.com/api/share", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -108,11 +147,11 @@ https://floatrising.com`
           `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(productUrl)}&media=${encodeURIComponent(cardImage)}&description=${encodeURIComponent(product.title)}`;
 
         const caption =
-`🔥 Creator Product
+`🔥 Creator Pick
 
 ${product.title}
 
-Trending product creators are posting.
+Trending product creators are posting right now.
 
 View product card
 ${productUrl}
