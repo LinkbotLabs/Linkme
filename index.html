@@ -37,10 +37,23 @@
 <body class="bg-gray-50 min-h-screen font-sans text-gray-900 antialiased">
 
 <div id="floatingTools" class="fixed right-4 bottom-28 z-50 flex flex-col gap-3">
-  <button onclick="sharePinterest()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">📌</button>
-  <button onclick="copyPinterestDescription()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">📋</button>
-  <button onclick="shareLink()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">🔗</button>
-  <button onclick="createGrokVideoPrompt()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">🎥</button>
+
+  <button onclick="sharePinterest()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    📌
+  </button>
+
+  <button onclick="copyPinterestDescription()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    📋
+  </button>
+
+  <button onclick="shareLink()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    🔗
+  </button>
+
+  <button onclick="createGrokVideoPrompt()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+    🎥
+  </button>
+
 </div>
 
 <!-- Slim Hero -->
@@ -53,7 +66,7 @@
     Viral finds for creators
   </p>
 
-  <!-- New: Free Telegram Bot Teaser in Hero -->
+  <!-- Free Telegram Bot Teaser in Hero -->
   <div class="mt-4 inline-block bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-3 rounded-2xl shadow-sm border border-indigo-100">
     <p class="text-sm sm:text-base font-medium text-indigo-800">
       Get <strong>2 fresh viral products daily</strong> straight to Telegram — completely free!<br>
@@ -61,7 +74,7 @@
     </p>
   </div>
 
-  <div class="flex justify-center mt-4">
+  <div class="flex justify-center mt-3">
     <a href="https://www.producthunt.com/products/float-rising?utm_source=badge&utm_medium=badge&utm_campaign=badge-float-rising" target="_blank" rel="noopener noreferrer">
       <img alt="Float Rising on Product Hunt" width="200" height="45" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1085675&theme=light">
     </a>
@@ -92,8 +105,12 @@
       <div class="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm sm:text-base font-semibold shadow">
          🔥 Daily Viral Finds
       </div>
-      <p class="text-sm mt-2">📌 Pin this before it goes viral</p>
-      <p class="text-sm font-semibold mt-3">⏰ New viral finds drop daily.</p>    
+      <p class="text-sm mt-2">
+📌 Pin this before it goes viral
+</p>
+    <p class="text-sm font-semibold mt-3">
+⏰ New viral finds drop daily.
+</p>    
     </div>
 
     <div id="card" class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden min-h-[500px]">
@@ -103,14 +120,14 @@
     <!-- Creator Tools -->
     <div class="mt-8 bg-white rounded-2xl shadow border border-gray-100 p-6">
       <h3 class="text-xl font-bold text-center mb-5">Creator Tools</h3>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 gap-4">
         <button onclick="shareLink()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">Share Link</button>
         <button onclick="copyPinterestDescription()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">📋 Caption</button>
         <button onclick="sharePinterest()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">Pinterest</button>
         <button onclick="takeScreenshotHint()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">📸 Screenshot</button>
       </div>
 
-      <!-- New: Free Bot Button in Creator Tools -->
+      <!-- Free Bot Button in Creator Tools -->
       <a href="https://t.me/floatviral" target="_blank" class="block w-full mt-6 py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl hover:opacity-90 transition flex items-center justify-center gap-3 text-base">
         <span>🤖</span> 2× Daily Viral Drops – Free Telegram Bot
       </a>
@@ -145,436 +162,486 @@
         🔥 <strong><span id="creatorCount">1284</span> creators</strong> using Float Rising
       </div>
 
-      <div class="mt-12">
-        <p class="text-center text-gray-600 mb-6 italic text-lg">
-          Products rotate constantly. Creators who pin first get the traffic.
-        </p>
+     <div class="mt-12">
 
-        <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
+  <p class="text-center text-gray-600 mb-6 italic text-lg">
+    Products rotate constantly. Creators who pin first get the traffick.
+  </p>
 
-        <ul class="space-y-4 text-base sm:text-lg">
-          <li>📌 Pin → 1 point</li>
-          <li>🛒 Product Card → 3 points</li>
-          <li>🎥 Video → 10 points (Fastest way to unlock.)</li>
-        </ul>
+  <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
 
-        <p class="text-sm text-gray-500 mt-4 text-center">
-          Hint: Product cards unlock after you create a pin. View your site to share them.
-        </p>
+  <ul class="space-y-4 text-base sm:text-lg">
+    <li>📌 Pin → 1 point</li>
+    <li>🛒 Product Card → 3 points</li>
+    <li>🎥 Video → 10 points (Fastest way to unlock.)</li>
+  </ul>
 
-        <!-- New: Free Bot Callout near Points -->
-        <div class="mt-8 bg-green-50 border border-green-100 rounded-xl p-6 text-center max-w-md mx-auto">
-          <p class="font-bold text-lg mb-2">⚡ Free Shortcut for Faster Wins</p>
-          <p class="text-sm text-gray-700 mb-3">
-            Join our free Telegram bot for <strong>2 hand-picked viral products daily</strong> — helps you create pins/videos quicker and earn points faster.
-          </p>
-          <a href="https://t.me/floatviral" target="_blank" class="inline-block py-3 px-6 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition">
-            Join @floatviral – Free
-          </a>
-        </div>
+  <p class="text-sm text-gray-500 mt-4 text-center">
+    Hint: Product cards unlock after you create a pin. View your site to share them.
+  </p>
 
-        <div class="mt-8 bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center max-w-md mx-auto">
-          <h3 class="text-xl font-bold mb-4">🚀 Unlock the Viral Product Vault</h3>
-          <p class="text-sm text-gray-700 mb-4">Buy access to the bot and get:</p>
-          <div class="text-sm text-gray-700 leading-relaxed mb-5">
-            • Every viral product curated so far<br>
-            • New discoveries added daily<br>
-            • 3 custom product requests per day
-          </div>
-          <p class="text-sm font-semibold text-gray-700 mb-2">💡 Prefer to explore for free?</p>
-          <div class="text-sm text-gray-700 leading-relaxed mb-5">
-            • Visit the page to see <strong>1 featured product per day</strong><br>
-            • Or stay on the homepage carousel — products rotate every <strong>8 seconds</strong>
-          </div>
-          <p class="text-sm font-semibold mb-3">📌 How to use the products</p>
-          <div class="text-sm text-gray-700 leading-relaxed mb-5">
-            1️⃣ Create your <strong>Pinterest pin</strong><br>
-            2️⃣ Click <strong>“View Site”</strong><br>
-            3️⃣ See the <strong>beautiful product card landing page</strong>
-          </div>
-          <p class="text-sm text-gray-700 mb-4">
-            💡 Tip: Screenshot the card or record a quick video and post it everywhere — Pinterest, TikTok, Reels, Facebook.
-          </p>
-          <p class="text-sm text-gray-700">
-            💰 Want the full advantage?<br>
-            Pay the joining fee and every product we showcase will automatically use your
-            <strong>Amazon affiliate details</strong>, so the commissions go directly to you.
-          </p>
-          <p class="mt-4 font-semibold text-gray-800">
-            Start building your viral product collection today.
-          </p>
-        </div>
-
-        <!-- Existing paid bot section -->
-        <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-5 text-center max-w-sm mx-auto">
-          <p class="font-bold text-lg mb-1">⚡ Skip the grind</p>
-          <p class="text-sm text-gray-600 mb-3">Creators use our bot to find viral products faster.</p>
-          <div class="text-xs text-gray-500 mb-4 leading-relaxed">
-            • 3 viral products daily<br>
-            • Ready-to-post Pinterest captions<br>
-            • Pin ideas for creators
-          </div>
-          <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition">
-            🤖 Unlock Creator Bot – $7
-          </a>
-          <p class="text-xs text-gray-400 mt-2">Instant access delivered via Telegram</p>
-        </div>
-
-        <p class="mt-8 text-center text-lg font-medium">
-          Reach <strong>200 points</strong> to unlock Creator Mode<br>Attach your affiliate tag to every product automatically.
-        </p>
-
-        <div class="mt-6 max-w-xs mx-auto">
-          <div class="text-center font-bold mb-2">Points: <span id="creatorPoints">0 / 200</span></div>
-          <div class="w-full bg-gray-200 rounded-full h-3">
-            <div id="creatorBar" class="bg-gradient-to-r from-primary to-accent h-full transition-all" style="width:0%"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Unlock Tab (unchanged) -->
-  <div id="tab-unlock" class="tab-panel hidden">
-    <div class="bg-white rounded-3xl shadow p-8">
-      <h2 class="text-3xl font-playfair font-bold text-center mb-8">Free vs Creator Mode</h2>
-      <div class="space-y-8">
-        <div class="bg-gray-50 rounded-2xl p-8">
-          <h3 class="text-2xl font-bold text-primary mb-4">🆓 Free Mode</h3>
-          <p class="text-gray-700 text-base sm:text-lg">
-            Use Float Rising affiliate ID.<br>Earn points by sharing.
-          </p>
-        </div>
-        <div class="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl p-8 border border-accent/20">
-          <h3 class="text-2xl font-bold text-accent mb-4">🚀 Creator Mode</h3>
-          <ul class="space-y-4 text-base sm:text-lg">
-            <li>✔ Your own Amazon affiliate ID</li>
-            <li>✔ Auto-attach your ID to every product card</li>
-            <li>✔ Keep 100% commissions</li>
-            <li>✔ Monetize every share</li>
-            <li>✔ Unlimited content</li>  
-          </ul>
-          <p class="mt-8 text-gray-700 italic text-center text-base sm:text-lg">
-            Own your earnings directly.
-          </p>
-        </div>
-      </div>
-      <div class="mt-12 text-center">
-        <button onclick="openUnlock()" class="px-10 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition">
-          Unlock – $19 One-Time
-        </button>
-        <p id="affiliateStatus" class="mt-6 font-medium text-base sm:text-lg"></p>
-      </div>
-    </div>
-  </div>
-</main>
-
-<!-- Floating Next Button -->
-<button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-primary to-accent text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg">
-  🔥 Next Product
-</button>
-
-<!-- Modals -->
-<div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-  <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-    <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
-    <p class="text-xl font-semibold text-center mb-6">$19 USD – One Time</p>
-    <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl text-center hover:opacity-90 transition mb-6">
-      Pay with Wise
+  <!-- Free Bot Callout near Points -->
+  <div class="mt-8 bg-green-50 border border-green-100 rounded-xl p-6 text-center max-w-md mx-auto">
+    <p class="font-bold text-lg mb-2">⚡ Free Shortcut for Faster Wins</p>
+    <p class="text-sm text-gray-700 mb-3">
+      Join our free Telegram bot for <strong>2 hand-picked viral products daily</strong> — helps you create pins/videos quicker and earn points faster.
+    </p>
+    <a href="https://t.me/floatviral" target="_blank" class="inline-block py-3 px-6 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition">
+      Join @floatviral – Free
     </a>
-    <p class="text-center text-gray-600 mb-4">Add email in note</p>
-    <p class="text-center mb-6">Email screenshot to <strong>omnistall70@gmail.com</strong></p>
-    <hr class="my-6" />
-    <p class="font-medium text-center mb-4">Already paid?</p>
-    <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
-    <button onclick="activateCreator()" class="w-full py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition text-lg">Activate</button>
   </div>
-</div>
 
-<div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-  <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-    <h3 class="text-2xl font-bold text-center mb-6">Amazon Affiliate ID</h3>
-    <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
-    <div id="affiliateError" class="text-red-600 text-center mb-4"></div>
-    <button onclick="saveAffiliate()" class="w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition text-lg">Save</button>
+<div class="mt-8 bg-indigo-50 border border-indigo-100 rounded-xl p-6 text-center max-w-md mx-auto">
+
+  <h3 class="text-xl font-bold mb-4">
+    🚀 Unlock the Viral Product Vault
+  </h3>
+
+  <p class="text-sm text-gray-700 mb-4">
+    Buy access to the bot and get:
+  </p>
+
+  <div class="text-sm text-gray-700 leading-relaxed mb-5">
+    • Every viral product curated so far<br>
+    • New discoveries added daily<br>
+    • 3 custom product requests per day
   </div>
-</div>
 
-<div id="grokModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-  <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-    <h3 class="text-2xl font-bold text-center mb-4">6s Video Prompt</h3>
-    <textarea id="grokText" class="w-full h-48 p-4 border border-gray-300 rounded-xl mb-6 text-base resize-none focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
-    <div class="grid grid-cols-3 gap-4">
-      <button onclick="copyGrok()" class="py-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition text-base">Copy</button>
-      <button onclick="openGrok()" class="py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition text-base">Open Grok</button>
-      <button onclick="closeModal()" class="py-3 bg-gray-300 rounded-xl hover:bg-gray-400 transition text-base">Close</button>
+  <p class="text-sm font-semibold text-gray-700 mb-2">
+    💡 Prefer to explore for free?
+  </p>
+
+  <div class="text-sm text-gray-700 leading-relaxed mb-5">
+    • Visit the page to see <strong>1 featured product per day</strong><br>
+    • Or stay on the homepage carousel — products rotate every <strong>8 seconds</strong>
+  </div>
+
+  <p class="text-sm font-semibold mb-3">
+    📌 How to use the products
+  </p>
+
+  <div class="text-sm text-gray-700 leading-relaxed mb-5">
+    1️⃣ Create your <strong>Pinterest pin</strong><br>
+    2️⃣ Click <strong>“View Site”</strong><br>
+    3️⃣ See the <strong>beautiful product card landing page</strong>
+  </div>
+
+  <p class="text-sm text-gray-700 mb-4">
+    💡 Tip: Screenshot the card or record a quick video and post it everywhere — Pinterest, TikTok, Reels, Facebook.
+  </p>
+
+  <p class="text-sm text-gray-700">
+    💰 Want the full advantage?<br>
+    Pay the joining fee and every product we showcase will automatically use your
+    <strong>Amazon affiliate details</strong>, so the commissions go directly to you.
+  </p>
+
+  <p class="mt-4 font-semibold text-gray-800">
+    Start building your viral product collection today.
+  </p>
+
+</div>
+  <!-- CREATOR BOT SHORTCUT -->
+
+  <div class="mt-8 bg-gray-50 border border-gray-200 rounded-xl p-5 text-center max-w-sm mx-auto">
+
+    <p class="font-bold text-lg mb-1">
+      ⚡ Skip the grind
+    </p>
+
+    <p class="text-sm text-gray-600 mb-3">
+      Creators use our bot to find viral products faster.
+    </p>
+
+    <div class="text-xs text-gray-500 mb-4 leading-relaxed">
+      • 3 viral products daily<br>
+      • Ready-to-post Pinterest captions<br>
+      • Pin ideas for creators
+    </div>
+
+    <a href="https://wise.com/pay/me/davids14542"
+       target="_blank"
+       class="block w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition">
+
+      🤖 Unlock Creator Bot – $7
+
+    </a>
+
+    <p class="text-xs text-gray-400 mt-2">
+      Instant access delivered via Telegram
+    </p>
+
+  </div>
+
+  <p class="mt-8 text-center text-lg font-medium">
+    Reach <strong>200 points</strong> to unlock Creator Mode
+    Attach your affiliate tag to every product automatically.
+  </p>
+
+  <div class="mt-6 max-w-xs mx-auto">
+    <div class="text-center font-bold mb-2">
+      Points: <span id="creatorPoints">0 / 200</span>
+    </div>
+
+    <div class="w-full bg-gray-200 rounded-full h-3">
+      <div id="creatorBar"
+           class="bg-gradient-to-r from-primary to-accent h-full transition-all"
+           style="width:0%">
+      </div>
     </div>
   </div>
 </div>
+</div>
+</div>       
+    <!-- Unlock Tab -->
+    <div id="tab-unlock" class="tab-panel hidden">
+      <div class="bg-white rounded-3xl shadow p-8">
+        <h2 class="text-3xl font-playfair font-bold text-center mb-8">Free vs Creator Mode</h2>
+        <div class="space-y-8">
+          <div class="bg-gray-50 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-primary mb-4">🆓 Free Mode</h3>
+            <p class="text-gray-700 text-base sm:text-lg">
+              Use Float Rising affiliate ID.<br>Earn points by sharing.
+            </p>
+          </div>
 
-<script>
-// Tab switching
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      b.classList.remove('border-primary', 'text-primary');
-      b.classList.add('border-transparent');
+          <div class="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl p-8 border border-accent/20">
+            <h3 class="text-2xl font-bold text-accent mb-4">🚀 Creator Mode</h3>
+            <ul class="space-y-4 text-base sm:text-lg">
+            <li>✔ Your own Amazon affiliate ID</li>
+<li>✔ Auto-attach your ID to every product card</li>
+<li>✔ Keep 100% commissions</li>
+<li>✔ Monetize every share</li>
+<li>✔ Unlimited content</li>  
+            </ul>
+            <p class="mt-8 text-gray-700 italic text-center text-base sm:text-lg">
+              Own your earnings directly.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <button onclick="openUnlock()" class="px-10 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition">
+            Unlock – $19 One-Time
+          </button>
+          <p id="affiliateStatus" class="mt-6 font-medium text-base sm:text-lg"></p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Next Button -->
+  <button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-primary to-accent text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg">
+    🔥 Next Product
+  </button>
+
+  <!-- Modals -->
+  <div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
+      <p class="text-xl font-semibold text-center mb-6">$19 USD – One Time</p>
+      <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl text-center hover:opacity-90 transition mb-6">
+        Pay with Wise
+      </a>
+      <p class="text-center text-gray-600 mb-4">Add email in note</p>
+      <p class="text-center mb-6">Email screenshot to <strong>omnistall70@gmail.com</strong></p>
+      <hr class="my-6" />
+      <p class="font-medium text-center mb-4">Already paid?</p>
+      <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+      <button onclick="activateCreator()" class="w-full py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition text-lg">Activate</button>
+    </div>
+  </div>
+
+  <div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <h3 class="text-2xl font-bold text-center mb-6">Amazon Affiliate ID</h3>
+      <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+      <div id="affiliateError" class="text-red-600 text-center mb-4"></div>
+      <button onclick="saveAffiliate()" class="w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition text-lg">Save</button>
+    </div>
+  </div>
+
+  <div id="grokModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
+      <h3 class="text-2xl font-bold text-center mb-4">6s Video Prompt</h3>
+      <textarea id="grokText" class="w-full h-48 p-4 border border-gray-300 rounded-xl mb-6 text-base resize-none focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+      <div class="grid grid-cols-3 gap-4">
+        <button onclick="copyGrok()" class="py-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition text-base">Copy</button>
+        <button onclick="openGrok()" class="py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition text-base">Open Grok</button>
+        <button onclick="closeModal()" class="py-3 bg-gray-300 rounded-xl hover:bg-gray-400 transition text-base">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('border-primary', 'text-primary');
+          b.classList.add('border-transparent');
+        });
+        btn.classList.add('border-primary', 'text-primary');
+
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+      });
     });
-    btn.classList.add('border-primary', 'text-primary');
 
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
-  });
-});
+    // Your full original JavaScript logic
+    document.getElementById("nextBtn").addEventListener("click",()=>{
+      nextProduct();
+      startAutoScroll();
+    });
 
-// Your full original JavaScript logic (with additions)
+    function openUnlock(){
+      document.getElementById("unlockModal").classList.remove("hidden");
+      setTimeout(() => { document.getElementById("unlockModal").classList.add("hidden"); }, 6000);
+    }
 
-document.getElementById("nextBtn").addEventListener("click",()=>{
-  nextProduct();
-  startAutoScroll();
-});
+    let products = [], currentIndex = 0;
+    const card = document.getElementById("card");
 
-function openUnlock(){
-  document.getElementById("unlockModal").classList.remove("hidden");
-  setTimeout(() => { document.getElementById("unlockModal").classList.add("hidden"); }, 6000);
-}
+    const DEFAULT_AFFILIATE_ID = "davidshort-21";
+    let affiliateId = localStorage.getItem("affiliateId") || "";
+    let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
 
-let products = [], currentIndex = 0;
-const card = document.getElementById("card");
+    let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
 
-const DEFAULT_AFFILIATE_ID = "davidshort-21";
-let affiliateId = localStorage.getItem("affiliateId") || "";
-let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
+    function addPoints(points) {
+      creatorPoints += points;
+      localStorage.setItem("creatorPoints", creatorPoints);
+      updatePointsDisplay();
+      checkCreatorUnlock();
+    }
 
-let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
+    function updatePointsDisplay() {
+      const el = document.getElementById("creatorPoints");
+      const bar = document.getElementById("creatorBar");
+      if (el) el.innerText = creatorPoints + " / 200";
+      if (bar) {
+        let percent = (creatorPoints / 200) * 100;
+        if (percent > 100) percent = 100;
+        bar.style.width = percent + "%";
+      }
+      if (creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
+    }
 
-function addPoints(points) {
-  creatorPoints += points;
-  localStorage.setItem("creatorPoints", creatorPoints);
-  updatePointsDisplay();
-  checkCreatorUnlock();
-}
+    function checkCreatorUnlock() {
+      if (creatorPoints >= 200 && !creatorUnlocked) {
+        creatorUnlocked = true;
+        localStorage.setItem("creatorUnlocked", "true");
+        alert("🚀 Creator Mode Unlocked!");
+        location.reload();
+      }
+    }
 
-function updatePointsDisplay() {
-  const el = document.getElementById("creatorPoints");
-  const bar = document.getElementById("creatorBar");
-  if (el) el.innerText = creatorPoints + " / 200";
-  if (bar) {
-    let percent = (creatorPoints / 200) * 100;
-    if (percent > 100) percent = 100;
-    bar.style.width = percent + "%";
-  }
-  if (creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
-}
+    function updateStatus() {
+      const el = document.getElementById("affiliateStatus");
+      if (creatorUnlocked) {
+        el.innerHTML = "🟢 Creator Mode Active";
+        el.style.color = "green";
+      } else {
+        el.innerHTML = "🆓 Free Mode Active";
+        el.style.color = "#b45309";
+      }
+    }
+    updateStatus();
 
-function checkCreatorUnlock() {
-  if (creatorPoints >= 200 && !creatorUnlocked) {
-    creatorUnlocked = true;
-    localStorage.setItem("creatorUnlocked", "true");
-    alert("🚀 Creator Mode Unlocked!");
-    location.reload();
-  }
-}
+    function activateCreator() {
+      const code = document.getElementById("unlockCodeInput").value.trim();
+      if (code === "CREATOR19") {
+        localStorage.setItem("creatorUnlocked", "true");
+        alert("Creator Mode Activated ✅");
+        location.reload();
+      } else alert("Invalid Code");
+    }
 
-function updateStatus() {
-  const el = document.getElementById("affiliateStatus");
-  if (creatorUnlocked) {
-    el.innerHTML = "🟢 Creator Mode Active";
-    el.style.color = "green";
-  } else {
-    el.innerHTML = "🆓 Free Mode Active";
-    el.style.color = "#b45309";
-  }
-}
-updateStatus();
+    function takeScreenshotHint() {
+      alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
+    }
 
-function activateCreator() {
-  const code = document.getElementById("unlockCodeInput").value.trim();
-  if (code === "CREATOR19") {
-    localStorage.setItem("creatorUnlocked", "true");
-    alert("Creator Mode Activated ✅");
-    location.reload();
-  } else alert("Invalid Code");
-}
+    function saveAffiliate() {
+      if (!creatorUnlocked) {
+        alert("Please unlock Creator Mode first.");
+        return;
+      }
+      const val = document.getElementById("affiliateInput").value.trim();
+      if (!val.includes("-")) {
+        document.getElementById("affiliateError").innerText = "Format example: yourname-20";
+        return;
+      }
+      affiliateId = val;
+      localStorage.setItem("affiliateId", val);
+      document.getElementById("affiliateModal").classList.add("hidden");
+      updateStatus();
+      renderProduct();
+    }
 
-function takeScreenshotHint() {
-  alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
-}
+    function appendAffiliate(url) {
+      const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
+      if (url.includes("tag=")) return url;
+      return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
+    }
 
-function saveAffiliate() {
-  if (!creatorUnlocked) {
-    alert("Please unlock Creator Mode first.");
-    return;
-  }
-  const val = document.getElementById("affiliateInput").value.trim();
-  if (!val.includes("-")) {
-    document.getElementById("affiliateError").innerText = "Format example: yourname-20";
-    return;
-  }
-  affiliateId = val;
-  localStorage.setItem("affiliateId", val);
-  document.getElementById("affiliateModal").classList.add("hidden");
-  updateStatus();
-  renderProduct();
-}
+    async function loadProducts(q = "") {
 
-function appendAffiliate(url) {
-  const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
-  if (url.includes("tag=")) return url;
-  return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
-}
-
-async function loadProducts(q = "") {
   card.innerHTML = "Refreshing todays viral products...";
 
   try {
+
     const res = await fetch("/api/search" + (q ? "?q=" + q : ""));
+
     if (!res.ok) throw new Error("API error");
+
     const data = await res.json();
+
     products = (data.products || []).filter(p => p.link && p.image);
+
     if (products.length === 0) {
       card.innerHTML = " Sourcing viral products.";
       return;
     }
-    shuffle(products);
-    currentIndex = 0;
-    renderProduct();
-    startAutoScroll();
-  } catch (err) {
-    console.error(err);
-    card.innerHTML = `
-      <div class="text-center p-12 text-gray-600">
-        ⚠️ Product feed loading...<br><br>
-        <button onclick="loadProducts()" class="px-8 py-4 bg-gray-800 text-white rounded-xl hover:bg-gray-700">Reload</button>
-      </div>
-    `;
-  }
-}
-
+        shuffle(products);
+        currentIndex = 0;
+        renderProduct();
+        startAutoScroll();
+      } catch (err) {
+        console.error(err);
+        card.innerHTML = `
+          <div class="text-center p-12 text-gray-600">
+            ⚠️ Product feed loading...<br><br>
+            <button onclick="loadProducts()" class="px-8 py-4 bg-gray-800 text-white rounded-xl hover:bg-gray-700">Reload</button>
+          </div>
+        `;
+      }
+    }
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
 }
+    function generateHook(title) {
+      const shortTitle = title.split(" ").slice(0,3).join(" ");
+      return `🔥 This ${shortTitle} Is Going Viral`;
+    }
 
-function generateHook(title) {
-  const shortTitle = title.split(" ").slice(0,3).join(" ");
-  return `🔥 This ${shortTitle} Is Going Viral`;
-}
+    function renderProduct() {
+      if (!products.length) {
+        card.innerHTML = '<div class="p-10 text-center text-gray-600 text-lg">No products found.</div>';
+        return;
+      }
 
-function renderProduct() {
-  if (!products.length) {
-    card.innerHTML = '<div class="p-10 text-center text-gray-600 text-lg">No products found.</div>';
-    return;
-  }
+      const p = products[currentIndex];
+      p.rating = (4.6 + Math.random()*0.3).toFixed(1);
+      p.reviews = Math.floor(Math.random()*800 + 200);
+      p.sold = Math.floor(Math.random()*1200 + 300);
+      p.urgency = Math.floor(Math.random()*10 + 3);
 
-  const p = products[currentIndex];
-  p.rating = (4.6 + Math.random()*0.3).toFixed(1);
-  p.reviews = Math.floor(Math.random()*800 + 200);
-  p.sold = Math.floor(Math.random()*1200 + 300);
-  p.urgency = Math.floor(Math.random()*10 + 3);
+      card.innerHTML = `
+        <div class="relative">
+          ${creatorUnlocked ? `
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow flex items-center gap-2 text-sm">
+              Float Rising
+            </div>
+          ` : ''}
 
-  card.innerHTML = `
-    <div class="relative">
-      ${creatorUnlocked ? `
-        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow flex items-center gap-2 text-sm">
-          Float Rising
+          <div class="absolute top-4 left-4 bg-gray-900 text-white px-4 py-2 rounded-full text-sm shadow">
+            VIRAL
+          </div>
+
+          <img src="${p.image || 'https://via.placeholder.com/800?text=Product'}" alt="${p.title}" class="w-full h-80 sm:h-[600px] object-cover" loading="lazy"
+               onerror="this.src='https://via.placeholder.com/800?text=Product'" />
+
+          <div class="p-6 sm:p-10">
+            <h2 class="text-2xl sm:text-4xl font-playfair font-bold text-center mb-4">${p.title}</h2>
+            <p class="text-center text-lg sm:text-xl text-gray-600 mb-6">${generateHook(p.title)}</p>
+
+            ${p.description ? `<p class="text-gray-700 mb-6">${p.description}</p>` : ''}
+
+            <div class="text-center text-yellow-500 font-medium mb-6">
+              ⭐ ${p.rating} • ${p.reviews}+ reviews
+            </div>
+
+            <div class="bg-gray-50 rounded-2xl p-6 mb-8 text-sm sm:text-base">
+              ✨ Why You’ll Love It:<br>
+              ✔ ${p.sold}+ sold<br>
+              ✔ Only ${p.urgency} left<br>
+              ✔ Viral trending find
+            </div>
+
+            <div onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="bg-gray-900 text-white py-5 px-8 rounded-2xl text-center font-bold cursor-pointer hover:opacity-90 mb-4">
+              🔥 See Why It's Viral
+            </div>
+
+            <button onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="w-full py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:opacity-90">
+              Check Price on Amazon →
+            </button>
+
+            <!-- Free Bot Banner inside every product card -->
+            <div class="mt-6 text-center text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
+              Want more viral finds like this every day?<br>
+              <strong>Get 2× daily drops free in Telegram → <a href="https://t.me/floatviral" target="_blank" class="text-blue-600 font-bold hover:underline">@floatviral</a></strong>
+            </div>
+
+            ${!creatorUnlocked ? `
+              <button onclick="openUnlock()" class="w-full mt-6 py-5 border-2 border-dashed border-gray-400 text-gray-700 font-medium rounded-2xl hover:bg-gray-50">
+                🔒 Use Your Own Affiliate ID
+              </button>
+            ` : ''}
+          </div>
         </div>
-      ` : ''}
+      `;
+    }
 
-      <div class="absolute top-4 left-4 bg-gray-900 text-white px-4 py-2 rounded-full text-sm shadow">
-        VIRAL
-      </div>
+    function closeModal() {
+      document.querySelectorAll('#unlockModal, #affiliateModal, #grokModal').forEach(m => m.classList.add('hidden'));
+    }
 
-      <img src="${p.image || 'https://via.placeholder.com/800?text=Product'}" alt="${p.title}" class="w-full h-80 sm:h-[600px] object-cover" loading="lazy"
-           onerror="this.src='https://via.placeholder.com/800?text=Product'" />
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeModal();
+    });
 
-      <div class="p-6 sm:p-10">
-        <h2 class="text-2xl sm:text-4xl font-playfair font-bold text-center mb-4">${p.title}</h2>
-        <p class="text-center text-lg sm:text-xl text-gray-600 mb-6">${generateHook(p.title)}</p>
+    // Pinterest / sharing / Grok helpers (your original code)
+    function generateViralPinHook(title){
+      const word = title.split(" ")[0];
+      const hooks = [
+        `This ${word} is going viral for a reason.`,
+        `TikTok users can't stop buying this ${word}.`,
+        `One simple ${word} that solves a daily problem.`,
+        `People are obsessed with this ${word}.`,
+        `This ${word} sold out twice last month.`
+      ];
+      return hooks[Math.floor(Math.random()*hooks.length)];
+    }
 
-        ${p.description ? `<p class="text-gray-700 mb-6">${p.description}</p>` : ''}
+    function generatePinterestTitle(title){
+      const templates=[
+        `TikTok Made Me Buy This ${title}`,
+        `Viral Amazon Find: ${title}`,
+        `${title} Everyone Is Talking About`,
+        `This ${title} Is Going Viral 🔥`,
+        `Amazon Must Have: ${title}`,
+        `${title} That Solves a Big Problem`,
+        `Trending Gadget: ${title}`
+      ];
+      return templates[Math.floor(Math.random()*templates.length)];
+    }
 
-        <div class="text-center text-yellow-500 font-medium mb-6">
-          ⭐ ${p.rating} • ${p.reviews}+ reviews
-        </div>
+    function cleanTitle(title){
+      return title.replace("Amazon.com:","").replace("Visit the","").replace("Store","").trim();
+    }
 
-        <div class="bg-gray-50 rounded-2xl p-6 mb-8 text-sm sm:text-base">
-          ✨ Why You’ll Love It:<br>
-          ✔ ${p.sold}+ sold<br>
-          ✔ Only ${p.urgency} left<br>
-          ✔ Viral trending find
-        </div>
+    function generatePinterestDescription(p,link){
 
-        <div onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="bg-gray-900 text-white py-5 px-8 rounded-2xl text-center font-bold cursor-pointer hover:opacity-90 mb-4">
-          🔥 See Why It's Viral
-        </div>
-
-        <button onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="w-full py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:opacity-90">
-          Check Price on Amazon →
-        </button>
-
-        <!-- New: Free Bot Banner inside every product card -->
-        <div class="mt-6 text-center text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
-          Want more viral finds like this every day?<br>
-          <strong>Get 2× daily drops free in Telegram → <a href="https://t.me/floatviral" target="_blank" class="text-blue-600 font-bold hover:underline">@floatviral</a></strong>
-        </div>
-
-        ${!creatorUnlocked ? `
-          <button onclick="openUnlock()" class="w-full mt-6 py-5 border-2 border-dashed border-gray-400 text-gray-700 font-medium rounded-2xl hover:bg-gray-50">
-            🔒 Use Your Own Affiliate ID
-          </button>
-        ` : ''}
-      </div>
-    </div>
-  `;
-}
-
-function closeModal() {
-  document.querySelectorAll('#unlockModal, #affiliateModal, #grokModal').forEach(m => m.classList.add('hidden'));
-}
-
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeModal();
-});
-
-// Pinterest / sharing / Grok helpers
-function generateViralPinHook(title){
-  const word = title.split(" ")[0];
-  const hooks = [
-    `This ${word} is going viral for a reason.`,
-    `TikTok users can't stop buying this ${word}.`,
-    `One simple ${word} that solves a daily problem.`,
-    `People are obsessed with this ${word}.`,
-    `This ${word} sold out twice last month.`
-  ];
-  return hooks[Math.floor(Math.random()*hooks.length)];
-}
-
-function generatePinterestTitle(title){
-  const templates=[
-    `TikTok Made Me Buy This ${title}`,
-    `Viral Amazon Find: ${title}`,
-    `${title} Everyone Is Talking About`,
-    `This ${title} Is Going Viral 🔥`,
-    `Amazon Must Have: ${title}`,
-    `${title} That Solves a Big Problem`,
-    `Trending Gadget: ${title}`
-  ];
-  return templates[Math.floor(Math.random()*templates.length)];
-}
-
-function cleanTitle(title){
-  return title.replace("Amazon.com:","").replace("Visit the","").replace("Store","").trim();
-}
-
-function generatePinterestDescription(p,link){
   const title = cleanTitle(p.title);
+
   const rating = p.rating || (4.5 + Math.random()*0.4).toFixed(1);
   const sold = p.sold || Math.floor(Math.random()*500 + 200);
 
   const templates=[
+
 `🔥 Viral Amazon Find: ${title}
 
 ${generateViralPinHook(title)}
@@ -622,54 +689,55 @@ Free Telegram bot → 2 viral products daily: https://t.me/floatviral
 📌 Save this before it goes viral.
 
 #amazonfavorites #tiktokfinds #viralproducts #coolgadgets`
+
   ];
 
   return templates[Math.floor(Math.random()*templates.length)];
-}
 
-async function shareLink(){
-  if(!products.length) return;
-  const p = products[currentIndex];
-  const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
-  const data = await res.json();
-  const smallLink = window.location.origin + "/s.html?id=" + data.id;
-  if(navigator.share){
-    navigator.share({title:p.title,text:smallLink});
-  }else{
-    alert("Copy this link:\n" + smallLink);
-  }
-  addPoints(1);
 }
+    async function shareLink(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
+      const data = await res.json();
+      const smallLink = window.location.origin + "/s.html?id=" + data.id;
+      if(navigator.share){
+        navigator.share({title:p.title,text:smallLink});
+      }else{
+        alert("Copy this link:\n" + smallLink);
+      }
+      addPoints(1);
+    }
 
-async function sharePinterest(){
-  if(!products.length) return;
-  const p = products[currentIndex];
-  const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
-  const data = await res.json();
-  const smallLink = window.location.origin + "/s.html?id=" + data.id;
-  const title = generatePinterestTitle(p.title);
-  const description = generatePinterestDescription(p,smallLink);
-  const pinterestUrl = "https://www.pinterest.com/pin/create/button/?" +
-    "url=" + encodeURIComponent(smallLink) +
-    "&media=" + encodeURIComponent(p.image) +
-    "&description=" + encodeURIComponent(title + "\n\n" + description);
-  window.open(pinterestUrl,"_blank");
-}
+    async function sharePinterest(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
+      const data = await res.json();
+      const smallLink = window.location.origin + "/s.html?id=" + data.id;
+      const title = generatePinterestTitle(p.title);
+      const description = generatePinterestDescription(p,smallLink);
+      const pinterestUrl = "https://www.pinterest.com/pin/create/button/?" +
+        "url=" + encodeURIComponent(smallLink) +
+        "&media=" + encodeURIComponent(p.image) +
+        "&description=" + encodeURIComponent(title + "\n\n" + description);
+      window.open(pinterestUrl,"_blank");
+    }
 
-function copyPinterestDescription(){
-  if(!products.length) return;
-  const p = products[currentIndex];
-  const link = window.location.origin + "/s.html?id=preview";
-  const title = generatePinterestTitle(p.title);
-  const description = generatePinterestDescription(p,link);
-  navigator.clipboard.writeText(title + "\n\n" + description);
-  alert("Pinterest caption copied ✅");
-}
+    function copyPinterestDescription(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const link = window.location.origin + "/s.html?id=preview";
+      const title = generatePinterestTitle(p.title);
+      const description = generatePinterestDescription(p,link);
+      navigator.clipboard.writeText(title + "\n\n" + description);
+      alert("Pinterest caption copied ✅");
+    }
 
-function createGrokVideoPrompt(){
-  if(!products.length) return;
-  const p=products[currentIndex];
-  document.getElementById("grokText").value=`
+    function createGrokVideoPrompt(){
+      if(!products.length) return;
+      const p=products[currentIndex];
+      document.getElementById("grokText").value=`
 Create a 6-second vertical 9:16 product video using the uploaded product card image.
 Structure:
 0-2 seconds: attention grabbing hook
@@ -680,73 +748,79 @@ Include short on-screen text captions.
 Make it optimized for Pinterest, TikTok and Facebook Reels.
 
 Pro tip: Join our free Telegram bot @floatviral for 2 new viral products daily → https://t.me/floatviral
-  `;
-  document.getElementById("grokModal").classList.remove("hidden");
-}
+      `;
+      document.getElementById("grokModal").classList.remove("hidden");
+    }
 
-function copyGrok(){
-  navigator.clipboard.writeText(document.getElementById("grokText").value);
-  alert("Copied ✅");
-}
+    function copyGrok(){
+      navigator.clipboard.writeText(document.getElementById("grokText").value);
+      alert("Copied ✅");
+    }
 
-function openGrok(){
-  copyGrok();
-  window.open("https://x.ai/grok","_blank");
-}
+    function openGrok(){
+      copyGrok();
+      window.open("https://x.ai/grok","_blank");
+    }
 
-function nextProduct(){
-  if(!products.length) return;
-  currentIndex++;
-  if(currentIndex >= products.length){
-    currentIndex = 0;
-    shuffle(products);
-  }
-  renderProduct();
-}
+    function nextProduct(){
+      if(!products.length) return;
+      currentIndex++;
+      if(currentIndex >= products.length){
+        currentIndex = 0;
+        shuffle(products);
+      }
+      renderProduct();
+    }
 
-function prevProduct(){
-  if(!products.length) return;
-  currentIndex = (currentIndex - 1 + products.length) % products.length;
-  renderProduct();
-}
+    function prevProduct(){
+      if(!products.length) return;
+      currentIndex = (currentIndex - 1 + products.length) % products.length;
+      renderProduct();
+    }
 
-const cardElement = document.getElementById("card");
-let startX=0, endX=0;
+    const cardElement = document.getElementById("card");
+    let startX=0, endX=0;
 
-cardElement.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
-cardElement.addEventListener("touchend", e => {
-  endX = e.changedTouches[0].clientX;
-  const diff = startX - endX;
-  if(Math.abs(diff) > 60){
-    if(diff > 0) nextProduct();
-    else prevProduct();
-  }
-});
+    cardElement.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
+    cardElement.addEventListener("touchend", e => {
+      endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      if(Math.abs(diff) > 60){
+        if(diff > 0) nextProduct();
+        else prevProduct();
+      }
+    });
 
-function animateCreators(){
-  let el = document.getElementById("creatorCount");
-  let base = 1200 + Math.floor(Math.random()*200);
-  setInterval(() => {
-    base += Math.floor(Math.random()*3);
-    el.innerText = base;
-  }, 4000);
-}
+    function animateCreators(){
+      let el = document.getElementById("creatorCount");
+      let base = 1200 + Math.floor(Math.random()*200);
+      setInterval(() => {
+        base += Math.floor(Math.random()*3);
+        el.innerText = base;
+      }, 4000);
+    }
 
-let autoTimer;
-function startAutoScroll(){
-  clearInterval(autoTimer);
-  autoTimer = setInterval(() => { nextProduct(); }, 8000);
-}
+    function shuffle(arr){
+      for(let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
 
-// Initial calls
-animateCreators();
-loadProducts();
-updatePointsDisplay();
-updateStatus();
-startAutoScroll();
-</script>
+    let autoTimer;
+    function startAutoScroll(){
+      clearInterval(autoTimer);
+      autoTimer = setInterval(() => { nextProduct(); }, 8000);
+    }
 
-<footer class="text-center text-sm text-gray-500 mt-16 pb-10">
+    // Initial calls
+    animateCreators();
+    loadProducts();
+    updatePointsDisplay();
+    updateStatus();
+    startAutoScroll();
+  </script>
+  <footer class="text-center text-sm text-gray-500 mt-16 pb-10">
   <p>© 2026 Float Rising</p>
   <p class="mt-2">
     🌍 Creators worldwide welcome — translate this page in your browser if needed.
