@@ -841,5 +841,50 @@ Pro tip: Join our free Telegram bot @floatviral for 2 new viral products daily �
     🌍 Creators worldwide welcome — translate this page in your browser if needed.
   </p>
 </footer>
+  </footer>
+
+<script>
+
+// Track events safely
+function trackEvent(action, label) {
+  if (typeof gtag === "function") {
+    gtag('event', action, {
+      event_category: 'homepage',
+      event_label: label
+    });
+  }
+}
+
+// Store product clicks (viral data)
+function recordProductClick(productId) {
+  let data = JSON.parse(localStorage.getItem("viralData")) || {};
+
+  if (!data[productId]) {
+    data[productId] = { clicks: 0 };
+  }
+
+  data[productId].clicks += 1;
+
+  localStorage.setItem("viralData", JSON.stringify(data));
+}
+
+// Auto detect product clicks
+document.addEventListener("click", function(e) {
+  const link = e.target.closest("a");
+  if (!link) return;
+
+  const href = link.getAttribute("href");
+
+  if (href && href.includes("/s.html?id=")) {
+    const productId = href.split("id=")[1].split("&")[0];
+
+    trackEvent("product_click", productId);
+    recordProductClick(productId);
+  }
+});
+
+</script>
+
+</body>
 </body>
 </html>
