@@ -599,56 +599,7 @@ function shuffle(array) {
       return title.replace("Amazon.com:","").replace("Visit the","").replace("Store","").trim();
     }
 
-    function generatePinterestDescription(p,link){
-
-  const title = cleanTitle(p.title);
-
-  const rating = p.rating || (4.5 + Math.random()*0.4).toFixed(1);
-  const sold = p.sold || Math.floor(Math.random()*500 + 200);
-
-  const templates=[
-
-`🔥 ${title}
-
-${generateViralPinHook(title)}
-
-⭐ ${rating} stars
-📦 ${sold}+ sold
-
-See why people are buying it:
-${link}
-
-#amazonfinds #tiktokmademebuyit #viralproducts #pinterestfinds`,
-
-`People can't stop buying this ${title}.
-
-${generateViralPinHook(title)}
-
-⭐ Rated ${rating}
-📦 ${sold}+ sold
-
-View the product here:
-${link}
-
-#amazonmusthaves #trendingproducts #gadgets #amazonfavorites`,
-
-`This ${title} is blowing up online.
-
-${generateViralPinHook(title)}
-
-✔ ${sold}+ sold
-⭐ ${rating} star reviews
-
-See the product here:
-${link}
-
-#amazonfavorites #tiktokfinds #viralproducts #coolgadgets`
-
-  ];
-
-  return templates[Math.floor(Math.random()*templates.length)];
-
-}
+    
     async function shareLink(){
       if(!products.length) return;
       const p = products[currentIndex];
