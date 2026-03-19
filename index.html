@@ -480,15 +480,7 @@ function closeFreeUnlock(){
       if (creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
     }
 
-    function checkCreatorUnlock() {
-      if (creatorPoints >= 200 && !creatorUnlocked) {
-        creatorUnlocked = true;
-        localStorage.setItem("creatorUnlocked", "true");
-        alert("🚀 Creator Mode Unlocked!");
-        location.reload();
-      }
-    }
-
+    
     function updateStatus() {
       const el = document.getElementById("affiliateStatus");
       if (creatorUnlocked) {
