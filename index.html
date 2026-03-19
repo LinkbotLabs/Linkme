@@ -477,7 +477,9 @@ function closeFreeUnlock(){
         if (percent > 100) percent = 100;
         bar.style.width = percent + "%";
       }
-      if (creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
+      if (creatorPoints >= 200) {
+  // do nothing (handled by modal)
+}
     }
 
     function checkCreatorUnlock() {
