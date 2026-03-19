@@ -461,7 +461,13 @@
       updatePointsDisplay();
       checkCreatorUnlock();
     }
+function openFreeUnlock(){
+  document.getElementById("freeUnlockModal").classList.remove("hidden");
+}
 
+function closeFreeUnlock(){
+  document.getElementById("freeUnlockModal").classList.add("hidden");
+}
     function updatePointsDisplay() {
       const el = document.getElementById("creatorPoints");
       const bar = document.getElementById("creatorBar");
