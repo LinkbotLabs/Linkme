@@ -457,7 +457,46 @@ function openUnlock() {
   document.getElementById("unlockModal").classList.remove("hidden");
 }
 
+async function activateCreator() {
+  const code = document.getElementById("unlockCodeInput")
+    .value.trim()
+    .toUpperCase();
 
+  try {
+    const res = await fetch("/api/validate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ code })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("creatorUnlocked", "true");
+      creatorUnlocked = true;
+
+      document.getElementById("unlockModal").classList.add("hidden");
+
+      alert("✅ Creator Mode activated!\nNow enter your Amazon affiliate tag.");
+
+      setTimeout(() => {
+        document.getElementById("affiliateModal").classList.remove("hidden");
+      }, 400);
+
+      updateStatus();
+      renderProduct();
+
+    } else {
+      alert("Invalid or expired code.\nPlease check your email or contact support.");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error. Try again.");
+  }
+}
 function saveAffiliate() {
   if (!creatorUnlocked) {
     alert("You need to activate Creator Mode first (200 points + valid code).");
