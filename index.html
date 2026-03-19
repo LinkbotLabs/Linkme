@@ -777,6 +777,12 @@ Free Telegram bot → 2 viral products daily: https://t.me/floatviral
         "url=" + encodeURIComponent(smallLink) +
         "&media=" + encodeURIComponent(p.image) +
         "&description=" + encodeURIComponent(title + "\n\n" + description);
+      const productKey = data.id;
+
+if (!localStorage.getItem(`pin_${productKey}`)) {
+  addPoints(1);
+  localStorage.setItem(`pin_${productKey}`, "true");
+}
       window.open(pinterestUrl,"_blank");
     }
 
