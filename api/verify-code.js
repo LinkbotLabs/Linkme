@@ -1,12 +1,9 @@
 export default function handler(req, res) {
   const { code } = req.body;
 
-  // Your secret codes (HIDDEN from users)
-  const validCodes = [
-    "FR-TEST2026",
-    "FR-PAID-001",
-    "FR-PAID-002"
-  ];
+  const validCodes = process.env.VALID_CODES
+    ? process.env.VALID_CODES.split(",")
+    : [];
 
   if (validCodes.includes(code)) {
     return res.status(200).json({ success: true });
