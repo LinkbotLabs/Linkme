@@ -821,6 +821,12 @@ Pro tip: Join our free Telegram bot @floatviral for 2 new viral products daily â
 
     function openGrok(){
       copyGrok();
+       const productKey = currentIndex;
+
+  if (!localStorage.getItem(`video_${productKey}`)) {
+    addPoints(10);
+    localStorage.setItem(`video_${productKey}`, "true");
+    }
       window.open("https://x.ai/grok","_blank");
     }
 
