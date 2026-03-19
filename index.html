@@ -480,7 +480,11 @@ function closeFreeUnlock(){
       if (creatorPoints >= 200) alert("🎉 Creator Mode Unlocked!");
     }
 
-    
+    function checkCreatorUnlock() {
+  if (creatorPoints >= 200) {
+    openFreeUnlock();
+  }
+}
     function updateStatus() {
       const el = document.getElementById("affiliateStatus");
       if (creatorUnlocked) {
