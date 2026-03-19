@@ -461,12 +461,7 @@ function activateCreator() {
   const code = document.getElementById("unlockCodeInput").value.trim().toUpperCase();
 
   // ── CHANGE THIS ARRAY with your real codes ─────────────────────────────
-  const validCodes = [
-    "FR-ABC123XY",
-    "FR-XYZ789AB",
-    "FR-TEST2026",
-    // add your paid codes here
-  ];
+ 
 
   if (validCodes.includes(code)) {
     localStorage.setItem("creatorUnlocked", "true");
