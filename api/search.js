@@ -154,7 +154,26 @@ export default async function handler(req, res) {
     const keepCount = Math.floor(existing.length * (1 - ROTATION));
     const newCount = DAILY_LIMIT - keepCount;
 
-    
+    const MAX_POOL = 90; // 3 days worth
+
+let pool = [...existing, ...sorted];
+
+// remove duplicates
+const uniquePool = [];
+const seenIds = new Set();
+
+for (const p of pool) {
+  if (!seenIds.has(p.id)) {
+    seenIds.add(p.id);
+    uniquePool.push(p);
+  }
+}
+
+// limit total pool size
+const trimmedPool = uniquePool.slice(0, MAX_POOL);
+
+// final display (top 30)
+const finalProducts = trimmedPool.slice(0, DAILY_LIMIT);
     cache.timestamp = now;
     cache.data = finalProducts;
     cache.fetching = false;
