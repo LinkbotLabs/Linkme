@@ -474,15 +474,7 @@ function closeFreeUnlock(){
     }
     updateStatus();
 
-    function activateCreator() {
-      const code = document.getElementById("unlockCodeInput").value.trim();
-      if (code === "CREATOR19") {
-        localStorage.setItem("creatorUnlocked", "true");
-        alert("Creator Mode Activated ✅");
-        location.reload();
-      } else alert("Invalid Code");
-    }
-
+    
     function takeScreenshotHint() {
       alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
     }
