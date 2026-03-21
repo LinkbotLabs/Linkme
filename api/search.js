@@ -154,15 +154,7 @@ export default async function handler(req, res) {
     const keepCount = Math.floor(existing.length * (1 - ROTATION));
     const newCount = DAILY_LIMIT - keepCount;
 
-    let finalProducts = [
-      ...sorted.slice(0, newCount),
-      ...existing.slice(0, keepCount)
-    ];
-
-    if (finalProducts.length < DAILY_LIMIT) {
-      finalProducts = sorted.slice(0, DAILY_LIMIT);
-    }
-
+    
     cache.timestamp = now;
     cache.data = finalProducts;
     cache.fetching = false;
