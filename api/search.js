@@ -6,43 +6,61 @@ const cache = {
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-const keywords = [
-  "amazon trending gadgets",
-  "viral kitchen gadgets amazon",
-  "amazon best seller tech",
-  "tiktok viral home gadgets amazon",
-  "amazon impulse buy gadgets",
-  "amazon trending gadgets 2026",
-  "viral amazon kitchen finds 2026",
-  "tiktok viral beauty products amazon",
-  "amazon viral tech gadgets 2026",
-  "trending amazon impulse buys 2026",
-  "amazon best seller kitchen tools 2026",
-  "tiktok viral wellness gadgets amazon",
+/* ---------------- KEYWORD ENGINE ---------------- */
 
-  "amazon weird gadgets",
-  "amazon problem solving gadgets",
-  "amazon must have gadgets",
-  "tiktok made me buy it amazon",
-  "amazon hidden gem gadgets",
-  "amazon life hack gadgets",
-  "viral amazon home finds",
-  "amazon cool gadgets under 50",
-  "amazon smart home gadgets",
-  "amazon car gadgets trending",
-  "amazon travel gadgets",
-  "amazon desk gadgets",
-  "amazon bedroom gadgets",
-  "amazon bathroom gadgets",
-  "amazon organization gadgets",
-  "amazon cleaning gadgets",
-  "amazon kitchen organization tools",
-
-  "amazon problem solving kitchen gadgets",
-  "amazon space saving gadgets",
-  "amazon cleaning hacks gadgets",
-  "amazon aesthetic home gadgets"
+const intents = [
+  "trending",
+  "viral",
+  "best seller",
+  "must have",
+  "hidden gems",
+  "problem solving",
+  "weird",
+  "aesthetic",
+  "smart",
+  "budget"
 ];
+
+const categories = [
+  "kitchen gadgets",
+  "home gadgets",
+  "tech gadgets",
+  "beauty products",
+  "car accessories",
+  "travel gadgets",
+  "desk gadgets",
+  "cleaning tools",
+  "organization tools",
+  "bedroom gadgets",
+  "bathroom gadgets",
+  "wellness gadgets"
+];
+
+const platforms = [
+  "",
+  "tiktok",
+  "amazon",
+  "tiktok made me buy it",
+  "viral finds"
+];
+
+function generateKeywords(count = 6) {
+  const combos = [];
+
+  for (const i of intents) {
+    for (const c of categories) {
+      for (const p of platforms) {
+        combos.push(`${p} ${i} ${c} 2026`.trim());
+      }
+    }
+  }
+
+  return combos
+    .sort(() => 0.5 - Math.random())
+    .slice(0, count);
+}
+
+/* ---------------- HANDLER ---------------- */
 
 export default async function handler(req, res) {
 
@@ -65,18 +83,18 @@ export default async function handler(req, res) {
 
     cache.fetching = true;
 
-    const shuffledKeywords = keywords
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 2);   // reduced Google searches
+    const shuffledKeywords = generateKeywords(4);
 
     const discovered = [];
     const seenASIN = new Set();
 
     for (const keyword of shuffledKeywords) {
 
-      const query = `${keyword} site:amazon.com -book -kindle`;
+      const query = `${keyword} (site:amazon.com OR site:pinterest.com OR site:tiktok.com) -book -kindle`;
 
-      for (const start of [1]) {
+      const starts = Math.random() > 0.5 ? [1, 11] : [1];
+
+      for (const start of starts) {
 
         const googleRes = await fetch(
           `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
@@ -117,17 +135,17 @@ export default async function handler(req, res) {
 
           seenASIN.add(asin);
 
-          if (discovered.length >= 50) break;
+          if (discovered.length >= 60) break;
 
         }
 
-        if (discovered.length >= 50) break;
-
+        if (discovered.length >= 60) break;
       }
 
-      if (discovered.length >= 50) break;
-
+      if (discovered.length >= 60) break;
     }
+
+    /* ---------------- MERGE + ROTATE ---------------- */
 
     const DAILY_LIMIT = 30;
     const MAX_POOL = 120;
@@ -146,12 +164,20 @@ export default async function handler(req, res) {
       }
     }
 
-    let finalProducts;
+    /* 🔄 PARTIAL REFRESH (key improvement) */
+    const ROTATION = 0.4;
 
-    if (unique.length >= MAX_POOL) {
+    const keepCount = Math.floor(existing.length * (1 - ROTATION));
+    const newCount = DAILY_LIMIT - keepCount;
+
+    let finalProducts = [
+      ...existing.slice(0, keepCount),
+      ...unique.slice(0, newCount)
+    ];
+
+    /* 🧠 Fallback if not enough */
+    if (finalProducts.length < DAILY_LIMIT) {
       finalProducts = unique.slice(0, DAILY_LIMIT);
-    } else {
-      finalProducts = unique.slice(0, existing.length + DAILY_LIMIT);
     }
 
     cache.timestamp = now;
@@ -173,8 +199,7 @@ export default async function handler(req, res) {
 
 }
 
-
-/* HELPERS */
+/* ---------------- HELPERS ---------------- */
 
 function cleanTitle(title) {
   return title
@@ -186,9 +211,7 @@ function cleanTitle(title) {
 }
 
 function extractASIN(url) {
-
   try {
-
     const parsed = new URL(url);
 
     const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
@@ -199,5 +222,4 @@ function extractASIN(url) {
   } catch {
     return null;
   }
-
 }
