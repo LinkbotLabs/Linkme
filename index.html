@@ -474,7 +474,38 @@ function closeFreeUnlock(){
     }
     updateStatus();
 
-    
+    async function activateCreator() {
+  const code = document.getElementById("unlockCodeInput").value.trim();
+
+  if (!code) {
+    alert("Enter your code");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/verify-code", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ code })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("creatorUnlocked", "true");
+      alert("Creator Mode Activated ✅");
+      location.reload();
+    } else {
+      alert("Invalid Code");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Error validating code");
+  }
+}
     function takeScreenshotHint() {
       alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
     }
