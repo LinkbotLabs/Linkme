@@ -126,20 +126,7 @@ export default async function handler(req, res) {
 
     /* -------- CAPTION -------- */
 
-    const caption = `${hook}
-
-${product.title}
-
-${product.description || "Creators are sharing this trending product right now."}
-
-🔎 View product card
-https://floatrising.com/s.html?id=${shareId}&utm_source=telegram&utm_campaign=bot&utm_content=${shareId}
-
-📦 Get today's creator pack
-https://t.me/floatrisingbot?start=pack
-
-${cta}`;
-
+    
     /* -------- POST TO TELEGRAM -------- */
 
     const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
