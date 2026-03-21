@@ -9,42 +9,22 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 /* ---------------- KEYWORD ENGINE ---------------- */
 
 const intents = [
-  "trending",
-  "viral",
-  "best seller",
-  "must have",
-  "hidden gems",
-  "problem solving",
-  "weird",
-  "aesthetic",
-  "smart",
-  "budget"
+  "trending", "viral", "best seller", "must have",
+  "hidden gems", "problem solving", "weird", "aesthetic", "smart"
 ];
 
 const categories = [
-  "kitchen gadgets",
-  "home gadgets",
-  "tech gadgets",
-  "beauty products",
-  "car accessories",
-  "travel gadgets",
-  "desk gadgets",
-  "cleaning tools",
-  "organization tools",
-  "bedroom gadgets",
-  "bathroom gadgets",
-  "wellness gadgets"
+  "kitchen gadgets", "home gadgets", "tech gadgets",
+  "beauty products", "car accessories", "travel gadgets",
+  "desk gadgets", "cleaning tools", "organization tools",
+  "bedroom gadgets", "bathroom gadgets"
 ];
 
 const platforms = [
-  "",
-  "tiktok",
-  "amazon",
-  "tiktok made me buy it",
-  "viral finds"
+  "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
 ];
 
-function generateKeywords(count = 6) {
+function generateKeywords(count = 4) {
   const combos = [];
 
   for (const i of intents) {
@@ -55,19 +35,14 @@ function generateKeywords(count = 6) {
     }
   }
 
-  return combos
-    .sort(() => 0.5 - Math.random())
-    .slice(0, count);
+  return combos.sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
 /* ---------------- HANDLER ---------------- */
 
 export default async function handler(req, res) {
 
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=86400, stale-while-revalidate"
-  );
+  res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate");
 
   const now = Date.now();
 
@@ -130,13 +105,15 @@ export default async function handler(req, res) {
             title: cleanTitle(item.title),
             description: description.substring(0, 140),
             image,
-            link: cleanLink
+            link: cleanLink,
+
+            // SIMPLE AUTO SCORE (no frontend needed)
+            score: Math.random() * 5 + Date.now() / 100000000000
           });
 
           seenASIN.add(asin);
 
           if (discovered.length >= 60) break;
-
         }
 
         if (discovered.length >= 60) break;
@@ -145,10 +122,9 @@ export default async function handler(req, res) {
       if (discovered.length >= 60) break;
     }
 
-    /* ---------------- MERGE + ROTATE ---------------- */
+    /* ---------------- MERGE ---------------- */
 
     const DAILY_LIMIT = 30;
-    const MAX_POOL = 120;
 
     let existing = cache.data || [];
 
@@ -164,20 +140,24 @@ export default async function handler(req, res) {
       }
     }
 
-    /* 🔄 PARTIAL REFRESH (key improvement) */
+    /* ---------------- SORT (VIRAL STYLE) ---------------- */
+
+    const sorted = unique.sort((a, b) => b.score - a.score);
+
+    /* ---------------- ROTATION ---------------- */
+
     const ROTATION = 0.4;
 
     const keepCount = Math.floor(existing.length * (1 - ROTATION));
     const newCount = DAILY_LIMIT - keepCount;
 
     let finalProducts = [
-      ...existing.slice(0, keepCount),
-      ...unique.slice(0, newCount)
+      ...sorted.slice(0, newCount),
+      ...existing.slice(0, keepCount)
     ];
 
-    /* 🧠 Fallback if not enough */
     if (finalProducts.length < DAILY_LIMIT) {
-      finalProducts = unique.slice(0, DAILY_LIMIT);
+      finalProducts = sorted.slice(0, DAILY_LIMIT);
     }
 
     cache.timestamp = now;
@@ -196,7 +176,6 @@ export default async function handler(req, res) {
     });
 
   }
-
 }
 
 /* ---------------- HELPERS ---------------- */
