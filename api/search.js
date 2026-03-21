@@ -11,14 +11,25 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 const intents = [
   "trending", "viral", "best seller", "must have",
   "hidden gems", "problem solving", "weird", "aesthetic", "smart"
+"luxury",
+"minimalist",
+"space saving",
+"portable",
+"high tech"
 ];
+
 
 const categories = [
   "kitchen gadgets", "home gadgets", "tech gadgets",
   "beauty products", "car accessories", "travel gadgets",
   "desk gadgets", "cleaning tools", "organization tools",
   "bedroom gadgets", "bathroom gadgets"
+"pet gadgets",
+"baby products",
+"fitness gadgets",
+"outdoor gear"
 ];
+
 
 const platforms = [
   "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
