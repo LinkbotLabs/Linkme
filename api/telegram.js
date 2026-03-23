@@ -68,7 +68,14 @@ async function trackUser(userId, source = "direct") {
 
     /* -------- START -------- */
 
-    if (text === "/start") {
+    if (text.startsWith("/start")) {
+
+  // ✅ Extract source (important)
+  const parts = text.split(" ");
+  const source = parts[1] || "direct";
+
+  // ✅ TRACK USER
+  await trackUser(userId, source);
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
