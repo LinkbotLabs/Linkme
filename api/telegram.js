@@ -42,7 +42,7 @@ async function trackUser(userId, source = "direct") {
   }
 }
 
-
+/* -------- HELPER: CLEAN + AFFILIATE -------- */
     function cleanAmazonUrl(url) {
       const tag = "davidshort-21";
 
