@@ -550,10 +550,7 @@ function closeFreeUnlock(){
 
     products = (data.products || []).filter(p => p.link && p.image);
 
-    if (products.length === 0) {
-      card.innerHTML = " Sourcing viral products.";
-      return;
-    }
+    
         shuffle(products);
         currentIndex = 0;
         renderProduct();
