@@ -20,29 +20,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ ok: true });
     }
 
-    const chatId = update.message.chat.id;
-    const text = (update.message.text || "").trim();
-const userId = update.message.from.id;
-    /const userId = update.message.from.id;
-
-// ✅ ADD THIS HERE
-async function trackUser(userId, source = "direct") {
-  try {
-    await fetch("https://floatrising.com/api/track-user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userId,
-        source,
-        timestamp: Date.now()
-      })
-    });
-  } catch (e) {
-    console.log("Tracking failed");
-  }
-}* -------- HELPER: CLEAN + AFFILIATE -------- */
+    -------- HELPER: CLEAN + AFFILIATE -------- */
 
     function cleanAmazonUrl(url) {
       const tag = "davidshort-21";
