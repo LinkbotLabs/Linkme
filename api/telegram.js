@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
     const chatId = update.message.chat.id;
     const text = (update.message.text || "").trim();
-
+const userId = update.message.from.id;
     /* -------- HELPER: CLEAN + AFFILIATE -------- */
 
     function cleanAmazonUrl(url) {
