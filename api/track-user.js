@@ -1,11 +1,13 @@
-let users = new Set(); // temporary in-memory storage
+let users = new Set();
+let sources = {}; // track traffic sources
 
 export default async function handler(req, res) {
 
-  // 👉 GET = view stats in browser
+  // 👉 GET = view full stats
   if (req.method === "GET") {
     return res.status(200).json({
-      totalUsers: users.size
+      totalUsers: users.size,
+      sources
     });
   }
 
@@ -21,15 +23,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing userId" });
     }
 
-    // ✅ Add user (unique)
+    const src = source || "direct";
+
+    // ✅ Track unique users
     const isNewUser = !users.has(userId);
     users.add(userId);
 
-    // 📊 Log useful info
+    // ✅ Track source counts
+    sources[src] = (sources[src] || 0) + 1;
+
+    // 📊 Logs
     console.log(
-      isNewUser ? "🆕 New User" : "↩️ Returning User",
+      isNewUser ? "🆕 New User" : "↩️ Returning",
       "| ID:", userId,
-      "| Source:", source || "direct",
+      "| Source:", src,
       "| Total:", users.size
     );
 
