@@ -42,7 +42,6 @@ export default async function handler(req, res) {
     }
 
     /* -------- AFFILIATE STORAGE -------- */
-
     async function saveAffiliate(userId, affiliateId) {
       try {
         await fetch("https://floatrising.com/api/affiliate/save", {
@@ -66,7 +65,6 @@ export default async function handler(req, res) {
     }
 
     /* -------- AMAZON CLEANER -------- */
-
     function cleanAmazonUrl(url, tag) {
       try {
         if (!url) return url;
@@ -88,7 +86,6 @@ export default async function handler(req, res) {
     }
 
     /* -------- START -------- */
-
     if (text.startsWith("/start")) {
 
       const parts = text.split(" ");
@@ -115,7 +112,6 @@ First time? Set your affiliate:
     }
 
     /* -------- MORE -------- */
-
     if (text === "/more") {
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -123,10 +119,7 @@ First time? Set your affiliate:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
-          text:
-`🔥 Discover more viral products
-
-https://floatrising.com`
+          text: `🔥 Discover more viral products\n\nhttps://floatrising.com`
         })
       });
 
@@ -134,18 +127,17 @@ https://floatrising.com`
     }
 
     /* -------- PACK -------- */
-
     if (text.startsWith("/pack")) {
 
       const parts = text.split(" ");
       let affiliateId = parts[1];
 
-      // ✅ Save affiliate if provided
+      // Save affiliate if provided
       if (affiliateId) {
         await saveAffiliate(userId, affiliateId);
       }
 
-      // ✅ If not provided, try Redis
+      // Retrieve affiliate if not provided
       if (!affiliateId) {
         affiliateId = await getAffiliate(userId);
 
@@ -167,7 +159,6 @@ https://floatrising.com`
       const data = await apiRes.json();
 
       if (!data.products || data.products.length === 0) {
-
         await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -181,7 +172,6 @@ https://floatrising.com`
       }
 
       /* -------- SCORING -------- */
-
       const scored = data.products.map(p => {
 
         const rating = p.rating || 4;
@@ -194,13 +184,11 @@ https://floatrising.com`
           price * 0.5;
 
         return { ...p, viralScore };
-
       });
 
       const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
 
       /* -------- PICKS -------- */
-
       const picks = [];
       const usedIds = new Set();
 
@@ -220,21 +208,16 @@ https://floatrising.com`
       const products = picks;
 
       /* -------- HEADER -------- */
-
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
-          text:
-`📦 Creator Pack Ready
-
-3 product cards coming 👇`
+          text: `📦 Creator Pack Ready\n\n3 product cards coming 👇`
         })
       });
 
       /* -------- SEND PRODUCTS -------- */
-
       let index = 1;
 
       for (const product of products) {
@@ -258,8 +241,9 @@ https://floatrising.com`
 
         const shareId = saveData.id;
 
+        /* ✅ SAME FORMAT AS CHANNEL */
         const productUrl =
-          `https://floatrising.com/api/share-page?id=${shareId}&utm_source=telegram_bot&utm_campaign=pack&utm_content=${index}`;
+          `https://floatrising.com/s.html?id=${shareId}&utm_source=telegram_bot&utm_campaign=pack&utm_content=${index}&aff=${affiliateId}`;
 
         const cardImage =
           `https://floatrising.com/api/card-image?id=${shareId}`;
@@ -301,16 +285,12 @@ Tap below 👇`;
       }
 
       /* -------- FOOTER -------- */
-
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
-          text:
-`📦 Pack delivered
-
-Type /more for more products.`
+          text: `📦 Pack delivered\n\nType /more for more products.`
         })
       });
 
@@ -318,7 +298,6 @@ Type /more for more products.`
     }
 
     /* -------- DEFAULT -------- */
-
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -331,9 +310,7 @@ Type /more for more products.`
     return res.status(200).json({ ok: true });
 
   } catch (error) {
-
     console.error("BOT ERROR:", error);
     return res.status(200).json({ ok: true });
-
   }
 }
