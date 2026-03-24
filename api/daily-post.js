@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     /* -------- HELPER: CLEAN + AFFILIATE LINK -------- */
 
     function cleanAmazonUrl(url) {
-      const tag = "davidshort-21"; // ✅ YOUR TAG
+      const tag = "davidshort-21";
 
       try {
         if (!url) return url;
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       }
     }
 
-    /* -------- FETCH PRODUCTS -------- */
+    /* -------- FETCH PRODUCTS (CAN SWITCH TO /api/feed LATER) -------- */
 
     const apiRes = await fetch("https://floatrising.com/api/search");
     const data = await apiRes.json();
@@ -64,21 +64,19 @@ export default async function handler(req, res) {
     const pool = sorted.slice(0, 5);
     const product = pool[Math.floor(Math.random() * pool.length)];
 
-    /* -------- SAFETY CHECK -------- */
-
     if (!product.image) {
       console.log("Missing image, skipping");
       return res.status(200).json({ message: "Skipped (no image)" });
     }
 
-    /* -------- 🔥 INJECT AFFILIATE LINK -------- */
+    /* -------- INJECT AFFILIATE -------- */
 
     const productWithAffiliate = {
       ...product,
       link: cleanAmazonUrl(product.url || product.link)
     };
 
-    /* -------- CREATE PRODUCT CARD -------- */
+    /* -------- CREATE SHARE CARD (THIS FEEDS YOUR LOOP) -------- */
 
     const shareRes = await fetch("https://floatrising.com/api/share", {
       method: "POST",
@@ -104,10 +102,8 @@ export default async function handler(req, res) {
       "🚀 Creators are jumping on this",
       "👀 This one is getting attention",
       "💡 Trending product spotted",
-      "🔥 This could be your next viral post",
       "📈 People are sharing this fast",
-      "⚡ This just started trending",
-      "🛍️ This one is everywhere right now"
+      "⚡ This just started trending"
     ];
 
     const hook = hooks[Math.floor(Math.random() * hooks.length)];
@@ -118,13 +114,26 @@ export default async function handler(req, res) {
       "🔥 Post it. Test it. Repeat.",
       "🚀 Try this in your next post",
       "💡 Add this to your content loop",
-      "📈 This could convert well",
-      "👀 Worth testing today"
+      "📈 This could convert well"
     ];
 
     const cta = ctas[Math.floor(Math.random() * ctas.length)];
 
-    /* -------- CAPTION -------- */
+    /* -------- PROMO BLOCK (THIS IS THE KEY ADDITION) -------- */
+
+    const promo = `
+
+💰 Creator Opportunity
+
+• Auto-add your Amazon affiliate ID  
+• Get your product cards featured  
+• Use the bot to generate viral content  
+
+👉 Start here: https://floatrising.com
+👉 Get products: https://t.me/FloatRisingBot
+`;
+
+    /* -------- FINAL CAPTION -------- */
 
     const caption = `${hook}
 
@@ -133,10 +142,13 @@ ${product.title}
 ${product.description || "Creators are sharing this trending product right now."}
 
 🔎 View product card
-https://floatrising.com/s.html?id=${shareId}&utm_source=telegram&utm_campaign=bot&utm_content=${shareId}
+https://floatrising.com/s.html?id=${shareId}&utm_source=telegram&utm_campaign=channel&utm_content=${shareId}
 
-${cta}`;
-    /* -------- POST TO TELEGRAM -------- */
+${cta}
+
+${promo}`;
+
+    /* -------- POST TO TELEGRAM CHANNEL -------- */
 
     const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
       method: "POST",
@@ -153,12 +165,9 @@ ${cta}`;
     const tgData = await tgRes.json();
     console.log("Telegram response:", tgData);
 
-    /* -------- SUCCESS -------- */
-
     return res.status(200).json({
       message: "Posted",
-      product: product.title,
-      affiliateLink: productWithAffiliate.link
+      product: product.title
     });
 
   } catch (error) {
