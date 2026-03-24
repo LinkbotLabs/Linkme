@@ -542,7 +542,59 @@ function closeFreeUnlock(){
     }
     updateStatus();
 
-    
+    async function activateCreator() {
+  const inputEl = document.getElementById("unlockCode");
+  const code = inputEl ? inputEl.value.trim() : "";
+
+  if (!code) {
+    alert("Enter your code");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/verify-code", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ code })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("creatorUnlocked", "true");
+
+      // update global state if exists
+      if (typeof creatorUnlocked !== "undefined") {
+        creatorUnlocked = true;
+      }
+
+      if (typeof updateStatus === "function") {
+        updateStatus();
+      }
+
+      alert("Creator Mode Activated ✅");
+
+      // Close unlock modal
+      const unlockModal = document.getElementById("unlockModal");
+      if (unlockModal) unlockModal.classList.add("hidden");
+
+      // Open affiliate modal
+      setTimeout(() => {
+        const affiliateModal = document.getElementById("affiliateModal");
+        if (affiliateModal) affiliateModal.classList.remove("hidden");
+      }, 300);
+
+    } else {
+      alert("Invalid Code");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Error validating code");
+  }
+}
     function takeScreenshotHint() {
       alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
     }
