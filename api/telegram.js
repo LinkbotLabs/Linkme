@@ -118,8 +118,7 @@ https://floatrising.com`
 
     if (text === "/pack") {
 
-      const apiRes = await fetch("https://floatrising.com/api/search");
-      const data = await apiRes.json();
+      
 
       if (!data.products || data.products.length === 0) {
 
