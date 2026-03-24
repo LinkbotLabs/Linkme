@@ -24,14 +24,12 @@ export default async function handler(req, res) {
     const text = (update.message.text || "").trim();
     const userId = update.message.from.id;
 
-    /* -------- TRACKING FUNCTION -------- */
+    /* -------- TRACKING -------- */
     async function trackUser(userId, source = "direct") {
       try {
         await fetch("https://floatrising.com/api/track-user", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId,
             source,
@@ -67,7 +65,8 @@ export default async function handler(req, res) {
       }
     }
 
-    /* -------- HELPER: CLEAN + AFFILIATE -------- */
+    /* -------- AMAZON CLEANER -------- */
+
     function cleanAmazonUrl(url, tag) {
       try {
         if (!url) return url;
@@ -105,12 +104,10 @@ export default async function handler(req, res) {
           text:
 `🔥 Float Rising Creator Bot
 
-Send /pack to receive 3 viral products.
+Send /pack to receive viral products.
 
-👉 First time? Use:
-/pack your-affiliate-id
-
-The bot will remember it automatically.`
+First time? Set your affiliate:
+👉 /pack YOUR-AFFILIATE-ID`
         })
       });
 
@@ -143,7 +140,12 @@ https://floatrising.com`
       const parts = text.split(" ");
       let affiliateId = parts[1];
 
-      // ✅ If no affiliate passed → try to load saved one
+      // ✅ Save affiliate if provided
+      if (affiliateId) {
+        await saveAffiliate(userId, affiliateId);
+      }
+
+      // ✅ If not provided, try Redis
       if (!affiliateId) {
         affiliateId = await getAffiliate(userId);
 
@@ -153,17 +155,12 @@ https://floatrising.com`
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               chat_id: chatId,
-              text: "❗ Please set your affiliate ID:\n/pack your-affiliate-id"
+              text: "❗ Please set your affiliate ID:\n/pack YOUR-AFFILIATE-ID"
             })
           });
 
           return res.status(200).json({ ok: true });
         }
-      }
-
-      // ✅ If user DID provide affiliate → save it
-      if (parts[1]) {
-        await saveAffiliate(userId, parts[1]);
       }
 
       const apiRes = await fetch("https://floatrising.com/api/feed");
@@ -183,7 +180,7 @@ https://floatrising.com`
         return res.status(200).json({ ok: true });
       }
 
-      /* -------- VIRAL SCORING -------- */
+      /* -------- SCORING -------- */
 
       const scored = data.products.map(p => {
 
@@ -339,5 +336,4 @@ Type /more for more products.`
     return res.status(200).json({ ok: true });
 
   }
-
 }
