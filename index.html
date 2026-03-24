@@ -522,7 +522,31 @@ function closeFreeUnlock(){
       alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
     }
 
-    
+    function saveAffiliate() {
+  if (!creatorUnlocked) {
+    alert("Please unlock Creator Mode first.");
+    return;
+  }
+
+  const val = document.getElementById("affiliateInput").value.trim();
+
+  if (!val.includes("-")) {
+    document.getElementById("affiliateError").innerText = "Format example: yourname-20";
+    return;
+  }
+
+  // ✅ Save to memory + storage
+  affiliateId = val;
+  localStorage.setItem("affiliateId", val);
+
+  // ✅ Close modal
+  document.getElementById("affiliateModal").classList.add("hidden");
+
+  updateStatus();
+
+  // Optional: re-render product to reflect affiliate usage
+  renderProduct();
+}
     function appendAffiliate(url) {
       const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
       if (url.includes("tag=")) return url;
