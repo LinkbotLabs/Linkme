@@ -21,8 +21,6 @@ const categories = [
   "pet gadgets", "baby products", "fitness gadgets", "outdoor gear"
 ];
 
-
-
 const platforms = [
   "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
 ];
@@ -39,6 +37,40 @@ function generateKeywords(count = 4) {
   }
 
   return combos.sort(() => 0.5 - Math.random()).slice(0, count);
+}
+
+/* ---------------- GOOGLE KEY FALLBACK ---------------- */
+
+const GOOGLE_KEYS = [
+  process.env.GOOGLE_KEY,
+  process.env.GOOGLE_KEY_1
+].filter(Boolean);
+
+async function fetchWithFallback(baseUrl) {
+  for (let i = 0; i < GOOGLE_KEYS.length; i++) {
+    const key = GOOGLE_KEYS[i];
+
+    const url = baseUrl.replace(process.env.GOOGLE_KEY, key);
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      // Detect quota / errors
+      if (res.status === 403 || data.error) {
+        console.log(`Google key ${i + 1} failed/quota exceeded, switching...`);
+        continue;
+      }
+
+      return data;
+
+    } catch (err) {
+      console.log(`Google key ${i + 1} error, trying next...`);
+      continue;
+    }
+  }
+
+  throw new Error("All Google API keys failed or quota exceeded");
 }
 
 /* ---------------- HANDLER ---------------- */
@@ -74,11 +106,9 @@ export default async function handler(req, res) {
 
       for (const start of starts) {
 
-        const googleRes = await fetch(
-          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
-        );
+        const baseUrl = `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`;
 
-        const data = await googleRes.json();
+        const data = await fetchWithFallback(baseUrl);
 
         if (!data.items) continue;
 
@@ -156,24 +186,25 @@ export default async function handler(req, res) {
 
     const MAX_POOL = 90; // 3 days worth
 
-let pool = [...existing, ...sorted];
+    let pool = [...existing, ...sorted];
 
-// remove duplicates
-const uniquePool = [];
-const seenIds = new Set();
+    // remove duplicates
+    const uniquePool = [];
+    const seenIds = new Set();
 
-for (const p of pool) {
-  if (!seenIds.has(p.id)) {
-    seenIds.add(p.id);
-    uniquePool.push(p);
-  }
-}
+    for (const p of pool) {
+      if (!seenIds.has(p.id)) {
+        seenIds.add(p.id);
+        uniquePool.push(p);
+      }
+    }
 
-// limit total pool size
-const trimmedPool = uniquePool.slice(0, MAX_POOL);
+    // limit total pool size
+    const trimmedPool = uniquePool.slice(0, MAX_POOL);
 
-// final display (top 30)
-const finalProducts = trimmedPool.slice(0, DAILY_LIMIT);
+    // final display (top 30)
+    const finalProducts = trimmedPool.slice(0, DAILY_LIMIT);
+
     cache.timestamp = now;
     cache.data = finalProducts;
     cache.fetching = false;
