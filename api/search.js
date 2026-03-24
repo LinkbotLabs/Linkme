@@ -7,7 +7,6 @@ const cache = {
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
 /* ---------------- KEYWORD ENGINE ---------------- */
-
 const intents = [
   "trending", "viral", "best seller", "must have",
   "hidden gems", "problem solving", "weird", "aesthetic", "smart",
@@ -21,6 +20,8 @@ const categories = [
   "bedroom gadgets", "bathroom gadgets",
   "pet gadgets", "baby products", "fitness gadgets", "outdoor gear"
 ];
+
+
 
 const platforms = [
   "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
@@ -40,39 +41,6 @@ function generateKeywords(count = 4) {
   return combos.sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
-/* ---------------- GOOGLE KEY FALLBACK ---------------- */
-
-const GOOGLE_KEYS = [
-  process.env.GOOGLE_KEY,
-  process.env.GOOGLE_KEY_1
-].filter(Boolean);
-
-async function fetchWithFallback(baseUrlTemplate) {
-  for (let i = 0; i < GOOGLE_KEYS.length; i++) {
-    const key = GOOGLE_KEYS[i];
-
-    const url = baseUrlTemplate.replace("__API_KEY__", key);
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-
-      if (res.status === 403 || data.error) {
-        console.log(`Google key ${i + 1} failed/quota exceeded, switching...`);
-        continue;
-      }
-
-      return data;
-
-    } catch (err) {
-      console.log(`Google key ${i + 1} error, trying next...`);
-      continue;
-    }
-  }
-
-  throw new Error("All Google API keys failed or quota exceeded");
-}
-
 /* ---------------- HANDLER ---------------- */
 
 export default async function handler(req, res) {
@@ -81,12 +49,7 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  // ✅ Only use cache if valid + not empty
-  if (
-    cache.data &&
-    cache.data.length > 0 &&
-    now - cache.timestamp < ONE_DAY
-  ) {
+  if (cache.data && now - cache.timestamp < ONE_DAY) {
     return res.status(200).json({ products: cache.data });
   }
 
@@ -111,9 +74,11 @@ export default async function handler(req, res) {
 
       for (const start of starts) {
 
-        const baseUrl = `https://www.googleapis.com/customsearch/v1?key=__API_KEY__&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`;
+        const googleRes = await fetch(
+          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
+        );
 
-        const data = await fetchWithFallback(baseUrl);
+        const data = await googleRes.json();
 
         if (!data.items) continue;
 
@@ -122,7 +87,8 @@ export default async function handler(req, res) {
           const link = item.link || "";
           const asin = extractASIN(link);
 
-          if (!asin || seenASIN.has(asin)) continue;
+          if (!asin) continue;
+          if (seenASIN.has(asin)) continue;
 
           const image =
             item.pagemap?.cse_image?.[0]?.src ||
@@ -143,6 +109,8 @@ export default async function handler(req, res) {
             description: description.substring(0, 140),
             image,
             link: cleanLink,
+
+            // SIMPLE AUTO SCORE (no frontend needed)
             score: Math.random() * 5 + Date.now() / 100000000000
           });
 
@@ -161,7 +129,8 @@ export default async function handler(req, res) {
 
     const DAILY_LIMIT = 30;
 
-    const existing = cache.data || [];
+    let existing = cache.data || [];
+
     const merged = [...existing, ...discovered];
 
     const unique = [];
@@ -174,32 +143,39 @@ export default async function handler(req, res) {
       }
     }
 
+    /* ---------------- SORT (VIRAL STYLE) ---------------- */
+
     const sorted = unique.sort((a, b) => b.score - a.score);
 
+    /* ---------------- ROTATION ---------------- */
+
     const ROTATION = 0.4;
-    const MAX_POOL = 90;
 
-    const pool = [...existing, ...sorted];
+    const keepCount = Math.floor(existing.length * (1 - ROTATION));
+    const newCount = DAILY_LIMIT - keepCount;
 
-    const uniquePool = [];
-    const seenIds = new Set();
+    const MAX_POOL = 90; // 3 days worth
 
-    for (const p of pool) {
-      if (!seenIds.has(p.id)) {
-        seenIds.add(p.id);
-        uniquePool.push(p);
-      }
-    }
+let pool = [...existing, ...sorted];
 
-    const trimmedPool = uniquePool.slice(0, MAX_POOL);
-    const finalProducts = trimmedPool.slice(0, DAILY_LIMIT);
+// remove duplicates
+const uniquePool = [];
+const seenIds = new Set();
 
-    // ✅ Only cache if we actually got products
-    if (finalProducts && finalProducts.length > 0) {
-      cache.timestamp = now;
-      cache.data = finalProducts;
-    }
+for (const p of pool) {
+  if (!seenIds.has(p.id)) {
+    seenIds.add(p.id);
+    uniquePool.push(p);
+  }
+}
 
+// limit total pool size
+const trimmedPool = uniquePool.slice(0, MAX_POOL);
+
+// final display (top 30)
+const finalProducts = trimmedPool.slice(0, DAILY_LIMIT);
+    cache.timestamp = now;
+    cache.data = finalProducts;
     cache.fetching = false;
 
     return res.status(200).json({ products: finalProducts });
