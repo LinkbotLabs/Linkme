@@ -496,13 +496,7 @@ function closeFreeUnlock(){
 
     const data = await res.json();
 
-    if (data.success) {
-      localStorage.setItem("creatorUnlocked", "true");
-      alert("Creator Mode Activated ✅");
-      location.reload();
-    } else {
-      alert("Invalid Code");
-    }
+   
 
   } catch (err) {
     console.error(err);
