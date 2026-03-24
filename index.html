@@ -496,7 +496,22 @@ function closeFreeUnlock(){
 
     const data = await res.json();
 
-   
+   if (data.success) {
+  localStorage.setItem("creatorUnlocked", "true");
+
+  alert("Creator Mode Activated ✅");
+
+  // Close unlock modal (if open)
+  const unlockModal = document.getElementById("unlockModal");
+  if (unlockModal) unlockModal.classList.add("hidden");
+
+  // 👉 Open affiliate input next
+  const affiliateModal = document.getElementById("affiliateModal");
+  if (affiliateModal) affiliateModal.classList.remove("hidden");
+
+} else {
+  alert("Invalid Code");
+}
 
   } catch (err) {
     console.error(err);
