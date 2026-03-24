@@ -496,7 +496,22 @@ function closeFreeUnlock(){
 
     const data = await res.json();
 
-    
+   if (data.success) {
+  localStorage.setItem("creatorUnlocked", "true");
+
+  creatorUnlocked = true;
+  updateStatus();
+
+  alert("Creator Mode Activated ✅");
+
+  // 🔥 Open affiliate setup immediately
+  setTimeout(() => {
+    document.getElementById("affiliateModal").classList.remove("hidden");
+  }, 300);
+
+} else {
+  alert("Invalid Code");
+} 
   } catch (err) {
     console.error(err);
     alert("Error validating code");
