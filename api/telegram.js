@@ -43,6 +43,30 @@ export default async function handler(req, res) {
       }
     }
 
+    /* -------- AFFILIATE STORAGE -------- */
+
+    async function saveAffiliate(userId, affiliateId) {
+      try {
+        await fetch("https://floatrising.com/api/affiliate/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId, affiliateId })
+        });
+      } catch (e) {
+        console.log("Save affiliate failed");
+      }
+    }
+
+    async function getAffiliate(userId) {
+      try {
+        const res = await fetch(`https://floatrising.com/api/affiliate/get?userId=${userId}`);
+        const data = await res.json();
+        return data.affiliateId || null;
+      } catch (e) {
+        return null;
+      }
+    }
+
     /* -------- HELPER: CLEAN + AFFILIATE -------- */
     function cleanAmazonUrl(url, tag) {
       try {
@@ -81,10 +105,12 @@ export default async function handler(req, res) {
           text:
 `🔥 Float Rising Creator Bot
 
-Send /pack to receive 3 viral products creators are posting right now.
+Send /pack to receive 3 viral products.
 
-Premium users can use:
-👉 /pack YOUR-AFFILIATE-ID`
+👉 First time? Use:
+/pack your-affiliate-id
+
+The bot will remember it automatically.`
         })
       });
 
@@ -103,8 +129,6 @@ Premium users can use:
           text:
 `🔥 Discover more viral products
 
-Browse the live product feed creators are sharing.
-
 https://floatrising.com`
         })
       });
@@ -116,9 +140,31 @@ https://floatrising.com`
 
     if (text.startsWith("/pack")) {
 
-      // ✅ Extract affiliate ID (premium user)
       const parts = text.split(" ");
-      const affiliateId = parts[1] || "davidshort-21";
+      let affiliateId = parts[1];
+
+      // ✅ If no affiliate passed → try to load saved one
+      if (!affiliateId) {
+        affiliateId = await getAffiliate(userId);
+
+        if (!affiliateId) {
+          await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: "❗ Please set your affiliate ID:\n/pack your-affiliate-id"
+            })
+          });
+
+          return res.status(200).json({ ok: true });
+        }
+      }
+
+      // ✅ If user DID provide affiliate → save it
+      if (parts[1]) {
+        await saveAffiliate(userId, parts[1]);
+      }
 
       const apiRes = await fetch("https://floatrising.com/api/feed");
       const data = await apiRes.json();
@@ -156,7 +202,7 @@ https://floatrising.com`
 
       const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
 
-      /* -------- SMART PICKS -------- */
+      /* -------- PICKS -------- */
 
       const picks = [];
       const usedIds = new Set();
@@ -186,9 +232,7 @@ https://floatrising.com`
           text:
 `📦 Creator Pack Ready
 
-Today's best viral products for content creators.
-
-3 product cards coming next 👇`
+3 product cards coming 👇`
         })
       });
 
@@ -200,7 +244,6 @@ Today's best viral products for content creators.
 
         if (!product?.image) continue;
 
-        /* 🔥 INJECT USER AFFILIATE */
         const productWithAffiliate = {
           ...product,
           link: cleanAmazonUrl(product.url || product.link, affiliateId)
@@ -232,12 +275,9 @@ Today's best viral products for content creators.
 
 ${product.title}
 
-Trending product creators are posting right now.
-
 🔎 View product card
 ${productUrl}
 
-🚀 Ready to post on Pinterest
 Tap below 👇`;
 
         await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
@@ -271,11 +311,9 @@ Tap below 👇`;
         body: JSON.stringify({
           chat_id: chatId,
           text:
-`📦 Creator pack delivered
+`📦 Pack delivered
 
-3 products ready for content.
-
-Type /more to discover more viral products.`
+Type /more for more products.`
         })
       });
 
@@ -289,7 +327,7 @@ Type /more to discover more viral products.`
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: chatId,
-        text: "Send /pack to receive today's viral creator products."
+        text: "Send /pack to get viral products."
       })
     });
 
