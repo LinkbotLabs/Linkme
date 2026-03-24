@@ -19,33 +19,32 @@ export default async function handler(req, res) {
     if (!update.message) {
       return res.status(200).json({ ok: true });
     }
-const chatId = update.message.chat.id;
-const text = (update.message.text || "").trim();
-const userId = update.message.from.id;
 
-// ✅ TRACKING FUNCTION (PLACE HERE)
-async function trackUser(userId, source = "direct") {
-  try {
-    await fetch("https://floatrising.com/api/track-user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userId,
-        source,
-        timestamp: Date.now()
-      })
-    });
-  } catch (e) {
-    console.log("Tracking failed");
-  }
-}
+    const chatId = update.message.chat.id;
+    const text = (update.message.text || "").trim();
+    const userId = update.message.from.id;
 
-/* -------- HELPER: CLEAN + AFFILIATE -------- */
-    function cleanAmazonUrl(url) {
-      const tag = "davidshort-21";
+    /* -------- TRACKING FUNCTION -------- */
+    async function trackUser(userId, source = "direct") {
+      try {
+        await fetch("https://floatrising.com/api/track-user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId,
+            source,
+            timestamp: Date.now()
+          })
+        });
+      } catch (e) {
+        console.log("Tracking failed");
+      }
+    }
 
+    /* -------- HELPER: CLEAN + AFFILIATE -------- */
+    function cleanAmazonUrl(url, tag) {
       try {
         if (!url) return url;
 
@@ -69,12 +68,10 @@ async function trackUser(userId, source = "direct") {
 
     if (text.startsWith("/start")) {
 
-  // ✅ Extract source (important)
-  const parts = text.split(" ");
-  const source = parts[1] || "direct";
+      const parts = text.split(" ");
+      const source = parts[1] || "direct";
 
-  // ✅ TRACK USER
-  await trackUser(userId, source);
+      await trackUser(userId, source);
 
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
         method: "POST",
@@ -86,7 +83,8 @@ async function trackUser(userId, source = "direct") {
 
 Send /pack to receive 3 viral products creators are posting right now.
 
-Perfect for Pinterest and TikTok creators.`
+Premium users can use:
+👉 /pack YOUR-AFFILIATE-ID`
         })
       });
 
@@ -116,10 +114,14 @@ https://floatrising.com`
 
     /* -------- PACK -------- */
 
-    if (text === "/pack") {
+    if (text.startsWith("/pack")) {
+
+      // ✅ Extract affiliate ID (premium user)
+      const parts = text.split(" ");
+      const affiliateId = parts[1] || "davidshort-21";
 
       const apiRes = await fetch("https://floatrising.com/api/feed");
-const data = await apiRes.json();
+      const data = await apiRes.json();
 
       if (!data.products || data.products.length === 0) {
 
@@ -154,7 +156,7 @@ const data = await apiRes.json();
 
       const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
 
-      /* -------- SMART PICKS (NO DUPES) -------- */
+      /* -------- SMART PICKS -------- */
 
       const picks = [];
       const usedIds = new Set();
@@ -168,9 +170,9 @@ const data = await apiRes.json();
         }
       }
 
-      addPick(sorted[0]); // viral
-      addPick([...sorted].sort((a,b)=> (b.price||0)-(a.price||0))[0]); // high value
-      addPick([...sorted].sort((a,b)=> (b.reviews||0)-(a.reviews||0))[0]); // social proof
+      addPick(sorted[0]);
+      addPick([...sorted].sort((a,b)=> (b.price||0)-(a.price||0))[0]);
+      addPick([...sorted].sort((a,b)=> (b.reviews||0)-(a.reviews||0))[0]);
 
       const products = picks;
 
@@ -198,10 +200,10 @@ Today's best viral products for content creators.
 
         if (!product?.image) continue;
 
-        /* 🔥 INJECT AFFILIATE */
+        /* 🔥 INJECT USER AFFILIATE */
         const productWithAffiliate = {
           ...product,
-          link: cleanAmazonUrl(product.url || product.link)
+          link: cleanAmazonUrl(product.url || product.link, affiliateId)
         };
 
         const saveRes = await fetch("https://floatrising.com/api/share", {
@@ -259,7 +261,6 @@ Tap below 👇`;
         });
 
         index++;
-
       }
 
       /* -------- FOOTER -------- */
