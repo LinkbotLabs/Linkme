@@ -10,11 +10,14 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  width: 100%;
   overflow: hidden;
 }
+
 iframe {
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: 100vw;
+  height: 100vh;
   border: none;
 }
 </style>
@@ -39,31 +42,40 @@ iframe.onload = () => {
 
   try {
     const theme = JSON.parse(atob(themeEncoded));
-
     const doc = iframe.contentDocument || iframe.contentWindow.document;
 
-    // Apply theme to body
-    if (theme.bg) doc.body.style.background = theme.bg;
-    if (theme.text) doc.body.style.color = theme.text;
+    // 🔥 Wait until card exists (IMPORTANT FIX)
+    const interval = setInterval(() => {
+      const card = doc.querySelector("#app > div");
 
-    // Apply to main card
-    const card = doc.querySelector("#app > div");
+      if (!card) return;
 
-    if (card) {
+      clearInterval(interval);
+
+      // ✅ Remove original gradient/background
+      doc.body.style.background = theme.bg || "#111";
+      doc.body.style.backgroundImage = "none";
+      doc.body.style.color = theme.text || "#fff";
+
+      // ✅ Apply theme to card
       if (theme.card) card.style.background = theme.card;
       if (theme.radius) card.style.borderRadius = theme.radius + "px";
       if (theme.text) card.style.color = theme.text;
-    }
 
-    // Buttons
-    const buttons = doc.querySelectorAll("a, button");
+      // ✅ Apply accent to buttons
+      const buttons = doc.querySelectorAll("a, button");
+      buttons.forEach(btn => {
+        if (theme.accent) {
+          btn.style.background = theme.accent;
+          btn.style.color = "#fff";
+        }
+      });
 
-    buttons.forEach(btn => {
-      if (theme.accent) {
-        btn.style.background = theme.accent;
-        btn.style.color = "#fff";
-      }
-    });
+      // ✅ Optional: hide "Customize" button on shared pages
+      const customizeBtn = doc.querySelector('a[href*="theme.html"]');
+      if (customizeBtn) customizeBtn.style.display = "none";
+
+    }, 100);
 
   } catch (e) {
     console.log("Theme error", e);
