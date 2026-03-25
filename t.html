@@ -4,6 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Themed Card</title>
+
+<!-- Match s.html font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body style="margin:0;">
@@ -19,6 +23,7 @@ const themeEncoded = params.get("theme");
 
 let theme = {};
 
+// Decode theme safely
 if(themeEncoded){
   try {
     theme = JSON.parse(atob(themeEncoded));
@@ -28,11 +33,21 @@ if(themeEncoded){
 }
 
 async function load(){
+
+  // Fetch product
   const res = await fetch(`/api/get?id=${id}`);
   const product = await res.json();
 
-  document.body.style.background = theme.bg || "#111";
+  // ✅ MATCH s.html LAYOUT
+  document.body.style.background = theme.bg || "#f5f5f3";
+  document.body.style.padding = "20px";
+  document.body.style.display = "flex";
+  document.body.style.justifyContent = "center";
+  document.body.style.alignItems = "center";
+  document.body.style.minHeight = "100vh";
+  document.body.style.fontFamily = "Inter, sans-serif";
 
+  // Render themed card
   document.getElementById("app").innerHTML =
     renderCard(product, theme);
 }
