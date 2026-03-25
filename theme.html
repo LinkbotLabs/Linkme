@@ -1,79 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Theme Builder</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Theme Builder</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+}
 
-    .panel {
-      width: 300px;
-      padding: 16px;
-      border-right: 1px solid #ddd;
-      background: #f9fafb;
-      overflow-y: auto;
-    }
+/* LEFT PANEL */
+.panel {
+  width: 300px;
+  padding: 16px;
+  border-right: 1px solid #ddd;
+  background: #f9fafb;
+  overflow-y: auto;
+}
 
-    .preview {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #111;
-    }
+/* RIGHT PREVIEW */
+.preview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+}
 
-    .card {
-      width: 320px;
-      padding: 16px;
-      border-radius: var(--radius, 12px);
-      background: var(--card, #111827);
-      color: var(--text, #fff);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
+#app {
+  width: 100%;
+  max-width: 420px;
+}
 
-    .card img {
-      width: 100%;
-      border-radius: 10px;
-    }
+/* UI */
+input {
+  width: 100%;
+  margin-bottom: 10px;
+}
 
-    .btn {
-      margin-top: 10px;
-      padding: 10px;
-      background: var(--accent, #22c55e);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-align: center;
-      display: block;
-    }
+.btn {
+  margin-top: 10px;
+  padding: 10px;
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  display: block;
+  width: 100%;
+}
 
-    input {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-
-    .preset-btn {
-      width: 100%;
-      margin-bottom: 6px;
-      padding: 8px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background: #e5e7eb;
-    }
-  </style>
+.preset-btn {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #e5e7eb;
+}
+</style>
 </head>
 
 <body>
@@ -110,15 +101,12 @@
 </div>
 
 <div class="preview">
-  <div class="card">
-    <img id="image" />
-    <h2 id="title"></h2>
-    <p id="desc"></p>
-    <div class="btn">View on Amazon</div>
-  </div>
+  <div id="app"></div>
 </div>
 
-<script>
+<script type="module">
+import { renderCard } from '/card.js';
+
 let productId;
 let product;
 
@@ -131,7 +119,6 @@ const presets = {
     accent: "#22c55e",
     radius: 16
   },
-
   minimalWhite: {
     bg: "#f9fafb",
     card: "#ffffff",
@@ -139,7 +126,6 @@ const presets = {
     accent: "#2563eb",
     radius: 12
   },
-
   neonViral: {
     bg: "#050505",
     card: "#111111",
@@ -167,18 +153,21 @@ async function init() {
   const res = await fetch(`/api/get?id=${productId}`);
   product = await res.json();
 
-  document.getElementById("image").src = product.image;
-  document.getElementById("title").innerText = product.title;
-  document.getElementById("desc").innerText = product.description || "";
-
   bindInputs();
   applyTheme();
+  render();
 }
 
 init();
 
-/* -------- PRESET + REMIX -------- */
-function loadPreset(name) {
+/* -------- RENDER -------- */
+function render(){
+  document.body.style.background = theme.bg;
+  document.getElementById("app").innerHTML = renderCard(product, theme);
+}
+
+/* -------- PRESET -------- */
+window.loadPreset = function(name){
   const preset = presets[name];
   if (!preset) return;
 
@@ -186,68 +175,56 @@ function loadPreset(name) {
   theme = { ...preset };
 
   syncInputs();
-  applyTheme();
-}
+  render();
+};
 
-/* -------- SYNC INPUTS -------- */
-function syncInputs() {
-  document.getElementById("bg").value = theme.bg.startsWith("#") ? theme.bg : "#111111";
-  document.getElementById("card").value = theme.card.startsWith("#") ? theme.card : "#111111";
-  document.getElementById("text").value = theme.text.startsWith("#") ? theme.text : "#ffffff";
-  document.getElementById("accent").value = theme.accent.startsWith("#") ? theme.accent : "#22c55e";
-  document.getElementById("radius").value = theme.radius;
-}
-
-/* -------- INPUT BINDING -------- */
-function bindInputs() {
-  document.querySelectorAll("input").forEach(input => {
-    input.addEventListener("input", () => {
+/* -------- INPUTS -------- */
+function bindInputs(){
+  document.querySelectorAll("input").forEach(input=>{
+    input.addEventListener("input", ()=>{
       theme.bg = document.getElementById("bg").value;
       theme.card = document.getElementById("card").value;
       theme.text = document.getElementById("text").value;
       theme.accent = document.getElementById("accent").value;
       theme.radius = document.getElementById("radius").value;
 
-      applyTheme();
+      render();
     });
   });
 }
 
-/* -------- APPLY THEME -------- */
-function applyTheme() {
-  document.documentElement.style.setProperty("--bg", theme.bg);
-  document.documentElement.style.setProperty("--card", theme.card);
-  document.documentElement.style.setProperty("--text", theme.text);
-  document.documentElement.style.setProperty("--accent", theme.accent);
-  document.documentElement.style.setProperty("--radius", theme.radius + "px");
+function syncInputs(){
+  document.getElementById("bg").value = theme.bg;
+  document.getElementById("card").value = theme.card;
+  document.getElementById("text").value = theme.text;
+  document.getElementById("accent").value = theme.accent;
+  document.getElementById("radius").value = theme.radius;
 }
 
-/* -------- ENCODE THEME -------- */
-function encodeTheme() {
+/* -------- ENCODE -------- */
+function encodeTheme(){
   return btoa(JSON.stringify({
     ...theme,
     preset: currentPreset || "custom"
   }));
 }
 
-/* -------- FINAL LINK -------- */
-function getLink() {
-  const encoded = encodeTheme();
-  return `https://floatrising.com/t.html?id=${productId}&theme=${encoded}`;
+/* -------- LINKS -------- */
+function getLink(){
+  return `https://floatrising.com/t.html?id=${productId}&theme=${encodeTheme()}`;
 }
 
-/* -------- SHARE -------- */
-function copyLink() {
+window.copyLink = function(){
   navigator.clipboard.writeText(getLink());
   alert("Link copied");
-}
+};
 
-function shareTelegram() {
+window.shareTelegram = function(){
   const url = encodeURIComponent(getLink());
   window.open(`https://t.me/share/url?url=${url}`, "_blank");
-}
+};
 
-function sharePinterest() {
+window.sharePinterest = function(){
   const url = encodeURIComponent(getLink());
   const image = encodeURIComponent(product.image);
   const desc = encodeURIComponent(product.title);
@@ -256,7 +233,7 @@ function sharePinterest() {
     `https://pinterest.com/pin/create/button/?url=${url}&media=${image}&description=${desc}`,
     "_blank"
   );
-}
+};
 </script>
 
 </body>
