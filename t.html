@@ -4,83 +4,40 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Themed Card</title>
-
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-iframe {
-  display: block;
-  width: 100vw;
-  height: 100vh;
-  border: none;
-}
-</style>
 </head>
 
-<body>
+<body style="margin:0;">
 
-<iframe id="frame"></iframe>
+<div id="app">Loading...</div>
 
-<script>
+<script type="module">
+import { renderCard } from '/card.js';
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const themeEncoded = params.get("theme");
 
-const iframe = document.getElementById("frame");
+let theme = {};
 
-// Load original card
-iframe.src = `/s.html?id=${id}`;
-
-iframe.onload = () => {
-  if (!themeEncoded) return;
-
+if(themeEncoded){
   try {
-    const theme = JSON.parse(atob(themeEncoded));
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-
-    // 🔥 Wait until card exists (IMPORTANT FIX)
-    const interval = setInterval(() => {
-      const card = doc.querySelector("#app > div");
-
-      if (!card) return;
-
-      clearInterval(interval);
-
-      // ✅ Remove original gradient/background
-      doc.body.style.background = theme.bg || "#111";
-      doc.body.style.backgroundImage = "none";
-      doc.body.style.color = theme.text || "#fff";
-
-      // ✅ Apply theme to card
-      if (theme.card) card.style.background = theme.card;
-      if (theme.radius) card.style.borderRadius = theme.radius + "px";
-      if (theme.text) card.style.color = theme.text;
-
-      // ✅ Apply accent to buttons
-      const buttons = doc.querySelectorAll("a, button");
-      buttons.forEach(btn => {
-        if (theme.accent) {
-          btn.style.background = theme.accent;
-          btn.style.color = "#fff";
-        }
-      });
-
-      // ✅ Optional: hide "Customize" button on shared pages
-      const customizeBtn = doc.querySelector('a[href*="theme.html"]');
-      if (customizeBtn) customizeBtn.style.display = "none";
-
-    }, 100);
-
-  } catch (e) {
-    console.log("Theme error", e);
+    theme = JSON.parse(atob(themeEncoded));
+  } catch(e){
+    console.log("Theme error");
   }
-};
+}
+
+async function load(){
+  const res = await fetch(`/api/get?id=${id}`);
+  const product = await res.json();
+
+  document.body.style.background = theme.bg || "#111";
+
+  document.getElementById("app").innerHTML =
+    renderCard(product, theme);
+}
+
+load();
 </script>
 
 </body>
