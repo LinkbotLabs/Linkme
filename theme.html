@@ -52,6 +52,7 @@
       border-radius: 8px;
       cursor: pointer;
       text-align: center;
+      display: block;
     }
 
     input {
@@ -62,13 +63,31 @@
     h3 {
       margin-top: 0;
     }
+
+    .preset-btn {
+      width: 100%;
+      margin-bottom: 6px;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #e5e7eb;
+    }
   </style>
 </head>
 
 <body>
 
 <div class="panel">
-  <h3>🎨 Theme Builder</h3>
+  <h3>🎨 Presets</h3>
+
+  <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
+  <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White</button>
+  <button class="preset-btn" onclick="loadPreset('neonViral')">Neon Viral</button>
+
+  <hr/>
+
+  <h3>⚙️ Customize</h3>
 
   <label>Background</label>
   <input type="color" id="bg" />
@@ -91,7 +110,7 @@
 </div>
 
 <div class="preview">
-  <div class="card" id="previewCard">
+  <div class="card">
     <img id="image" />
     <h2 id="title"></h2>
     <p id="desc"></p>
@@ -103,6 +122,33 @@
 let productId;
 let product;
 
+/* -------- PRESETS -------- */
+const presets = {
+  darkGlass: {
+    bg: "#0f172a",
+    card: "rgba(255,255,255,0.05)",
+    text: "#ffffff",
+    accent: "#22c55e",
+    radius: 16
+  },
+
+  minimalWhite: {
+    bg: "#f9fafb",
+    card: "#ffffff",
+    text: "#111827",
+    accent: "#2563eb",
+    radius: 12
+  },
+
+  neonViral: {
+    bg: "#050505",
+    card: "#111111",
+    text: "#ffffff",
+    accent: "#ff00ff",
+    radius: 20
+  }
+};
+
 let theme = {
   bg: "#111111",
   card: "#111827",
@@ -110,6 +156,8 @@ let theme = {
   accent: "#22c55e",
   radius: 12
 };
+
+let currentPreset = null;
 
 /* -------- INIT -------- */
 async function init() {
@@ -129,14 +177,29 @@ async function init() {
 
 init();
 
-/* -------- INPUTS -------- */
-function bindInputs() {
-  document.getElementById("bg").value = theme.bg;
-  document.getElementById("card").value = theme.card;
-  document.getElementById("text").value = theme.text;
-  document.getElementById("accent").value = theme.accent;
-  document.getElementById("radius").value = theme.radius;
+/* -------- PRESET + REMIX -------- */
+function loadPreset(name) {
+  const preset = presets[name];
+  if (!preset) return;
 
+  currentPreset = name;
+  theme = { ...preset };
+
+  syncInputs();
+  applyTheme();
+}
+
+/* -------- SYNC INPUTS -------- */
+function syncInputs() {
+  document.getElementById("bg").value = theme.bg.startsWith("#") ? theme.bg : "#111111";
+  document.getElementById("card").value = theme.card.startsWith("#") ? theme.card : "#111111";
+  document.getElementById("text").value = theme.text.startsWith("#") ? theme.text : "#ffffff";
+  document.getElementById("accent").value = theme.accent.startsWith("#") ? theme.accent : "#22c55e";
+  document.getElementById("radius").value = theme.radius;
+}
+
+/* -------- INPUT BINDING -------- */
+function bindInputs() {
   document.querySelectorAll("input").forEach(input => {
     input.addEventListener("input", () => {
       theme.bg = document.getElementById("bg").value;
@@ -161,7 +224,10 @@ function applyTheme() {
 
 /* -------- ENCODE THEME -------- */
 function encodeTheme() {
-  return btoa(JSON.stringify(theme));
+  return btoa(JSON.stringify({
+    ...theme,
+    preset: currentPreset || "custom"
+  }));
 }
 
 /* -------- FINAL LINK -------- */
