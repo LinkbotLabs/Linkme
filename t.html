@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Themed Card</title>
+
+  <style>
+    :root {
+      --bg: #111;
+      --card: #111827;
+      --text: #fff;
+      --accent: #22c55e;
+      --radius: 12px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    .card {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 16px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .btn {
+      display: block;
+      margin-top: 10px;
+      padding: 10px;
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="app">Loading...</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+const themeEncoded = params.get("theme");
+
+/* -------- APPLY THEME -------- */
+function applyTheme(theme) {
+  const root = document.documentElement;
+
+  if (theme.bg) root.style.setProperty("--bg", theme.bg);
+  if (theme.card) root.style.setProperty("--card", theme.card);
+  if (theme.text) root.style.setProperty("--text", theme.text);
+  if (theme.accent) root.style.setProperty("--accent", theme.accent);
+  if (theme.radius) root.style.setProperty("--radius", theme.radius + "px");
+}
+
+/* -------- LOAD PRODUCT -------- */
+async function load() {
+  const res = await fetch(`/api/get?id=${id}`);
+  const product = await res.json();
+
+  let theme = null;
+
+  if (themeEncoded) {
+    try {
+      theme = JSON.parse(atob(themeEncoded));
+      applyTheme(theme);
+    } catch (e) {
+      console.log("Invalid theme");
+    }
+  }
+
+  render(product);
+}
+
+/* -------- RENDER CARD -------- */
+function render(product) {
+  document.getElementById("app").innerHTML = `
+    <div class="card">
+      <img src="${product.image}" />
+      <h2>${product.title}</h2>
+      <p>${product.description || ""}</p>
+
+      <a class="btn" href="${product.link}" target="_blank">
+        View on Amazon
+      </a>
+
+      <a class="btn" href="#" onclick="alert('Pinned')">
+        📌 Pin
+      </a>
+    </div>
+  `;
+}
+
+load();
+</script>
+
+</body>
+</html>
