@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Theme Builder</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    .panel {
+      width: 300px;
+      padding: 16px;
+      border-right: 1px solid #ddd;
+      background: #f9fafb;
+      overflow-y: auto;
+    }
+
+    .preview {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+
+    .card {
+      width: 320px;
+      padding: 16px;
+      border-radius: var(--radius, 12px);
+      background: var(--card, #111827);
+      color: var(--text, #fff);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .btn {
+      margin-top: 10px;
+      padding: 10px;
+      background: var(--accent, #22c55e);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="panel">
+  <h3>🎨 Theme Builder</h3>
+
+  <label>Background</label>
+  <input type="color" id="bg" />
+
+  <label>Card</label>
+  <input type="color" id="card" />
+
+  <label>Text</label>
+  <input type="color" id="text" />
+
+  <label>Accent</label>
+  <input type="color" id="accent" />
+
+  <label>Radius</label>
+  <input type="range" id="radius" min="0" max="40" />
+
+  <button class="btn" onclick="copyLink()">📋 Copy Link</button>
+  <button class="btn" onclick="shareTelegram()">📤 Share Telegram</button>
+  <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
+</div>
+
+<div class="preview">
+  <div class="card" id="previewCard">
+    <img id="image" />
+    <h2 id="title"></h2>
+    <p id="desc"></p>
+    <div class="btn">View on Amazon</div>
+  </div>
+</div>
+
+<script>
+let productId;
+let product;
+
+let theme = {
+  bg: "#111111",
+  card: "#111827",
+  text: "#ffffff",
+  accent: "#22c55e",
+  radius: 12
+};
+
+/* -------- INIT -------- */
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  productId = params.get("id");
+
+  const res = await fetch(`/api/get?id=${productId}`);
+  product = await res.json();
+
+  document.getElementById("image").src = product.image;
+  document.getElementById("title").innerText = product.title;
+  document.getElementById("desc").innerText = product.description || "";
+
+  bindInputs();
+  applyTheme();
+}
+
+init();
+
+/* -------- INPUTS -------- */
+function bindInputs() {
+  document.getElementById("bg").value = theme.bg;
+  document.getElementById("card").value = theme.card;
+  document.getElementById("text").value = theme.text;
+  document.getElementById("accent").value = theme.accent;
+  document.getElementById("radius").value = theme.radius;
+
+  document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", () => {
+      theme.bg = document.getElementById("bg").value;
+      theme.card = document.getElementById("card").value;
+      theme.text = document.getElementById("text").value;
+      theme.accent = document.getElementById("accent").value;
+      theme.radius = document.getElementById("radius").value;
+
+      applyTheme();
+    });
+  });
+}
+
+/* -------- APPLY THEME -------- */
+function applyTheme() {
+  document.documentElement.style.setProperty("--bg", theme.bg);
+  document.documentElement.style.setProperty("--card", theme.card);
+  document.documentElement.style.setProperty("--text", theme.text);
+  document.documentElement.style.setProperty("--accent", theme.accent);
+  document.documentElement.style.setProperty("--radius", theme.radius + "px");
+}
+
+/* -------- ENCODE THEME -------- */
+function encodeTheme() {
+  return btoa(JSON.stringify(theme));
+}
+
+/* -------- FINAL LINK -------- */
+function getLink() {
+  const encoded = encodeTheme();
+  return `https://floatrising.com/t.html?id=${productId}&theme=${encoded}`;
+}
+
+/* -------- SHARE -------- */
+function copyLink() {
+  navigator.clipboard.writeText(getLink());
+  alert("Link copied");
+}
+
+function shareTelegram() {
+  const url = encodeURIComponent(getLink());
+  window.open(`https://t.me/share/url?url=${url}`, "_blank");
+}
+
+function sharePinterest() {
+  const url = encodeURIComponent(getLink());
+  const image = encodeURIComponent(product.image);
+  const desc = encodeURIComponent(product.title);
+
+  window.open(
+    `https://pinterest.com/pin/create/button/?url=${url}&media=${image}&description=${desc}`,
+    "_blank"
+  );
+}
+</script>
+
+</body>
+</html>
