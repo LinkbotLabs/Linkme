@@ -622,7 +622,7 @@ function shuffle(array) {
       return `🔥 This ${shortTitle} Is Going Viral`;
     }
 
-    function renderProduct() {
+function renderProduct() {
   if (!products.length) {
     card.innerHTML = '<div class="p-10 text-center text-gray-600 text-lg">No products found.</div>';
     return;
@@ -648,13 +648,13 @@ function shuffle(array) {
         </div>
       ` : ''}
 
-      <!-- Enhanced centered image area -->
-      <div class="flex justify-center items-center bg-gradient-to-b from-gray-50 to-white min-h-[420px] sm:min-h-[580px] p-8 relative overflow-hidden">
-        <div class="relative">
+      <!-- BIGGER & FULL-BLEED Image Container -->
+      <div class="flex justify-center items-center bg-gradient-to-b from-gray-50 to-white min-h-[520px] sm:min-h-[620px] lg:min-h-[680px] p-6 md:p-10 relative overflow-hidden">
+        <div class="relative w-full max-w-3xl mx-auto">
           <img 
             src="${p.image || 'https://via.placeholder.com/800?text=Product'}" 
             alt="${p.title}" 
-            class="max-w-full max-h-[520px] w-auto h-auto object-contain drop-shadow-2xl"
+            class="w-full h-auto max-h-[580px] object-contain drop-shadow-2xl mx-auto"
             loading="lazy"
             onerror="this.src='https://via.placeholder.com/800?text=Product'" 
           />
