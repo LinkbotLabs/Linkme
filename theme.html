@@ -63,11 +63,14 @@ input {
   border-radius: 6px;
   cursor: pointer;
   background: #e5e7eb;
+}
 
-  @media (max-width: 768px) {
+/* ✅ MOBILE FIX */
+@media (max-width: 768px) {
 
   body {
     flex-direction: column;
+    height: auto;
   }
 
   .panel {
@@ -79,7 +82,7 @@ input {
 
   .preview {
     flex: none;
-    height: 65vh;
+    height: auto;
     padding: 10px;
   }
 
@@ -88,13 +91,14 @@ input {
   }
 
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="panel">
+  <button class="btn" onclick="toggleEditor()">👁 Hide Editor</button>
+
   <h3>🎨 Presets</h3>
 
   <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
@@ -179,7 +183,6 @@ async function init() {
   product = await res.json();
 
   bindInputs();
-  applyTheme();
   render();
 }
 
@@ -225,6 +228,17 @@ function syncInputs(){
   document.getElementById("accent").value = theme.accent;
   document.getElementById("radius").value = theme.radius;
 }
+
+/* -------- TOGGLE EDITOR -------- */
+window.toggleEditor = function(){
+  const panel = document.querySelector(".panel");
+
+  if(panel.style.display === "none"){
+    panel.style.display = "block";
+  } else {
+    panel.style.display = "none";
+  }
+};
 
 /* -------- ENCODE -------- */
 function encodeTheme(){
