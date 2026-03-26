@@ -63,6 +63,31 @@ input {
   border-radius: 6px;
   cursor: pointer;
   background: #e5e7eb;
+
+  @media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+  }
+
+  .panel {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .preview {
+    flex: none;
+    height: 65vh;
+    padding: 10px;
+  }
+
+  #app {
+    max-width: 100%;
+  }
+
+}
 }
 </style>
 </head>
