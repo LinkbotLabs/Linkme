@@ -31,21 +31,78 @@ let theme = {};
 if(themeEncoded){
   try {
     theme = JSON.parse(atob(themeEncoded));
-
-    // Save theme locally (so copy/share persists)
     localStorage.setItem(`theme_${id}`, themeEncoded);
-
   } catch(e){
     console.log("Theme decode error");
   }
 } else {
-  // fallback to saved theme if exists
   const saved = localStorage.getItem(`theme_${id}`);
   if(saved){
     try {
       theme = JSON.parse(atob(saved));
     } catch(e){}
   }
+}
+
+/* ---------- ATTACH BUTTONS ---------- */
+function attachButtons(product){
+
+  /* ---------- COPY LINK ---------- */
+  const copyBtn = document.getElementById("copyBtn");
+
+  if(copyBtn){
+    copyBtn.addEventListener("click", async () => {
+
+      const url = window.location.href;
+
+      try {
+        await navigator.clipboard.writeText(url);
+        alert("Link copied!");
+      } catch (err) {
+        // fallback (iOS / restricted browsers)
+        const textarea = document.createElement("textarea");
+        textarea.value = url;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+
+        alert("Link copied!");
+      }
+
+    });
+  }
+
+  /* ---------- BUY BUTTON ---------- */
+  const buyBtn = document.getElementById("buyBtn");
+
+  if(buyBtn){
+    buyBtn.addEventListener("click", () => {
+      window.open(product.link, "_blank");
+    });
+  }
+
+  /* ---------- PINTEREST SHARE ---------- */
+  const pinBtn = document.getElementById("pinBtn");
+
+  if(pinBtn){
+    pinBtn.addEventListener("click", () => {
+
+      const url = encodeURIComponent(window.location.href); // themed URL
+      const media = encodeURIComponent(product.image);
+
+      const desc = encodeURIComponent(
+        `${product.title} 🔥 Trending viral product — tap to view the card #amazonfinds #viralproducts`
+      );
+
+      const pinURL =
+        `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`;
+
+      window.open(pinURL, "_blank");
+
+    });
+  }
+
 }
 
 async function load(){
@@ -82,53 +139,10 @@ async function load(){
   document.getElementById("app").innerHTML =
     renderCard(product, theme);
 
-  /* =====================================================
-     COPY LINK (THEMED URL)
-  ====================================================== */
-  const copyBtn = document.getElementById("copyBtn");
-  if(copyBtn){
-    copyBtn.addEventListener("click", () => {
-
-      const themedURL = window.location.href;
-
-      navigator.clipboard.writeText(themedURL);
-      alert("Link copied!");
-
-    });
-  }
-
-  /* =====================================================
-     BUY BUTTON
-  ====================================================== */
-  const buyBtn = document.getElementById("buyBtn");
-  if(buyBtn){
-    buyBtn.addEventListener("click", () => {
-      window.open(product.link, "_blank");
-    });
-  }
-
-  /* =====================================================
-     PINTEREST SHARE (SHARES THE THEMED PAGE)
-  ====================================================== */
-  const pinBtn = document.getElementById("pinBtn");
-
-  if(pinBtn){
-    pinBtn.addEventListener("click", () => {
-
-      const url = encodeURIComponent(window.location.href); // themed link
-      const media = encodeURIComponent(product.image);
-
-      const desc = encodeURIComponent(
-        `${product.title} 🔥 Trending viral product — tap to view the full card #amazonfinds #viralproducts`
-      );
-
-      const pinURL =
-        `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`;
-
-      window.open(pinURL, "_blank");
-
-    });
-  }
+  /* ---------- ATTACH BUTTONS (AFTER RENDER) ---------- */
+  setTimeout(() => {
+    attachButtons(product);
+  }, 0);
 
 }
 
