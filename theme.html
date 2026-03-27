@@ -14,7 +14,7 @@ body {
 }
 
 /* =========================
-   SIDEBAR (SLIDE IN/OUT)
+   SIDEBAR
 ========================= */
 .sidebar {
   width: 300px;
@@ -65,7 +65,7 @@ body {
 }
 
 /* =========================
-   CONTENT AREA
+   CONTENT
 ========================= */
 .content {
   margin-left: 300px;
@@ -228,7 +228,7 @@ function render(){
   document.getElementById("app").innerHTML = renderCard(product, theme);
 }
 
-/* SIDEBAR TOGGLE */
+/* SIDEBAR */
 window.toggleSidebar = function(){
   document.getElementById("sidebar").classList.toggle("closed");
 };
@@ -263,22 +263,42 @@ function syncInputs(){
   document.getElementById("radius").value = theme.radius;
 }
 
-/* LINKS */
+/* ✅ IMPORTANT: ALWAYS GET LATEST THEME */
+function getCurrentTheme(){
+  theme.bg = document.getElementById("bg").value;
+  theme.card = document.getElementById("card").value;
+  theme.text = document.getElementById("text").value;
+  theme.accent = document.getElementById("accent").value;
+  theme.radius = document.getElementById("radius").value;
+
+  return theme;
+}
+
+/* ENCODE */
 function encodeTheme(){
   return btoa(JSON.stringify({
-    ...theme,
+    ...getCurrentTheme(),
     preset: currentPreset || "custom"
   }));
 }
 
+/* LINK */
 function getLink(){
   return `https://floatrising.com/t.html?id=${productId}&theme=${encodeTheme()}`;
 }
 
-window.copyLink = function(){
-  navigator.clipboard.writeText(getLink());
+/* COPY */
+window.copyLink = async function(){
+  try {
+    const link = getLink();
+    await navigator.clipboard.writeText(link);
+    alert("✅ Link copied with current theme!");
+  } catch(e){
+    alert("⚠️ Copy failed");
+  }
 };
 
+/* SHARE */
 window.shareTelegram = function(){
   const url = encodeURIComponent(getLink());
   window.open(`https://t.me/share/url?url=${url}`, "_blank");
