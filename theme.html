@@ -8,32 +8,115 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
   background: #111;
 }
 
-/* ✅ FLOATING PANEL */
+/* =========================
+   PANEL (GLASS + MINIMAL)
+========================= */
 .panel {
   position: fixed;
   top: 20px;
   left: 20px;
-  width: 300px;
+  width: 280px;
   max-height: 90vh;
   z-index: 9999;
 
-  background: rgba(249,250,251,0.95);
-  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 
-  border-radius: 12px;
-  padding: 16px;
-  overflow-y: auto;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 
-  cursor: move;
+  color: #fff;
+
+  overflow: hidden;
+
+  cursor: default;
 }
 
-/* ✅ PREVIEW BACKGROUND */
+/* Header always visible (drag handle) */
+.panel-header {
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  cursor: move;
+  background: rgba(255,255,255,0.03);
+}
+
+/* Collapsible body */
+.panel-body {
+  padding: 12px;
+  display: none;
+}
+
+/* Expand on hover */
+.panel:hover .panel-body {
+  display: block;
+}
+
+/* =========================
+   CONTROLS
+========================= */
+label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+input {
+  width: 100%;
+  margin: 6px 0 10px;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+}
+
+.btn {
+  margin-top: 8px;
+  padding: 8px;
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 13px;
+}
+
+.btn.secondary {
+  background: rgba(255,255,255,0.08);
+}
+
+/* Presets */
+.preset-btn {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 7px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 12px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: 10px 0;
+}
+
+/* =========================
+   PREVIEW
+========================= */
 .preview {
   position: fixed;
   inset: 0;
@@ -47,78 +130,55 @@ body {
   width: 100%;
   max-width: 420px;
 }
-
-/* UI */
-input {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.btn {
-  margin-top: 10px;
-  padding: 10px;
-  background: #22c55e;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: center;
-  display: block;
-  width: 100%;
-}
-
-.preset-btn {
-  width: 100%;
-  margin-bottom: 6px;
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #e5e7eb;
-}
 </style>
 </head>
 
 <body>
 
 <div class="panel">
-
-  <div id="panelHeader" style="font-weight:600; margin-bottom:10px;">
+  <div class="panel-header" id="panelHeader">
     Theme Editor
+    <span style="font-size:12px; opacity:0.6;">drag</span>
   </div>
 
-  <button class="btn" onclick="toggleFocus()">🔍 Focus Mode</button>
-  <button class="btn" onclick="toggleEditor()">👁 Hide Editor</button>
+  <div class="panel-body">
 
-  <h3>🎨 Presets</h3>
+    <button class="btn secondary" onclick="toggleFocus()">🔍 Focus Mode</button>
+    <button class="btn secondary" onclick="toggleEditor()">👁 Hide Editor</button>
 
-  <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
-  <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White</button>
-  <button class="preset-btn" onclick="loadPreset('neonViral')">Neon Viral</button>
+    <hr/>
 
-  <hr/>
+    <div>🎨 Presets</div>
+    <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
+    <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White</button>
+    <button class="preset-btn" onclick="loadPreset('neonViral')">Neon Viral</button>
 
-  <h3>⚙️ Customize</h3>
+    <hr/>
 
-  <label>Background</label>
-  <input type="color" id="bg" />
+    <div>⚙️ Customize</div>
 
-  <label>Card</label>
-  <input type="color" id="card" />
+    <label>Background</label>
+    <input type="color" id="bg" />
 
-  <label>Text</label>
-  <input type="color" id="text" />
+    <label>Card</label>
+    <input type="color" id="card" />
 
-  <label>Accent</label>
-  <input type="color" id="accent" />
+    <label>Text</label>
+    <input type="color" id="text" />
 
-  <label>Radius</label>
-  <input type="range" id="radius" min="0" max="40" />
+    <label>Accent</label>
+    <input type="color" id="accent" />
 
-  <button class="btn" onclick="copyLink()">📋 Copy Link</button>
-  <button class="btn" onclick="shareTelegram()">📤 Share Telegram</button>
-  <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
+    <label>Radius</label>
+    <input type="range" id="radius" min="0" max="40" />
 
+    <hr/>
+
+    <button class="btn" onclick="copyLink()">📋 Copy Link</button>
+    <button class="btn" onclick="shareTelegram()">📤 Telegram</button>
+    <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
+
+  </div>
 </div>
 
 <div class="preview">
@@ -131,7 +191,6 @@ import { renderCard } from '/card.js';
 let productId;
 let product;
 
-/* -------- PRESETS -------- */
 const presets = {
   darkGlass: {
     bg: "#0f172a",
@@ -166,51 +225,35 @@ let theme = {
 
 let currentPreset = null;
 
-/* -------- INIT -------- */
+/* INIT */
 async function init() {
   const params = new URLSearchParams(window.location.search);
   productId = params.get("id");
 
-  if(!productId){
-    document.getElementById("app").innerHTML = "Missing product";
-    return;
-  }
-
   const res = await fetch(`/api/get?id=${productId}`);
   product = await res.json();
-
-  if(!product || product.error){
-    document.getElementById("app").innerHTML = "Product not found";
-    return;
-  }
 
   bindInputs();
   syncInputs();
   render();
 }
-
 init();
 
-/* -------- RENDER -------- */
+/* RENDER */
 function render(){
   document.body.style.background = theme.bg;
-
   document.getElementById("app").innerHTML = renderCard(product, theme);
 }
 
-/* -------- PRESET -------- */
+/* PRESETS */
 window.loadPreset = function(name){
-  const preset = presets[name];
-  if (!preset) return;
-
+  theme = { ...presets[name] };
   currentPreset = name;
-  theme = { ...preset };
-
   syncInputs();
   render();
 };
 
-/* -------- INPUTS -------- */
+/* INPUTS */
 function bindInputs(){
   document.querySelectorAll("input").forEach(input=>{
     input.addEventListener("input", ()=>{
@@ -219,7 +262,6 @@ function bindInputs(){
       theme.text = document.getElementById("text").value;
       theme.accent = document.getElementById("accent").value;
       theme.radius = document.getElementById("radius").value;
-
       render();
     });
   });
@@ -233,70 +275,49 @@ function syncInputs(){
   document.getElementById("radius").value = theme.radius;
 }
 
-/* -------- TOGGLE EDITOR -------- */
+/* TOGGLE */
 window.toggleEditor = function(){
   const panel = document.querySelector(".panel");
-
-  panel.style.display =
-    panel.style.display === "none" ? "block" : "none";
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
 };
 
-/* -------- FOCUS MODE -------- */
 let focusMode = false;
-
-window.toggleFocus = function () {
+window.toggleFocus = function(){
   const panel = document.querySelector(".panel");
-
   focusMode = !focusMode;
 
-  if (focusMode) {
-    panel.style.opacity = "0";
-    panel.style.pointerEvents = "none";
-  } else {
-    panel.style.opacity = "1";
-    panel.style.pointerEvents = "auto";
-  }
+  panel.style.opacity = focusMode ? "0" : "1";
+  panel.style.pointerEvents = focusMode ? "none" : "auto";
 };
 
-/* -------- DRAG PANEL -------- */
+/* DRAG (HEADER ONLY) */
 const panel = document.querySelector(".panel");
 const header = document.getElementById("panelHeader");
 
-let isDragging = false;
+let dragging = false;
 let offsetX = 0;
 let offsetY = 0;
 
-header.addEventListener("mousedown", (e) => {
-  isDragging = true;
-
+header.addEventListener("mousedown", (e)=>{
+  dragging = true;
   const rect = panel.getBoundingClientRect();
-
   offsetX = e.clientX - rect.left;
   offsetY = e.clientY - rect.top;
-
-  panel.style.transition = "none";
 });
 
-document.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
-
+document.addEventListener("mousemove", (e)=>{
+  if(!dragging) return;
   panel.style.left = `${e.clientX - offsetX}px`;
   panel.style.top = `${e.clientY - offsetY}px`;
 });
 
-document.addEventListener("mouseup", () => {
-  isDragging = false;
-});
+document.addEventListener("mouseup", ()=> dragging = false);
 
-/* -------- ENCODE -------- */
+/* LINKS */
 function encodeTheme(){
-  return btoa(JSON.stringify({
-    ...theme,
-    preset: currentPreset || "custom"
-  }));
+  return btoa(JSON.stringify({ ...theme, preset: currentPreset || "custom" }));
 }
 
-/* -------- LINKS -------- */
 function getLink(){
   return `https://floatrising.com/t.html?id=${productId}&theme=${encodeTheme()}`;
 }
@@ -312,14 +333,9 @@ window.shareTelegram = function(){
 };
 
 window.sharePinterest = function(){
-
-  const link = getLink();
-
-  const url = encodeURIComponent(link);
+  const url = encodeURIComponent(getLink());
   const media = encodeURIComponent(product.image);
-  const desc = encodeURIComponent(
-    "🔥 This product is going viral right now — tap to see why"
-  );
+  const desc = encodeURIComponent("🔥 Trending product");
 
   window.open(
     `https://pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`,
