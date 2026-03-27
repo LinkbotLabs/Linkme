@@ -8,180 +8,163 @@
 <style>
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: system-ui, sans-serif;
   background: #111;
+  display: flex;
 }
 
 /* =========================
-   PANEL (GLASS + MINIMAL)
+   SIDEBAR (SLIDE IN/OUT)
 ========================= */
-.panel {
+.sidebar {
+  width: 300px;
+  height: 100vh;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(16px);
+
+  border-right: 1px solid rgba(255,255,255,0.08);
+
+  padding: 12px;
+  box-sizing: border-box;
+
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+
+  color: #fff;
+  overflow-y: auto;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* Toggle button */
+.toggle-btn {
   position: fixed;
   top: 20px;
-  left: 20px;
-  width: 280px;
-  max-height: 90vh;
-  z-index: 9999;
+  left: 320px;
+  z-index: 10000;
 
-  background: rgba(0,0,0,0.22);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-
-  color: #fff;
-
-  overflow: hidden;
-
-  cursor: default;
-}
-
-/* Header always visible (drag handle) */
-.panel-header {
-  padding: 10px 12px;
-  font-weight: 600;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  cursor: move;
-  background: rgba(255,255,255,0.03);
-}
-
-/* Collapsible body */
-.panel-body {
-  padding: 12px;
-  display: none;
-}
-
-/* Expand on hover */
-.panel:hover .panel-body {
-  display: block;
-}
-
-/* =========================
-   CONTROLS
-========================= */
-label {
-  font-size: 12px;
-  opacity: 0.7;
-}
-
-input {
-  width: 100%;
-  margin: 6px 0 10px;
-  padding: 6px;
-  border-radius: 6px;
-  border: none;
-}
-
-.btn {
-  margin-top: 8px;
-  padding: 8px;
   background: #22c55e;
-  color: #fff;
   border: none;
+  color: #fff;
+  padding: 8px 10px;
   border-radius: 8px;
   cursor: pointer;
-  width: 100%;
-  font-size: 13px;
+
+  transition: left 0.3s ease;
 }
 
-.btn.secondary {
-  background: rgba(255,255,255,0.08);
-}
-
-/* Presets */
-.preset-btn {
-  width: 100%;
-  margin-bottom: 6px;
-  padding: 7px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-  font-size: 12px;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  margin: 10px 0;
+.sidebar.closed ~ .toggle-btn {
+  left: 20px;
 }
 
 /* =========================
-   PREVIEW
+   CONTENT AREA
 ========================= */
-.preview {
-  position: fixed;
-  inset: 0;
+.content {
+  margin-left: 300px;
+  width: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1;
+  align-items: center;
+
+  transition: margin-left 0.3s ease;
+}
+
+.sidebar.closed ~ .content {
+  margin-left: 0;
 }
 
 #app {
   width: 100%;
   max-width: 420px;
 }
+
+/* =========================
+   UI
+========================= */
+input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.btn {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #22c55e;
+  color: #fff;
+}
+
+.preset-btn {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin: 10px 0;
+}
 </style>
 </head>
 
 <body>
 
-<div class="panel">
-  <div class="panel-header" id="panelHeader">
-    Theme Editor
-    <span style="font-size:12px; opacity:0.6;">drag</span>
-  </div>
+<div id="sidebar" class="sidebar closed">
 
-  <div class="panel-body">
+  <h3>🎨 Theme Editor</h3>
 
-    <button class="btn secondary" onclick="toggleFocus()">🔍 Focus Mode</button>
-    <button class="btn secondary" onclick="toggleEditor()">👁 Hide Editor</button>
+  <h4>Presets</h4>
+  <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
+  <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White</button>
+  <button class="preset-btn" onclick="loadPreset('neonViral')">Neon Viral</button>
 
-    <hr/>
+  <hr/>
 
-    <div>🎨 Presets</div>
-    <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
-    <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White</button>
-    <button class="preset-btn" onclick="loadPreset('neonViral')">Neon Viral</button>
+  <h4>Customize</h4>
 
-    <hr/>
+  <label>Background</label>
+  <input type="color" id="bg" />
 
-    <div>⚙️ Customize</div>
+  <label>Card</label>
+  <input type="color" id="card" />
 
-    <label>Background</label>
-    <input type="color" id="bg" />
+  <label>Text</label>
+  <input type="color" id="text" />
 
-    <label>Card</label>
-    <input type="color" id="card" />
+  <label>Accent</label>
+  <input type="color" id="accent" />
 
-    <label>Text</label>
-    <input type="color" id="text" />
+  <label>Radius</label>
+  <input type="range" id="radius" min="0" max="40" />
 
-    <label>Accent</label>
-    <input type="color" id="accent" />
+  <hr/>
 
-    <label>Radius</label>
-    <input type="range" id="radius" min="0" max="40" />
+  <button class="btn" onclick="copyLink()">📋 Copy Link</button>
+  <button class="btn" onclick="shareTelegram()">📤 Telegram</button>
+  <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
 
-    <hr/>
-
-    <button class="btn" onclick="copyLink()">📋 Copy Link</button>
-    <button class="btn" onclick="shareTelegram()">📤 Telegram</button>
-    <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
-
-  </div>
 </div>
 
-<div class="preview">
+<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="content">
   <div id="app"></div>
 </div>
 
@@ -245,6 +228,11 @@ function render(){
   document.getElementById("app").innerHTML = renderCard(product, theme);
 }
 
+/* SIDEBAR TOGGLE */
+window.toggleSidebar = function(){
+  document.getElementById("sidebar").classList.toggle("closed");
+};
+
 /* PRESETS */
 window.loadPreset = function(name){
   theme = { ...presets[name] };
@@ -275,47 +263,12 @@ function syncInputs(){
   document.getElementById("radius").value = theme.radius;
 }
 
-/* TOGGLE */
-window.toggleEditor = function(){
-  const panel = document.querySelector(".panel");
-  panel.style.display = panel.style.display === "none" ? "block" : "none";
-};
-
-let focusMode = false;
-window.toggleFocus = function(){
-  const panel = document.querySelector(".panel");
-  focusMode = !focusMode;
-
-  panel.style.opacity = focusMode ? "0" : "1";
-  panel.style.pointerEvents = focusMode ? "none" : "auto";
-};
-
-/* DRAG (HEADER ONLY) */
-const panel = document.querySelector(".panel");
-const header = document.getElementById("panelHeader");
-
-let dragging = false;
-let offsetX = 0;
-let offsetY = 0;
-
-header.addEventListener("mousedown", (e)=>{
-  dragging = true;
-  const rect = panel.getBoundingClientRect();
-  offsetX = e.clientX - rect.left;
-  offsetY = e.clientY - rect.top;
-});
-
-document.addEventListener("mousemove", (e)=>{
-  if(!dragging) return;
-  panel.style.left = `${e.clientX - offsetX}px`;
-  panel.style.top = `${e.clientY - offsetY}px`;
-});
-
-document.addEventListener("mouseup", ()=> dragging = false);
-
 /* LINKS */
 function encodeTheme(){
-  return btoa(JSON.stringify({ ...theme, preset: currentPreset || "custom" }));
+  return btoa(JSON.stringify({
+    ...theme,
+    preset: currentPreset || "custom"
+  }));
 }
 
 function getLink(){
@@ -324,7 +277,6 @@ function getLink(){
 
 window.copyLink = function(){
   navigator.clipboard.writeText(getLink());
-  alert("Link copied");
 };
 
 window.shareTelegram = function(){
