@@ -65,29 +65,23 @@ input {
   background: #e5e7eb;
 }
 
-/* ✅ MOBILE FIX */
+/* ✅ MOBILE FIX: editor becomes overlay */
 @media (max-width: 768px) {
 
-  body {
-    flex-direction: column;
-    height: auto;
-  }
-
   .panel {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid #ddd;
+    height: 100%;
+    z-index: 9999;
+    background: #f9fafb;
+    overflow-y: auto;
   }
 
   .preview {
-    flex: none;
-    height: auto;
-    padding: 10px;
-  }
-
-  #app {
-    max-width: 100%;
+    width: 100%;
+    height: 100vh;
   }
 
 }
@@ -179,8 +173,18 @@ async function init() {
   const params = new URLSearchParams(window.location.search);
   productId = params.get("id");
 
+  if(!productId){
+    document.getElementById("app").innerHTML = "Missing product";
+    return;
+  }
+
   const res = await fetch(`/api/get?id=${productId}`);
   product = await res.json();
+
+  if(!product || product.error){
+    document.getElementById("app").innerHTML = "Product not found";
+    return;
+  }
 
   bindInputs();
   render();
@@ -233,11 +237,8 @@ function syncInputs(){
 window.toggleEditor = function(){
   const panel = document.querySelector(".panel");
 
-  if(panel.style.display === "none"){
-    panel.style.display = "block";
-  } else {
-    panel.style.display = "none";
-  }
+  panel.style.display =
+    panel.style.display === "none" ? "block" : "none";
 };
 
 /* -------- ENCODE -------- */
@@ -264,12 +265,17 @@ window.shareTelegram = function(){
 };
 
 window.sharePinterest = function(){
-  const url = encodeURIComponent(getLink());
-  const image = encodeURIComponent(product.image);
-  const desc = encodeURIComponent(product.title);
+
+  const link = getLink();
+
+  const url = encodeURIComponent(link); // ✅ themed link
+  const media = encodeURIComponent(product.image); // ✅ clean image
+  const desc = encodeURIComponent(
+    "🔥 This product is going viral right now — tap to see why"
+  );
 
   window.open(
-    `https://pinterest.com/pin/create/button/?url=${url}&media=${image}&description=${desc}`,
+    `https://pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`,
     "_blank"
   );
 };
