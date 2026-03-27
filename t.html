@@ -7,11 +7,13 @@
 
 <!-- Match s.html font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Open Graph (Pinterest / Facebook preview) -->
+
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="🔥 Viral Product Card">
 <meta property="og:description" content="See why this is trending now">
 <meta property="og:image" content="" id="ogImage">
+
 </head>
 
 <body style="margin:0;">
@@ -27,7 +29,7 @@ const themeEncoded = params.get("theme");
 
 let theme = {};
 
-// Decode theme safely
+/* ✅ Decode theme safely */
 if(themeEncoded){
   try {
     theme = JSON.parse(atob(themeEncoded));
@@ -38,11 +40,23 @@ if(themeEncoded){
 
 async function load(){
 
-  // Fetch product
+  if(!id){
+    document.getElementById("app").innerHTML =
+      "<p style='color:red;text-align:center;'>Missing product ID</p>";
+    return;
+  }
+
+  /* Fetch product */
   const res = await fetch(`/api/get?id=${id}`);
   const product = await res.json();
 
-  // ✅ MATCH s.html LAYOUT
+  if(!product || product.error){
+    document.getElementById("app").innerHTML =
+      "<p style='color:red;text-align:center;'>Product not found</p>";
+    return;
+  }
+
+  /* ✅ MATCH s.html LAYOUT */
   document.body.style.background = theme.bg || "#f5f5f3";
   document.body.style.padding = "20px";
   document.body.style.display = "flex";
@@ -51,9 +65,35 @@ async function load(){
   document.body.style.minHeight = "100vh";
   document.body.style.fontFamily = "Inter, sans-serif";
 
-  // Render themed card
+  /* ✅ Set OG image (important for sharing fallback) */
+  document.getElementById("ogImage")
+    .setAttribute("content", product.image);
+
+  /* Render themed card */
   document.getElementById("app").innerHTML =
     renderCard(product, theme);
+
+  /* ✅ PINTEREST LOOP (CRITICAL) */
+  const pinBtn = document.getElementById("pinBtn");
+
+  if(pinBtn){
+    pinBtn.addEventListener("click", () => {
+
+      const url = encodeURIComponent(window.location.href); // themed link
+      const media = encodeURIComponent(product.image);
+
+      const desc = encodeURIComponent(
+        `${product.title} 🔥 This is going viral right now — tap to see why #amazonfinds #viralproducts`
+      );
+
+      const pinURL =
+        `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`;
+
+      window.open(pinURL, "_blank");
+
+    });
+  }
+
 }
 
 load();
