@@ -9,26 +9,38 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  display: flex;
-  height: 100vh;
+  background: #111;
 }
 
-/* LEFT PANEL */
+/* ✅ FLOATING PANEL */
 .panel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
   width: 300px;
+  max-height: 90vh;
+  z-index: 9999;
+
+  background: rgba(249,250,251,0.95);
+  backdrop-filter: blur(12px);
+
+  border-radius: 12px;
   padding: 16px;
-  border-right: 1px solid #ddd;
-  background: #f9fafb;
   overflow-y: auto;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+
+  cursor: move;
 }
 
-/* RIGHT PREVIEW */
+/* ✅ PREVIEW BACKGROUND */
 .preview {
-  flex: 1;
+  position: fixed;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #111;
+  z-index: 1;
 }
 
 #app {
@@ -64,33 +76,18 @@ input {
   cursor: pointer;
   background: #e5e7eb;
 }
-
-/* ✅ MOBILE FIX: editor becomes overlay */
-@media (max-width: 768px) {
-
-  .panel {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    background: #f9fafb;
-    overflow-y: auto;
-  }
-
-  .preview {
-    width: 100%;
-    height: 100vh;
-  }
-
-}
 </style>
 </head>
 
 <body>
 
 <div class="panel">
+
+  <div id="panelHeader" style="font-weight:600; margin-bottom:10px;">
+    Theme Editor
+  </div>
+
+  <button class="btn" onclick="toggleFocus()">🔍 Focus Mode</button>
   <button class="btn" onclick="toggleEditor()">👁 Hide Editor</button>
 
   <h3>🎨 Presets</h3>
@@ -121,6 +118,7 @@ input {
   <button class="btn" onclick="copyLink()">📋 Copy Link</button>
   <button class="btn" onclick="shareTelegram()">📤 Share Telegram</button>
   <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
+
 </div>
 
 <div class="preview">
@@ -187,6 +185,7 @@ async function init() {
   }
 
   bindInputs();
+  syncInputs();
   render();
 }
 
@@ -195,6 +194,7 @@ init();
 /* -------- RENDER -------- */
 function render(){
   document.body.style.background = theme.bg;
+
   document.getElementById("app").innerHTML = renderCard(product, theme);
 }
 
@@ -241,6 +241,53 @@ window.toggleEditor = function(){
     panel.style.display === "none" ? "block" : "none";
 };
 
+/* -------- FOCUS MODE -------- */
+let focusMode = false;
+
+window.toggleFocus = function () {
+  const panel = document.querySelector(".panel");
+
+  focusMode = !focusMode;
+
+  if (focusMode) {
+    panel.style.opacity = "0";
+    panel.style.pointerEvents = "none";
+  } else {
+    panel.style.opacity = "1";
+    panel.style.pointerEvents = "auto";
+  }
+};
+
+/* -------- DRAG PANEL -------- */
+const panel = document.querySelector(".panel");
+const header = document.getElementById("panelHeader");
+
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+header.addEventListener("mousedown", (e) => {
+  isDragging = true;
+
+  const rect = panel.getBoundingClientRect();
+
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+
+  panel.style.transition = "none";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+
+  panel.style.left = `${e.clientX - offsetX}px`;
+  panel.style.top = `${e.clientY - offsetY}px`;
+});
+
+document.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
 /* -------- ENCODE -------- */
 function encodeTheme(){
   return btoa(JSON.stringify({
@@ -268,8 +315,8 @@ window.sharePinterest = function(){
 
   const link = getLink();
 
-  const url = encodeURIComponent(link); // ✅ themed link
-  const media = encodeURIComponent(product.image); // ✅ clean image
+  const url = encodeURIComponent(link);
+  const media = encodeURIComponent(product.image);
   const desc = encodeURIComponent(
     "🔥 This product is going viral right now — tap to see why"
   );
