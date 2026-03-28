@@ -3,378 +3,344 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Theme Builder • FloatRising</title>
+<title>Theme Builder</title>
 
 <style>
-    :root {
-        --accent: #22c55e;
-    }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #111;
+}
 
-    body {
-        margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: #0a0a0a;
-        color: #f1f5f9;
-        display: flex;
-        overflow: hidden;
-    }
+/* =========================
+   PANEL (GLASS + MINIMAL)
+========================= */
+.panel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 280px;
+  max-height: 90vh;
+  z-index: 9999;
 
-    /* Professional Liquid Glass Sidebar */
-    .sidebar {
-        width: 340px;
-        height: 100vh;
-        position: fixed;
-        left: 0;
-        top: 0;
-        background: rgba(15, 23, 42, 0.82);
-        backdrop-filter: blur(24px) saturate(180%);
-        border-right: 1px solid rgba(148, 163, 184, 0.15);
-        padding: 28px 24px;
-        box-sizing: border-box;
-        overflow-y: auto;
-        box-shadow: 6px 0 40px rgba(0, 0, 0, 0.6);
-        transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-        z-index: 1000;
-    }
+  background: rgba(0,0,0,0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 
-    .sidebar.closed {
-        transform: translateX(-100%);
-    }
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
 
-    .sidebar h3 {
-        margin: 0 0 6px;
-        font-size: 22px;
-        font-weight: 600;
-        letter-spacing: -0.025em;
-    }
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 
-    .subtitle {
-        font-size: 13px;
-        color: #94a3b8;
-        margin-bottom: 28px;
-    }
+  color: #fff;
 
-    h4 {
-        margin: 32px 0 12px;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: #64748b;
-        font-weight: 600;
-    }
+  overflow: hidden;
 
-    hr {
-        border: none;
-        border-top: 1px solid rgba(148, 163, 184, 0.1);
-        margin: 28px 0;
-    }
+  cursor: default;
+}
 
-    label {
-        display: block;
-        margin: 16px 0 7px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #e2e8f0;
-    }
+/* Header always visible (drag handle) */
+.panel-header {
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    /* Enhanced Inputs */
-    input[type="color"] {
-        width: 100%;
-        height: 52px;
-        padding: 6px;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        border-radius: 12px;
-        cursor: pointer;
-        transition: transform 0.2s ease;
-    }
+  cursor: move;
+  background: rgba(255,255,255,0.03);
+}
 
-    input[type="color"]:hover {
-        transform: scale(1.02);
-    }
+/* Collapsible body */
+.panel-body {
+  padding: 12px;
+  display: none;
+}
 
-    .color-info {
-        font-size: 12px;
-        color: #94a3b8;
-        margin-top: 4px;
-        display: flex;
-        justify-content: space-between;
-    }
+/* Expand on hover */
+.panel:hover .panel-body {
+  display: block;
+}
 
-    select, input[type="range"] {
-        width: 100%;
-        padding: 11px 14px;
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        border-radius: 12px;
-        color: #fff;
-        font-size: 15px;
-        transition: all 0.2s ease;
-    }
+/* =========================
+   CONTROLS
+========================= */
+label {
+  font-size: 12px;
+  opacity: 0.7;
+}
 
-    select:hover, input[type="range"]:hover {
-        border-color: var(--accent);
-    }
+input {
+  width: 100%;
+  margin: 6px 0 10px;
+  padding: 6px;
+  border-radius: 6px;
+  border: none;
+}
 
-    .preset-btn {
-        width: 100%;
-        padding: 13px;
-        margin-bottom: 9px;
-        border-radius: 12px;
-        border: none;
-        background: rgba(255,255,255,0.08);
-        color: #fff;
-        font-size: 15px;
-        cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+.btn {
+  margin-top: 8px;
+  padding: 8px;
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 13px;
+}
 
-    .preset-btn:hover {
-        background: rgba(255,255,255,0.15);
-        transform: translateY(-2px);
-    }
+.btn.secondary {
+  background: rgba(255,255,255,0.08);
+}
 
-    .btn {
-        width: 100%;
-        padding: 13px;
-        margin-top: 10px;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        font-weight: 500;
-        font-size: 15px;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+/* Presets */
+.preset-btn {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 7px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 12px;
+}
 
-    .btn-primary {
-        background: var(--accent);
-        color: #fff;
-        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
-    }
+hr {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: 10px 0;
+}
 
-    .btn-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.45);
-    }
+/* =========================
+   PREVIEW
+========================= */
+.preview {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
 
-    .toggle-btn {
-        position: fixed;
-        top: 24px;
-        left: 360px;
-        z-index: 1100;
-        background: var(--accent);
-        border: none;
-        color: #fff;
-        padding: 11px 16px;
-        border-radius: 14px;
-        cursor: pointer;
-        font-size: 20px;
-        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-        transition: left 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-
-    .sidebar.closed ~ .toggle-btn {
-        left: 24px;
-    }
-
-    .content {
-        margin-left: 340px;
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px 30px;
-        transition: margin-left 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-    }
-
-    .sidebar.closed ~ .content {
-        margin-left: 0;
-    }
-
-    #app {
-        width: 100%;
-        max-width: 420px;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 30px 70px -15px rgba(0,0,0,0.6),
-                    inset 0 1px 0 0 rgba(255,255,255,0.1);
-    }
+#app {
+  width: 100%;
+  max-width: 420px;
+}
 </style>
 </head>
 
 <body>
 
-<div id="sidebar" class="sidebar">
-    <h3>🎨 Theme Studio</h3>
-    <div class="subtitle">Craft viral product cards with textures & glass</div>
+<div class="panel">
+  <div class="panel-header" id="panelHeader">
+    Theme Editor
+    <span style="font-size:12px; opacity:0.6;">drag</span>
+  </div>
 
-    <h4>Quick Presets</h4>
-    <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass • Granite</button>
-    <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White • Paper</button>
+  <div class="panel-body">
+
+    <button class="btn secondary" onclick="toggleFocus()">🔍 Focus Mode</button>
+    <button class="btn secondary" onclick="toggleEditor()">👁 Hide Editor</button>
+
+    <hr/>
+
+    <div>🎨 Presets</div>
+    <button class="preset-btn" onclick="loadPreset('darkGlass')">Dark Glass</button>
+    <button class="preset-btn" onclick="loadPreset('minimalWhite')">Minimal White</button>
     <button class="preset-btn" onclick="loadPreset('neonViral')">Neon Viral</button>
 
     <hr/>
 
-    <h4>Customize</h4>
+    <div>⚙️ Customize</div>
 
     <label>Background</label>
     <input type="color" id="bg" />
-    <div class="color-info" id="bg-info"></div>
 
-    <label>Card Base</label>
+    <label>Card</label>
     <input type="color" id="card" />
-    <div class="color-info" id="card-info"></div>
 
     <label>Text</label>
     <input type="color" id="text" />
-    <div class="color-info" id="text-info"></div>
 
     <label>Accent</label>
     <input type="color" id="accent" />
-    <div class="color-info" id="accent-info"></div>
 
-    <label>Texture Overlay</label>
-    <select id="texture">
-        <option value="none">None (Solid)</option>
-        <option value="paper">Fine Paper</option>
-        <option value="granite">Granite Noise</option>
-        <option value="wood">Warm Wood Grain</option>
-        <option value="tiles">Matte Tiles</option>
-        <option value="noise">Subtle Static Noise</option>
-    </select>
-
-    <label>Corner Radius — <span id="radius-val">14</span>px</label>
-    <input type="range" id="radius" min="4" max="40" value="14" />
+    <label>Radius</label>
+    <input type="range" id="radius" min="0" max="40" />
 
     <hr/>
 
-    <button class="btn btn-primary" onclick="resetToDefault()">Reset to Clean Default</button>
-    <button class="btn btn-primary" onclick="copyLink()">📋 Copy Shareable Link</button>
-    <button class="btn" onclick="shareTelegram()">Telegram</button>
-    <button class="btn" onclick="sharePinterest()">Pinterest</button>
+    <button class="btn" onclick="copyLink()">📋 Copy Link</button>
+    <button class="btn" onclick="shareTelegram()">📤 Telegram</button>
+    <button class="btn" onclick="sharePinterest()">📌 Pinterest</button>
+
+  </div>
 </div>
 
-<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-
-<div class="content">
-    <div id="app"></div>
+<div class="preview">
+  <div id="app"></div>
 </div>
 
 <script type="module">
 import { renderCard } from '/card.js';
 
-let productId, product;
+let productId;
+let product;
 
-const presets = { /* same as before, with texture values */ 
-    darkGlass: { bg: "#0f172a", card: "#1e2937", text: "#f8fafc", accent: "#22c55e", radius: 20, texture: "granite" },
-    minimalWhite: { bg: "#f8fafc", card: "#ffffff", text: "#0f172a", accent: "#2563eb", radius: 16, texture: "paper" },
-    neonViral: { bg: "#050505", card: "#111111", text: "#ffffff", accent: "#c026d3", radius: 24, texture: "noise" }
+const presets = {
+  darkGlass: {
+    bg: "#0f172a",
+    card: "rgba(255,255,255,0.05)",
+    text: "#ffffff",
+    accent: "#22c55e",
+    radius: 16
+  },
+  minimalWhite: {
+    bg: "#f9fafb",
+    card: "#ffffff",
+    text: "#111827",
+    accent: "#2563eb",
+    radius: 12
+  },
+  neonViral: {
+    bg: "#050505",
+    card: "#111111",
+    text: "#ffffff",
+    accent: "#ff00ff",
+    radius: 20
+  }
 };
 
 let theme = {
-    bg: "#111111", card: "#1e2937", text: "#f1f5f9", accent: "#22c55e", radius: 16, texture: "none"
+  bg: "#111111",
+  card: "#111827",
+  text: "#ffffff",
+  accent: "#22c55e",
+  radius: 12
 };
 
-async function init() {
-    const params = new URLSearchParams(window.location.search);
-    productId = params.get("id");
-    const res = await fetch(`/api/get?id=${productId}`);
-    product = await res.json();
+let currentPreset = null;
 
-    bindInputs();
-    syncInputs();
-    render();
+/* INIT */
+async function init() {
+  const params = new URLSearchParams(window.location.search);
+  productId = params.get("id");
+
+  const res = await fetch(`/api/get?id=${productId}`);
+  product = await res.json();
+
+  bindInputs();
+  syncInputs();
+  render();
 }
 init();
 
-function render() {
-    document.body.style.background = theme.bg;
-    document.getElementById("app").innerHTML = renderCard(product, theme);
+/* RENDER */
+function render(){
+  document.body.style.background = theme.bg;
+  document.getElementById("app").innerHTML = renderCard(product, theme);
 }
 
-window.toggleSidebar = () => document.getElementById("sidebar").classList.toggle("closed");
-
-window.loadPreset = (name) => {
-    theme = {...presets[name]};
-    syncInputs();
-    render();
+/* PRESETS */
+window.loadPreset = function(name){
+  theme = { ...presets[name] };
+  currentPreset = name;
+  syncInputs();
+  render();
 };
 
-window.resetToDefault = () => {
-    if (!confirm("Reset all customizations?")) return;
-    theme = { bg: "#111111", card: "#1e2937", text: "#f1f5f9", accent: "#22c55e", radius: 16, texture: "none" };
-    syncInputs();
-    render();
-};
-
-function bindInputs() {
-    ["bg","card","text","accent"].forEach(id => {
-        const el = document.getElementById(id);
-        el.addEventListener("input", () => {
-            theme[id] = el.value;
-            updateColorInfo(id);
-            render();
-        });
+/* INPUTS */
+function bindInputs(){
+  document.querySelectorAll("input").forEach(input=>{
+    input.addEventListener("input", ()=>{
+      theme.bg = document.getElementById("bg").value;
+      theme.card = document.getElementById("card").value;
+      theme.text = document.getElementById("text").value;
+      theme.accent = document.getElementById("accent").value;
+      theme.radius = document.getElementById("radius").value;
+      render();
     });
-
-    document.getElementById("texture").addEventListener("change", () => {
-        theme.texture = document.getElementById("texture").value;
-        render();
-    });
-
-    const radiusEl = document.getElementById("radius");
-    radiusEl.addEventListener("input", () => {
-        theme.radius = parseInt(radiusEl.value);
-        document.getElementById("radius-val").textContent = theme.radius;
-        render();
-    });
+  });
 }
 
-function updateColorInfo(id) {
-    // Optional: show hex or hsl – can be expanded
-    document.getElementById(id + "-info").textContent = document.getElementById(id).value.toUpperCase();
+function syncInputs(){
+  document.getElementById("bg").value = theme.bg;
+  document.getElementById("card").value = theme.card;
+  document.getElementById("text").value = theme.text;
+  document.getElementById("accent").value = theme.accent;
+  document.getElementById("radius").value = theme.radius;
 }
 
-function syncInputs() {
-    document.getElementById("bg").value = theme.bg;
-    document.getElementById("card").value = theme.card;
-    document.getElementById("text").value = theme.text;
-    document.getElementById("accent").value = theme.accent;
-    document.getElementById("texture").value = theme.texture;
-    document.getElementById("radius").value = theme.radius;
-    document.getElementById("radius-val").textContent = theme.radius;
-    ["bg","card","text","accent"].forEach(updateColorInfo);
-}
-
-function encodeTheme() {
-    return encodeURIComponent(JSON.stringify(theme));
-}
-
-function getLink() {
-    const base = `${window.location.origin}${window.location.pathname}`;
-    return `${base}?id=${productId}&theme=${encodeTheme()}`;
-}
-
-window.copyLink = async () => {
-    const link = getLink();
-    try {
-        await navigator.clipboard.writeText(link);
-        alert("Link copied!");
-    } catch {
-        prompt("Copy this link:", link);
-    }
+/* TOGGLE */
+window.toggleEditor = function(){
+  const panel = document.querySelector(".panel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
 };
 
-window.shareTelegram = () => {
-    const link = getLink();
-    const url = `https://t.me/share/url?url=${encodeURIComponent(link)}`;
-    window.open(url, "_blank");
+let focusMode = false;
+window.toggleFocus = function(){
+  const panel = document.querySelector(".panel");
+  focusMode = !focusMode;
+
+  panel.style.opacity = focusMode ? "0" : "1";
+  panel.style.pointerEvents = focusMode ? "none" : "auto";
 };
 
-window.sharePinterest = () => {
-    const link = getLink();
-    const url = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&description=Check%20this%20out`;
-    window.open(url, "_blank");
+/* DRAG (HEADER ONLY) */
+const panel = document.querySelector(".panel");
+const header = document.getElementById("panelHeader");
+
+let dragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+header.addEventListener("mousedown", (e)=>{
+  dragging = true;
+  const rect = panel.getBoundingClientRect();
+  offsetX = e.clientX - rect.left;
+  offsetY = e.clientY - rect.top;
+});
+
+document.addEventListener("mousemove", (e)=>{
+  if(!dragging) return;
+  panel.style.left = `${e.clientX - offsetX}px`;
+  panel.style.top = `${e.clientY - offsetY}px`;
+});
+
+document.addEventListener("mouseup", ()=> dragging = false);
+
+/* LINKS */
+function encodeTheme(){
+  return btoa(JSON.stringify({ ...theme, preset: currentPreset || "custom" }));
+}
+
+function getLink(){
+  return `https://floatrising.com/t.html?id=${productId}&theme=${encodeTheme()}`;
+}
+
+window.copyLink = function(){
+  navigator.clipboard.writeText(getLink());
+  alert("Link copied");
+};
+
+window.shareTelegram = function(){
+  const url = encodeURIComponent(getLink());
+  window.open(`https://t.me/share/url?url=${url}`, "_blank");
+};
+
+window.sharePinterest = function(){
+  const url = encodeURIComponent(getLink());
+  const media = encodeURIComponent(product.image);
+  const desc = encodeURIComponent("🔥 Trending product");
+
+  window.open(
+    `https://pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${desc}`,
+    "_blank"
+  );
 };
 </script>
 
