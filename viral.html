@@ -12,6 +12,7 @@
 
 <link rel="icon" href="/float-rising-logo.svg">
 <link rel="canonical" href="">
+
 <style>
 body{
   font-family:system-ui;
@@ -19,17 +20,20 @@ body{
   margin:auto;
   padding:20px;
   background:#f9fafb;
+  line-height:1.7;
 }
-h1{font-size:28px;}
+h1{font-size:30px;margin-bottom:10px;}
+h2{margin-top:30px;}
 .card{
   background:white;
   padding:15px;
   border-radius:12px;
   margin-bottom:15px;
   box-shadow:0 5px 15px rgba(0,0,0,0.08);
+  cursor:pointer;
 }
 img{width:100%;border-radius:10px;}
-a.button{
+.button{
   display:block;
   margin-top:10px;
   padding:10px;
@@ -47,39 +51,105 @@ a.button{
 
 <h1 id="title">Trending Products</h1>
 
+<p id="intro"></p>
+
+<h2>🔥 Trending Right Now</h2>
+
 <div id="list">Loading...</div>
 
+<!-- SEO TEXT (IMPORTANT) -->
+<h2>📈 Why These Products Are Trending</h2>
+<p id="seoText"></p>
+
+<!-- INTERNAL LINKS -->
+<div style="margin-top:40px;line-height:1.8;">
+  <a href="/viral-amazon-products.html">🔥 Viral Amazon Products</a><br>
+  <a href="/tiktok-made-me-buy-it.html">📱 TikTok Made Me Buy It</a><br>
+  <a href="/amazon-must-haves.html">🛒 Amazon Must Haves</a><br>
+  <a href="/viral-kitchen-gadgets.html">🍳 Viral Kitchen Gadgets</a>
+</div>
+
 <script>
-  document.querySelector('link[rel="canonical"]')
-.setAttribute("href", window.location.href);
+
+// ===== SETUP =====
 const params = new URLSearchParams(window.location.search);
 const q = params.get("q") || "viral";
 
-const title = `Viral ${q} Products (Updated Daily)`;
-const desc = `Discover trending ${q} products on Amazon. Find viral items people are buying right now.`;
+// CLEAN TEXT
+const keyword = q.replace(/-/g, " ");
 
+// TITLE + META
+const title = `Viral ${keyword} Products (Updated Daily)`;
+const desc = `Discover trending ${keyword} products on Amazon. Find viral items people are buying right now.`;
+
+// APPLY
 document.getElementById("title").innerText = title;
 document.getElementById("pageTitle").innerText = title;
 document.getElementById("metaDesc").setAttribute("content", desc);
 
+// CANONICAL
+document.querySelector('link[rel="canonical"]')
+  .setAttribute("href", window.location.origin + "/programmatic.html?q=" + q);
+
+// INTRO TEXT (SEO BOOST)
+document.getElementById("intro").innerHTML = `
+Looking for <strong>${keyword}</strong> trending right now? 
+These are the products going viral across TikTok, Pinterest, and Amazon.
+`;
+
+// SEO TEXT (VERY IMPORTANT)
+document.getElementById("seoText").innerHTML = `
+Most ${keyword} go viral because they solve simple problems, look satisfying on video, or create curiosity. 
+That’s why they perform so well on TikTok and Pinterest.
+`;
+
 // LOAD PRODUCTS
-fetch("/api/search?q=" + q)
-.then(res => res.json())
-.then(data => {
+async function loadProducts(){
 
-const products = (data.products || []).slice(0,10);
+  try{
 
-document.getElementById("list").innerHTML = products.map(p => `
-<div class="card">
-<img src="${p.image}">
-<h3>${p.title}</h3>
-<a class="button" href="/s.html?id=${p.id}">
-View Product
-</a>
-</div>
-`).join("");
+    const res = await fetch("/api/search?q=" + q);
+    const data = await res.json();
 
-});
+    const products = (data.products || []).slice(0,10);
+
+    if(products.length === 0){
+      document.getElementById("list").innerHTML = "No products found.";
+      return;
+    }
+
+    const html = await Promise.all(products.map(async p => {
+
+      // 🔥 IMPORTANT: create share link dynamically
+      const shareRes = await fetch("/api/share", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(p)
+      });
+
+      const shareData = await shareRes.json();
+
+      return `
+      <div class="card" onclick="window.location.href='/s.html?id=${shareData.id}'">
+        <img src="${p.image}">
+        <h3>${p.title}</h3>
+        <div class="button">View Product</div>
+      </div>
+      `;
+
+    }));
+
+    document.getElementById("list").innerHTML = html.join("");
+
+  }catch(err){
+    console.error(err);
+    document.getElementById("list").innerHTML = "Error loading products";
+  }
+
+}
+
+loadProducts();
+
 </script>
 
 </body>
