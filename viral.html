@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title id="pageTitle">Viral Products</title>
+
+<meta name="description" id="metaDesc" content="">
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="/float-rising-logo.svg">
+
+<style>
+body{
+  font-family:system-ui;
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+  background:#f9fafb;
+}
+h1{font-size:28px;}
+.card{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+img{width:100%;border-radius:10px;}
+a.button{
+  display:block;
+  margin-top:10px;
+  padding:10px;
+  background:#111;
+  color:white;
+  text-align:center;
+  border-radius:8px;
+  text-decoration:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 id="title">Trending Products</h1>
+
+<div id="list">Loading...</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const q = params.get("q") || "viral";
+
+const title = `Viral ${q} Products (Updated Daily)`;
+const desc = `Discover trending ${q} products on Amazon. Find viral items people are buying right now.`;
+
+document.getElementById("title").innerText = title;
+document.getElementById("pageTitle").innerText = title;
+document.getElementById("metaDesc").setAttribute("content", desc);
+
+// LOAD PRODUCTS
+fetch("/api/search?q=" + q)
+.then(res => res.json())
+.then(data => {
+
+const products = (data.products || []).slice(0,10);
+
+document.getElementById("list").innerHTML = products.map(p => `
+<div class="card">
+<img src="${p.image}">
+<h3>${p.title}</h3>
+<a class="button" href="/s.html?id=${p.id}">
+View Product
+</a>
+</div>
+`).join("");
+
+});
+</script>
+
+</body>
+</html>
