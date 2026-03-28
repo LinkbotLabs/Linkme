@@ -497,7 +497,89 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
       if (url.includes("tag=")) return url;
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
+async function loadProducts(q = "") {
+  const card = document.getElementById("card");
+  
+  // Show clean waiting state when API is unavailable (quota, down, etc.)
+  card.innerHTML = `
+    <div class="p-12 text-center space-y-8 min-h-[520px] flex flex-col items-center justify-center bg-gray-900 rounded-3xl">
+      <div class="text-6xl animate-pulse">⏳</div>
+      <div class="space-y-3">
+        <div class="text-2xl font-semibold text-gray-200">
+          Finding today's viral products...
+        </div>
+        <div class="text-gray-400 max-w-sm">
+          New drops usually land at 7am UK time.<br>
+          The feed is refreshing right now.
+        </div>
+      </div>
+      
+      <button onclick="loadProducts()" 
+              class="mt-4 px-10 py-4 bg-gradient-to-r from-primary to-accent hover:from-indigo-600 hover:to-purple-600 
+                     text-white font-bold text-lg rounded-2xl shadow-xl transition hover:scale-105">
+        🔄 Refresh Page
+      </button>
 
+      <div class="pt-6 text-sm text-gray-500">
+        Want products instantly? 
+        <a href="https://t.me/floatviral" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-medium">
+          Join @floatviral on Telegram →
+        </a>
+      </div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch("/api/search" + (q ? "?q=" + encodeURIComponent(q) : ""));
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    products = (data.products || []).filter(p => p.link && p.image);
+
+    if (products.length === 0) {
+      showNoProductsState();
+      return;
+    }
+
+    // Success - show the first product
+    shuffle(products);
+    currentIndex = 0;
+    renderProduct();
+    startAutoScroll();
+
+  } catch (err) {
+    console.error("API unavailable (quota or other error):", err);
+    // Do nothing - keep the nice "please refresh" screen shown above
+    // User must click Refresh or reload the page
+  }
+}
+
+function showNoProductsState() {
+  const card = document.getElementById("card");
+  card.innerHTML = `
+    <div class="p-12 text-center space-y-8 min-h-[520px] flex flex-col items-center justify-center bg-gray-900 rounded-3xl">
+      <div class="text-5xl">🌊</div>
+      <div class="text-xl font-semibold text-gray-200">
+        No products available yet
+      </div>
+      <p class="text-gray-400 max-w-sm">
+        We're updating the viral feed. Please refresh in a few minutes.
+      </p>
+      <button onclick="loadProducts()" 
+              class="px-10 py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:scale-105 transition">
+        🔄 Try Again
+      </button>
+      
+      <a href="https://t.me/floatviral" target="_blank" 
+         class="mt-4 inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300">
+        👉 Get early drops on Telegram @floatviral
+      </a>
+    </div>
+  `;
+}
     
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
