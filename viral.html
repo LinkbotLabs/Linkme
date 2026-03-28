@@ -50,6 +50,8 @@ a.button{
 <div id="list">Loading...</div>
 
 <script>
+  document.querySelector('link[rel="canonical"]')
+.setAttribute("href", window.location.href);
 const params = new URLSearchParams(window.location.search);
 const q = params.get("q") || "viral";
 
