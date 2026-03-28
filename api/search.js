@@ -7,10 +7,11 @@ const cache = {
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
 /* ---------------- KEYWORD ENGINE ---------------- */
+
 const intents = [
   "trending", "viral", "best seller", "must have",
-  "hidden gems", "problem solving", "weird", "aesthetic", "smart",
-  "luxury", "minimalist", "space saving", "portable", "high tech"
+  "hidden gems", "problem solving", "weird", "aesthetic",
+  "smart", "portable", "high tech"
 ];
 
 const categories = [
@@ -20,8 +21,6 @@ const categories = [
   "bedroom gadgets", "bathroom gadgets",
   "pet gadgets", "baby products", "fitness gadgets", "outdoor gear"
 ];
-
-
 
 const platforms = [
   "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
@@ -39,6 +38,37 @@ function generateKeywords(count = 4) {
   }
 
   return combos.sort(() => 0.5 - Math.random()).slice(0, count);
+}
+
+/* ---------------- VIRAL SCORE ENGINE ---------------- */
+
+function getViralScore({ title, image, source }) {
+  const t = title.toLowerCase();
+
+  let score = 0;
+
+  // 🔥 Keyword boosts (TikTok-style psychology)
+  if (t.includes("tiktok")) score += 40;
+  if (t.includes("viral")) score += 40;
+  if (t.includes("must have")) score += 25;
+  if (t.includes("amazon find")) score += 20;
+  if (t.includes("gadgets")) score += 15;
+  if (t.includes("smart")) score += 10;
+  if (t.includes("portable")) score += 10;
+
+  // 🖼 Image quality proxy
+  if (image) score += 25;
+  else score -= 50;
+
+  // 🌐 Source weighting
+  if (source.includes("tiktok")) score += 25;
+  if (source.includes("pinterest")) score += 15;
+  if (source.includes("amazon")) score += 10;
+
+  // 🎲 Controlled randomness (keeps feed fresh)
+  score += Math.random() * 15;
+
+  return score;
 }
 
 /* ---------------- HANDLER ---------------- */
@@ -79,22 +109,26 @@ export default async function handler(req, res) {
         );
 
         const data = await googleRes.json();
-
         if (!data.items) continue;
 
         for (const item of data.items) {
 
           const link = item.link || "";
           const asin = extractASIN(link);
-
-          if (!asin) continue;
-          if (seenASIN.has(asin)) continue;
+          if (!asin || seenASIN.has(asin)) continue;
 
           const image =
             item.pagemap?.cse_image?.[0]?.src ||
             item.pagemap?.cse_thumbnail?.[0]?.src;
 
+          // ❌ HARD FILTERS (remove junk early)
           if (!image) continue;
+          if (!item.title || item.title.length < 25) continue;
+
+          const lowerTitle = item.title.toLowerCase();
+          if (lowerTitle.includes("book")) continue;
+          if (lowerTitle.includes("manual")) continue;
+          if (lowerTitle.includes("guide")) continue;
 
           const description =
             item.snippet ||
@@ -103,15 +137,22 @@ export default async function handler(req, res) {
 
           const cleanLink = `https://www.amazon.com/dp/${asin}`;
 
+          const score = getViralScore({
+            title: item.title,
+            image,
+            source: link
+          });
+
+          // ❌ SCORE FILTER (this is key)
+          if (score < 40) continue;
+
           discovered.push({
             id: asin,
             title: cleanTitle(item.title),
             description: description.substring(0, 140),
             image,
             link: cleanLink,
-
-            // SIMPLE AUTO SCORE (no frontend needed)
-            score: Math.random() * 5 + Date.now() / 100000000000
+            score
           });
 
           seenASIN.add(asin);
@@ -125,55 +166,45 @@ export default async function handler(req, res) {
       if (discovered.length >= 60) break;
     }
 
-    /* ---------------- MERGE ---------------- */
+    /* ---------------- MERGE + DEDUPE ---------------- */
 
     const DAILY_LIMIT = 30;
+    const MAX_POOL = 90;
 
     let existing = cache.data || [];
+    let pool = [...existing, ...discovered];
 
-    const merged = [...existing, ...discovered];
+    const uniquePool = [];
+    const seenIds = new Set();
 
-    const unique = [];
-    const seen = new Set();
-
-    for (const p of merged) {
-      if (!seen.has(p.id)) {
-        seen.add(p.id);
-        unique.push(p);
+    for (const p of pool) {
+      if (!seenIds.has(p.id)) {
+        seenIds.add(p.id);
+        uniquePool.push(p);
       }
     }
 
-    /* ---------------- SORT (VIRAL STYLE) ---------------- */
+    /* ---------------- SORT PROPERLY ---------------- */
 
-    const sorted = unique.sort((a, b) => b.score - a.score);
+    const sortedPool = uniquePool.sort((a, b) => b.score - a.score);
 
-    /* ---------------- ROTATION ---------------- */
+    /* ---------------- TRIM POOL ---------------- */
 
-    const ROTATION = 0.4;
+    const trimmedPool = sortedPool.slice(0, MAX_POOL);
 
-    const keepCount = Math.floor(existing.length * (1 - ROTATION));
-    const newCount = DAILY_LIMIT - keepCount;
+    /* ---------------- SMART DISPLAY (LIKE TELEGRAM) ---------------- */
 
-    const MAX_POOL = 90; // 3 days worth
+    const top = trimmedPool.slice(0, 50);
+    const finalProducts = [];
 
-let pool = [...existing, ...sorted];
+    while (finalProducts.length < DAILY_LIMIT && top.length > 0) {
+      const pickIndex = Math.floor(Math.random() * Math.min(10, top.length));
+      const pick = top.splice(pickIndex, 1)[0];
+      finalProducts.push(pick);
+    }
 
-// remove duplicates
-const uniquePool = [];
-const seenIds = new Set();
+    /* ---------------- SAVE CACHE ---------------- */
 
-for (const p of pool) {
-  if (!seenIds.has(p.id)) {
-    seenIds.add(p.id);
-    uniquePool.push(p);
-  }
-}
-
-// limit total pool size
-const trimmedPool = uniquePool.slice(0, MAX_POOL);
-
-// final display (top 30)
-const finalProducts = trimmedPool.slice(0, DAILY_LIMIT);
     cache.timestamp = now;
     cache.data = finalProducts;
     cache.fetching = false;
