@@ -346,7 +346,36 @@ function syncInputs() {
     ["bg","card","text","accent"].forEach(updateColorInfo);
 }
 
-/* encodeTheme, getLink, copyLink, share functions remain the same as previous version */
+function encodeTheme() {
+    return encodeURIComponent(JSON.stringify(theme));
+}
+
+function getLink() {
+    const base = `${window.location.origin}${window.location.pathname}`;
+    return `${base}?id=${productId}&theme=${encodeTheme()}`;
+}
+
+window.copyLink = async () => {
+    const link = getLink();
+    try {
+        await navigator.clipboard.writeText(link);
+        alert("Link copied!");
+    } catch {
+        prompt("Copy this link:", link);
+    }
+};
+
+window.shareTelegram = () => {
+    const link = getLink();
+    const url = `https://t.me/share/url?url=${encodeURIComponent(link)}`;
+    window.open(url, "_blank");
+};
+
+window.sharePinterest = () => {
+    const link = getLink();
+    const url = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&description=Check%20this%20out`;
+    window.open(url, "_blank");
+};
 </script>
 
 </body>
