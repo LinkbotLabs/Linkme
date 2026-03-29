@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   <title>Float Rising – Curated Product Cards</title>
 
   <meta property="og:title" content="Float Rising – Discover Today's Viral Products">
@@ -13,11 +11,12 @@
   <meta property="og:url" content="https://floatrising.com">
   <meta property="og:type" content="website">
   <meta name="google-site-verification" content="zimyFSPRizqjegANdGwnkqXVgye374FVVqmQt14cpMM" />
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://floatrising.com/">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://floatrising.com/">
 
-<meta name="description" content="Discover viral Amazon products updated daily. Find trending TikTok products, create shareable product cards, and earn with affiliate links.">
-  <!-- Google tag (gtag.js) -->
+  <meta name="description" content="Discover viral Amazon products updated daily. Find trending TikTok products, create shareable product cards, and earn with affiliate links.">
+
+  <!-- Google tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-QQZ3KB99WL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -26,503 +25,441 @@
     gtag('config', 'G-QQZ3KB99WL');
   </script>
 
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-  tailwind.config = {
-    theme: {
-      extend: {
-        colors: {
-          primary: '#6366f1',   // indigo
-          accent: '#22d3ee',    // cyan neon
-          dark: '#0B0F1A',      // main background
-          surface: '#111827',   // cards / panels
-        },
-        fontFamily: {
-          playfair: ['"Playfair Display"', 'serif'],
-        },
-        boxShadow: {
-          glow: '0 0 20px rgba(34, 211, 238, 0.25)',
-          glowStrong: '0 0 35px rgba(34, 211, 238, 0.4)',
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4f46e5',     // Deep indigo-blue (2026 tech primary)
+            accent: '#22d3ee',      // Bright cyan/teal accent
+            neutral: '#111827',
+          },
+          fontFamily: {
+            playfair: ['"Playfair Display"', 'serif'],
+          }
         }
       }
     }
-  }
-</script>
+  </script>
+
+  <style>
+    @keyframes float1 { 0% { transform: translate(0,0); } 50% { transform: translate(40px,-30px); } 100% { transform: translate(0,0); } }
+    @keyframes float2 { 0% { transform: translate(0,0); } 50% { transform: translate(-50px,40px); } 100% { transform: translate(0,0); } }
+    @keyframes float3 { 0% { transform: translate(0,0); } 50% { transform: translate(30px,20px); } 100% { transform: translate(0,0); } }
+
+    .animate-float1 { animation: float1 6s ease-in-out infinite; }
+    .animate-float2 { animation: float2 7s ease-in-out infinite; }
+    .animate-float3 { animation: float3 5s ease-in-out infinite; }
+
+    /* Enhanced 2026 glow for gradients */
+    .glow-cyan {
+      box-shadow: 0 0 25px -5px rgb(34 211 238 / 0.4);
+    }
+  </style>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
   <link rel="icon" href="/float-rising-logo.svg" />
 </head>
-<body class="bg-dark text-gray-100">
-<div style="display:none;">
-Viral Amazon products updated daily. Discover trending TikTok products, gadgets, and must-have items. Create shareable product cards and earn with affiliate marketing. Float Rising helps creators turn viral products into traffic and income through Pinterest and social sharing.
-</div>
-<div id="floatingTools" class="fixed right-4 bottom-28 z-50 flex flex-col gap-3">
 
-  <button onclick="sharePinterest()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+<body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
+
+<div style="display:none;">
+Viral Amazon products updated daily. Discover trending TikTok products, gadgets, and must-have items. Create shareable product cards and earn with affiliate marketing.
+</div>
+
+<div id="floatingTools" class="fixed right-4 bottom-28 z-50 flex flex-col gap-3">
+  <button onclick="sharePinterest()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
     📌
   </button>
-
-  <button onclick="copyPinterestDescription()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+  <button onclick="copyPinterestDescription()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
     📋
   </button>
-
-  <button onclick="shareLink()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+  <button onclick="shareLink()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
     🔗
   </button>
-
-  <button onclick="createGrokVideoPrompt()" class="bg-white shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition">
+  <button onclick="createGrokVideoPrompt()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
     🎥
   </button>
-
 </div>
 
-<!-- Slim Hero -->
-<header class="text-center pt-6 pb-4 px-4 bg-white border-b border-gray-100">
-  <img src="/float-rising-logo.svg" alt="Float Rising" class="mx-auto h-20 mb-3" />
-  <h1 class="text-4xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-    Float Rising
-  </h1>
-  <p class="text-base font-medium bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mt-1">
-    Create product cards that float across the internet and bring clicks back to you.
-    <div style="
-text-align:center;
-font-size:14px;
-color:#6b7280;
-margin-top:6px;
-">
-Create it once. Let it float.
-</div>
-  </p>
-<div class="mt-6 max-w-xs mx-auto">
-  <div class="text-center font-bold mb-2">
-    Points: <span id="creatorPoints">0 / 200</span>
-  </div>
-
-  <div class="w-full bg-gray-200 rounded-full h-3">
-    <div id="creatorBar"
-         class="bg-gradient-to-r from-primary to-accent h-full transition-all"
-         style="width:0%">
+<!-- HERO - Updated gradient -->
+<section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white">
+  <div class="absolute inset-0 opacity-30 blur-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-400"></div>
+  <div class="relative max-w-5xl mx-auto px-6 py-20 text-center">
+    <div class="inline-block px-4 py-2 mb-6 text-sm rounded-full bg-white/10 border border-white/20">
+      🚀 Turn views into traffic
+    </div>
+    <h1 class="text-4xl sm:text-6xl font-bold leading-tight mb-6">
+      Your product shouldn’t<br>
+      <span class="bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
+        sit on a page.
+      </span>
+    </h1>
+    <p class="text-lg sm:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+      Create once. Let your product circulate across Pinterest and social feeds — bringing clicks back automatically.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <button onclick="document.getElementById('tab-discover').scrollIntoView({behavior:'smooth'})"
+        class="px-8 py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 rounded-full font-bold text-lg shadow-xl hover:scale-105 transition glow-cyan">
+        🔥 Start Browsing
+      </button>
+      <button onclick="document.getElementById('tab-how').scrollIntoView({behavior:'smooth'})"
+        class="px-8 py-4 border border-white/30 rounded-full font-medium text-lg hover:bg-white/10 transition">
+        How It Works
+      </button>
+    </div>
+    <div class="mt-10 text-sm text-gray-400">
+      🔥 <strong>1,200+ creators</strong> already using Float Rising
     </div>
   </div>
-</div>
-  <!-- Free Telegram Bot Teaser in Hero -->
-  <div class="mt-4 inline-block bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-3 rounded-2xl shadow-sm border border-indigo-100">
-    <p class="text-sm sm:text-base font-medium text-indigo-800">
-      Missed  <strong>Todays product cards</strong> see a selection on Telegram — <br>
-         → <a href="https://t.me/floatviral" target="_blank" class="text-indigo-600 font-bold hover:underline">Join @floatviral now</a> 🚀
-    </p>
-  </div>
+</section>
 
-  
+<!-- SOCIAL PROOF -->
+<section class="bg-gray-900 text-white py-16 px-6 text-center">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold mb-10">Already spreading across the internet</h2>
+    <div class="grid grid-cols-3 gap-6">
+      <div>
+        <div class="text-3xl font-bold">1.2K+</div>
+        <div class="text-gray-400 text-sm">Creators</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold">10K+</div>
+        <div class="text-gray-400 text-sm">Cards Created</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold">50K+</div>
+        <div class="text-gray-400 text-sm">Clicks Generated</div>
+      </div>
+    </div>
+    <p class="mt-10 text-gray-400 text-sm">⚡ Early creators capture the most traffic</p>
+  </div>
+</section>
+
+<!-- MATCHED DARK HEADER -->
+<header class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white text-center pt-12 pb-10 px-4">
+  <div class="absolute inset-0 opacity-20 blur-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-400"></div>
+  <div class="relative z-10">
+    <img src="/float-rising-logo.svg" alt="Float Rising" class="mx-auto h-20 mb-4" />
+    <h1 class="text-4xl sm:text-5xl font-playfair font-bold bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
+      Float Rising
+    </h1>
+    <p class="text-gray-300 mt-3 max-w-md mx-auto">
+      Create once. Let your product circulate and bring clicks back automatically.
+    </p>
+    <div class="text-sm text-gray-500 mt-2">Create it once. Let it float.</div>
+
+    <div class="mt-6 max-w-xs mx-auto bg-white/10 backdrop-blur rounded-xl p-4 border border-white/10">
+      <div class="text-center font-semibold mb-2 text-gray-200">
+        Points: <span id="creatorPoints">0 / 200</span>
+      </div>
+      <div class="w-full bg-white/10 rounded-full h-3">
+        <div id="creatorBar" class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full transition-all" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="mt-5 max-w-md mx-auto bg-white/10 backdrop-blur border border-white/10 rounded-2xl px-5 py-4">
+      <p class="text-sm text-gray-300">Missed today’s product cards?</p>
+      <a href="https://t.me/floatviral" target="_blank" class="inline-block mt-1 text-cyan-400 font-semibold hover:underline">
+        → Join @floatviral 🚀
+      </a>
+    </div>
+  </div>
 </header>
 
-<!-- Sticky Tabs -->
-<nav class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
-  <div class="flex overflow-x-auto scrollbar-hide px-2">
-    <button data-tab="discover" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap active" aria-selected="true">
-      Discover
+<!-- Modern SaaS Tabs - Updated active state -->
+<nav class="sticky top-0 z-40 flex justify-center py-3 bg-black/60 backdrop-blur border-b border-white/10">
+  <div class="flex items-center gap-2 bg-white/5 backdrop-blur rounded-full p-1 border border-white/10 shadow-lg">
+    <!-- Discover -->
+    <button data-tab="discover"
+      class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white text-black shadow-sm scale-105">
+      🔍 <span>Discover</span>
     </button>
-    <button data-tab="how" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap">
-      How It Works
+
+    <!-- How -->
+    <button data-tab="how"
+      class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+      📘 <span>How It Works</span>
     </button>
-    <button data-tab="unlock" class="tab-btn px-5 py-3.5 font-medium text-sm sm:text-base border-b-4 border-transparent hover:border-primary focus:outline-none focus:border-primary transition whitespace-nowrap">
-      Unlock Mode
+
+    <!-- Unlock -->
+    <button data-tab="unlock"
+      class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+      🔓 <span>Unlock</span>
     </button>
   </div>
 </nav>
 
 <!-- Tab Panels -->
-<main class="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+<main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
 
-  <!-- Discover Tab -->
   <div id="tab-discover" class="tab-panel">
-    <div class="text-center mb-6">
-      <div class="inline-block bg-gray-900 text-white px-6 py-2.5 rounded-full text-sm sm:text-base font-semibold shadow">
-         🔥 Daily Viral Finds
-      </div>
-      <p class="text-sm mt-2">
-📌 Pin this before it goes viral
-</p>
-    <p class="text-sm font-semibold mt-3">
-⏰ New viral finds drop daily at 7am UK.
-Cards go fast.
-</p>    
-    </div>
 
-    <div id="card" class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden min-h-[500px]">
-      Loading...
-    </div>
-
-    <!-- Creator Tools -->
-    <div class="mt-8 bg-white rounded-2xl shadow border border-gray-100 p-6">
-      <h3 class="text-xl font-bold text-center mb-5">Creator Tools</h3>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="shareLink()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">Share Link</button>
-        <button onclick="copyPinterestDescription()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">📋 Caption</button>
-        <button onclick="sharePinterest()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">Pinterest</button>
-        <button onclick="takeScreenshotHint()" class="py-4 border border-gray-300 rounded-xl hover:bg-gray-50 transition text-sm">📸 Screenshot</button>
+    <!-- Section Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">
+          Discover
+        </h2>
+        <p class="text-sm text-gray-400 mt-1">
+          Trending products curated for circulation
+        </p>
       </div>
 
-      <!-- Free Bot Button in Creator Tools -->
-      <a href="https://t.me/floatviral" target="_blank" class="block w-full mt-6 py-5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl hover:opacity-90 transition flex items-center justify-center gap-3 text-base">
-        <span>🤖</span>  Daily Viral Drops – Free Telegram Channel
-      </a>
-
-      <button onclick="createGrokVideoPrompt()" class="w-full mt-4 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition flex items-center justify-center gap-3 text-base">
-        <span>🎥</span> 6s Video Prompt
-      </button>
-
-      <div class="mt-6 p-5 bg-gray-50 rounded-xl text-sm text-gray-600 text-center">
-        <strong>Quick video tip:</strong><br>Save image → upload to Grok → use prompt
-      </div>
-
-      <div id="affiliateLock" class="mt-6 hidden">
-        <button onclick="openUnlock()" class="w-full py-5 border-2 border-dashed border-gray-400 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition text-base">
-          🔒 Use Your Own Affiliate
-        </button>
+      <div class="flex items-center gap-3 text-xs text-gray-400">
+        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">
+          🔥 Updated daily
+        </span>
+        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">
+          🌍 Global trends
+        </span>
       </div>
     </div>
-  </div>
 
-  <!-- How It Works Tab -->
+    <!-- Floating banner -->
+    <div class="relative overflow-hidden bg-white/5 backdrop-blur border border-white/10 rounded-2xl mb-6 p-6 text-center">
+      <div class="absolute inset-0 opacity-20 blur-3xl bg-gradient-to-r from-indigo-500 to-cyan-400"></div>
+      <div class="relative z-10">
+        <div class="text-sm text-gray-300 mb-1">📌 Pin this before it spreads</div>
+        <div class="text-xs text-gray-500">New drops daily at 7am UK</div>
+      </div>
+    </div>
+
+    <!-- Product Card Container -->
+    <div class="w-full h-1 bg-white/10 overflow-hidden">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-400 w-0"></div>
+    </div>
+    <div class="bg-white/5 backdrop-blur border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
+
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div class="text-sm text-gray-400">
+          Product Preview
+        </div>
+
+        <div class="flex items-center gap-2 text-xs text-gray-500">
+          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">Swipe</span>
+          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">Next</span>
+        </div>
+      </div>
+
+      <div id="card" class="min-h-[520px]">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>  
+
+  <!-- How It Works Tab (updated accents) -->
   <div id="tab-how" class="tab-panel hidden">
-    <div class="bg-white rounded-3xl shadow p-8">
+    <div class="bg-gray-900 rounded-3xl shadow-xl border border-gray-700 p-8">
       <h2 class="text-3xl font-playfair font-bold text-center mb-8">How It Works</h2>
       <ol class="space-y-6 text-base sm:text-lg">
-        <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-primary">1️⃣</span> Discover viral products</li>
-        <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-primary">2️⃣</span> Turn them into floating cards</li>
-        <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-primary">3️⃣</span> Let them spread across the web</li>
+        <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-indigo-400">1️⃣</span> Discover viral products</li>
+        <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-indigo-400">2️⃣</span> Turn them into floating cards</li>
+        <li class="flex items-start"><span class="font-bold text-3xl mr-5 text-indigo-400">3️⃣</span> Let them spread across the web</li>
       </ol>
-<div style="
-text-align:center;
-margin-top:20px;
-font-size:15px;
-color:#374151;
-line-height:1.6;
-">
-🌊 Every card you create doesn’t stay here.<br>
-It floats across Pinterest, feeds, and shares — bringing traffic back to you.
-</div>
-      <div class="mt-10 text-center text-lg sm:text-xl font-medium">
-        🔥 <strong><span id="creatorCount">1284</span> creators</strong> using Float Rising
+      <div class="text-center mt-10 text-gray-300 text-lg leading-relaxed">
+        🌊 Every card you create doesn’t stay here.<br>
+        It floats across Pinterest, feeds, and shares — bringing traffic back to you.
       </div>
 
-     <div class="mt-12">
-
-  <p class="text-center text-gray-600 mb-6 italic text-lg">
-    Products rotate constantly. Creators who pin first get the traffick.
-  </p>
-
-  <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
-
-  <ul class="space-y-4 text-base sm:text-lg">
-    <li>📌 Pin → 1 point</li>
-    <li>🛒 Product Card → 3 points</li>
-    <li>🎥 Video → 10 points (Fastest way to unlock.)</li>
-  </ul>
-
-  <p class="text-sm text-gray-500 mt-4 text-center">
-    Hint: Product cards unlock after you create a pin. View your site to share them.
-  </p>
-
-  <!-- Free Bot Callout near Points -->
-  <div class="mt-8 bg-green-50 border border-green-100 rounded-xl p-6 text-center max-w-md mx-auto">
-    <p class="font-bold text-lg mb-2">⚡ Free Shortcut for Faster Wins</p>
-    <p class="text-sm text-gray-700 mb-3">
-       <strong>Missed todays cards </strong> — see a selection here 
-    </p>
-    <a href="https://t.me/floatviral" target="_blank" class="inline-block py-3 px-6 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition">
-      Join @floatviral – Free
-    </a>
-  </div>
-
-
-
-  <p class="mt-8 text-center text-lg font-medium">
-    Reach <strong>200 points</strong> to unlock Creator Mode
-    Attach your affiliate tag to every product automatically.
-  </p>
-
-  <div class="mt-6 max-w-xs mx-auto">
-    <div class="text-center font-bold mb-2">
-      Points: <span id="creatorPoints">0 / 200</span>
-    </div>
-
-    <div class="w-full bg-gray-200 rounded-full h-3">
-      <div id="creatorBar"
-           class="bg-gradient-to-r from-primary to-accent h-full transition-all"
-           style="width:0%">
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>       
-    <!-- Unlock Tab -->
-    <div id="tab-unlock" class="tab-panel hidden">
-  <div class="bg-white rounded-3xl shadow p-8">
-
-    <h2 class="text-3xl font-playfair font-bold text-center mb-6">
-      🚀 Start Earning From Every Click
-    </h2>
-
-    <p class="text-center text-gray-600 mb-8 max-w-md mx-auto">
-      Right now you're sending traffic using our affiliate links.
-      Unlock Creator Mode and keep 100% of the commissions yourself.
-    </p>
-
-    <!-- COMPARISON -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
-
-      <!-- FREE -->
-      <div class="bg-gray-50 rounded-2xl p-6 border">
-        <h3 class="text-xl font-bold mb-4 text-gray-700">🆓 Free Mode</h3>
-
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li>• Uses Float Rising affiliate ID</li>
-          <li>• You drive traffic</li>
-          <li>• We earn the commission</li>
+      <!-- Points system remains similar, with updated gradient bar -->
+      <div class="mt-12">
+        <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
+        <ul class="space-y-4 text-base sm:text-lg text-gray-300">
+          <li>📌 Pin → 1 point</li>
+          <li>🛒 Product Card → 3 points</li>
+          <li>🎥 Video → 10 points (Fastest way to unlock.)</li>
         </ul>
-      </div>
 
-      <!-- CREATOR -->
-      <div class="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-6 border-2 border-accent shadow-lg">
-        <h3 class="text-xl font-bold mb-4 text-accent">🚀 Creator Mode</h3>
+        <div class="mt-8 bg-green-900/30 border border-green-800 rounded-xl p-6 text-center max-w-md mx-auto">
+          <p class="font-bold text-lg mb-2 text-green-400">⚡ Free Shortcut for Faster Wins</p>
+          <a href="https://t.me/floatviral" target="_blank" class="inline-block py-3 px-6 bg-green-600 text-white font-bold rounded-xl hover:bg-green-700 transition">
+            Join @floatviral – Free
+          </a>
+        </div>
 
-        <ul class="space-y-3 text-sm text-gray-800">
-          <li>✔ Your own Amazon affiliate ID</li>
-          <li>✔ Auto-attached to every product</li>
-          <li>✔ Keep 100% commissions</li>
-          <li>✔ Monetize every post</li>
-          <li>✔ Unlimited content</li>
-          
-    <li>🤖 Premium Telegram bot access</li>
-    <li>📦 Daily viral product packs</li>
-        </ul>
-      </div>
+        <p class="mt-10 text-center text-lg font-medium text-gray-300">
+          Reach <strong>200 points</strong> to unlock Creator Mode
+        </p>
 
-    </div>
-
-    <!-- VALUE HIT -->
-    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5 text-center mb-8">
-      <p class="text-sm text-gray-700">
-        💡 One viral product can easily cover the cost of Creator Mode.
-      </p>
-    </div>
-
-    <!-- PRICE -->
-    <div class="text-center mb-6">
-      <div class="text-4xl font-bold">$19</div>
-      <div class="text-sm text-gray-500">One-time • Lifetime access</div>
-    </div>
-
-    <!-- CTA -->
-    
-    <!-- TRUST -->
-    <p class="mt-6 text-center text-xs text-gray-500">
-      Instant activation after payment
-    </p>
-
-  </div>
-</div>
-        <div class="mt-12 text-center">
-          <button onclick="openUnlock()" class="px-10 py-5 bg-gradient-to-r from-primary to-accent text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition">
-            Unlock – $19 One-Time
-          </button>
-          <p id="affiliateStatus" class="mt-6 font-medium text-base sm:text-lg"></p>
+        <div class="mt-6 max-w-xs mx-auto">
+          <div class="text-center font-bold mb-2 text-gray-200">
+            Points: <span id="creatorPoints">0 / 200</span>
+          </div>
+          <div class="w-full bg-gray-800 rounded-full h-3">
+            <div id="creatorBar" class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full transition-all" style="width:0%"></div>
+          </div>
         </div>
       </div>
     </div>
-  <section style="max-width:800px;margin:60px auto 20px auto;padding:20px;color:#374151;line-height:1.7;font-size:15px;">
-
-<h2 style="font-size:22px;font-weight:700;margin-bottom:10px;">
-Trending Viral Amazon Products (Updated Daily)
-</h2>
-
-<p>
-Float Rising helps you discover <strong>viral Amazon products</strong> people are sharing right now across TikTok, Pinterest, and social media.
-</p>
-
-<p>
-Every day, we source <strong>trending Amazon finds</strong>, turning them into shareable product cards designed to drive clicks, traffic, and affiliate earnings.
-</p>
-
-<p>
-Creators use Float Rising to:
-</p>
-
-<ul style="margin-left:18px;margin-top:10px;margin-bottom:10px;">
-<li>📌 Find viral products before they trend</li>
-<li>📲 Share product cards across Pinterest and social platforms</li>
-<li>💰 Earn commissions using affiliate links</li>
-</ul>
-
-<p>
-If you're looking for <strong>Amazon must-have products</strong>, <strong>viral gadgets</strong>, or <strong>trending TikTok products</strong>, this is where they appear first.
-</p>
-
-</section>
-  </main>
-
-  <!-- Floating Next Button -->
-  <button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-primary to-accent text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg">
-    🔥 Next Product
-  </button>
-
-  <!-- Modals -->
-  <div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-      <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
-      <p class="text-xl font-semibold text-center mb-6">$19 USD – One Time</p>
-      <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl text-center hover:opacity-90 transition mb-6">
-        Pay with Wise
-      </a>
-      <p class="text-center text-gray-600 mb-4">Add email in note</p>
-      <p class="text-center mb-6">Email screenshot to <strong>omnistall70@gmail.com</strong></p>
-      <hr class="my-6" />
-      <p class="font-medium text-center mb-4">Already paid?</p>
-      <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
-      <button onclick="activateCreator()" class="w-full py-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition text-lg">Activate</button>
-    </div>
   </div>
 
-  <div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-      <h3 class="text-2xl font-bold text-center mb-6">Amazon Affiliate ID</h3>
-      <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 border border-gray-300 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-primary" />
-      <div id="affiliateError" class="text-red-600 text-center mb-4"></div>
-      <button onclick="saveAffiliate()" class="w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl hover:opacity-90 transition text-lg">Save</button>
-    </div>
-  </div>
-<div id="freeUnlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-  <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
+  <!-- Unlock Tab (updated accents) -->
+  <div id="tab-unlock" class="tab-panel hidden">
+    <div class="bg-gray-900 rounded-3xl shadow-xl border border-gray-700 p-8">
+      <h2 class="text-3xl font-playfair font-bold text-center mb-6">🚀 Start Earning From Every Click</h2>
+      <p class="text-center text-gray-400 mb-8 max-w-md mx-auto">
+        Right now you're sending traffic using our affiliate links.<br>
+        Unlock Creator Mode and keep 100% of the commissions yourself.
+      </p>
 
-   <h3 class="text-2xl font-bold mb-4">🎉 You Hit 200 Points!</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+        <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
+          <h3 class="text-xl font-bold mb-4 text-gray-300">🆓 Free Mode</h3>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li>• Uses Float Rising affiliate ID</li>
+            <li>• You drive traffic</li>
+            <li>• We earn the commission</li>
+          </ul>
+        </div>
+        <div class="bg-gradient-to-br from-indigo-500/10 to-cyan-400/10 rounded-2xl p-6 border-2 border-cyan-400 shadow-lg">
+          <h3 class="text-xl font-bold mb-4 text-cyan-400">🚀 Creator Mode</h3>
+          <ul class="space-y-3 text-sm text-gray-200">
+            <li>✔ Your own Amazon affiliate ID</li>
+            <li>✔ Auto-attached to every product</li>
+            <li>✔ Keep 100% commissions</li>
+            <li>✔ Monetize every post</li>
+            <li>✔ Unlimited content</li>
+            <li>🤖 Premium Telegram bot access</li>
+            <li>📦 Daily viral product packs</li>
+          </ul>
+        </div>
+      </div>
 
-<p class="text-gray-700 mb-6">
-You're eligible to unlock Creator Mode 🚀
-</p>
+      <div class="bg-yellow-900/30 border border-yellow-700 rounded-xl p-5 text-center mb-8">
+        <p class="text-sm text-yellow-300">💡 One viral product can easily cover the cost of Creator Mode.</p>
+      </div>
 
-<div class="bg-gray-50 p-4 rounded-xl mb-6 text-sm text-gray-700">
-  <strong>Step 1:</strong><br>
-  Send your points screenshot to:<br>
-  <a href="https://t.me/floatviral" target="_blank" class="text-blue-600 font-bold">
-    👉 @floatviral
-  </a>
-</div>
+      <div class="text-center mb-6">
+        <div class="text-4xl font-bold">$19</div>
+        <div class="text-sm text-gray-400">One-time • Lifetime access</div>
+      </div>
 
-<div class="bg-gray-50 p-4 rounded-xl mb-6 text-sm text-gray-700">
-  <strong>Step 2:</strong><br>
-  Pay $1 to activate Creator Mode
-</div>
-
-<a href="https://wise.com/pay/me/davids14542"
-   target="_blank"
-   class="block w-full py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl mb-4">
-   💳 Pay $1
-</a>
-
-<p class="text-xs text-gray-500">
-After payment, you will receive your unlock code instantly via Telegram.
-</p> 
-    <button onclick="closeFreeUnlock()"
-      class="w-full py-3 bg-gray-200 rounded-xl">
-      Close
-    </button>
-
-  </div>
-</div>
-  <div id="grokModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
-    <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-      <h3 class="text-2xl font-bold text-center mb-4">6s Video Prompt</h3>
-      <textarea id="grokText" class="w-full h-48 p-4 border border-gray-300 rounded-xl mb-6 text-base resize-none focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
-      <div class="grid grid-cols-3 gap-4">
-        <button onclick="copyGrok()" class="py-3 bg-gray-200 rounded-xl hover:bg-gray-300 transition text-base">Copy</button>
-        <button onclick="openGrok()" class="py-3 bg-gradient-to-r from-primary to-accent text-white rounded-xl hover:opacity-90 transition text-base">Open Grok</button>
-        <button onclick="closeModal()" class="py-3 bg-gray-300 rounded-xl hover:bg-gray-400 transition text-base">Close</button>
+      <div class="mt-12 text-center">
+        <button onclick="openUnlock()" class="px-10 py-5 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition glow-cyan">
+          Unlock – $19 One-Time
+        </button>
+        <p id="affiliateStatus" class="mt-6 font-medium text-base sm:text-lg"></p>
       </div>
     </div>
   </div>
+</main>
 
-  <script>
-    // Tab switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('border-primary', 'text-primary');
-          b.classList.add('border-transparent');
-        });
-        btn.classList.add('border-primary', 'text-primary');
+<!-- Floating Next Button - Updated gradient -->
+<button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg glow-cyan">
+  🔥 Next Product
+</button>
 
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-        document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
-      });
+<!-- Modals (updated button gradients where needed) -->
+<div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+  <div class="bg-gray-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-700">
+    <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
+    <p class="text-xl font-semibold text-center mb-6">$19 USD – One Time</p>
+    <a href="https://wise.com/pay/me/davids14542" target="_blank" class="block w-full py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white font-bold rounded-xl text-center hover:opacity-90 transition mb-6 glow-cyan">
+      Pay with Wise
+    </a>
+    <p class="text-center text-gray-400 mb-4">Add email in note</p>
+    <p class="text-center mb-6">Email screenshot to <strong>omnistall70@gmail.com</strong></p>
+    <hr class="my-6 border-gray-700" />
+    <p class="font-medium text-center mb-4">Already paid?</p>
+    <input id="unlockCodeInput" placeholder="Enter code" class="w-full p-4 bg-gray-800 border border-gray-700 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+    <button onclick="activateCreator()" class="w-full py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition text-lg">Activate</button>
+  </div>
+</div>
+
+<div id="affiliateModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
+  <div class="bg-gray-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-700">
+    <h3 class="text-2xl font-bold text-center mb-6">Amazon Affiliate ID</h3>
+    <input id="affiliateInput" placeholder="yourname-20" class="w-full p-4 bg-gray-800 border border-gray-700 rounded-xl mb-4 text-lg focus:outline-none focus:ring-2 focus:ring-cyan-400" />
+    <div id="affiliateError" class="text-red-400 text-center mb-4"></div>
+    <button onclick="saveAffiliate()" class="w-full py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white font-bold rounded-xl hover:opacity-90 transition text-lg">Save</button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+
+    // Reset all tabs
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('bg-white', 'text-black', 'scale-105', 'shadow-sm');
+      b.classList.add('text-gray-300');
     });
 
-    // Your full original JavaScript logic
-    document.getElementById("nextBtn").addEventListener("click",()=>{
-      nextProduct();
-      startAutoScroll();
-    });
+    // Activate clicked tab
+    btn.classList.add('bg-white', 'text-black', 'scale-105', 'shadow-sm');
+    btn.classList.remove('text-gray-300');
 
-    function openUnlock(){
-      document.getElementById("unlockModal").classList.remove("hidden");
-      setTimeout(() => { document.getElementById("unlockModal").classList.add("hidden"); }, 6000);
-    }
+    // Show correct panel
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
 
-    let products = [], currentIndex = 0;
-    const card = document.getElementById("card");
+  });
+});
+  document.getElementById("nextBtn").addEventListener("click",()=>{
+  nextProduct();
+  startAutoScroll();
+});
 
-    const DEFAULT_AFFILIATE_ID = "davidshort-21";
-    let affiliateId = localStorage.getItem("affiliateId") || "";
-    let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
-
-    let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
-
-    function addPoints(points) {
-      creatorPoints += points;
-      localStorage.setItem("creatorPoints", creatorPoints);
-      updatePointsDisplay();
-      checkCreatorUnlock();
-    }
-function openFreeUnlock(){
-  document.getElementById("freeUnlockModal").classList.remove("hidden");
-}
-
-function closeFreeUnlock(){
-  document.getElementById("freeUnlockModal").classList.add("hidden");
-}
-    function updatePointsDisplay() {
-      const el = document.getElementById("creatorPoints");
-      const bar = document.getElementById("creatorBar");
-      if (el) el.innerText = creatorPoints + " / 200";
-      if (bar) {
-        let percent = (creatorPoints / 200) * 100;
-        if (percent > 100) percent = 100;
-        bar.style.width = percent + "%";
-      }
-      if (creatorPoints >= 200) {
-  // do nothing (handled by modal)
-}
-    }
-
-    function checkCreatorUnlock() {
-  if (creatorPoints >= 200) {
-    openFreeUnlock();
+  function openUnlock(){
+    document.getElementById("unlockModal").classList.remove("hidden");
+    setTimeout(() => { document.getElementById("unlockModal").classList.add("hidden"); }, 6000);
   }
-}
-    function updateStatus() {
-      const el = document.getElementById("affiliateStatus");
-      if (creatorUnlocked) {
-        el.innerHTML = "🟢 Creator Mode Active";
-        el.style.color = "green";
-      } else {
-        el.innerHTML = "🆓 Free Mode Active";
-        el.style.color = "#b45309";
-      }
+
+  let products = [], currentIndex = 0;
+  const card = document.getElementById("card");
+
+  const DEFAULT_AFFILIATE_ID = "davidshort-21";
+  let affiliateId = localStorage.getItem("affiliateId") || "";
+  let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
+  let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
+
+  function addPoints(points) {
+    creatorPoints += points;
+    localStorage.setItem("creatorPoints", creatorPoints);
+    updatePointsDisplay();
+    checkCreatorUnlock();
+  }
+
+  function openFreeUnlock(){
+    document.getElementById("freeUnlockModal").classList.remove("hidden");
+  }
+
+  function closeFreeUnlock(){
+    document.getElementById("freeUnlockModal").classList.add("hidden");
+  }
+
+  function updatePointsDisplay() {
+    const el = document.getElementById("creatorPoints");
+    const bar = document.getElementById("creatorBar");
+    if (el) el.innerText = creatorPoints + " / 200";
+    if (bar) {
+      let percent = (creatorPoints / 200) * 100;
+      if (percent > 100) percent = 100;
+      bar.style.width = percent + "%";
     }
-    updateStatus();
+  }
+
+  function checkCreatorUnlock() {
+    if (creatorPoints >= 200) openFreeUnlock();
+  }
+
+  function updateStatus() {
+    const el = document.getElementById("affiliateStatus");
+    if (creatorUnlocked) {
+      el.innerHTML = "🟢 Creator Mode Active";
+      el.style.color = "#22c55e";
+    } else {
+      el.innerHTML = "🆓 Free Mode Active";
+      el.style.color = "#eab308";
+    }
+  }
+  updateStatus();
 
     async function activateCreator() {
   const code = document.getElementById("unlockCodeInput").value.trim();
@@ -599,68 +536,90 @@ function closeFreeUnlock(){
       if (url.includes("tag=")) return url;
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
+async function loadProducts(q = "") {
+  const card = document.getElementById("card");
+  
+  // Show clean waiting state when API is unavailable (quota, down, etc.)
+  card.innerHTML = `
+    <div class="p-12 text-center space-y-8 min-h-[520px] flex flex-col items-center justify-center bg-gray-900 rounded-3xl">
+      <div class="text-6xl animate-pulse">⏳</div>
+      <div class="space-y-3">
+        <div class="text-2xl font-semibold text-gray-200">
+          Finding today's viral products...
+        </div>
+        <div class="text-gray-400 max-w-sm">
+          New drops usually land at 7am UK time.<br>
+          The feed is refreshing right now.
+        </div>
+      </div>
+      
+      <button onclick="loadProducts()" 
+              class="mt-4 px-10 py-4 bg-gradient-to-r from-primary to-accent hover:from-indigo-600 hover:to-purple-600 
+                     text-white font-bold text-lg rounded-2xl shadow-xl transition hover:scale-105">
+        🔄 Refresh Page
+      </button>
 
-    async function loadProducts(q = "") {
-
-  card.innerHTML = "Refreshing todays viral products...";
+      <div class="pt-6 text-sm text-gray-500">
+        Want products instantly? 
+        <a href="https://t.me/floatviral" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-medium">
+          Join @floatviral on Telegram →
+        </a>
+      </div>
+    </div>
+  `;
 
   try {
+    const res = await fetch("/api/search" + (q ? "?q=" + encodeURIComponent(q) : ""));
 
-    const res = await fetch("/api/search" + (q ? "?q=" + q : ""));
-
-    if (!res.ok) throw new Error("API error");
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status}`);
+    }
 
     const data = await res.json();
-
     products = (data.products || []).filter(p => p.link && p.image);
 
     if (products.length === 0) {
+      showNoProductsState();
+      return;
+    }
+
+    // Success - show the first product
+    shuffle(products);
+    currentIndex = 0;
+    renderProduct();
+    startAutoScroll();
+
+  } catch (err) {
+    console.error("API unavailable (quota or other error):", err);
+    // Do nothing - keep the nice "please refresh" screen shown above
+    // User must click Refresh or reload the page
+  }
+}
+
+function showNoProductsState() {
+  const card = document.getElementById("card");
   card.innerHTML = `
-    <div class="p-10 text-center space-y-6">
-
-      <div class="text-lg font-semibold text-gray-700">
-        🔄 Sourcing…
-
-⏰ Drops at 7am UK
+    <div class="p-12 text-center space-y-8 min-h-[520px] flex flex-col items-center justify-center bg-gray-900 rounded-3xl">
+      <div class="text-5xl">🌊</div>
+      <div class="text-xl font-semibold text-gray-200">
+        No products available yet
       </div>
-
-      <p class="text-gray-500 text-sm">
-        No products available yet. We’re currently updating the feed.
+      <p class="text-gray-400 max-w-sm">
+        We're updating the viral feed. Please refresh in a few minutes.
       </p>
-
-      <div class="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100 rounded-2xl p-6">
-        <p class="font-bold text-indigo-800 text-base mb-2">
-          🚀 Missed todays drops
-        </p>
-
-        <p class="text-sm text-indigo-700 mb-4">
-          View a selection of today’s product cards instantly on Telegram — fastest updates and early access before they appear on the site.
-        </p>
-
-        <a href="https://t.me/floatviral" target="_blank"
-           class="inline-block px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl hover:opacity-90 transition">
-          👉 Join @floatviral
-        </a>
-      </div>
-
+      <button onclick="loadProducts()" 
+              class="px-10 py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:scale-105 transition">
+        🔄 Try Again
+      </button>
+      
+      <a href="https://t.me/floatviral" target="_blank" 
+         class="mt-4 inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300">
+        👉 Get early drops on Telegram @floatviral
+      </a>
     </div>
   `;
-  return;
 }
-        shuffle(products);
-        currentIndex = 0;
-        renderProduct();
-        startAutoScroll();
-      } catch (err) {
-        console.error(err);
-        card.innerHTML = `
-          <div class="text-center p-12 text-gray-600">
-            ⚠️ Product feed loading...<br><br>
-            <button onclick="loadProducts()" class="px-8 py-4 bg-gray-800 text-white rounded-xl hover:bg-gray-700">Reload</button>
-          </div>
-        `;
-      }
-    }
+    
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -988,12 +947,41 @@ Pro tip: Join our free Telegram bot @floatviral for 2 new viral products daily �
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
     }
+  function startProgressBar() {
+  const bar = document.getElementById("progressBar");
+  if (!bar) return;
+
+  // reset instantly
+  bar.style.transition = "none";
+  bar.style.width = "0%";
+
+  // force reflow (important)
+  void bar.offsetWidth;
+
+  // animate to full over 8 seconds
+  bar.style.transition = "width 8s linear";
+  bar.style.width = "100%";
+}
+
+function resetProgressBar() {
+  const bar = document.getElementById("progressBar");
+  if (!bar) return;
+
+  bar.style.transition = "none";
+  bar.style.width = "0%";
+}
 
     let autoTimer;
     function startAutoScroll(){
-      clearInterval(autoTimer);
-      autoTimer = setInterval(() => { nextProduct(); }, 8000);
-    }
+  clearInterval(autoTimer);
+
+  startProgressBar(); // 👈 start bar immediately
+
+  autoTimer = setInterval(() => {
+    nextProduct();
+    startProgressBar(); // 👈 restart bar on each product
+  }, 8000);
+}
 
     // Initial calls
     animateCreators();
