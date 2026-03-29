@@ -26,24 +26,27 @@
     gtag('config', 'G-QQZ3KB99WL');
   </script>
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#6366f1',
-            accent: '#a855f7',
-            neutral: '#111827',
-          },
-          fontFamily: {
-            playfair: ['"Playfair Display"', 'serif'],
-          }
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#6366f1',   // indigo
+          accent: '#22d3ee',    // cyan neon
+          dark: '#0B0F1A',      // main background
+          surface: '#111827',   // cards / panels
+        },
+        fontFamily: {
+          playfair: ['"Playfair Display"', 'serif'],
+        },
+        boxShadow: {
+          glow: '0 0 20px rgba(34, 211, 238, 0.25)',
+          glowStrong: '0 0 35px rgba(34, 211, 238, 0.4)',
         }
       }
     }
-  </script>
+  }
+</script>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
