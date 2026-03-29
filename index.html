@@ -32,9 +32,8 @@
       theme: {
         extend: {
           colors: {
-            primary: '#4f46e5',     // Deep indigo-blue (2026 tech primary)
-            accent: '#22d3ee',      // Bright cyan/teal accent
-            neutral: '#111827',
+            primary: '#4f46e5',
+            accent: '#22d3ee',
           },
           fontFamily: {
             playfair: ['"Playfair Display"', 'serif'],
@@ -53,7 +52,6 @@
     .animate-float2 { animation: float2 7s ease-in-out infinite; }
     .animate-float3 { animation: float3 5s ease-in-out infinite; }
 
-    /* Enhanced 2026 glow for gradients */
     .glow-cyan {
       box-shadow: 0 0 25px -5px rgb(34 211 238 / 0.4);
     }
@@ -71,21 +69,13 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
 </div>
 
 <div id="floatingTools" class="fixed right-4 bottom-28 z-50 flex flex-col gap-3">
-  <button onclick="sharePinterest()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
-    📌
-  </button>
-  <button onclick="copyPinterestDescription()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
-    📋
-  </button>
-  <button onclick="shareLink()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
-    🔗
-  </button>
-  <button onclick="createGrokVideoPrompt()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">
-    🎥
-  </button>
+  <button onclick="sharePinterest()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">📌</button>
+  <button onclick="copyPinterestDescription()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">📋</button>
+  <button onclick="shareLink()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">🔗</button>
+  <button onclick="createGrokVideoPrompt()" class="bg-gray-900 shadow-lg rounded-full w-12 h-12 flex items-center justify-center hover:scale-110 transition border border-gray-700">🎥</button>
 </div>
 
-<!-- HERO - Updated gradient -->
+<!-- HERO -->
 <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white">
   <div class="absolute inset-0 opacity-30 blur-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-400"></div>
   <div class="relative max-w-5xl mx-auto px-6 py-20 text-center">
@@ -122,24 +112,15 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
   <div class="max-w-4xl mx-auto">
     <h2 class="text-3xl font-bold mb-10">Already spreading across the internet</h2>
     <div class="grid grid-cols-3 gap-6">
-      <div>
-        <div class="text-3xl font-bold">1.2K+</div>
-        <div class="text-gray-400 text-sm">Creators</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold">10K+</div>
-        <div class="text-gray-400 text-sm">Cards Created</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold">50K+</div>
-        <div class="text-gray-400 text-sm">Clicks Generated</div>
-      </div>
+      <div><div class="text-3xl font-bold">1.2K+</div><div class="text-gray-400 text-sm">Creators</div></div>
+      <div><div class="text-3xl font-bold">10K+</div><div class="text-gray-400 text-sm">Cards Created</div></div>
+      <div><div class="text-3xl font-bold">50K+</div><div class="text-gray-400 text-sm">Clicks Generated</div></div>
     </div>
     <p class="mt-10 text-gray-400 text-sm">⚡ Early creators capture the most traffic</p>
   </div>
 </section>
 
-<!-- MATCHED DARK HEADER -->
+<!-- HEADER -->
 <header class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white text-center pt-12 pb-10 px-4">
   <div class="absolute inset-0 opacity-20 blur-3xl bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-400"></div>
   <div class="relative z-10">
@@ -170,56 +151,31 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
   </div>
 </header>
 
-<!-- Modern SaaS Tabs - Updated active state -->
+<!-- Sticky Tabs -->
 <nav class="sticky top-0 z-40 flex justify-center py-3 bg-black/60 backdrop-blur border-b border-white/10">
   <div class="flex items-center gap-2 bg-white/5 backdrop-blur rounded-full p-1 border border-white/10 shadow-lg">
-    <!-- Discover -->
-    <button data-tab="discover"
-      class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white text-black shadow-sm scale-105">
-      🔍 <span>Discover</span>
-    </button>
-
-    <!-- How -->
-    <button data-tab="how"
-      class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
-      📘 <span>How It Works</span>
-    </button>
-
-    <!-- Unlock -->
-    <button data-tab="unlock"
-      class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
-      🔓 <span>Unlock</span>
-    </button>
+    <button data-tab="discover" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white text-black shadow-sm scale-105">🔍 Discover</button>
+    <button data-tab="how" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">📘 How It Works</button>
+    <button data-tab="unlock" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">🔓 Unlock</button>
   </div>
 </nav>
 
-<!-- Tab Panels -->
+<!-- Main - Products now higher up with image-only preview -->
 <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
 
   <div id="tab-discover" class="tab-panel">
 
-    <!-- Section Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-white">
-          Discover
-        </h2>
-        <p class="text-sm text-gray-400 mt-1">
-          Trending products curated for circulation
-        </p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white">Discover</h2>
+        <p class="text-sm text-gray-400 mt-1">Trending products curated for circulation</p>
       </div>
-
       <div class="flex items-center gap-3 text-xs text-gray-400">
-        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">
-          🔥 Updated daily
-        </span>
-        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">
-          🌍 Global trends
-        </span>
+        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">🔥 Updated daily</span>
+        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">🌍 Global trends</span>
       </div>
     </div>
 
-    <!-- Floating banner -->
     <div class="relative overflow-hidden bg-white/5 backdrop-blur border border-white/10 rounded-2xl mb-6 p-6 text-center">
       <div class="absolute inset-0 opacity-20 blur-3xl bg-gradient-to-r from-indigo-500 to-cyan-400"></div>
       <div class="relative z-10">
@@ -228,32 +184,27 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
       </div>
     </div>
 
-    <!-- Product Card Container -->
-    <div class="w-full h-1 bg-white/10 overflow-hidden">
+    <div class="w-full h-1 bg-white/10 overflow-hidden mb-4">
       <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-400 w-0"></div>
     </div>
+
+    <!-- Image-only preview container -->
     <div class="bg-white/5 backdrop-blur border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
-
       <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
-        <div class="text-sm text-gray-400">
-          Product Preview
-        </div>
-
+        <div class="text-sm text-gray-400">Product Preview</div>
         <div class="flex items-center gap-2 text-xs text-gray-500">
           <span class="px-2 py-1 rounded bg-white/5 border border-white/10">Swipe</span>
           <span class="px-2 py-1 rounded bg-white/5 border border-white/10">Next</span>
         </div>
       </div>
-
-      <div id="card" class="min-h-[520px]">
+      <div id="card" class="min-h-[460px] flex items-center justify-center bg-gray-950 relative">
         Loading...
       </div>
-
     </div>
 
-  </div>  
+  </div>
 
-  <!-- How It Works Tab (updated accents) -->
+  <!-- How It Works Tab -->
   <div id="tab-how" class="tab-panel hidden">
     <div class="bg-gray-900 rounded-3xl shadow-xl border border-gray-700 p-8">
       <h2 class="text-3xl font-playfair font-bold text-center mb-8">How It Works</h2>
@@ -267,7 +218,6 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
         It floats across Pinterest, feeds, and shares — bringing traffic back to you.
       </div>
 
-      <!-- Points system remains similar, with updated gradient bar -->
       <div class="mt-12">
         <h3 class="text-2xl font-bold text-center mb-6">Points System</h3>
         <ul class="space-y-4 text-base sm:text-lg text-gray-300">
@@ -299,7 +249,7 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
     </div>
   </div>
 
-  <!-- Unlock Tab (updated accents) -->
+  <!-- Unlock Tab -->
   <div id="tab-unlock" class="tab-panel hidden">
     <div class="bg-gray-900 rounded-3xl shadow-xl border border-gray-700 p-8">
       <h2 class="text-3xl font-playfair font-bold text-center mb-6">🚀 Start Earning From Every Click</h2>
@@ -350,12 +300,12 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
   </div>
 </main>
 
-<!-- Floating Next Button - Updated gradient -->
+<!-- Floating Next Button -->
 <button id="nextBtn" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white font-bold px-8 py-4 rounded-full shadow-2xl hover:shadow-3xl hover:scale-105 transition flex items-center gap-2 text-base sm:text-lg glow-cyan">
   🔥 Next Product
 </button>
 
-<!-- Modals (updated button gradients where needed) -->
+<!-- Modals -->
 <div id="unlockModal" class="fixed inset-0 bg-black/70 hidden flex items-center justify-center z-50 px-4">
   <div class="bg-gray-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-700">
     <h3 class="text-2xl font-bold text-center mb-6">🔓 Unlock Creator Mode</h3>
@@ -381,7 +331,7 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
   </div>
 </div>
 
-<script>
+<script
   document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
 
