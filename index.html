@@ -240,7 +240,64 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
 <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8">
 
  
-    
+  <div id="tab-discover" class="tab-panel">
+
+  <!-- Section Header (SaaS style) -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">
+        Discover
+      </h2>
+      <p class="text-sm text-gray-400 mt-1">
+        Trending products curated for circulation
+      </p>
+    </div>
+
+    <!-- Subtle status / controls -->
+    <div class="flex items-center gap-3 text-xs text-gray-400">
+      <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">
+        🔥 Updated daily
+      </span>
+      <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur">
+        🌍 Global trends
+      </span>
+    </div>
+
+  </div>
+
+  <!-- Floating banner (kept but cleaner) -->
+  <div class="relative overflow-hidden bg-white/5 backdrop-blur border border-white/10 rounded-2xl mb-6 p-6 text-center">
+    <div class="absolute inset-0 opacity-20 blur-3xl bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+    <div class="relative z-10">
+      <div class="text-sm text-gray-300 mb-1">📌 Pin this before it spreads</div>
+      <div class="text-xs text-gray-500">New drops daily at 7am UK</div>
+    </div>
+  </div>
+
+  <!-- Product Card Container (SaaS panel style) -->
+  <div class="bg-white/5 backdrop-blur border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
+
+    <!-- Optional top bar -->
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/10">
+      <div class="text-sm text-gray-400">
+        Product Preview
+      </div>
+
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <span class="px-2 py-1 rounded bg-white/5 border border-white/10">Swipe</span>
+        <span class="px-2 py-1 rounded bg-white/5 border border-white/10">Next</span>
+      </div>
+    </div>
+
+    <!-- Your existing product card -->
+    <div id="card" class="min-h-[520px]">
+      Loading...
+    </div>
+
+  </div>
+
+</div>  
 
   <!-- How It Works Tab -->
   <div id="tab-how" class="tab-panel hidden">
