@@ -955,6 +955,29 @@ Pro tip: Join our free Telegram bot @floatviral for 2 new viral products daily â
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
     }
+  function startProgressBar() {
+  const bar = document.getElementById("progressBar");
+  if (!bar) return;
+
+  // reset instantly
+  bar.style.transition = "none";
+  bar.style.width = "0%";
+
+  // force reflow (important)
+  void bar.offsetWidth;
+
+  // animate to full over 8 seconds
+  bar.style.transition = "width 8s linear";
+  bar.style.width = "100%";
+}
+
+function resetProgressBar() {
+  const bar = document.getElementById("progressBar");
+  if (!bar) return;
+
+  bar.style.transition = "none";
+  bar.style.width = "0%";
+}
 
     let autoTimer;
     function startAutoScroll(){
