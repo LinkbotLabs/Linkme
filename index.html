@@ -981,9 +981,15 @@ function resetProgressBar() {
 
     let autoTimer;
     function startAutoScroll(){
-      clearInterval(autoTimer);
-      autoTimer = setInterval(() => { nextProduct(); }, 8000);
-    }
+  clearInterval(autoTimer);
+
+  startProgressBar(); // 👈 start bar immediately
+
+  autoTimer = setInterval(() => {
+    nextProduct();
+    startProgressBar(); // 👈 restart bar on each product
+  }, 8000);
+}
 
     // Initial calls
     animateCreators();
