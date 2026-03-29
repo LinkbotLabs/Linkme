@@ -391,7 +391,25 @@ Viral Amazon products updated daily. Discover trending TikTok products, gadgets,
 <!-- freeUnlockModal and grokModal are unchanged in structure but you can apply similar dark classes if needed -->
 
 <script>
-  
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+
+    // Reset all tabs
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('bg-white', 'text-black', 'scale-105', 'shadow-sm');
+      b.classList.add('text-gray-300');
+    });
+
+    // Activate clicked tab
+    btn.classList.add('bg-white', 'text-black', 'scale-105', 'shadow-sm');
+    btn.classList.remove('text-gray-300');
+
+    // Show correct panel
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+    document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+
+  });
+});
   document.getElementById("nextBtn").addEventListener("click",()=>{
     nextProduct();
     startAutoScroll();
