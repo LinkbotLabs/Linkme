@@ -40,6 +40,32 @@ function generateKeywords(count = 4) {
   return combos.sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
+/* ---------------- IMAGE CLEANER ---------------- */
+
+function cleanAmazonImage(url) {
+  if (!url) return null;
+
+  try {
+    // strip everything after .jpg
+    const clean = url.split(".jpg")[0] + ".jpg";
+
+    // reject garbage / overlays
+    if (
+      clean.includes("aplus-media") ||
+      clean.includes("PIBSS") ||
+      clean.includes("awareness") ||
+      clean.includes("deal") ||
+      clean.includes("sprite") ||
+      clean.includes("icon")
+    ) return null;
+
+    return clean;
+
+  } catch {
+    return null;
+  }
+}
+
 /* ---------------- VIRAL SCORE ENGINE ---------------- */
 
 function getViralScore({ title, image, source }) {
@@ -47,7 +73,6 @@ function getViralScore({ title, image, source }) {
 
   let score = 0;
 
-  // 🔥 Keyword boosts (TikTok-style psychology)
   if (t.includes("tiktok")) score += 40;
   if (t.includes("viral")) score += 40;
   if (t.includes("must have")) score += 25;
@@ -56,16 +81,13 @@ function getViralScore({ title, image, source }) {
   if (t.includes("smart")) score += 10;
   if (t.includes("portable")) score += 10;
 
-  // 🖼 Image quality proxy
   if (image) score += 25;
   else score -= 50;
 
-  // 🌐 Source weighting
   if (source.includes("tiktok")) score += 25;
   if (source.includes("pinterest")) score += 15;
   if (source.includes("amazon")) score += 10;
 
-  // 🎲 Controlled randomness (keeps feed fresh)
   score += Math.random() * 15;
 
   return score;
@@ -117,18 +139,28 @@ export default async function handler(req, res) {
           const asin = extractASIN(link);
           if (!asin || seenASIN.has(asin)) continue;
 
-          const image =
+          let rawImage =
             item.pagemap?.cse_image?.[0]?.src ||
             item.pagemap?.cse_thumbnail?.[0]?.src;
 
-          // ❌ HARD FILTERS (remove junk early)
+          const image = cleanAmazonImage(rawImage);
+
+          // ❌ HARD FILTERS
           if (!image) continue;
+          if (!image.includes("images/I/")) continue;
           if (!item.title || item.title.length < 25) continue;
 
           const lowerTitle = item.title.toLowerCase();
-          if (lowerTitle.includes("book")) continue;
-          if (lowerTitle.includes("manual")) continue;
-          if (lowerTitle.includes("guide")) continue;
+
+          if (
+            lowerTitle.includes("book") ||
+            lowerTitle.includes("manual") ||
+            lowerTitle.includes("guide")
+          ) continue;
+
+          // ❌ REMOVE BORING LOW-VIRAL ITEMS
+          const badWords = ["organizer", "storage", "tray", "case"];
+          if (badWords.some(w => lowerTitle.includes(w))) continue;
 
           const description =
             item.snippet ||
@@ -143,7 +175,6 @@ export default async function handler(req, res) {
             source: link
           });
 
-          // ❌ SCORE FILTER (this is key)
           if (score < 40) continue;
 
           discovered.push({
@@ -184,15 +215,13 @@ export default async function handler(req, res) {
       }
     }
 
-    /* ---------------- SORT PROPERLY ---------------- */
+    /* ---------------- SORT ---------------- */
 
     const sortedPool = uniquePool.sort((a, b) => b.score - a.score);
 
-    /* ---------------- TRIM POOL ---------------- */
-
     const trimmedPool = sortedPool.slice(0, MAX_POOL);
 
-    /* ---------------- SMART DISPLAY (LIKE TELEGRAM) ---------------- */
+    /* ---------------- SMART DISPLAY ---------------- */
 
     const top = trimmedPool.slice(0, 50);
     const finalProducts = [];
@@ -227,10 +256,12 @@ export default async function handler(req, res) {
 
 function cleanTitle(title) {
   return title
+    .replace("Amazon.com:", "")
     .replace("- Amazon.com", "")
     .replace("| Amazon", "")
+    .replace(/\bAmazon\b/gi, "")
     .split("|")[0]
-    .substring(0, 80)
+    .substring(0, 70)
     .trim();
 }
 
