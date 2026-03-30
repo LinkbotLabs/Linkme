@@ -563,7 +563,9 @@ async function loadProducts(q = "") {
     }
 
     const data = await res.json();
-    products = (data.products || []).filter(p => p.link && p.image);
+    const list = Array.isArray(data) ? data : data.products;
+
+products = (list || []).filter(p => p.link && p.image);
 
     if (products.length === 0) {
       showNoProductsState();
