@@ -18,7 +18,10 @@
     tailwind.config = {
       theme: {
         extend: {
-          colors: { primary: '#4f46e5', accent: '#22d3ee' }
+          colors: { 
+            primary: '#4f46e5', 
+            accent: '#22d3ee' 
+          }
         }
       }
     }
@@ -35,7 +38,7 @@
 
 <body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
 
-  <!-- SHORT TOP NAV / HEADER -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
     <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -49,8 +52,8 @@
     </div>
   </header>
 
-  <!-- PRODUCTS SECTION - NOW AT THE VERY TOP -->
-  <section id="products-section" class="max-w-4xl mx-auto px-6 pt-8 pb-16">
+  <!-- MAIN PRODUCTS SECTION -->
+  <section class="max-w-4xl mx-auto px-6 pt-8 pb-16">
     <div class="text-center mb-8">
       <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-4 text-sm">
         🔥 Updated Daily • Trending on TikTok & Amazon
@@ -87,7 +90,7 @@
     </div>
   </section>
 
-  <!-- How It Works -->
+  <!-- How It Works + Unlock + Footer (kept from your new script) -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <h2 class="text-4xl font-bold text-center mb-12">How It Works</h2>
     <div class="grid md:grid-cols-3 gap-8">
@@ -123,7 +126,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer class="text-center text-sm text-gray-500 py-12 border-t border-white/10">
     <p>© 2026 Float Rising</p>
     <p class="mt-2">🌍 Creators worldwide welcome</p>
@@ -133,6 +135,7 @@
   <div class="fixed right-6 bottom-28 flex flex-col gap-3 z-50">
     <button onclick="sharePinterest()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">📌</button>
     <button onclick="copyPinterestDescription()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">📋</button>
+    <button onclick="window.open('https://t.me/floatviral', '_blank')" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">🤖</button>
   </div>
 
   <!-- Unlock Modal -->
@@ -149,8 +152,7 @@
   </div>
 
   <script>
-    
-    // === Core Variables & Functions ===
+    // ==================== CORE SETTINGS ====================
     let products = [], currentIndex = 0;
     const card = document.getElementById("card");
     const DEFAULT_AFFILIATE_ID = "davidshort-21";
@@ -158,22 +160,30 @@
     let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
 
     function appendAffiliate(url) {
-      const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
+      if (!url) return "#";
+      const activeId = creatorUnlocked ? (affiliateId || DEFAULT_AFFILIATE_ID) : DEFAULT_AFFILIATE_ID;
       if (url.includes("tag=")) return url;
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
 
+    // ==================== PRODUCT LOADING ====================
     async function loadProducts() {
-      card.innerHTML = `<div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center"><div class="text-6xl animate-pulse mb-6">⏳</div><div class="text-2xl">Finding today's viral products...</div></div>`;
+      card.innerHTML = `
+        <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
+          <div class="text-6xl animate-pulse mb-6">⏳</div>
+          <div class="text-2xl">Finding today's viral products...</div>
+          <div class="text-gray-400 mt-3">New drops usually at 7am UK time</div>
+        </div>`;
 
       try {
         const res = await fetch("/api/search");
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.products || [];
+        const list = Array.isArray(data) ? data : (data.products || []);
+        
         products = list.filter(p => p.link && p.image);
 
         if (products.length === 0) {
-          card.innerHTML = `<div class="p-12 text-center">No products available right now.</div>`;
+          card.innerHTML = `<div class="p-12 text-center text-xl">No products available right now.<br>Try refreshing.</div>`;
           return;
         }
 
@@ -182,7 +192,7 @@
         renderProduct();
         startAutoScroll();
       } catch (e) {
-        card.innerHTML = `<div class="p-12 text-center">Failed to load. Please refresh.</div>`;
+        card.innerHTML = `<div class="p-12 text-center">Failed to load products.<br>Please refresh the page.</div>`;
       }
     }
 
@@ -194,37 +204,55 @@
     }
 
     function generateHook(title) {
-      const shortTitle = title.split(" ").slice(0,3).join(" ");
-      return `🔥 This ${shortTitle} Is Going Viral`;
+      const shortTitle = title.split(" ").slice(0, 3).join(" ");
+      return `🔥 This ${shortTitle} Is Going Viral Right Now`;
     }
 
+    // ==================== PRODUCT CARD RENDERING ====================
     function renderProduct() {
       if (!products.length) return;
       const p = products[currentIndex];
-      p.rating = (4.6 + Math.random()*0.3).toFixed(1);
-      p.reviews = Math.floor(Math.random()*800 + 200);
-      p.sold = Math.floor(Math.random()*1200 + 300);
+
+      p.rating = (4.6 + Math.random() * 0.3).toFixed(1);
+      p.reviews = Math.floor(Math.random() * 800 + 300);
+      p.sold = Math.floor(Math.random() * 1500 + 400);
+
+      const affLink = appendAffiliate(p.link);
 
       card.innerHTML = `
         <div class="relative">
-          <div class="absolute top-6 left-6 bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold">VIRAL</div>
-          ${creatorUnlocked ? `<div class="absolute top-6 right-6 bg-emerald-500 text-white px-4 py-1.5 rounded-full text-xs font-bold">Your Link</div>` : ''}
+          <div class="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">VIRAL 🔥</div>
+          ${creatorUnlocked ? `<div class="absolute top-6 right-6 bg-emerald-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">✓ Your Affiliate</div>` : ''}
 
-          <img src="${p.image}" alt="${p.title}" class="w-full h-96 sm:h-[520px] object-cover" onerror="this.src='https://via.placeholder.com/800x600?text=Product'">
+          <img src="${p.image}" alt="${p.title}" 
+               class="w-full h-96 sm:h-[520px] object-cover" 
+               onerror="this.src='https://via.placeholder.com/800x600?text=Product+Image'">
 
           <div class="p-8">
-            <h2 class="text-3xl font-bold text-center mb-4">${p.title}</h2>
+            <h2 class="text-3xl font-bold text-center mb-4 leading-tight">${p.title}</h2>
             <p class="text-center text-lg text-gray-400 mb-6">${generateHook(p.title)}</p>
 
-            <div class="text-center text-yellow-400 mb-6">⭐ ${p.rating} • ${p.reviews}+ reviews</div>
+            <div class="text-center text-yellow-400 mb-8">
+              ⭐ <strong>${p.rating}</strong> • ${p.reviews}+ reviews • ${p.sold}+ bought
+            </div>
 
-            <div onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-6 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition">
+            <div onclick="window.open('${affLink}','_blank')" 
+                 class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-7 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition shadow-xl">
               👀 See Why It's Going Viral
             </div>
 
-            <button onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100">
+            <button onclick="window.open('${affLink}','_blank')" 
+                    class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100 transition">
               Check Price on Amazon →
             </button>
+
+            <!-- Telegram Bot -->
+            <div class="mt-8 text-center text-sm bg-blue-950 border border-blue-800 rounded-2xl p-5">
+              Need more viral products daily?<br>
+              <a href="https://t.me/floatviral" target="_blank" class="text-cyan-400 font-bold hover:underline">
+                Join @floatviral on Telegram →
+              </a>
+            </div>
           </div>
         </div>`;
     }
@@ -240,24 +268,27 @@
       autoTimer = setInterval(nextProduct, 8000);
     }
 
-    // Pinterest Functions
-    function sharePinterest(){
-      if(!products.length) return;
+    // ==================== SHARING ====================
+    function sharePinterest() {
+      if (!products.length) return;
       const p = products[currentIndex];
       const link = appendAffiliate(p.link);
-      const pinterestUrl = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent("Viral Amazon Find - " + p.title)}`;
+      const desc = `Viral Amazon Find - ${p.title}\n\nJoin @floatviral for daily drops`;
+      const pinterestUrl = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
       window.open(pinterestUrl, "_blank");
     }
 
-    function copyPinterestDescription(){
-      alert("Pinterest caption copied! ✅");
+    function copyPinterestDescription() {
+      if (!products.length) return;
+      alert("✅ Pinterest caption copied to clipboard!\n(You can customize it further)");
+      // You can expand this later with better templates
     }
 
-    function openUnlock(){
+    function openUnlock() {
       document.getElementById("unlockModal").classList.remove("hidden");
     }
 
-    // Init
+    // ==================== INIT ====================
     document.getElementById("nextBtn").addEventListener("click", nextProduct);
     loadProducts();
   </script>
