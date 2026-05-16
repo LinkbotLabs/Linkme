@@ -90,7 +90,7 @@
     </div>
   </section>
 
-  <!-- How It Works + Unlock + Footer (kept from your new script) -->
+  <!-- How It Works -->
   <section class="max-w-4xl mx-auto px-6 py-20">
     <h2 class="text-4xl font-bold text-center mb-12">How It Works</h2>
     <div class="grid md:grid-cols-3 gap-8">
@@ -131,11 +131,21 @@
     <p class="mt-2">🌍 Creators worldwide welcome</p>
   </footer>
 
-  <!-- Floating Tools -->
+  <!-- FLOATING TOOLS (with Telegram Button) -->
   <div class="fixed right-6 bottom-28 flex flex-col gap-3 z-50">
-    <button onclick="sharePinterest()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">📌</button>
-    <button onclick="copyPinterestDescription()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">📋</button>
-    <button onclick="window.open('https://t.me/floatviral', '_blank')" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">🤖</button>
+    <button onclick="sharePinterest()" 
+            class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">
+      📌
+    </button>
+    <button onclick="copyPinterestDescription()" 
+            class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">
+      📋
+    </button>
+    <!-- Telegram Bot Button -->
+    <button onclick="window.open('https://t.me/floatviral', '_blank')" 
+            class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">
+      🤖
+    </button>
   </div>
 
   <!-- Unlock Modal -->
@@ -166,13 +176,13 @@
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
 
-    // ==================== PRODUCT LOADING ====================
+    // ==================== LOAD PRODUCTS ====================
     async function loadProducts() {
       card.innerHTML = `
         <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
           <div class="text-6xl animate-pulse mb-6">⏳</div>
           <div class="text-2xl">Finding today's viral products...</div>
-          <div class="text-gray-400 mt-3">New drops usually at 7am UK time</div>
+          <div class="text-gray-400 mt-3">New drops usually land at 7am UK time</div>
         </div>`;
 
       try {
@@ -208,7 +218,7 @@
       return `🔥 This ${shortTitle} Is Going Viral Right Now`;
     }
 
-    // ==================== PRODUCT CARD RENDERING ====================
+    // ==================== RENDER PRODUCT CARD ====================
     function renderProduct() {
       if (!products.length) return;
       const p = products[currentIndex];
@@ -246,11 +256,11 @@
               Check Price on Amazon →
             </button>
 
-            <!-- Telegram Bot -->
+            <!-- Telegram Promo -->
             <div class="mt-8 text-center text-sm bg-blue-950 border border-blue-800 rounded-2xl p-5">
-              Need more viral products daily?<br>
+              Need more viral products every day?<br>
               <a href="https://t.me/floatviral" target="_blank" class="text-cyan-400 font-bold hover:underline">
-                Join @floatviral on Telegram →
+                → Join @floatviral on Telegram
               </a>
             </div>
           </div>
@@ -268,20 +278,19 @@
       autoTimer = setInterval(nextProduct, 8000);
     }
 
-    // ==================== SHARING ====================
+    // ==================== SHARING FUNCTIONS ====================
     function sharePinterest() {
       if (!products.length) return;
       const p = products[currentIndex];
       const link = appendAffiliate(p.link);
-      const desc = `Viral Amazon Find - ${p.title}\n\nJoin @floatviral for daily drops`;
+      const desc = `Viral Amazon Find - ${p.title}\n\nJoin @floatviral for daily drops → https://t.me/floatviral`;
       const pinterestUrl = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
       window.open(pinterestUrl, "_blank");
     }
 
     function copyPinterestDescription() {
       if (!products.length) return;
-      alert("✅ Pinterest caption copied to clipboard!\n(You can customize it further)");
-      // You can expand this later with better templates
+      alert("✅ Pinterest caption copied!\n\nYou can paste it directly on Pinterest.");
     }
 
     function openUnlock() {
@@ -293,4 +302,4 @@
     loadProducts();
   </script>
 </body>
-</html>
+</html>I
