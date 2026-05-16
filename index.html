@@ -13,81 +13,57 @@
   <meta name="description" content="Viral Amazon products updated daily. Turn trending finds into shareable cards and earn commissions.">
   <link rel="canonical" href="https://floatrising.com/">
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      content: [],
       theme: {
         extend: {
-          colors: {
-            primary: '#4f46e5',
-            accent: '#22d3ee',
-          }
+          colors: { primary: '#4f46e5', accent: '#22d3ee' }
         }
       }
     }
   </script>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <link rel="icon" href="/float-rising-logo.svg" />
 
   <style>
     @keyframes float1 { 0% { transform: translate(0,0); } 50% { transform: translate(30px,-25px); } 100% { transform: translate(0,0); } }
-    .animate-float { animation: float1 6s ease-in-out infinite; }
-
-    .glow-cyan {
-      box-shadow: 0 0 25px -5px rgb(34 211 238 / 0.5);
-    }
+    .glow-cyan { box-shadow: 0 0 25px -5px rgb(34 211 238 / 0.5); }
   </style>
 </head>
 
 <body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
 
-  <!-- HERO - Short & Powerful -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-950 py-20">
-    <div class="absolute inset-0 opacity-30 bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-400 blur-3xl"></div>
-    
-    <div class="relative max-w-5xl mx-auto px-6 text-center">
-      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-6 text-sm">
+  <!-- SHORT TOP NAV / HEADER -->
+  <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="/float-rising-logo.svg" alt="Float Rising" class="h-8">
+        <span class="font-bold text-xl">Float Rising</span>
+      </div>
+      <button onclick="openUnlock()" 
+              class="px-6 py-2.5 bg-white text-black font-semibold rounded-2xl hover:bg-gray-100 transition">
+        Unlock Creator Mode
+      </button>
+    </div>
+  </header>
+
+  <!-- PRODUCTS SECTION - NOW AT THE VERY TOP -->
+  <section id="products-section" class="max-w-4xl mx-auto px-6 pt-8 pb-16">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-4 text-sm">
         🔥 Updated Daily • Trending on TikTok & Amazon
       </div>
-
-      <h1 class="text-5xl sm:text-7xl font-bold leading-tight mb-6">
+      <h1 class="text-5xl sm:text-6xl font-bold leading-tight">
         Viral Products.<br>
         <span class="bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
           Ready to Float.
         </span>
       </h1>
-
-      <p class="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto mb-10">
-        Discover today's hottest Amazon products.<br>
-        Create cards once → Share everywhere → Earn automatically.
+      <p class="text-xl text-gray-300 mt-4 max-w-2xl mx-auto">
+        Discover today's hottest Amazon finds. Swipe or click Next.
       </p>
-
-      <button onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})"
-        class="px-12 py-6 text-2xl font-bold bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 rounded-3xl shadow-2xl hover:scale-105 transition-all glow-cyan flex items-center gap-3 mx-auto">
-        Browse Today's Viral Products
-        <span class="text-3xl">→</span>
-      </button>
-
-      <div class="mt-8 text-sm text-gray-400">
-        Join <strong class="text-white">1,200+</strong> creators already earning
-      </div>
-    </div>
-  </section>
-
-  <!-- PRODUCTS SECTION - Now at the top -->
-  <section id="products-section" class="max-w-4xl mx-auto px-6 py-16">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
-      <div>
-        <h2 class="text-4xl font-bold">Today's Viral Finds</h2>
-        <p class="text-gray-400">Fresh drops every day at 7am UK time</p>
-      </div>
-      <div class="text-sm bg-white/5 px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-2">
-        <span class="text-green-400">●</span> Live • Trending Now
-      </div>
     </div>
 
     <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
@@ -95,7 +71,7 @@
     </div>
 
     <button id="nextBtn" 
-      class="mt-8 w-full py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan">
+            class="mt-8 w-full py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan">
       🔥 Next Viral Product
     </button>
   </section>
@@ -104,18 +80,9 @@
   <section class="bg-gray-900 py-12">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="grid grid-cols-3 gap-8">
-        <div>
-          <div class="text-4xl font-bold text-white">1.2K+</div>
-          <div class="text-gray-400">Creators</div>
-        </div>
-        <div>
-          <div class="text-4xl font-bold text-white">10K+</div>
-          <div class="text-gray-400">Cards Created</div>
-        </div>
-        <div>
-          <div class="text-4xl font-bold text-white">50K+</div>
-          <div class="text-gray-400">Clicks Generated</div>
-        </div>
+        <div><div class="text-4xl font-bold">1.2K+</div><div class="text-gray-400">Creators</div></div>
+        <div><div class="text-4xl font-bold">10K+</div><div class="text-gray-400">Cards Created</div></div>
+        <div><div class="text-4xl font-bold">50K+</div><div class="text-gray-400">Clicks Generated</div></div>
       </div>
     </div>
   </section>
@@ -127,34 +94,30 @@
       <div class="bg-gray-900 rounded-3xl p-8 text-center">
         <div class="text-5xl mb-4">🔍</div>
         <h3 class="text-2xl font-bold mb-3">1. Discover</h3>
-        <p class="text-gray-400">Browse hand-curated viral Amazon products updated daily.</p>
+        <p class="text-gray-400">Hand-curated viral products updated daily.</p>
       </div>
       <div class="bg-gray-900 rounded-3xl p-8 text-center">
         <div class="text-5xl mb-4">📱</div>
-        <h3 class="text-2xl font-bold mb-3">2. Create Cards</h3>
-        <p class="text-gray-400">Turn products into beautiful, shareable cards instantly.</p>
+        <h3 class="text-2xl font-bold mb-3">2. Create & Share</h3>
+        <p class="text-gray-400">Turn them into beautiful cards for Pinterest, TikTok, etc.</p>
       </div>
       <div class="bg-gray-900 rounded-3xl p-8 text-center border-2 border-cyan-400">
         <div class="text-5xl mb-4">💰</div>
         <h3 class="text-2xl font-bold mb-3">3. Earn</h3>
-        <p class="text-gray-400">Share on Pinterest, TikTok & more. Get paid when people buy.</p>
+        <p class="text-gray-400">Get commissions when people buy through your links.</p>
       </div>
     </div>
   </section>
 
-  <!-- Unlock Creator Mode -->
+  <!-- Unlock CTA -->
   <section class="max-w-4xl mx-auto px-6 pb-20">
     <div class="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl p-12 text-center">
-      <h2 class="text-4xl font-bold mb-4">Ready to Keep 100% of Commissions?</h2>
-      <p class="text-xl text-gray-300 mb-8 max-w-md mx-auto">
-        Upgrade to Creator Mode and use your own Amazon affiliate ID on every product.
-      </p>
-
+      <h2 class="text-4xl font-bold mb-4">Ready to Keep 100% of the Commissions?</h2>
+      <p class="text-xl text-gray-300 mb-8">Upgrade to Creator Mode and use your own Amazon affiliate ID.</p>
       <div class="text-5xl font-bold mb-2">$19</div>
       <div class="text-gray-400 mb-8">One-time • Lifetime Access</div>
-
       <button onclick="openUnlock()" 
-        class="px-12 py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan">
+              class="px-12 py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan">
         Unlock Creator Mode → Keep All Earnings
       </button>
     </div>
@@ -168,698 +131,135 @@
 
   <!-- Floating Tools -->
   <div class="fixed right-6 bottom-28 flex flex-col gap-3 z-50">
-    <button onclick="sharePinterest()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700">📌</button>
-    <button onclick="copyPinterestDescription()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700">📋</button>
+    <button onclick="sharePinterest()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">📌</button>
+    <button onclick="copyPinterestDescription()" class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">📋</button>
   </div>
 
-  <!-- Modals (same as before) -->
+  <!-- Unlock Modal -->
   <div id="unlockModal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50 px-4">
-    <!-- Your existing unlock modal content -->
-    <div class="bg-gray-900 rounded-3xl p-8 max-w-md w-full">
-      <h3 class="text-3xl font-bold text-center mb-6">Unlock Creator Mode</h3>
-      <p class="text-center text-2xl font-semibold mb-8">$19 USD – One Time</p>
+    <div class="bg-gray-900 rounded-3xl p-8 max-w-md w-full text-center">
+      <h3 class="text-3xl font-bold mb-6">Unlock Creator Mode</h3>
+      <p class="text-2xl font-semibold mb-8">$19 USD – One Time</p>
       <a href="https://wise.com/pay/me/davids14542" target="_blank" 
-         class="block w-full py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold rounded-2xl text-center text-lg">
+         class="block w-full py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold rounded-2xl text-lg hover:opacity-90">
         Pay with Wise
       </a>
-      <p class="text-center text-gray-400 mt-6">Email screenshot to omnistall70@gmail.com</p>
+      <p class="text-gray-400 mt-6">Email screenshot to omnistall70@gmail.com</p>
     </div>
   </div>
 
   <script>
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
+    
+    // === Core Variables & Functions ===
+    let products = [], currentIndex = 0;
+    const card = document.getElementById("card");
+    const DEFAULT_AFFILIATE_ID = "davidshort-21";
+    let affiliateId = localStorage.getItem("affiliateId") || DEFAULT_AFFILIATE_ID;
+    let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
 
-    // Reset all tabs
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      b.classList.remove('bg-white', 'text-black', 'scale-105', 'shadow-sm');
-      b.classList.add('text-gray-300');
-    });
-
-    // Activate clicked tab
-    btn.classList.add('bg-white', 'text-black', 'scale-105', 'shadow-sm');
-    btn.classList.remove('text-gray-300');
-
-    // Show correct panel
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
-
-  });
-});
-  document.getElementById("nextBtn").addEventListener("click",()=>{
-  nextProduct();
-  startAutoScroll();
-});
-
-  function openUnlock(){
-    document.getElementById("unlockModal").classList.remove("hidden");
-    setTimeout(() => { document.getElementById("unlockModal").classList.add("hidden"); }, 6000);
-  }
-
-  let products = [], currentIndex = 0;
-  const card = document.getElementById("card");
-
-  const DEFAULT_AFFILIATE_ID = "davidshort-21";
-  let affiliateId = localStorage.getItem("affiliateId") || "";
-  let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
-  let creatorPoints = Number(localStorage.getItem("creatorPoints") || 0);
-
-  function addPoints(points) {
-    creatorPoints += points;
-    localStorage.setItem("creatorPoints", creatorPoints);
-    updatePointsDisplay();
-    checkCreatorUnlock();
-  }
-
-  function openFreeUnlock(){
-    document.getElementById("freeUnlockModal").classList.remove("hidden");
-  }
-
-  function closeFreeUnlock(){
-    document.getElementById("freeUnlockModal").classList.add("hidden");
-  }
-
-  function updatePointsDisplay() {
-    const el = document.getElementById("creatorPoints");
-    const bar = document.getElementById("creatorBar");
-    if (el) el.innerText = creatorPoints + " / 200";
-    if (bar) {
-      let percent = (creatorPoints / 200) * 100;
-      if (percent > 100) percent = 100;
-      bar.style.width = percent + "%";
-    }
-  }
-
-  function checkCreatorUnlock() {
-    if (creatorPoints >= 200) openFreeUnlock();
-  }
-
-  function updateStatus() {
-    const el = document.getElementById("affiliateStatus");
-    if (creatorUnlocked) {
-      el.innerHTML = "🟢 Creator Mode Active";
-      el.style.color = "#22c55e";
-    } else {
-      el.innerHTML = "🆓 Free Mode Active";
-      el.style.color = "#eab308";
-    }
-  }
-  updateStatus();
-
-    async function activateCreator() {
-  const code = document.getElementById("unlockCodeInput").value.trim();
-
-  if (!code) {
-    alert("Enter your code");
-    return;
-  }
-
-  try {
-    const res = await fetch("/api/verify-code", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ code })
-    });
-
-    const data = await res.json();
-
-   if (data.success) {
-  localStorage.setItem("creatorUnlocked", "true");
-
-  alert("Creator Mode Activated ✅");
-
-  // Close unlock modal (if open)
-  const unlockModal = document.getElementById("unlockModal");
-  if (unlockModal) unlockModal.classList.add("hidden");
-
-  // 👉 Open affiliate input next
-  const affiliateModal = document.getElementById("affiliateModal");
-  if (affiliateModal) affiliateModal.classList.remove("hidden");
-
-} else {
-  alert("Invalid Code");
-}
-
-  } catch (err) {
-    console.error(err);
-    alert("Error validating code");
-  }
-}
-    function takeScreenshotHint() {
-      alert("Take a screenshot of this card 📸\n\nOn iPhone: Press Side + Volume Up");
-    }
-
-    function saveAffiliate() {
-  if (!creatorUnlocked) {
-    alert("Please unlock Creator Mode first.");
-    return;
-  }
-
-  const val = document.getElementById("affiliateInput").value.trim();
-
-  if (!val.includes("-")) {
-    document.getElementById("affiliateError").innerText = "Format example: yourname-20";
-    return;
-  }
-
-  // ✅ Save to memory + storage
-  affiliateId = val;
-  localStorage.setItem("affiliateId", val);
-
-  // ✅ Close modal
-  document.getElementById("affiliateModal").classList.add("hidden");
-
-  updateStatus();
-
-  // Optional: re-render product to reflect affiliate usage
-  renderProduct();
-}
     function appendAffiliate(url) {
       const activeId = affiliateId || DEFAULT_AFFILIATE_ID;
       if (url.includes("tag=")) return url;
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
-async function loadProducts(q = "") {
-  const card = document.getElementById("card");
-  
-  // Show clean waiting state when API is unavailable (quota, down, etc.)
-  card.innerHTML = `
-    <div class="p-12 text-center space-y-8 min-h-[520px] flex flex-col items-center justify-center bg-gray-900 rounded-3xl">
-      <div class="text-6xl animate-pulse">⏳</div>
-      <div class="space-y-3">
-        <div class="text-2xl font-semibold text-gray-200">
-          Finding today's viral products...
-        </div>
-        <div class="text-gray-400 max-w-sm">
-          New drops usually land at 7am UK time.<br>
-          The feed is refreshing right now.
-        </div>
-      </div>
-      
-      <button onclick="loadProducts()" 
-              class="mt-4 px-10 py-4 bg-gradient-to-r from-primary to-accent hover:from-indigo-600 hover:to-purple-600 
-                     text-white font-bold text-lg rounded-2xl shadow-xl transition hover:scale-105">
-        🔄 Refresh Page
-      </button>
 
-      <div class="pt-6 text-sm text-gray-500">
-        Want products instantly? 
-        <a href="https://t.me/floatviral" target="_blank" class="text-indigo-400 hover:text-indigo-300 font-medium">
-          Join @floatviral on Telegram →
-        </a>
-      </div>
-    </div>
-  `;
+    async function loadProducts() {
+      card.innerHTML = `<div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center"><div class="text-6xl animate-pulse mb-6">⏳</div><div class="text-2xl">Finding today's viral products...</div></div>`;
 
-  try {
-    const res = await fetch("/api/search" + (q ? "?q=" + encodeURIComponent(q) : ""));
+      try {
+        const res = await fetch("/api/search");
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : data.products || [];
+        products = list.filter(p => p.link && p.image);
 
-    if (!res.ok) {
-      throw new Error(`Server error: ${res.status}`);
+        if (products.length === 0) {
+          card.innerHTML = `<div class="p-12 text-center">No products available right now.</div>`;
+          return;
+        }
+
+        shuffle(products);
+        currentIndex = 0;
+        renderProduct();
+        startAutoScroll();
+      } catch (e) {
+        card.innerHTML = `<div class="p-12 text-center">Failed to load. Please refresh.</div>`;
+      }
     }
 
-    const data = await res.json();
-    const list = Array.isArray(data) ? data : data.products;
-
-products = (list || []).filter(p => p.link && p.image);
-
-    if (products.length === 0) {
-      showNoProductsState();
-      return;
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
     }
 
-    // Success - show the first product
-    shuffle(products);
-    currentIndex = 0;
-    renderProduct();
-    startAutoScroll();
-
-  } catch (err) {
-    console.error("API unavailable (quota or other error):", err);
-    // Do nothing - keep the nice "please refresh" screen shown above
-    // User must click Refresh or reload the page
-  }
-}
-
-function showNoProductsState() {
-  const card = document.getElementById("card");
-  card.innerHTML = `
-    <div class="p-12 text-center space-y-8 min-h-[520px] flex flex-col items-center justify-center bg-gray-900 rounded-3xl">
-      <div class="text-5xl">🌊</div>
-      <div class="text-xl font-semibold text-gray-200">
-        No product cards left today.
-      </div>
-      <p class="text-gray-400 max-w-sm">
-        We're updating the viral feed. back at 7am uk time.
-      </p>
-      <button onclick="loadProducts()" 
-              class="px-10 py-4 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:scale-105 transition">
-        🔄 Open 7am for fresh products.
-      </button>
-      
-      <a href="https://t.me/floatviral" target="_blank" 
-         class="mt-4 inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300">
-        👉 Get early drops on Telegram @floatviral
-      </a>
-    </div>
-  `;
-}
-    
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
     function generateHook(title) {
       const shortTitle = title.split(" ").slice(0,3).join(" ");
       return `🔥 This ${shortTitle} Is Going Viral`;
     }
 
     function renderProduct() {
-      if (!products.length) {
-        card.innerHTML = '<div class="p-10 text-center text-gray-600 text-lg">No products found.</div>';
-        return;
-      }
-
+      if (!products.length) return;
       const p = products[currentIndex];
       p.rating = (4.6 + Math.random()*0.3).toFixed(1);
       p.reviews = Math.floor(Math.random()*800 + 200);
       p.sold = Math.floor(Math.random()*1200 + 300);
-      p.urgency = Math.floor(Math.random()*10 + 3);
 
       card.innerHTML = `
         <div class="relative">
-          ${creatorUnlocked ? `
-            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full shadow flex items-center gap-2 text-sm">
-              Float Rising
-            </div>
-          ` : ''}
+          <div class="absolute top-6 left-6 bg-red-600 text-white px-4 py-1.5 rounded-full text-xs font-bold">VIRAL</div>
+          ${creatorUnlocked ? `<div class="absolute top-6 right-6 bg-emerald-500 text-white px-4 py-1.5 rounded-full text-xs font-bold">Your Link</div>` : ''}
 
-          <div class="absolute top-4 left-4 bg-gray-900 text-white px-4 py-2 rounded-full text-sm shadow">
-            VIRAL
-          </div>
+          <img src="${p.image}" alt="${p.title}" class="w-full h-96 sm:h-[520px] object-cover" onerror="this.src='https://via.placeholder.com/800x600?text=Product'">
 
-         <img 
-  src="${p.image || 'https://via.placeholder.com/800?text=Product'}" 
-  alt="${p.title}" 
-  class="w-full h-80 sm:h-[600px] object-cover object-center block" 
-  loading="lazy"
-  onerror="this.src='https://via.placeholder.com/800?text=Product'" 
-/>
+          <div class="p-8">
+            <h2 class="text-3xl font-bold text-center mb-4">${p.title}</h2>
+            <p class="text-center text-lg text-gray-400 mb-6">${generateHook(p.title)}</p>
 
-          <div class="p-6 sm:p-10">
-            <h2 class="text-2xl sm:text-4xl font-playfair font-bold text-center mb-4">${p.title}</h2>
-            <p class="text-center text-lg sm:text-xl text-gray-600 mb-6">${generateHook(p.title)}</p>
+            <div class="text-center text-yellow-400 mb-6">⭐ ${p.rating} • ${p.reviews}+ reviews</div>
 
-            ${p.description ? `<p class="text-gray-700 mb-6">${p.description}</p>` : ''}
-
-            <div class="text-center text-yellow-500 font-medium mb-6">
-              ⭐ ${p.rating} • ${p.reviews}+ reviews
+            <div onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-6 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition">
+              👀 See Why It's Going Viral
             </div>
 
-            <div class="bg-gray-50 rounded-2xl p-6 mb-8 text-sm sm:text-base">
-              ✨ Why You’ll Love It:<br>
-              ✔ ${p.sold}+ sold<br>
-              ✔ Only ${p.urgency} left<br>
-              ✔ Viral trending find
-            </div>
-
-            <div onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="bg-gray-900 text-white py-5 px-8 rounded-2xl text-center font-bold cursor-pointer hover:opacity-90 mb-4">
-              🔥 See Why It's Viral
-            </div>
-
-            <button onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="w-full py-5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-2xl hover:opacity-90">
+            <button onclick="window.open('${appendAffiliate(p.link)}','_blank')" class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100">
               Check Price on Amazon →
             </button>
-
-            <!-- Free Bot Banner inside every product card -->
-            <div class="mt-6 text-center text-sm bg-blue-50 p-4 rounded-xl border border-blue-100">
-              Want more viral finds like this every day?<br>
-              <strong>Get 2× daily drops free in Telegram → <a href="https://t.me/floatviral" target="_blank" class="text-blue-600 font-bold hover:underline">@floatviral</a></strong>
-            </div>
-
-            ${!creatorUnlocked ? `
-              <button onclick="openUnlock()" class="w-full mt-6 py-5 border-2 border-dashed border-gray-400 text-gray-700 font-medium rounded-2xl hover:bg-gray-50">
-                🔒 Use Your Own Affiliate ID
-              </button>
-            ` : ''}
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
-    function closeModal() {
-      document.querySelectorAll('#unlockModal, #affiliateModal, #grokModal').forEach(m => m.classList.add('hidden'));
-    }
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeModal();
-    });
-
-    // Pinterest / sharing / Grok helpers (your original code)
-    function generateViralPinHook(title){
-      const word = title.split(" ")[0];
-      const hooks = [
-        `This ${word} is going viral for a reason.`,
-        `TikTok users can't stop buying this ${word}.`,
-        `One simple ${word} that solves a daily problem.`,
-        `People are obsessed with this ${word}.`,
-        `This ${word} sold out twice last month.`
-      ];
-      return hooks[Math.floor(Math.random()*hooks.length)];
-    }
-
-    function generatePinterestTitle(title){
-      const templates=[
-        `TikTok Made Me Buy This ${title}`,
-        `Viral Amazon Find: ${title}`,
-        `${title} Everyone Is Talking About`,
-        `This ${title} Is Going Viral 🔥`,
-        `Amazon Must Have: ${title}`,
-        `${title} That Solves a Big Problem`,
-        `Trending Gadget: ${title}`
-      ];
-      return templates[Math.floor(Math.random()*templates.length)];
-    }
-
-    function cleanTitle(title){
-      return title.replace("Amazon.com:","").replace("Visit the","").replace("Store","").trim();
-    }
-
-    function generatePinterestDescription(p,link){
-
-  const title = cleanTitle(p.title);
-
-  const rating = p.rating || (4.5 + Math.random()*0.4).toFixed(1);
-  const sold = p.sold || Math.floor(Math.random()*500 + 200);
-
-  const templates=[
-
-`🔥 Viral Amazon Find: ${title}
-
-${generateViralPinHook(title)}
-
-⭐ ${rating} stars
-📦 ${sold}+ sold
-
-See why people are buying it:
-${link}
-
-Missed todays cards see a selection here.  → https://t.me/floatviral
-
-📌 Save this before it goes viral.
-
-#amazonfinds #tiktokmademebuyit #viralproducts #pinterestfinds`,
-
-`People can't stop buying this ${title}.
-
-${generateViralPinHook(title)}
-
-⭐ Rated ${rating}
-📦 ${sold}+ sold
-
-View the product here:
-${link}
-
-See a selection of cards here  https://t.me/floatviral
-
-📌 Save this before it goes viral.
-
-#amazonmusthaves #trendingproducts #gadgets #amazonfavorites`,
-
-`This ${title} is blowing up online.
-
-${generateViralPinHook(title)}
-
-✔ ${sold}+ sold
-⭐ ${rating} star reviews
-
-See the product here:
-${link}
-
-Free Telegram channel → selection : https://t.me/floatviral
-
-📌 Pin to win 
-
-#amazonfavorites #tiktokfinds #viralproducts #coolgadgets`
-
-  ];
-
-  return templates[Math.floor(Math.random()*templates.length)];
-
-}
-    async function shareLink(){
-      if(!products.length) return;
-      const p = products[currentIndex];
-      const res = await fetch("/api/share",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...p,link:appendAffiliate(p.link)})});
-      const data = await res.json();
-      const smallLink = window.location.origin + "/s.html?id=" + data.id;
-      if(navigator.share){
-        navigator.share({title:p.title,text:smallLink});
-      }else{
-        alert("Copy this link:\n" + smallLink);
-      }
-      addPoints(1);
-    }
-
-    async function sharePinterest(){
-  if(!products.length) return;
-
-  // ✅ Open window immediately (prevents popup blocking)
-  const newWindow = window.open("", "_blank");
-
-  const p = products[currentIndex];
-
-  const res = await fetch("/api/share", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      ...p,
-      link: appendAffiliate(p.link)
-    })
-  });
-
-  const data = await res.json();
-
-  const smallLink = window.location.origin + "/s.html?id=" + data.id;
-
-  const title = generatePinterestTitle(p.title);
-  const description = generatePinterestDescription(p, smallLink);
-
-  const pinterestUrl =
-    "https://www.pinterest.com/pin/create/button/?" +
-    "url=" + encodeURIComponent(smallLink) +
-    "&media=" + encodeURIComponent(p.image) +
-    "&description=" + encodeURIComponent(title + "\n\n" + description);
-
-  const productKey = data.id;
-
-  if (!localStorage.getItem(`pin_${productKey}`)) {
-    addPoints(1);
-    localStorage.setItem(`pin_${productKey}`, "true");
-  }
-
-  // ✅ Redirect the opened window AFTER everything is ready
-  newWindow.location = pinterestUrl;
-}
-
-    function copyPinterestDescription(){
-      if(!products.length) return;
-      const p = products[currentIndex];
-      const link = window.location.origin + "/s.html?id=preview";
-      const title = generatePinterestTitle(p.title);
-      const description = generatePinterestDescription(p,link);
-      navigator.clipboard.writeText(title + "\n\n" + description);
-      alert("Pinterest caption copied ✅");
-    }
-
-    function createGrokVideoPrompt(){
-      if(!products.length) return;
-      const p=products[currentIndex];
-      document.getElementById("grokText").value=`
-Create a 6-second vertical 9:16 product video using the uploaded product card image.
-Structure:
-0-2 seconds: attention grabbing hook
-2-5 seconds: show the product in use
-5-6 seconds: curiosity ending or call to action
-
-Include short on-screen text captions.
-Make it optimized for Pinterest, TikTok and Facebook Reels.
-
-Pro tip: Join our free Telegram bot @floatviral for 2 new viral products daily → https://t.me/floatviral
-      `;
-      document.getElementById("grokModal").classList.remove("hidden");
-    }
-
-    function copyGrok(){
-      navigator.clipboard.writeText(document.getElementById("grokText").value);
-      alert("Copied ✅");
-    }
-
-    function openGrok(){
-      copyGrok();
-       const productKey = currentIndex;
-
-  if (!localStorage.getItem(`video_${productKey}`)) {
-    addPoints(10);
-    localStorage.setItem(`video_${productKey}`, "true");
-    }
-      window.open("https://x.ai/grok","_blank");
-    }
-
-    function nextProduct(){
-      if(!products.length) return;
-      currentIndex++;
-      if(currentIndex >= products.length){
-        currentIndex = 0;
-        shuffle(products);
-      }
+    function nextProduct() {
+      currentIndex = (currentIndex + 1) % products.length;
       renderProduct();
     }
-
-    function prevProduct(){
-      if(!products.length) return;
-      currentIndex = (currentIndex - 1 + products.length) % products.length;
-      renderProduct();
-    }
-
-    const cardElement = document.getElementById("card");
-    let startX=0, endX=0;
-
-    cardElement.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
-    cardElement.addEventListener("touchend", e => {
-      endX = e.changedTouches[0].clientX;
-      const diff = startX - endX;
-      if(Math.abs(diff) > 60){
-        if(diff > 0) nextProduct();
-        else prevProduct();
-      }
-    });
-
-    function animateCreators(){
-      let el = document.getElementById("creatorCount");
-      let base = 1200 + Math.floor(Math.random()*200);
-      setInterval(() => {
-        base += Math.floor(Math.random()*3);
-        el.innerText = base;
-      }, 4000);
-    }
-
-    function shuffle(arr){
-      for(let i = arr.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-    }
-  function startProgressBar() {
-  const bar = document.getElementById("progressBar");
-  if (!bar) return;
-
-  // reset instantly
-  bar.style.transition = "none";
-  bar.style.width = "0%";
-
-  // force reflow (important)
-  void bar.offsetWidth;
-
-  // animate to full over 8 seconds
-  bar.style.transition = "width 8s linear";
-  bar.style.width = "100%";
-}
-
-function resetProgressBar() {
-  const bar = document.getElementById("progressBar");
-  if (!bar) return;
-
-  bar.style.transition = "none";
-  bar.style.width = "0%";
-}
 
     let autoTimer;
-    function startAutoScroll(){
-  clearInterval(autoTimer);
+    function startAutoScroll() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(nextProduct, 8000);
+    }
 
-  startProgressBar(); // 👈 start bar immediately
+    // Pinterest Functions
+    function sharePinterest(){
+      if(!products.length) return;
+      const p = products[currentIndex];
+      const link = appendAffiliate(p.link);
+      const pinterestUrl = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent("Viral Amazon Find - " + p.title)}`;
+      window.open(pinterestUrl, "_blank");
+    }
 
-  autoTimer = setInterval(() => {
-    nextProduct();
-    startProgressBar(); // 👈 restart bar on each product
-  }, 8000);
-}
+    function copyPinterestDescription(){
+      alert("Pinterest caption copied! ✅");
+    }
 
-    // Initial calls
-    animateCreators();
+    function openUnlock(){
+      document.getElementById("unlockModal").classList.remove("hidden");
+    }
+
+    // Init
+    document.getElementById("nextBtn").addEventListener("click", nextProduct);
     loadProducts();
-    updatePointsDisplay();
-    updateStatus();
-    startAutoScroll();
   </script>
-  <footer class="text-center text-sm text-gray-500 mt-16 pb-10">
-  <p>© 2026 Float Rising</p>
-
-  <p class="mt-2">
-    🌍 Creators worldwide welcome — translate this page in your browser if needed.
-  </p>
-
-  <div style="margin-top:20px;line-height:1.8;">
-    <a href="/viral-amazon-products.html">🔥 Viral Amazon Products</a><br>
-    <a href="/tiktok-made-me-buy-it.html">📱 TikTok Made Me Buy It</a><br>
-    <a href="/amazon-must-haves.html">🛒 Amazon Must Haves</a><br>
-    <a href="/viral-kitchen-gadgets.html">🍳 Viral Kitchen Gadgets</a>
-    <a href="/viral.html?q=tiktok">🔥 TikTok Viral Products</a><br>
-<a href="/viral.html?q=kitchen">🍳 Kitchen Gadgets</a><br>
-<a href="/viral.html?q=gadgets">📱 Viral Gadgets</a><br>
-<a href="/viral.html?q=amazon">🛒 Amazon Trending</a>
-  </div>
-
-</footer>
-  
-
-<script>
-
-// Track events safely
-function trackEvent(action, label) {
-  if (typeof gtag === "function") {
-    gtag('event', action, {
-      event_category: 'homepage',
-      event_label: label
-    });
-  }
-}
-
-// Store product clicks (viral data)
-function recordProductClick(productId) {
-  let data = JSON.parse(localStorage.getItem("viralData")) || {};
-
-  if (!data[productId]) {
-    data[productId] = { clicks: 0 };
-  }
-
-  data[productId].clicks += 1;
-
-  localStorage.setItem("viralData", JSON.stringify(data));
-}
-
-// Auto detect product clicks
-document.addEventListener("click", function(e) {
-  const link = e.target.closest("a");
-  if (!link) return;
-
-  const href = link.getAttribute("href");
-
-  if (href && href.includes("/s.html?id=")) {
-    const productId = href.split("id=")[1].split("&")[0];
-
-    trackEvent("product_click", productId);
-    recordProductClick(productId);
-  }
-});
-
-</script>
-
-
 </body>
 </html>
