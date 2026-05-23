@@ -1,7 +1,6 @@
 import { Redis } from '@upstash/redis';
 
 export default async function handler(req, res) {
-
   const base = "https://floatrising.com";
 
   const redis = new Redis({
@@ -12,16 +11,25 @@ export default async function handler(req, res) {
   let shareIds = [];
 
   try {
-    const keys = await redis.keys("float:*");
-    shareIds = keys.map(k => k.replace("float:", ""));
-    console.log(`Sitemap: Found ${shareIds.length} products`);
+    let cursor = 0;
+
+    do {
+      const [nextCursor, batch] = await redis.scan(cursor, {
+        match: "float:*",
+        count: 100,
+      });
+
+      cursor = Number(nextCursor);
+      shareIds.push(...batch);
+
+    } while (cursor !== 0);
+
+    shareIds = shareIds.map(k => k.replace("float:", ""));
+
   } catch (err) {
     console.error("Redis error in sitemap:", err);
   }
 
-  const today = new Date().toISOString();
-
-  // 🔥 STATIC SEO PAGES
   const staticPages = [
     "",
     "/viral-amazon-products.html",
@@ -32,31 +40,28 @@ export default async function handler(req, res) {
   ];
 
   const staticUrls = staticPages.map(path => `
-  <url>
-    <loc>${base}${path}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>${path === "" ? "1.0" : "0.9"}</priority>
-  </url>`).join("");
+    <url>
+      <loc>${base}${path}</loc>
+      <changefreq>weekly</changefreq>
+      <priority>${path === "" ? "1.0" : "0.8"}</priority>
+    </url>
+  `).join("");
 
-  // 🔥 PRODUCT PAGES
   const productUrls = shareIds.map(id => `
-  <url>
-    <loc>${base}/s.html?id=${id}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`).join("");
+    <url>
+      <loc>${base}/s.html?id=${id}</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  `).join("");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-${staticUrls}
-
-${productUrls}
-
-</urlset>`;
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    ${staticUrls}
+    ${productUrls}
+  </urlset>`;
 
   res.setHeader("Content-Type", "application/xml");
-  res.status(200).end(xml);
+  res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate");
+  res.status(200).send(xml);
 }
