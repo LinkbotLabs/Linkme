@@ -457,247 +457,417 @@
 
   </div>
 
-  <script>
-    let products = [];
-    let currentIndex = 0;
+ <script>
+  let products = [];
+  let currentIndex = 0;
 
-    const card = document.getElementById("card");
+  const card = document.getElementById("card");
 
-    const DEFAULT_AFFILIATE_ID = "davidshort-21";
+  const DEFAULT_AFFILIATE_ID = "davidshort-21";
 
-    let affiliateId =
-      localStorage.getItem("affiliateId") || DEFAULT_AFFILIATE_ID;
+  let affiliateId =
+    localStorage.getItem("affiliateId") || DEFAULT_AFFILIATE_ID;
 
-    let creatorUnlocked =
-      localStorage.getItem("creatorUnlocked") === "true";
+  let creatorUnlocked =
+    localStorage.getItem("creatorUnlocked") === "true";
 
-    function appendAffiliate(url) {
-      if (!url) return "#";
+  function appendAffiliate(url) {
 
-      const activeId = creatorUnlocked
-        ? (affiliateId || DEFAULT_AFFILIATE_ID)
-        : DEFAULT_AFFILIATE_ID;
+    if (!url) return "#";
 
-      if (url.includes("tag=")) return url;
+    const activeId = creatorUnlocked
+      ? (affiliateId || DEFAULT_AFFILIATE_ID)
+      : DEFAULT_AFFILIATE_ID;
 
-      return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
-    }
+    if (url.includes("tag=")) return url;
 
-    async function loadProducts() {
+    return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
+  }
 
-      card.innerHTML = `
-        <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
-          <div class="text-6xl animate-pulse mb-6">⏳</div>
-          <div class="text-2xl">Finding today's viral products...</div>
-          <div class="text-gray-400 mt-3">
-            New drops usually land twice daily
-          </div>
+  /* ---------------- LIVE FEED LOADER ---------------- */
+
+  async function loadProducts() {
+
+    card.innerHTML = `
+      <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
+        <div class="text-6xl animate-pulse mb-6">🚀</div>
+        <div class="text-2xl font-bold">
+          Loading Live Telegram Feed...
         </div>
-      `;
+        <div class="text-gray-400 mt-3">
+          Fetching latest viral product drops
+        </div>
+      </div>
+    `;
+
+    try {
+
+      /* ---------------- PRIORITY 1 = LIVE TELEGRAM FEED ---------------- */
+
+      const feedRes = await fetch("/api/feed");
+      const feedData = await feedRes.json();
+
+      const feedProducts = Array.isArray(feedData)
+        ? feedData
+        : (feedData.products || []);
+
+      /* ---------------- PRIORITY 2 = SEARCH FALLBACK ---------------- */
+
+      let searchProducts = [];
 
       try {
 
-        const res = await fetch("/api/search");
-        const data = await res.json();
+        const searchRes = await fetch("/api/search");
+        const searchData = await searchRes.json();
 
-        const list = Array.isArray(data)
-          ? data
-          : (data.products || []);
+        searchProducts = Array.isArray(searchData)
+          ? searchData
+          : (searchData.products || []);
 
-        products = list.filter(p => p.link && p.image);
+      } catch (err) {
+        console.log("Search fallback unavailable");
+      }
 
-        if (!products.length) {
+      /* ---------------- MERGE FEEDS ---------------- */
 
-          card.innerHTML = `
-            <div class="p-12 text-center text-xl">
-              No products available right now.<br>
-              Try refreshing.
-            </div>
-          `;
+      const combined = [
+        ...feedProducts,
+        ...searchProducts
+      ];
 
-          return;
-        }
+      /* ---------------- DEDUPE ---------------- */
 
-        shuffle(products);
+      const seen = new Set();
 
-        currentIndex = 0;
+      products = combined.filter(p => {
 
-        renderProduct();
+        if (!p) return false;
+        if (!p.link) return false;
+        if (!p.image) return false;
 
-        startAutoScroll();
+        const id =
+          p.id ||
+          p.asin ||
+          p.link;
 
-      } catch (e) {
+        if (seen.has(id)) return false;
+
+        seen.add(id);
+
+        return true;
+      });
+
+      /* ---------------- EMPTY STATE ---------------- */
+
+      if (!products.length) {
 
         card.innerHTML = `
-          <div class="p-12 text-center">
-            Failed to load products.<br>
-            Please refresh the page.
+          <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
+
+            <div class="text-6xl mb-6">📦</div>
+
+            <div class="text-2xl font-bold mb-4">
+              No Viral Products Right Now
+            </div>
+
+            <div class="text-gray-400">
+              Check back soon for the next drop.
+            </div>
+
           </div>
         `;
+
+        return;
       }
-    }
 
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
+      /* ---------------- SORT LIVE FEED FIRST ---------------- */
 
-        const j = Math.floor(Math.random() * (i + 1));
+      products.sort((a, b) => {
 
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+        const aFeed = a.shareId || a.telegram || a.posted;
+        const bFeed = b.shareId || b.telegram || b.posted;
 
-    function generateHook(title) {
+        if (aFeed && !bFeed) return -1;
+        if (!aFeed && bFeed) return 1;
 
-      const shortTitle =
-        title.split(" ").slice(0, 3).join(" ");
+        return (b.score || 0) - (a.score || 0);
+      });
 
-      return `🔥 This ${shortTitle} Is Trending Right Now`;
-    }
+      currentIndex = 0;
 
-    function renderProduct() {
+      renderProduct();
 
-      if (!products.length) return;
+      startAutoScroll();
 
-      const p = products[currentIndex];
+    } catch (e) {
 
-      const affLink = appendAffiliate(p.link);
+      console.error(e);
 
       card.innerHTML = `
-        <div class="relative">
+        <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
 
-          <div class="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
-            VIRAL 🔥
+          <div class="text-6xl mb-6">⚠️</div>
+
+          <div class="text-2xl font-bold mb-4">
+            Failed To Load Products
           </div>
 
-          ${creatorUnlocked
+          <div class="text-gray-400">
+            Please refresh the page.
+          </div>
+
+        </div>
+      `;
+    }
+  }
+
+  /* ---------------- SHUFFLE ---------------- */
+
+  function shuffle(array) {
+
+    for (let i = array.length - 1; i > 0; i--) {
+
+      const j = Math.floor(Math.random() * (i + 1));
+
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  /* ---------------- HOOK ENGINE ---------------- */
+
+  function generateHook(title) {
+
+    const hooks = [
+      "🔥 This Is Trending Fast",
+      "🚀 TikTok Creators Are Posting This",
+      "👀 Viral Product Alert",
+      "📈 This Product Is Taking Off",
+      "💡 Amazon Find Going Viral",
+      "⚡ Trending Across Social Media"
+    ];
+
+    return hooks[Math.floor(Math.random() * hooks.length)];
+  }
+
+  /* ---------------- PRODUCT RENDER ---------------- */
+
+  function renderProduct() {
+
+    if (!products.length) return;
+
+    const p = products[currentIndex];
+
+    const affLink = appendAffiliate(
+      p.url || p.link
+    );
+
+    const isLiveFeed =
+      p.shareId ||
+      p.telegram ||
+      p.posted;
+
+    card.innerHTML = `
+      <div class="relative bg-black">
+
+        <!-- LIVE FEED BADGE -->
+
+        ${
+          isLiveFeed
             ? `
-              <div class="absolute top-6 right-6 bg-emerald-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
+              <div class="absolute top-6 left-6 bg-cyan-500 text-black px-5 py-2 rounded-full text-sm font-bold shadow-lg z-10 animate-pulse">
+                LIVE DROP 🚀
+              </div>
+            `
+            : `
+              <div class="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg z-10">
+                VIRAL 🔥
+              </div>
+            `
+        }
+
+        ${
+          creatorUnlocked
+            ? `
+              <div class="absolute top-6 right-6 bg-emerald-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg z-10">
                 ✓ Your Affiliate
               </div>
             `
             : ''
+        }
+
+        <!-- IMAGE -->
+
+        <img
+          src="${p.image}"
+          alt="${p.title}"
+          class="w-full h-96 sm:h-[520px] object-cover"
+          loading="lazy"
+          onerror="this.src='https://via.placeholder.com/800x600?text=Trending+Product'"
+        >
+
+        <!-- CONTENT -->
+
+        <div class="p-8">
+
+          <h2 class="text-3xl font-bold text-center mb-4 leading-tight">
+            ${p.title || "Trending Product"}
+          </h2>
+
+          <p class="text-center text-lg text-gray-400 mb-6">
+            ${generateHook(p.title || "")}
+          </p>
+
+          <div class="text-center text-cyan-300 mb-8 text-lg">
+            🔥 Trending Across TikTok & Amazon
+          </div>
+
+          ${
+            p.description
+              ? `
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 text-gray-300 text-center leading-7 mb-8">
+                  ${p.description.substring(0, 180)}
+                </div>
+              `
+              : ''
           }
 
-          <img
-            src="${p.image}"
-            alt="${p.title}"
-            class="w-full h-96 sm:h-[520px] object-cover"
-            onerror="this.src='https://via.placeholder.com/800x600?text=Product+Image'"
+          <!-- PRIMARY CTA -->
+
+          <div
+            onclick="window.open('${affLink}','_blank')"
+            class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-7 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition shadow-xl"
           >
+            👀 See Why It's Going Viral
+          </div>
 
-          <div class="p-8">
+          <!-- AMAZON BUTTON -->
 
-            <h2 class="text-3xl font-bold text-center mb-4 leading-tight">
-              ${p.title}
-            </h2>
+          <button
+            onclick="window.open('${affLink}','_blank')"
+            class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100 transition"
+          >
+            Check Price on Amazon →
+          </button>
 
-            <p class="text-center text-lg text-gray-400 mb-6">
-              ${generateHook(p.title)}
-            </p>
+          <!-- TELEGRAM BLOCK -->
 
-            <div class="text-center text-cyan-300 mb-8 text-lg">
-              🔥 Trending Across TikTok & Amazon
+          <div class="mt-8 text-center text-sm bg-blue-950 border border-blue-800 rounded-2xl p-5">
+
+            <div class="text-lg font-bold mb-2">
+              🚀 Live Viral Product Feed
             </div>
 
-            <div
-              onclick="window.open('${affLink}','_blank')"
-              class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-7 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition shadow-xl"
+            <div class="text-gray-300 mb-4">
+              Get twice-daily product drops before trends peak.
+            </div>
+
+            <a
+              href="https://t.me/floatviral"
+              target="_blank"
+              class="inline-block px-6 py-3 rounded-xl bg-cyan-500 text-black font-bold hover:scale-105 transition"
             >
-              👀 See Why It's Going Viral
-            </div>
-
-            <button
-              onclick="window.open('${affLink}','_blank')"
-              class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100 transition"
-            >
-              Check Price on Amazon →
-            </button>
-
-            <div class="mt-8 text-center text-sm bg-blue-950 border border-blue-800 rounded-2xl p-5">
-
-              Need more viral products every day?<br>
-
-              <a
-                href="https://t.me/floatviral"
-                target="_blank"
-                class="text-cyan-400 font-bold hover:underline"
-              >
-                → Join @floatviral on Telegram
-              </a>
-
-            </div>
+              Join @floatviral
+            </a>
 
           </div>
 
         </div>
-      `;
-    }
 
-    function nextProduct() {
-      currentIndex = (currentIndex + 1) % products.length;
-      renderProduct();
-    }
+      </div>
+    `;
+  }
 
-    let autoTimer;
+  /* ---------------- NEXT PRODUCT ---------------- */
 
-    function startAutoScroll() {
-      clearInterval(autoTimer);
-      autoTimer = setInterval(nextProduct, 8000);
-    }
+  function nextProduct() {
 
-    function sharePinterest() {
+    currentIndex =
+      (currentIndex + 1) % products.length;
 
-      if (!products.length) return;
+    renderProduct();
+  }
 
-      const p = products[currentIndex];
+  /* ---------------- AUTO SCROLL ---------------- */
 
-      const link = appendAffiliate(p.link);
+  let autoTimer;
 
-      const desc = `
-        Viral Amazon Find - ${p.title}
+  function startAutoScroll() {
 
-        Join @floatviral for daily product drops →
-        https://t.me/floatviral
-      `;
+    clearInterval(autoTimer);
 
-      const pinterestUrl =
-        `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
+    autoTimer = setInterval(() => {
+      nextProduct();
+    }, 8000);
+  }
 
-      window.open(pinterestUrl, "_blank");
-    }
+  /* ---------------- PINTEREST SHARE ---------------- */
 
-    function copyPinterestDescription() {
+  function sharePinterest() {
 
-      if (!products.length) return;
+    if (!products.length) return;
 
-      const p = products[currentIndex];
+    const p = products[currentIndex];
 
-      const text = `
+    const link = appendAffiliate(
+      p.url || p.link
+    );
+
+    const desc = `
 🔥 Viral Amazon Find
 
 ${p.title}
 
 Join @floatviral for daily product drops:
 https://t.me/floatviral
-      `;
+    `;
 
-      navigator.clipboard.writeText(text);
+    const pinterestUrl =
+      `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
 
-      alert("✅ Pinterest caption copied!");
-    }
+    window.open(pinterestUrl, "_blank");
+  }
 
-    function openUnlock() {
-      document
-        .getElementById("unlockModal")
-        .classList.remove("hidden");
-    }
+  /* ---------------- COPY DESCRIPTION ---------------- */
+
+  function copyPinterestDescription() {
+
+    if (!products.length) return;
+
+    const p = products[currentIndex];
+
+    const text = `
+🔥 Viral Amazon Find
+
+${p.title}
+
+Join @floatviral for daily product drops:
+https://t.me/floatviral
+    `;
+
+    navigator.clipboard.writeText(text);
+
+    alert("✅ Pinterest caption copied!");
+  }
+
+  /* ---------------- MODAL ---------------- */
+
+  function openUnlock() {
 
     document
-      .getElementById("nextBtn")
-      .addEventListener("click", nextProduct);
+      .getElementById("unlockModal")
+      .classList.remove("hidden");
+  }
 
-    loadProducts();
-  </script>
+  /* ---------------- EVENTS ---------------- */
+
+  document
+    .getElementById("nextBtn")
+    .addEventListener("click", nextProduct);
+
+  /* ---------------- START ---------------- */
+
+  loadProducts();
+</script>
 
 </body>
 </html>
