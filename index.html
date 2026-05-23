@@ -3,268 +3,634 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Float Rising – Viral Amazon Products Daily</title>
 
-  <meta property="og:title" content="Float Rising – Viral Amazon Products Daily">
-  <meta property="og:description" content="Discover trending TikTok & Amazon products. Create viral cards and earn with affiliate links.">
+  <!-- PRIMARY SEO -->
+  <title>
+    Float Rising – Viral Amazon Finds, TikTok Products & Trending Gadgets Daily
+  </title>
+
+  <meta
+    name="description"
+    content="Discover viral Amazon finds, trending TikTok products, clever gadgets, home upgrades, and creator-friendly affiliate products updated daily. Join Float Rising for daily product inspiration and trending product alerts."
+  />
+
+  <meta
+    name="keywords"
+    content="viral amazon products, trending tiktok products, amazon finds, viral gadgets, amazon must haves, tiktok made me buy it, affiliate products, trending gadgets, creator products"
+  />
+
+  <link rel="canonical" href="https://floatrising.com/" />
+
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Float Rising – Viral Amazon Finds & Trending TikTok Products">
+  <meta property="og:description" content="Discover trending Amazon finds, viral TikTok products, creator tools, and daily product inspiration.">
   <meta property="og:image" content="https://floatrising.com/banner.jpg">
   <meta property="og:url" content="https://floatrising.com">
 
-  <meta name="description" content="Viral Amazon products updated daily. Turn trending finds into shareable cards and earn commissions.">
-  <link rel="canonical" href="https://floatrising.com/">
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Float Rising – Viral Amazon Finds">
+  <meta name="twitter:description" content="Trending Amazon products, TikTok gadgets, and creator-friendly affiliate finds updated daily.">
+  <meta name="twitter:image" content="https://floatrising.com/banner.jpg">
+
+  <!-- STRUCTURED DATA -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Float Rising",
+    "url":"https://floatrising.com",
+    "description":"Discover viral Amazon finds, trending TikTok products, gadgets and creator-friendly affiliate products updated daily.",
+    "potentialAction":{
+      "@type":"SearchAction",
+      "target":"https://floatrising.com/search?q={search_term_string}",
+      "query-input":"required name=search_term_string"
+    }
+  }
+  </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: { 
-            primary: '#4f46e5', 
-            accent: '#22d3ee' 
+          colors: {
+            primary: '#4f46e5',
+            accent: '#22d3ee'
           }
         }
       }
     }
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <link rel="icon" href="/float-rising-logo.svg" />
 
   <style>
-    @keyframes float1 { 0% { transform: translate(0,0); } 50% { transform: translate(30px,-25px); } 100% { transform: translate(0,0); } }
-    .glow-cyan { box-shadow: 0 0 25px -5px rgb(34 211 238 / 0.5); }
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .glow-cyan {
+      box-shadow: 0 0 25px -5px rgb(34 211 238 / 0.5);
+    }
   </style>
 </head>
 
-<body class="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
+<body class="bg-gray-950 text-gray-100 min-h-screen antialiased">
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
     <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+
       <div class="flex items-center gap-3">
-        <img src="/float-rising-logo.svg" alt="Float Rising" class="h-8">
+        <img src="/float-rising-logo.svg" alt="Float Rising Logo" class="h-8">
         <span class="font-bold text-xl">Float Rising</span>
       </div>
-      <button onclick="openUnlock()" 
-              class="px-6 py-2.5 bg-white text-black font-semibold rounded-2xl hover:bg-gray-100 transition">
+
+      <button
+        onclick="openUnlock()"
+        class="px-6 py-2.5 bg-white text-black font-semibold rounded-2xl hover:bg-gray-100 transition"
+      >
         Unlock Creator Mode
       </button>
+
     </div>
   </header>
 
-  <!-- MAIN PRODUCTS SECTION -->
-  <section class="max-w-4xl mx-auto px-6 pt-8 pb-16">
-    <div class="text-center mb-8">
-      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-4 text-sm">
+  <!-- HERO -->
+  <section class="max-w-4xl mx-auto px-6 pt-10 pb-16">
+
+    <div class="text-center mb-10">
+
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-5 py-2 mb-5 text-sm">
         🔥 Updated Daily • Trending on TikTok & Amazon
       </div>
+
       <h1 class="text-5xl sm:text-6xl font-bold leading-tight">
-        Viral Products.<br>
+        Discover Viral Amazon Finds<br>
         <span class="bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-          Ready to Float.
+          Before Everyone Else
         </span>
       </h1>
-      <p class="text-xl text-gray-300 mt-4 max-w-2xl mx-auto">
-        Discover today's hottest Amazon finds. Swipe or click Next.
+
+      <p class="text-xl text-gray-300 mt-5 max-w-2xl mx-auto leading-8">
+        Daily trending products, TikTok gadgets, Amazon must-haves,
+        and creator-friendly affiliate finds curated for content creators,
+        Pinterest marketers, and product hunters.
       </p>
+
     </div>
 
+    <!-- PRODUCT CARD -->
     <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
-      <div id="card" class="min-h-[560px]">Loading products...</div>
-    </div>
-
-    <button id="nextBtn" 
-            class="mt-8 w-full py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan">
-      🔥 Next Viral Product
-    </button>
-  </section>
-
-  <!-- Social Proof -->
-  <section class="bg-gray-900 py-12">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-      <div class="grid grid-cols-3 gap-8">
-        <div><div class="text-4xl font-bold">1.2K+</div><div class="text-gray-400">Creators</div></div>
-        <div><div class="text-4xl font-bold">10K+</div><div class="text-gray-400">Cards Created</div></div>
-        <div><div class="text-4xl font-bold">50K+</div><div class="text-gray-400">Clicks Generated</div></div>
+      <div id="card" class="min-h-[560px]">
+        Loading products...
       </div>
     </div>
+
+    <button
+      id="nextBtn"
+      class="mt-8 w-full py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan"
+    >
+      🔥 Next Viral Product
+    </button>
+
   </section>
 
-  <!-- How It Works -->
+  <!-- SEO CONTENT -->
+  <section class="max-w-4xl mx-auto px-6 py-16">
+
+    <div class="bg-gray-900/60 border border-white/10 rounded-3xl p-10">
+
+      <h2 class="text-4xl font-bold mb-6">
+        Discover Viral Amazon Products Before They Explode
+      </h2>
+
+      <div class="space-y-6 text-gray-300 text-lg leading-8">
+
+        <p>
+          Float Rising helps creators discover trending Amazon products,
+          viral TikTok gadgets, home upgrades, desk accessories,
+          kitchen tools, and impulse-buy products gaining traction online.
+        </p>
+
+        <p>
+          Every day we track rising product trends and publish shareable
+          product cards designed for Pinterest creators, TikTok marketers,
+          affiliate marketers, dropshippers, and content creators looking
+          for high-engagement products.
+        </p>
+
+        <p>
+          Whether you're searching for viral kitchen gadgets,
+          Amazon must-haves, trending home products, smart travel accessories,
+          or creator-friendly affiliate products,
+          Float Rising updates daily with fresh product inspiration.
+        </p>
+
+        <p>
+          Join our Telegram channel for twice-daily live product drops,
+          trending product alerts, and curated viral finds before trends peak.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- TRENDING CATEGORIES -->
+  <section class="max-w-5xl mx-auto px-6 py-16">
+
+    <h2 class="text-4xl font-bold text-center mb-10">
+      Trending Categories
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+      <a href="/viral-kitchen-gadgets.html"
+         class="bg-gray-900 p-6 rounded-2xl text-center hover:bg-gray-800 transition border border-white/10">
+        Viral Kitchen Gadgets
+      </a>
+
+      <a href="/amazon-must-haves.html"
+         class="bg-gray-900 p-6 rounded-2xl text-center hover:bg-gray-800 transition border border-white/10">
+        Amazon Must-Haves
+      </a>
+
+      <a href="/tiktok-made-me-buy-it.html"
+         class="bg-gray-900 p-6 rounded-2xl text-center hover:bg-gray-800 transition border border-white/10">
+        TikTok Made Me Buy It
+      </a>
+
+      <a href="/viral.html"
+         class="bg-gray-900 p-6 rounded-2xl text-center hover:bg-gray-800 transition border border-white/10">
+        Trending Viral Products
+      </a>
+
+    </div>
+
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="bg-gray-900 py-12">
+
+    <div class="max-w-4xl mx-auto px-6 text-center">
+
+      <div class="grid grid-cols-3 gap-8">
+
+        <div>
+          <div class="text-4xl font-bold">1.2K+</div>
+          <div class="text-gray-400">Creators</div>
+        </div>
+
+        <div>
+          <div class="text-4xl font-bold">10K+</div>
+          <div class="text-gray-400">Cards Created</div>
+        </div>
+
+        <div>
+          <div class="text-4xl font-bold">50K+</div>
+          <div class="text-gray-400">Clicks Generated</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- HOW IT WORKS -->
   <section class="max-w-4xl mx-auto px-6 py-20">
-    <h2 class="text-4xl font-bold text-center mb-12">How It Works</h2>
+
+    <h2 class="text-4xl font-bold text-center mb-12">
+      How It Works
+    </h2>
+
     <div class="grid md:grid-cols-3 gap-8">
+
       <div class="bg-gray-900 rounded-3xl p-8 text-center">
         <div class="text-5xl mb-4">🔍</div>
         <h3 class="text-2xl font-bold mb-3">1. Discover</h3>
-        <p class="text-gray-400">Hand-curated viral products updated daily.</p>
+        <p class="text-gray-400">
+          Hand-curated viral products updated daily.
+        </p>
       </div>
+
       <div class="bg-gray-900 rounded-3xl p-8 text-center">
         <div class="text-5xl mb-4">📱</div>
         <h3 class="text-2xl font-bold mb-3">2. Create & Share</h3>
-        <p class="text-gray-400">Turn them into beautiful cards for Pinterest, TikTok, etc.</p>
+        <p class="text-gray-400">
+          Turn them into beautiful cards for Pinterest, TikTok, and social media.
+        </p>
       </div>
+
       <div class="bg-gray-900 rounded-3xl p-8 text-center border-2 border-cyan-400">
         <div class="text-5xl mb-4">💰</div>
         <h3 class="text-2xl font-bold mb-3">3. Earn</h3>
-        <p class="text-gray-400">Get commissions when people buy through your links.</p>
+        <p class="text-gray-400">
+          Use your affiliate links and keep 100% of your commissions.
+        </p>
       </div>
+
     </div>
+
   </section>
 
-  <!-- Unlock CTA -->
+  <!-- FAQ -->
+  <section class="max-w-4xl mx-auto px-6 py-20">
+
+    <h2 class="text-4xl font-bold text-center mb-12">
+      Frequently Asked Questions
+    </h2>
+
+    <div class="space-y-6">
+
+      <div class="bg-gray-900 rounded-2xl p-6">
+        <h3 class="text-2xl font-semibold mb-3">
+          What products are featured on Float Rising?
+        </h3>
+
+        <p class="text-gray-400 leading-7">
+          Float Rising features trending Amazon products,
+          viral TikTok gadgets, creator-friendly affiliate products,
+          home upgrades, desk accessories, travel gadgets,
+          and impulse-buy products shared across social media.
+        </p>
+      </div>
+
+      <div class="bg-gray-900 rounded-2xl p-6">
+        <h3 class="text-2xl font-semibold mb-3">
+          How often are products updated?
+        </h3>
+
+        <p class="text-gray-400 leading-7">
+          New viral product finds are added daily,
+          with live product cards posted twice daily
+          in the Float Rising Telegram channel.
+        </p>
+      </div>
+
+      <div class="bg-gray-900 rounded-2xl p-6">
+        <h3 class="text-2xl font-semibold mb-3">
+          Can creators use their own affiliate links?
+        </h3>
+
+        <p class="text-gray-400 leading-7">
+          Yes. Creator Mode allows users to use their own
+          Amazon affiliate ID and keep 100% of their commissions.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- TELEGRAM CTA -->
   <section class="max-w-4xl mx-auto px-6 pb-20">
-    <div class="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl p-12 text-center">
-      <h2 class="text-4xl font-bold mb-4">Ready to Keep 100% of the Commissions?</h2>
-      <p class="text-xl text-gray-300 mb-8">Upgrade to Creator Mode and use your own Amazon affiliate ID.</p>
-      <div class="text-5xl font-bold mb-2">$19</div>
-      <div class="text-gray-400 mb-8">One-time • Lifetime Access</div>
-      <button onclick="openUnlock()" 
-              class="px-12 py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan">
-        Unlock Creator Mode → Keep All Earnings
-      </button>
+
+    <div class="bg-gradient-to-br from-cyan-950 to-blue-950 border border-cyan-500/20 rounded-3xl p-12 text-center">
+
+      <div class="text-5xl mb-6">🚀</div>
+
+      <h2 class="text-4xl font-bold mb-4">
+        Join The Float Rising Telegram Channel
+      </h2>
+
+      <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+        Get twice-daily viral product drops, trending Amazon finds,
+        TikTok product alerts, and creator-ready affiliate opportunities.
+      </p>
+
+      <a
+        href="https://t.me/floatviral"
+        target="_blank"
+        class="inline-block px-12 py-6 text-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl hover:scale-105 transition-all glow-cyan"
+      >
+        Join @floatviral →
+      </a>
+
     </div>
+
   </section>
 
+  <!-- CREATOR MODE -->
+  <section class="max-w-4xl mx-auto px-6 pb-20">
+
+    <div class="bg-gradient-to-br from-gray-900 to-black border border-white/10 rounded-3xl p-12 text-center">
+
+      <h2 class="text-4xl font-bold mb-4">
+        Ready to Keep 100% of the Commissions?
+      </h2>
+
+      <p class="text-xl text-gray-300 mb-8">
+        Upgrade to Creator Mode and use your own Amazon affiliate ID.
+      </p>
+
+      <div class="text-5xl font-bold mb-2">$19</div>
+
+      <div class="text-gray-400 mb-8">
+        One-time • Lifetime Access
+      </div>
+
+      <button
+        onclick="openUnlock()"
+        class="px-12 py-6 text-xl font-bold bg-gradient-to-r from-indigo-600 to-cyan-500 rounded-3xl hover:scale-105 transition-all glow-cyan"
+      >
+        Unlock Creator Mode →
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
   <footer class="text-center text-sm text-gray-500 py-12 border-t border-white/10">
+
     <p>© 2026 Float Rising</p>
-    <p class="mt-2">🌍 Creators worldwide welcome</p>
+
+    <p class="mt-2">
+      Viral Amazon Finds • TikTok Products • Creator Affiliate Tools
+    </p>
+
   </footer>
 
-  <!-- FLOATING TOOLS (with Telegram Button) -->
+  <!-- FLOATING BUTTONS -->
   <div class="fixed right-6 bottom-28 flex flex-col gap-3 z-50">
-    <button onclick="sharePinterest()" 
-            class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">
+
+    <button
+      onclick="sharePinterest()"
+      class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg"
+    >
       📌
     </button>
-    <button onclick="copyPinterestDescription()" 
-            class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">
+
+    <button
+      onclick="copyPinterestDescription()"
+      class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg"
+    >
       📋
     </button>
-    <!-- Telegram Bot Button -->
-    <button onclick="window.open('https://t.me/floatviral', '_blank')" 
-            class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg">
+
+    <button
+      onclick="window.open('https://t.me/floatviral', '_blank')"
+      class="bg-gray-900 w-14 h-14 rounded-full flex items-center justify-center text-2xl hover:scale-110 transition border border-gray-700 shadow-lg"
+    >
       🤖
     </button>
+
   </div>
 
-  <!-- Unlock Modal -->
+  <!-- UNLOCK MODAL -->
   <div id="unlockModal" class="fixed inset-0 bg-black/80 hidden flex items-center justify-center z-50 px-4">
+
     <div class="bg-gray-900 rounded-3xl p-8 max-w-md w-full text-center">
-      <h3 class="text-3xl font-bold mb-6">Unlock Creator Mode</h3>
-      <p class="text-2xl font-semibold mb-8">$19 USD – One Time</p>
-      <a href="https://wise.com/pay/me/davids14542" target="_blank" 
-         class="block w-full py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold rounded-2xl text-lg hover:opacity-90">
+
+      <h3 class="text-3xl font-bold mb-6">
+        Unlock Creator Mode
+      </h3>
+
+      <p class="text-2xl font-semibold mb-8">
+        $19 USD – One Time
+      </p>
+
+      <a
+        href="https://wise.com/pay/me/davids14542"
+        target="_blank"
+        class="block w-full py-5 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold rounded-2xl text-lg hover:opacity-90"
+      >
         Pay with Wise
       </a>
-      <p class="text-gray-400 mt-6">Email screenshot to omnistall70@gmail.com</p>
+
+      <p class="text-gray-400 mt-6">
+        Email screenshot to omnistall70@gmail.com
+      </p>
+
     </div>
+
   </div>
 
   <script>
-    // ==================== CORE SETTINGS ====================
-    let products = [], currentIndex = 0;
+    let products = [];
+    let currentIndex = 0;
+
     const card = document.getElementById("card");
+
     const DEFAULT_AFFILIATE_ID = "davidshort-21";
-    let affiliateId = localStorage.getItem("affiliateId") || DEFAULT_AFFILIATE_ID;
-    let creatorUnlocked = localStorage.getItem("creatorUnlocked") === "true";
+
+    let affiliateId =
+      localStorage.getItem("affiliateId") || DEFAULT_AFFILIATE_ID;
+
+    let creatorUnlocked =
+      localStorage.getItem("creatorUnlocked") === "true";
 
     function appendAffiliate(url) {
       if (!url) return "#";
-      const activeId = creatorUnlocked ? (affiliateId || DEFAULT_AFFILIATE_ID) : DEFAULT_AFFILIATE_ID;
+
+      const activeId = creatorUnlocked
+        ? (affiliateId || DEFAULT_AFFILIATE_ID)
+        : DEFAULT_AFFILIATE_ID;
+
       if (url.includes("tag=")) return url;
+
       return url + (url.includes("?") ? "&" : "?") + "tag=" + activeId;
     }
 
-    // ==================== LOAD PRODUCTS ====================
     async function loadProducts() {
+
       card.innerHTML = `
         <div class="p-12 text-center min-h-[560px] flex flex-col items-center justify-center">
           <div class="text-6xl animate-pulse mb-6">⏳</div>
           <div class="text-2xl">Finding today's viral products...</div>
-          <div class="text-gray-400 mt-3">New drops usually land at 7am UK time</div>
-        </div>`;
+          <div class="text-gray-400 mt-3">
+            New drops usually land twice daily
+          </div>
+        </div>
+      `;
 
       try {
+
         const res = await fetch("/api/search");
         const data = await res.json();
-        const list = Array.isArray(data) ? data : (data.products || []);
-        
+
+        const list = Array.isArray(data)
+          ? data
+          : (data.products || []);
+
         products = list.filter(p => p.link && p.image);
 
-        if (products.length === 0) {
-          card.innerHTML = `<div class="p-12 text-center text-xl">No products available right now.<br>Try refreshing.</div>`;
+        if (!products.length) {
+
+          card.innerHTML = `
+            <div class="p-12 text-center text-xl">
+              No products available right now.<br>
+              Try refreshing.
+            </div>
+          `;
+
           return;
         }
 
         shuffle(products);
+
         currentIndex = 0;
+
         renderProduct();
+
         startAutoScroll();
+
       } catch (e) {
-        card.innerHTML = `<div class="p-12 text-center">Failed to load products.<br>Please refresh the page.</div>`;
+
+        card.innerHTML = `
+          <div class="p-12 text-center">
+            Failed to load products.<br>
+            Please refresh the page.
+          </div>
+        `;
       }
     }
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
+
         const j = Math.floor(Math.random() * (i + 1));
+
         [array[i], array[j]] = [array[j], array[i]];
       }
     }
 
     function generateHook(title) {
-      const shortTitle = title.split(" ").slice(0, 3).join(" ");
-      return `🔥 This ${shortTitle} Is Going Viral Right Now`;
+
+      const shortTitle =
+        title.split(" ").slice(0, 3).join(" ");
+
+      return `🔥 This ${shortTitle} Is Trending Right Now`;
     }
 
-    // ==================== RENDER PRODUCT CARD ====================
     function renderProduct() {
-      if (!products.length) return;
-      const p = products[currentIndex];
 
-      p.rating = (4.6 + Math.random() * 0.3).toFixed(1);
-      p.reviews = Math.floor(Math.random() * 800 + 300);
-      p.sold = Math.floor(Math.random() * 1500 + 400);
+      if (!products.length) return;
+
+      const p = products[currentIndex];
 
       const affLink = appendAffiliate(p.link);
 
       card.innerHTML = `
         <div class="relative">
-          <div class="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">VIRAL 🔥</div>
-          ${creatorUnlocked ? `<div class="absolute top-6 right-6 bg-emerald-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">✓ Your Affiliate</div>` : ''}
 
-          <img src="${p.image}" alt="${p.title}" 
-               class="w-full h-96 sm:h-[520px] object-cover" 
-               onerror="this.src='https://via.placeholder.com/800x600?text=Product+Image'">
+          <div class="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
+            VIRAL 🔥
+          </div>
+
+          ${creatorUnlocked
+            ? `
+              <div class="absolute top-6 right-6 bg-emerald-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
+                ✓ Your Affiliate
+              </div>
+            `
+            : ''
+          }
+
+          <img
+            src="${p.image}"
+            alt="${p.title}"
+            class="w-full h-96 sm:h-[520px] object-cover"
+            onerror="this.src='https://via.placeholder.com/800x600?text=Product+Image'"
+          >
 
           <div class="p-8">
-            <h2 class="text-3xl font-bold text-center mb-4 leading-tight">${p.title}</h2>
-            <p class="text-center text-lg text-gray-400 mb-6">${generateHook(p.title)}</p>
 
-            <div class="text-center text-yellow-400 mb-8">
-              ⭐ <strong>${p.rating}</strong> • ${p.reviews}+ reviews • ${p.sold}+ bought
+            <h2 class="text-3xl font-bold text-center mb-4 leading-tight">
+              ${p.title}
+            </h2>
+
+            <p class="text-center text-lg text-gray-400 mb-6">
+              ${generateHook(p.title)}
+            </p>
+
+            <div class="text-center text-cyan-300 mb-8 text-lg">
+              🔥 Trending Across TikTok & Amazon
             </div>
 
-            <div onclick="window.open('${affLink}','_blank')" 
-                 class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-7 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition shadow-xl">
+            <div
+              onclick="window.open('${affLink}','_blank')"
+              class="cursor-pointer bg-gradient-to-r from-amber-500 to-orange-500 text-white py-7 rounded-2xl text-center font-bold text-xl mb-4 hover:scale-[1.02] transition shadow-xl"
+            >
               👀 See Why It's Going Viral
             </div>
 
-            <button onclick="window.open('${affLink}','_blank')" 
-                    class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100 transition">
+            <button
+              onclick="window.open('${affLink}','_blank')"
+              class="w-full py-6 bg-white text-gray-900 font-bold rounded-2xl text-xl hover:bg-gray-100 transition"
+            >
               Check Price on Amazon →
             </button>
 
-            <!-- Telegram Promo -->
             <div class="mt-8 text-center text-sm bg-blue-950 border border-blue-800 rounded-2xl p-5">
+
               Need more viral products every day?<br>
-              <a href="https://t.me/floatviral" target="_blank" class="text-cyan-400 font-bold hover:underline">
+
+              <a
+                href="https://t.me/floatviral"
+                target="_blank"
+                class="text-cyan-400 font-bold hover:underline"
+              >
                 → Join @floatviral on Telegram
               </a>
+
             </div>
+
           </div>
-        </div>`;
+
+        </div>
+      `;
     }
 
     function nextProduct() {
@@ -273,33 +639,65 @@
     }
 
     let autoTimer;
+
     function startAutoScroll() {
       clearInterval(autoTimer);
       autoTimer = setInterval(nextProduct, 8000);
     }
 
-    // ==================== SHARING FUNCTIONS ====================
     function sharePinterest() {
+
       if (!products.length) return;
+
       const p = products[currentIndex];
+
       const link = appendAffiliate(p.link);
-      const desc = `Viral Amazon Find - ${p.title}\n\nJoin @floatviral for daily drops → https://t.me/floatviral`;
-      const pinterestUrl = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
+
+      const desc = `
+        Viral Amazon Find - ${p.title}
+
+        Join @floatviral for daily product drops →
+        https://t.me/floatviral
+      `;
+
+      const pinterestUrl =
+        `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
+
       window.open(pinterestUrl, "_blank");
     }
 
     function copyPinterestDescription() {
+
       if (!products.length) return;
-      alert("✅ Pinterest caption copied!\n\nYou can paste it directly on Pinterest.");
+
+      const p = products[currentIndex];
+
+      const text = `
+🔥 Viral Amazon Find
+
+${p.title}
+
+Join @floatviral for daily product drops:
+https://t.me/floatviral
+      `;
+
+      navigator.clipboard.writeText(text);
+
+      alert("✅ Pinterest caption copied!");
     }
 
     function openUnlock() {
-      document.getElementById("unlockModal").classList.remove("hidden");
+      document
+        .getElementById("unlockModal")
+        .classList.remove("hidden");
     }
 
-    // ==================== INIT ====================
-    document.getElementById("nextBtn").addEventListener("click", nextProduct);
+    document
+      .getElementById("nextBtn")
+      .addEventListener("click", nextProduct);
+
     loadProducts();
   </script>
+
 </body>
-</html>I
+</html>
