@@ -214,7 +214,86 @@
          class="bg-gray-900 p-6 rounded-2xl text-center hover:bg-gray-800 transition border border-white/10">
         Trending Viral Products
       </a>
+<!-- SEO PRODUCT LINKS -->
 
+<section class="max-w-5xl mx-auto px-6 py-20">
+
+  <h2 class="text-4xl font-bold text-center mb-10">
+    Trending Viral Products
+  </h2>
+
+  <div
+    id="seoProducts"
+    class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+  >
+  </div>
+
+</section>
+
+<script>
+
+async function loadSeoProducts(){
+
+  try{
+
+    const res = await fetch("/api/feed");
+    const data = await res.json();
+
+    const products =
+      Array.isArray(data)
+      ? data
+      : (data.products || []);
+
+    const container =
+      document.getElementById("seoProducts");
+
+    products.slice(0,8).forEach((p,index)=>{
+
+      const id =
+        p.id ||
+        p.asin ||
+        index;
+
+      container.innerHTML += `
+
+        <a
+          href="/s.html?id=${id}"
+          class="bg-gray-900 rounded-3xl overflow-hidden border border-white/10 hover:scale-[1.02] transition block"
+        >
+
+          <img
+            src="${p.image}"
+            class="w-full h-56 object-cover"
+          >
+
+          <div class="p-5">
+
+            <div class="text-cyan-300 text-sm mb-2">
+              Viral Find 🔥
+            </div>
+
+            <div class="font-bold text-lg leading-7">
+
+              ${(p.title || "Trending Product").substring(0,70)}
+
+            </div>
+
+          </div>
+
+        </a>
+
+      `;
+    });
+
+  }catch(err){
+
+    console.log(err);
+  }
+}
+
+loadSeoProducts();
+
+</script>
     </div>
 
   </section>
