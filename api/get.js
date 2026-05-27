@@ -13,16 +13,33 @@ export default async function handler(req, res) {
   });
 
   try {
-    // Load from FLOAT namespace
     const data = await redis.get(`float:${id}`);
 
     if (!data) {
       return res.status(404).json({ error: 'Not found' });
     }
 
-    const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+    const p = typeof data === 'string' ? JSON.parse(data) : data;
 
-    res.status(200).json(parsed);
+    // 🔧 NORMALISE EVERYTHING (THIS IS THE FIX)
+    const product = {
+      id,
+      title: p.title || "Trending Product",
+      image: p.image || "",
+      link: p.link || p.url || "",
+      price: p.price || null,
+      reviews: p.reviews || null,
+      rating: p.rating || null
+    };
+
+    // ❗ HARD GUARD (ONLY REAL FAILURE CASE)
+    if (!product.image || !product.title) {
+      return res.status(404).json({
+        error: 'Invalid product data'
+      });
+    }
+
+    return res.status(200).json(product);
 
   } catch (err) {
     console.error('Load error:', err);
