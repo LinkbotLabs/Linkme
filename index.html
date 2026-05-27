@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <!-- PRIMARY SEO -->
+  <!-- SEO -->
 
   <title>
     Float Rising – Viral Baby Products, TikTok Mom Finds & Newborn Essentials
@@ -18,14 +18,14 @@
 
   <meta
     name="keywords"
-    content="viral baby products, tiktok mom finds, amazon baby finds, newborn essentials, baby products 2026, baby must haves, parenting hacks, baby travel gear, toddler products"
+    content="viral baby products, tiktok mom finds, amazon baby finds, newborn essentials, baby products 2026, baby must haves, parenting hacks"
   />
 
   <meta name="robots" content="index,follow"/>
 
   <link
     rel="canonical"
-    href="https://floatrising.com/viral-baby-products.html"
+    href="https://floatrising.com/"
   />
 
   <!-- OPEN GRAPH -->
@@ -34,7 +34,7 @@
   <meta property="og:title" content="Float Rising – Viral Baby Products & TikTok Mom Finds">
   <meta property="og:description" content="Discover trending baby products, newborn essentials, parenting hacks, and viral Amazon baby finds updated daily.">
   <meta property="og:image" content="https://floatrising.com/banner.jpg">
-  <meta property="og:url" content="https://floatrising.com/viral-baby-products.html">
+  <meta property="og:url" content="https://floatrising.com/">
 
   <!-- TWITTER -->
 
@@ -48,10 +48,10 @@
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
-    "@type":"CollectionPage",
-    "name":"Float Rising Viral Baby Products",
-    "url":"https://floatrising.com/viral-baby-products.html",
-    "description":"Trending baby products, TikTok mom finds, newborn essentials, parenting hacks and viral Amazon baby finds updated daily."
+    "@type":"WebSite",
+    "name":"Float Rising",
+    "url":"https://floatrising.com",
+    "description":"Trending viral baby products and newborn essentials updated daily."
   }
   </script>
 
@@ -74,6 +74,8 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   />
+
+  <link rel="icon" href="/float-rising-logo.svg">
 
   <style>
 
@@ -128,10 +130,10 @@
       <div class="flex items-center gap-3">
 
         <a
-          href="/"
+          href="/blog-baby.html"
           class="hidden sm:block px-5 py-3 rounded-2xl border border-white/10 hover:bg-white/5 transition"
         >
-          Home
+          Parenting Blog
         </a>
 
         <a
@@ -178,7 +180,7 @@
 
     </div>
 
-    <!-- FEATURE CARD -->
+    <!-- PRODUCT CARD -->
 
     <div class="bg-white/5 border border-white/10 rounded-[36px] overflow-hidden backdrop-blur-xl shadow-2xl">
 
@@ -204,49 +206,30 @@
 
     </div>
 
-    <!-- NEXT BUTTON -->
+    <!-- BUTTONS -->
 
-    <button
-      id="nextBtn"
-      class="mt-8 w-full py-6 rounded-3xl text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
-    >
-      👶 Next Viral Baby Product
-    </button>
+    <div class="grid sm:grid-cols-3 gap-4 mt-8">
 
-  </section>
+      <button
+        id="nextBtn"
+        class="py-6 rounded-3xl text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
+      >
+        👶 Next Product
+      </button>
 
-  <!-- TRUST SECTION -->
+      <button
+        onclick="sharePinterest()"
+        class="py-6 rounded-3xl text-xl font-bold bg-[#E60023] hover:scale-[1.02] transition-all"
+      >
+        📌 Pinterest
+      </button>
 
-  <section class="max-w-5xl mx-auto px-6 pb-20">
-
-    <div class="bg-[#12121a] border border-white/10 rounded-[36px] p-10">
-
-      <h2 class="text-4xl font-bold mb-8">
-        Baby Products Parents Actually Want
-      </h2>
-
-      <div class="space-y-6 text-lg text-gray-300 leading-8">
-
-        <p>
-          Float Rising tracks trending baby products, TikTok parenting finds,
-          newborn essentials, feeding products, baby sleep solutions,
-          toddler travel gear, and problem-solving products parents are sharing online.
-        </p>
-
-        <p>
-          Every product is selected for visual appeal, parenting usefulness,
-          social media momentum, and strong buyer interest across TikTok,
-          Amazon, Pinterest, and parenting communities.
-        </p>
-
-        <p>
-          Whether you're looking for baby travel essentials,
-          smart feeding products, nursery upgrades,
-          postpartum recovery finds, or viral parenting hacks,
-          Float Rising updates daily with fresh discoveries.
-        </p>
-
-      </div>
+      <button
+        onclick="copyPinterestDescription()"
+        class="py-6 rounded-3xl text-xl font-bold bg-white text-black hover:scale-[1.02] transition-all"
+      >
+        📋 Copy Caption
+      </button>
 
     </div>
 
@@ -260,45 +243,53 @@
       Trending Baby Categories
     </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-5">
 
       <a
-        href="/baby-sleep-products.html"
+        href="/baby-sleep.html"
         class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
       >
         😴<br><br>
-        Baby Sleep Products
+        Baby Sleep
       </a>
 
       <a
-        href="/newborn-essentials.html"
+        href="/baby-products.html"
         class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
       >
         👶<br><br>
-        Newborn Essentials
+        Baby Products
       </a>
 
       <a
-        href="/tiktok-mom-finds.html"
+        href="/baby-feeding.html"
         class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
       >
-        📱<br><br>
-        TikTok Mom Finds
+        🍼<br><br>
+        Feeding
       </a>
 
       <a
-        href="/baby-travel-gear.html"
+        href="/baby-travel.html"
         class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
       >
         ✈️<br><br>
-        Baby Travel Gear
+        Travel
+      </a>
+
+      <a
+        href="/baby-toys.html"
+        class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
+      >
+        🧸<br><br>
+        Toys
       </a>
 
     </div>
 
   </section>
 
-  <!-- SEO PRODUCT GRID -->
+  <!-- SEO GRID -->
 
   <section class="max-w-6xl mx-auto px-6 pb-20">
 
@@ -313,230 +304,71 @@
 
   </section>
 
-  <!-- SOCIAL PROOF -->
+  <!-- BLOG -->
 
-  <section class="bg-[#101018] py-16 border-y border-white/5">
+  <section class="max-w-6xl mx-auto px-6 pb-24">
 
-    <div class="max-w-5xl mx-auto px-6">
+    <div class="flex items-center justify-between mb-10">
 
-      <div class="grid grid-cols-3 gap-8 text-center">
-
-        <div>
-
-          <div class="text-4xl font-bold">
-            12K+
-          </div>
-
-          <div class="text-gray-400 mt-2">
-            Parents Reached
-          </div>
-
-        </div>
-
-        <div>
-
-          <div class="text-4xl font-bold">
-            2K+
-          </div>
-
-          <div class="text-gray-400 mt-2">
-            Viral Baby Finds
-          </div>
-
-        </div>
-
-        <div>
-
-          <div class="text-4xl font-bold">
-            Daily
-          </div>
-
-          <div class="text-gray-400 mt-2">
-            Product Updates
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- HOW IT WORKS -->
-
-  <section class="max-w-5xl mx-auto px-6 py-20">
-
-    <h2 class="text-4xl font-bold text-center mb-14">
-      How Float Rising Works
-    </h2>
-
-    <div class="grid md:grid-cols-3 gap-8">
-
-      <div class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center">
-
-        <div class="text-5xl mb-5">
-          🔍
-        </div>
-
-        <h3 class="text-2xl font-bold mb-4">
-          1. Track Trends
-        </h3>
-
-        <p class="text-gray-400 leading-7">
-          We discover trending baby products parents are sharing across TikTok and Amazon.
-        </p>
-
-      </div>
-
-      <div class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center">
-
-        <div class="text-5xl mb-5">
-          👶
-        </div>
-
-        <h3 class="text-2xl font-bold mb-4">
-          2. Curate The Best
-        </h3>
-
-        <p class="text-gray-400 leading-7">
-          Only visually appealing, useful, and highly shareable products make the feed.
-        </p>
-
-      </div>
-
-      <div class="bg-[#14141c] border border-pink-500/30 rounded-3xl p-8 text-center">
-
-        <div class="text-5xl mb-5">
-          🚀
-        </div>
-
-        <h3 class="text-2xl font-bold mb-4">
-          3. Discover Early
-        </h3>
-
-        <p class="text-gray-400 leading-7">
-          Find trending parenting products before they become saturated everywhere.
-        </p>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- TELEGRAM CTA -->
-
-  <section class="max-w-5xl mx-auto px-6 pb-24">
-
-    <div class="rounded-[36px] p-14 text-center border border-pink-500/20 bg-gradient-to-br from-pink-950 via-rose-950 to-cyan-950">
-
-      <div class="text-6xl mb-8">
-        🚀
-      </div>
-
-      <h2 class="text-5xl font-bold mb-6">
-        Join The Viral Baby Feed
+      <h2 class="text-4xl font-bold">
+        Parenting Guides & Support
       </h2>
 
-      <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-8 mb-10">
-
-        Get daily viral baby finds, trending parenting products,
-        newborn essentials, TikTok mom discoveries,
-        and Amazon baby products before trends peak.
-
-      </p>
-
       <a
-        href="https://t.me/floatviral"
-        target="_blank"
-        class="inline-block px-12 py-6 rounded-3xl bg-gradient-to-r from-pink-500 to-cyan-500 text-white text-xl font-bold hover:scale-105 transition-all glow-pink"
+        href="/blog-baby.html"
+        class="text-pink-400 font-semibold hover:text-pink-300 transition"
       >
-        Join @floatviral →
+        Read More →
       </a>
 
     </div>
 
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <a
+        href="/blog-baby.html"
+        class="group bg-[#14141c] border border-white/10 rounded-[28px] overflow-hidden hover:border-pink-500/30 transition-all"
+      >
+
+        <div class="h-52 bg-gradient-to-br from-pink-500/20 via-rose-500/10 to-cyan-500/20 flex items-center justify-center text-6xl">
+          👶
+        </div>
+
+        <div class="p-7">
+
+          <div class="text-sm text-pink-400 font-semibold mb-3">
+            PARENTING SUPPORT
+          </div>
+
+          <h3 class="text-2xl font-bold mb-4 group-hover:text-pink-300 transition">
+
+            Pregnancy Stress & Finding The Right Baby Products
+
+          </h3>
+
+          <p class="text-gray-400 leading-7">
+
+            Helpful advice, emotional support resources,
+            and curated baby products for modern parents.
+
+          </p>
+
+        </div>
+
+      </a>
+
+      <div class="bg-[#111118] border border-dashed border-white/10 rounded-[28px] p-8 flex items-center justify-center text-gray-500 text-center leading-7">
+        More parenting guides coming soon
+      </div>
+
+      <div class="bg-[#111118] border border-dashed border-white/10 rounded-[28px] p-8 flex items-center justify-center text-gray-500 text-center leading-7">
+        Baby checklists, sleep guides & newborn tips
+      </div>
+
+    </div>
+
   </section>
-<!-- BLOG / GUIDES -->
 
-<section class="max-w-6xl mx-auto px-6 pb-24">
-
-  <div class="flex items-center justify-between mb-10">
-
-    <h2 class="text-4xl font-bold">
-      Parenting Guides & Support
-    </h2>
-
-    <a
-      href="/blog-baby.html"
-      class="text-pink-400 font-semibold hover:text-pink-300 transition"
-    >
-      Read More →
-    </a>
-
-  </div>
-
-  <div class="grid md:grid-cols-3 gap-6">
-
-    <!-- ARTICLE -->
-
-    <a
-      href="/blog-baby.html"
-      class="group bg-[#14141c] border border-white/10 rounded-[28px] overflow-hidden hover:border-pink-500/30 transition-all"
-    >
-
-      <div class="h-52 bg-gradient-to-br from-pink-500/20 via-rose-500/10 to-cyan-500/20 flex items-center justify-center text-6xl">
-        👶
-      </div>
-
-      <div class="p-7">
-
-        <div class="text-sm text-pink-400 font-semibold mb-3">
-          PARENTING SUPPORT
-        </div>
-
-        <h3 class="text-2xl font-bold mb-4 group-hover:text-pink-300 transition">
-
-          Pregnancy Stress & Finding The Right Baby Products
-
-        </h3>
-
-        <p class="text-gray-400 leading-7">
-
-          Preparing for a baby can feel overwhelming.
-          Discover helpful advice, emotional support resources,
-          and curated baby products for modern parents.
-
-        </p>
-
-        <div class="mt-6 text-cyan-300 font-semibold">
-          Read Article →
-        </div>
-
-      </div>
-
-    </a>
-
-    <!-- PLACEHOLDER 2 -->
-
-    <div class="bg-[#111118] border border-dashed border-white/10 rounded-[28px] p-8 flex items-center justify-center text-gray-500 text-center leading-7">
-
-      More parenting guides coming soon
-
-    </div>
-
-    <!-- PLACEHOLDER 3 -->
-
-    <div class="bg-[#111118] border border-dashed border-white/10 rounded-[28px] p-8 flex items-center justify-center text-gray-500 text-center leading-7">
-
-      Baby checklists, sleep guides & newborn tips
-
-    </div>
-
-  </div>
-
-</section>
   <!-- FOOTER -->
 
   <footer class="border-t border-white/10 py-12 text-center text-sm text-gray-500">
@@ -558,22 +390,60 @@ let currentIndex = 0;
 
 const card = document.getElementById("card");
 
+/* ---------------- AFFILIATE ---------------- */
+
+const DEFAULT_AFFILIATE_ID = "davidshort-21";
+
+function appendAffiliate(url){
+
+  if(!url) return "#";
+
+  if(url.includes("tag=")) return url;
+
+  return url + (url.includes("?") ? "&" : "?") + "tag=" + DEFAULT_AFFILIATE_ID;
+}
+
 /* ---------------- LOAD PRODUCTS ---------------- */
 
 async function loadProducts(){
 
   try{
 
-    const res = await fetch("/api/feed");
-    const data = await res.json();
+    const feedRes = await fetch("/api/feed");
+    const feedData = await feedRes.json();
 
-    products = Array.isArray(data)
-      ? data
-      : (data.products || []);
+    let feedProducts = Array.isArray(feedData)
+      ? feedData
+      : (feedData.products || []);
 
-    /* FILTER BABY PRODUCTS */
+    /* SEARCH FALLBACK */
 
-    products = products.filter(p => {
+    let searchProducts = [];
+
+    try{
+
+      const searchRes = await fetch("/api/search");
+      const searchData = await searchRes.json();
+
+      searchProducts = Array.isArray(searchData)
+        ? searchData
+        : (searchData.products || []);
+
+    }catch(err){
+      console.log("Search fallback unavailable");
+    }
+
+    const combined = [
+      ...feedProducts,
+      ...searchProducts
+    ];
+
+    const seen = new Set();
+
+    products = combined.filter(p => {
+
+      if(!p) return false;
+      if(!p.image) return false;
 
       const text = (
         (p.title || "") +
@@ -581,7 +451,8 @@ async function loadProducts(){
         (p.description || "")
       ).toLowerCase();
 
-      return (
+      const isBaby = (
+
         text.includes("baby") ||
         text.includes("newborn") ||
         text.includes("toddler") ||
@@ -590,7 +461,21 @@ async function loadProducts(){
         text.includes("feeding") ||
         text.includes("stroller") ||
         text.includes("diaper")
+
       );
+
+      if(!isBaby) return false;
+
+      const id =
+        p.id ||
+        p.asin ||
+        p.link;
+
+      if(seen.has(id)) return false;
+
+      seen.add(id);
+
+      return true;
     });
 
     if(!products.length){
@@ -617,6 +502,7 @@ async function loadProducts(){
     }
 
     renderProduct();
+    loadSeoProducts();
 
   }catch(err){
 
@@ -663,6 +549,10 @@ function renderProduct(){
 
   const p = products[currentIndex];
 
+  const affLink = appendAffiliate(
+    p.url || p.link
+  );
+
   card.innerHTML = `
 
     <div class="relative">
@@ -701,7 +591,7 @@ function renderProduct(){
         </div>
 
         <a
-          href="${p.link}"
+          href="${affLink}"
           target="_blank"
           class="block text-center py-6 rounded-3xl text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
         >
@@ -717,95 +607,119 @@ function renderProduct(){
 
 /* ---------------- NEXT ---------------- */
 
-document
-.getElementById("nextBtn")
-.addEventListener("click", () => {
+function nextProduct(){
 
   currentIndex =
     (currentIndex + 1) % products.length;
 
   renderProduct();
-});
+}
+
+document
+.getElementById("nextBtn")
+.addEventListener("click", nextProduct);
 
 /* ---------------- SEO GRID ---------------- */
 
-async function loadSeoProducts(){
+function loadSeoProducts(){
 
-  try{
+  const container =
+    document.getElementById("seoProducts");
 
-    const res = await fetch("/api/feed");
-    const data = await res.json();
+  container.innerHTML = "";
 
-    let products = Array.isArray(data)
-      ? data
-      : (data.products || []);
+  products.slice(0,8).forEach((p,index)=>{
 
-    products = products.filter(p => {
+    const id =
+      p.id ||
+      p.asin ||
+      index;
 
-      const text = (
-        (p.title || "") +
-        " " +
-        (p.description || "")
-      ).toLowerCase();
+    container.innerHTML += `
 
-      return (
-        text.includes("baby") ||
-        text.includes("newborn") ||
-        text.includes("toddler") ||
-        text.includes("mom")
-      );
-    });
+      <a
+        href="/s.html?id=${id}"
+        class="bg-[#14141c] border border-white/10 rounded-3xl overflow-hidden card-hover"
+      >
 
-    const container =
-      document.getElementById("seoProducts");
-
-    products.slice(0,8).forEach((p,index)=>{
-
-      const id =
-        p.id ||
-        p.asin ||
-        index;
-
-      container.innerHTML += `
-
-        <a
-          href="/s.html?id=${id}"
-          class="bg-[#14141c] border border-white/10 rounded-3xl overflow-hidden card-hover"
+        <img
+          src="${p.image}"
+          class="w-full h-60 object-cover"
+          alt="${p.title}"
         >
 
-          <img
-            src="${p.image}"
-            class="w-full h-60 object-cover"
-            alt="${p.title}"
-          >
+        <div class="p-5">
 
-          <div class="p-5">
+          <div class="text-pink-300 text-sm mb-2">
+            Viral Baby Find 👶
+          </div>
 
-            <div class="text-pink-300 text-sm mb-2">
-              Viral Baby Find 👶
-            </div>
+          <div class="font-bold leading-7">
 
-            <div class="font-bold leading-7">
-
-              ${(p.title || "").substring(0,70)}
-
-            </div>
+            ${(p.title || "").substring(0,70)}
 
           </div>
 
-        </a>
+        </div>
 
-      `;
-    });
+      </a>
 
-  }catch(err){
-
-    console.log(err);
-  }
+    `;
+  });
 }
 
+/* ---------------- PINTEREST SHARE ---------------- */
+
+function sharePinterest(){
+
+  if(!products.length) return;
+
+  const p = products[currentIndex];
+
+  const link = appendAffiliate(
+    p.url || p.link
+  );
+
+  const desc = `
+👶 Viral Baby Find
+
+${p.title}
+
+Discover more trending baby products:
+https://floatrising.com
+  `;
+
+  const pinterestUrl =
+    `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
+
+  window.open(pinterestUrl, "_blank");
+}
+
+/* ---------------- COPY PINTEREST ---------------- */
+
+function copyPinterestDescription(){
+
+  if(!products.length) return;
+
+  const p = products[currentIndex];
+
+  const text = `
+👶 Viral Baby Find
+
+${p.title}
+
+Discover more trending baby products:
+https://floatrising.com
+  `;
+
+  navigator.clipboard.writeText(text);
+
+  alert("✅ Pinterest caption copied!");
+}
+
+/* ---------------- START ---------------- */
+
 loadProducts();
-loadSeoProducts();
 
 </script>
 
