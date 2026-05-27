@@ -841,40 +841,32 @@ function shuffleSeoProducts(){
 }
 
 /* ---------------- PINTEREST SHARE ---------------- */
-
 function sharePinterest(){
 
   if(!products.length){
     return;
   }
 
-  const p =
-    products[currentIndex];
+  const p = products[currentIndex];
 
   const link =
-    appendAffiliate(
-      p.url || p.link
-    );
+    `${window.location.origin}/s.html?id=${p.id || p.asin}`;
 
   const desc = `
-
 👶 Viral Baby Find
 
 ${cleanTitle(p.title)}
 
 Discover more trending baby products:
 https://floatrising.com
-
   `;
 
   const pinterestUrl =
     `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
 
-  window.open(
-    pinterestUrl,
-    "_blank"
-  );
+  window.open(pinterestUrl, "_blank");
 }
+
 
 /* ---------------- COPY PINTEREST ---------------- */
 
