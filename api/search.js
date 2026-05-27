@@ -6,123 +6,50 @@ const cache = {
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-/* ---------------- CATEGORY SEARCHES ---------------- */
+/* ---------------- KEYWORD ENGINE ---------------- */
 
-const categorySearches = {
+const intents = [
+  "trending", "viral", "best seller", "must have",
+  "hidden gems", "problem solving", "weird", "aesthetic",
+  "smart", "portable", "high tech"
+];
 
-  general: [
-    "viral baby products 2026",
-    "tiktok baby finds",
-    "newborn must haves",
-    "amazon baby gadgets",
-    "viral nursery products"
-  ],
+const categories = [
+  "kitchen gadgets", "home gadgets", "tech gadgets",
+  "beauty products", "car accessories", "travel gadgets",
+  "desk gadgets", "cleaning tools", "organization tools",
+  "bedroom gadgets", "bathroom gadgets",
+  "pet gadgets", "baby products", "fitness gadgets", "outdoor gear"
+];
 
-  sleep: [
-    "baby sleep products",
-    "baby sound machine",
-    "baby night light",
-    "baby swaddle",
-    "white noise machine baby",
-    "baby bassinet",
-    "baby sleep soother"
-  ],
+const platforms = [
+  "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
+];
 
-  feeding: [
-    "baby feeding products",
-    "baby bottle",
-    "formula dispenser",
-    "silicone baby feeding set",
-    "baby bib",
-    "sippy cup baby"
-  ],
+function generateKeywords(count = 4) {
+  const combos = [];
 
-  toys: [
-    "baby toys",
-    "montessori baby toys",
-    "sensory baby toys",
-    "educational baby toys",
-    "baby play gym",
-    "baby teether toys"
-  ],
+  for (const i of intents) {
+    for (const c of categories) {
+      for (const p of platforms) {
+        combos.push(`${p} ${i} ${c} 2026`.trim());
+      }
+    }
+  }
 
-  travel: [
-    "baby travel gear",
-    "portable baby products",
-    "baby stroller accessories",
-    "travel diaper bag",
-    "baby carrier",
-    "portable baby bed"
-  ]
-};
-
-/* ---------------- CATEGORY FILTERS ---------------- */
-
-const categoryFilters = {
-
-  sleep: [
-    "sleep",
-    "bassinet",
-    "crib",
-    "swaddle",
-    "white noise",
-    "sound machine",
-    "night light",
-    "sleeping",
-    "baby monitor",
-    "soother"
-  ],
-
-  feeding: [
-    "feeding",
-    "bottle",
-    "formula",
-    "bib",
-    "sippy",
-    "milk",
-    "breast",
-    "baby food",
-    "high chair",
-    "silicone"
-  ],
-
-  toys: [
-    "toy",
-    "montessori",
-    "sensory",
-    "learning",
-    "educational",
-    "activity",
-    "play",
-    "teether",
-    "blocks",
-    "play gym"
-  ],
-
-  travel: [
-    "travel",
-    "stroller",
-    "carrier",
-    "portable",
-    "diaper bag",
-    "car seat",
-    "backseat",
-    "foldable",
-    "on the go"
-  ]
-};
+  return combos.sort(() => 0.5 - Math.random()).slice(0, count);
+}
 
 /* ---------------- IMAGE CLEANER ---------------- */
 
 function cleanAmazonImage(url) {
-
   if (!url) return null;
 
   try {
+    // strip everything after .jpg
+    const clean = url.split(".jpg")[0] + ".jpg";
 
-    const clean =
-      url.split(".jpg")[0] + ".jpg";
-
+    // reject garbage / overlays
     if (
       clean.includes("aplus-media") ||
       clean.includes("PIBSS") ||
@@ -130,334 +57,224 @@ function cleanAmazonImage(url) {
       clean.includes("deal") ||
       clean.includes("sprite") ||
       clean.includes("icon")
-    ) {
-      return null;
-    }
+    ) return null;
 
     return clean;
 
   } catch {
-
     return null;
   }
 }
 
-/* ---------------- TITLE CLEANER ---------------- */
+/* ---------------- VIRAL SCORE ENGINE ---------------- */
 
-function cleanTitle(title) {
-
-  if (!title) return "Trending Baby Product";
-
-  return title
-    .replace(/Amazon\.com:?/gi, "")
-    .replace(/- Amazon\.com/gi, "")
-    .replace(/\| Amazon/gi, "")
-    .replace(/\bAmazon\b/gi, "")
-    .replace(/\(.*?\)/g, "")
-    .split("|")[0]
-    .trim()
-    .substring(0, 80);
-}
-
-/* ---------------- ASIN EXTRACTOR ---------------- */
-
-function extractASIN(url) {
-
-  try {
-
-    const parsed = new URL(url);
-
-    const dpMatch =
-      parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
-
-    const gpMatch =
-      parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
-
-    return (
-      dpMatch?.[1] ||
-      gpMatch?.[1] ||
-      null
-    );
-
-  } catch {
-
-    return null;
-  }
-}
-
-/* ---------------- CATEGORY MATCHER ---------------- */
-
-function matchesCategory(title, category) {
-
-  if (!categoryFilters[category]) {
-    return true;
-  }
-
-  const lower =
-    title.toLowerCase();
-
-  return categoryFilters[category]
-    .some(keyword =>
-      lower.includes(keyword)
-    );
-}
-
-/* ---------------- VIRAL SCORE ---------------- */
-
-function getViralScore({
-  title,
-  image,
-  source,
-  category
-}) {
-
-  const t =
-    title.toLowerCase();
+function getViralScore({ title, image, source }) {
+  const t = title.toLowerCase();
 
   let score = 0;
 
-  if (t.includes("baby")) score += 30;
-  if (t.includes("newborn")) score += 25;
-  if (t.includes("toddler")) score += 20;
-  if (t.includes("viral")) score += 20;
-  if (t.includes("tiktok")) score += 20;
+  if (t.includes("tiktok")) score += 40;
+  if (t.includes("viral")) score += 40;
+  if (t.includes("must have")) score += 25;
+  if (t.includes("amazon find")) score += 20;
+  if (t.includes("gadgets")) score += 15;
+  if (t.includes("smart")) score += 10;
+  if (t.includes("portable")) score += 10;
 
-  if (
-    category &&
-    matchesCategory(title, category)
-  ) {
-    score += 50;
-  }
+  if (image) score += 25;
+  else score -= 50;
 
-  if (image) {
-    score += 20;
-  }
+  if (source.includes("tiktok")) score += 25;
+  if (source.includes("pinterest")) score += 15;
+  if (source.includes("amazon")) score += 10;
 
-  if (source.includes("amazon")) {
-    score += 10;
-  }
-
-  score += Math.random() * 10;
+  score += Math.random() * 15;
 
   return score;
 }
 
-/* ---------------- API HANDLER ---------------- */
+/* ---------------- HANDLER ---------------- */
 
 export default async function handler(req, res) {
 
-  res.setHeader(
-    "Cache-Control",
-    "s-maxage=86400, stale-while-revalidate"
-  );
+  res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate");
 
   const now = Date.now();
 
-  const category =
-    (req.query.category || "general")
-    .toLowerCase();
-
-  const cacheKey =
-    `baby-${category}`;
-
-  if (!cache[cacheKey]) {
-
-    cache[cacheKey] = {
-      timestamp: 0,
-      data: null
-    };
-  }
-
-  /* ---------------- USE CACHE ---------------- */
-
-  if (
-    cache[cacheKey].data &&
-    now - cache[cacheKey].timestamp < ONE_DAY
-  ) {
-
-    return res.status(200).json({
-      products: cache[cacheKey].data
-    });
+  if (cache.data && now - cache.timestamp < ONE_DAY) {
+    return res.status(200).json({ products: cache.data });
   }
 
   if (cache.fetching) {
-
-    return res.status(200).json({
-      products:
-        cache[cacheKey].data || []
-    });
+    return res.status(200).json({ products: cache.data || [] });
   }
 
   try {
 
     cache.fetching = true;
 
-    const searches =
-      categorySearches[category] ||
-      categorySearches.general;
+    const shuffledKeywords = generateKeywords(4);
 
     const discovered = [];
+    const seenASIN = new Set();
 
-    const seenASIN =
-      new Set();
+    for (const keyword of shuffledKeywords) {
 
-    /* ---------------- SEARCH LOOP ---------------- */
+      const query = `${keyword} (site:amazon.com OR site:pinterest.com OR site:tiktok.com) -book -kindle`;
 
-    for (const keyword of searches) {
+      const starts = Math.random() > 0.5 ? [1, 11] : [1];
 
-      const query = `
-        ${keyword}
-        site:amazon.com
-        -book
-        -manual
-        -guide
-      `
-      .replace(/\s+/g, " ")
-      .trim();
+      for (const start of starts) {
 
-      const googleRes =
-        await fetch(
-          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+        const googleRes = await fetch(
+          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
         );
 
-      const data =
-        await googleRes.json();
+        const data = await googleRes.json();
+        if (!data.items) continue;
 
-      if (!data.items) {
-        continue;
-      }
+        for (const item of data.items) {
 
-      for (const item of data.items) {
+          const link = item.link || "";
+          const asin = extractASIN(link);
+          if (!asin || seenASIN.has(asin)) continue;
 
-        const link =
-          item.link || "";
+          let rawImage =
+            item.pagemap?.cse_image?.[0]?.src ||
+            item.pagemap?.cse_thumbnail?.[0]?.src;
 
-        const asin =
-          extractASIN(link);
+          const image = cleanAmazonImage(rawImage);
 
-        if (
-          !asin ||
-          seenASIN.has(asin)
-        ) {
-          continue;
-        }
+          // ❌ HARD FILTERS
+          if (!image) continue;
+          if (!image.includes("images/I/")) continue;
+          if (!item.title || item.title.length < 25) continue;
 
-        const title =
-          cleanTitle(item.title || "");
+          const lowerTitle = item.title.toLowerCase();
 
-        /* ---------------- STRICT CATEGORY FILTER ---------------- */
+          if (
+            lowerTitle.includes("book") ||
+            lowerTitle.includes("manual") ||
+            lowerTitle.includes("guide")
+          ) continue;
 
-        if (
-          !matchesCategory(
-            title,
-            category
-          )
-        ) {
-          continue;
-        }
+          // ❌ REMOVE BORING LOW-VIRAL ITEMS
+          const badWords = ["organizer", "storage", "tray", "case"];
+          if (badWords.some(w => lowerTitle.includes(w))) continue;
 
-        let rawImage =
-          item.pagemap?.cse_image?.[0]?.src ||
-          item.pagemap?.cse_thumbnail?.[0]?.src;
+          const description =
+            item.snippet ||
+            item.pagemap?.metatags?.[0]?.["og:description"] ||
+            "Trending product people are buying right now.";
 
-        const image =
-          cleanAmazonImage(rawImage);
+          const cleanLink = `https://www.amazon.com/dp/${asin}`;
 
-        if (!image) {
-          continue;
-        }
-
-        if (
-          !image.includes("images/I/")
-        ) {
-          continue;
-        }
-
-        const description =
-          item.snippet ||
-          "Trending baby product parents are loving right now.";
-
-        const score =
-          getViralScore({
-            title,
+          const score = getViralScore({
+            title: item.title,
             image,
-            source: link,
-            category
+            source: link
           });
 
-        if (score < 50) {
-          continue;
+          if (score < 40) continue;
+
+          discovered.push({
+            id: asin,
+            title: cleanTitle(item.title),
+            description: description.substring(0, 140),
+            image,
+            link: cleanLink,
+            score
+          });
+
+          seenASIN.add(asin);
+
+          if (discovered.length >= 60) break;
         }
 
-        discovered.push({
-
-          id: asin,
-
-          title,
-
-          description:
-            description.substring(0, 160),
-
-          image,
-
-          link:
-            `https://www.amazon.com/dp/${asin}`,
-
-          score
-
-        });
-
-        seenASIN.add(asin);
-
-        if (
-          discovered.length >= 40
-        ) {
-          break;
-        }
+        if (discovered.length >= 60) break;
       }
 
-      if (
-        discovered.length >= 40
-      ) {
-        break;
+      if (discovered.length >= 60) break;
+    }
+
+    /* ---------------- MERGE + DEDUPE ---------------- */
+
+    const DAILY_LIMIT = 30;
+    const MAX_POOL = 90;
+
+    let existing = cache.data || [];
+    let pool = [...existing, ...discovered];
+
+    const uniquePool = [];
+    const seenIds = new Set();
+
+    for (const p of pool) {
+      if (!seenIds.has(p.id)) {
+        seenIds.add(p.id);
+        uniquePool.push(p);
       }
     }
 
     /* ---------------- SORT ---------------- */
 
-    const finalProducts =
-      discovered
-        .sort((a, b) =>
-          b.score - a.score
-        )
-        .slice(0, 24);
+    const sortedPool = uniquePool.sort((a, b) => b.score - a.score);
+
+    const trimmedPool = sortedPool.slice(0, MAX_POOL);
+
+    /* ---------------- SMART DISPLAY ---------------- */
+
+    const top = trimmedPool.slice(0, 50);
+    const finalProducts = [];
+
+    while (finalProducts.length < DAILY_LIMIT && top.length > 0) {
+      const pickIndex = Math.floor(Math.random() * Math.min(10, top.length));
+      const pick = top.splice(pickIndex, 1)[0];
+      finalProducts.push(pick);
+    }
 
     /* ---------------- SAVE CACHE ---------------- */
 
-    cache[cacheKey].timestamp =
-      now;
-
-    cache[cacheKey].data =
-      finalProducts;
-
+    cache.timestamp = now;
+    cache.data = finalProducts;
     cache.fetching = false;
 
-    return res.status(200).json({
-      products: finalProducts
-    });
+    return res.status(200).json({ products: finalProducts });
 
   } catch (error) {
 
     cache.fetching = false;
 
-    console.error(error);
-
     return res.status(500).json({
-
       error: "Search failed",
-
       details: error.message
-
     });
+
+  }
+}
+
+/* ---------------- HELPERS ---------------- */
+
+function cleanTitle(title) {
+  return title
+    .replace("Amazon.com:", "")
+    .replace("- Amazon.com", "")
+    .replace("| Amazon", "")
+    .replace(/\bAmazon\b/gi, "")
+    .split("|")[0]
+    .substring(0, 70)
+    .trim();
+}
+
+function extractASIN(url) {
+  try {
+    const parsed = new URL(url);
+
+    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
+    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
+
+    return dpMatch?.[1] || gpMatch?.[1] || null;
+
+  } catch {
+    return null;
   }
 }
