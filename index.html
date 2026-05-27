@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
 
   <meta charset="UTF-8" />
@@ -71,7 +72,7 @@
   </script>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
 
@@ -84,7 +85,7 @@
     }
 
     .glow-pink{
-      box-shadow:0 0 30px -5px rgb(236 72 153 / .45);
+      box-shadow:0 0 35px -10px rgb(236 72 153 / .45);
     }
 
     .card-hover{
@@ -93,6 +94,21 @@
 
     .card-hover:hover{
       transform:translateY(-4px);
+    }
+
+    .fade-in{
+      animation:fade .35s ease;
+    }
+
+    @keyframes fade{
+      from{
+        opacity:0;
+        transform:translateY(10px);
+      }
+      to{
+        opacity:1;
+        transform:none;
+      }
     }
 
   </style>
@@ -105,17 +121,17 @@
 
   <header class="sticky top-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
 
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
 
       <a href="/" class="flex items-center gap-3">
 
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-cyan-400 flex items-center justify-center text-xl">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-pink-500 to-cyan-400 flex items-center justify-center text-xl shadow-lg">
           👶
         </div>
 
         <div>
 
-          <div class="font-bold text-xl">
+          <div class="font-extrabold text-xl">
             Float Rising
           </div>
 
@@ -152,7 +168,7 @@
 
   <!-- HERO -->
 
-  <section class="max-w-5xl mx-auto px-6 pt-14 pb-20">
+  <section class="max-w-5xl mx-auto px-5 pt-14 pb-16">
 
     <div class="text-center mb-12">
 
@@ -160,17 +176,17 @@
         👶 Updated Daily • Viral TikTok Mom Finds
       </div>
 
-      <h1 class="text-5xl sm:text-6xl font-bold leading-tight">
+      <h1 class="text-4xl sm:text-6xl font-extrabold leading-tight tracking-tight">
 
-        Discover Viral Baby Products<br>
+        Discover Viral Baby Products
 
-        <span class="bg-gradient-to-r from-pink-400 via-rose-300 to-cyan-300 bg-clip-text text-transparent">
+        <span class="block mt-2 bg-gradient-to-r from-pink-400 via-rose-300 to-cyan-300 bg-clip-text text-transparent">
           Before Everyone Else
         </span>
 
       </h1>
 
-      <p class="text-xl text-gray-300 mt-6 max-w-3xl mx-auto leading-8">
+      <p class="text-lg sm:text-xl text-gray-300 mt-7 max-w-3xl mx-auto leading-8">
 
         Trending baby products, newborn essentials,
         parenting hacks, sleep products, travel gear,
@@ -184,9 +200,9 @@
 
     <div class="bg-white/5 border border-white/10 rounded-[36px] overflow-hidden backdrop-blur-xl shadow-2xl">
 
-      <div id="card" class="min-h-[650px]">
+      <div id="card" class="min-h-[640px]">
 
-        <div class="p-16 text-center flex flex-col items-center justify-center min-h-[650px]">
+        <div class="p-10 sm:p-16 text-center flex flex-col items-center justify-center min-h-[640px]">
 
           <div class="text-7xl mb-6 animate-pulse">
             👶
@@ -212,21 +228,21 @@
 
       <button
         id="nextBtn"
-        class="py-6 rounded-3xl text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
+        class="py-5 rounded-3xl text-lg sm:text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
       >
         👶 Next Product
       </button>
 
       <button
         onclick="sharePinterest()"
-        class="py-6 rounded-3xl text-xl font-bold bg-[#E60023] hover:scale-[1.02] transition-all"
+        class="py-5 rounded-3xl text-lg sm:text-xl font-bold bg-[#E60023] hover:scale-[1.02] transition-all"
       >
         📌 Pinterest
       </button>
 
       <button
         onclick="copyPinterestDescription()"
-        class="py-6 rounded-3xl text-xl font-bold bg-white text-black hover:scale-[1.02] transition-all"
+        class="py-5 rounded-3xl text-lg sm:text-xl font-bold bg-white text-black hover:scale-[1.02] transition-all"
       >
         📋 Copy Caption
       </button>
@@ -237,9 +253,9 @@
 
   <!-- CATEGORY GRID -->
 
-  <section class="max-w-6xl mx-auto px-6 pb-20">
+  <section class="max-w-6xl mx-auto px-5 pb-20">
 
-    <h2 class="text-4xl font-bold text-center mb-12">
+    <h2 class="text-3xl sm:text-4xl font-bold text-center mb-10">
       Trending Baby Categories
     </h2>
 
@@ -247,42 +263,42 @@
 
       <a
         href="/baby-sleep.html"
-        class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
+        class="bg-[#14141c] border border-white/10 rounded-3xl p-7 text-center hover:bg-[#1a1a24] transition"
       >
-        😴<br><br>
-        Baby Sleep
+        <div class="text-4xl mb-4">😴</div>
+        <div class="font-semibold">Baby Sleep</div>
       </a>
 
       <a
         href="/baby-products.html"
-        class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
+        class="bg-[#14141c] border border-white/10 rounded-3xl p-7 text-center hover:bg-[#1a1a24] transition"
       >
-        👶<br><br>
-        Baby Products
+        <div class="text-4xl mb-4">👶</div>
+        <div class="font-semibold">Baby Products</div>
       </a>
 
       <a
         href="/baby-feeding.html"
-        class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
+        class="bg-[#14141c] border border-white/10 rounded-3xl p-7 text-center hover:bg-[#1a1a24] transition"
       >
-        🍼<br><br>
-        Feeding
+        <div class="text-4xl mb-4">🍼</div>
+        <div class="font-semibold">Feeding</div>
       </a>
 
       <a
         href="/baby-travel.html"
-        class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
+        class="bg-[#14141c] border border-white/10 rounded-3xl p-7 text-center hover:bg-[#1a1a24] transition"
       >
-        ✈️<br><br>
-        Travel
+        <div class="text-4xl mb-4">✈️</div>
+        <div class="font-semibold">Travel</div>
       </a>
 
       <a
         href="/baby-toys.html"
-        class="bg-[#14141c] border border-white/10 rounded-3xl p-8 text-center hover:bg-[#1a1a24] transition"
+        class="bg-[#14141c] border border-white/10 rounded-3xl p-7 text-center hover:bg-[#1a1a24] transition"
       >
-        🧸<br><br>
-        Toys
+        <div class="text-4xl mb-4">🧸</div>
+        <div class="font-semibold">Toys</div>
       </a>
 
     </div>
@@ -291,11 +307,22 @@
 
   <!-- SEO GRID -->
 
-  <section class="max-w-6xl mx-auto px-6 pb-20">
+  <section class="max-w-6xl mx-auto px-5 pb-20">
 
-    <h2 class="text-4xl font-bold text-center mb-12">
-      Trending Baby Finds
-    </h2>
+    <div class="flex items-center justify-between mb-10">
+
+      <h2 class="text-3xl sm:text-4xl font-bold">
+        Trending Baby Finds
+      </h2>
+
+      <button
+        onclick="shuffleSeoProducts()"
+        class="text-sm px-4 py-2 rounded-2xl border border-white/10 hover:bg-white/5 transition"
+      >
+        Refresh Grid
+      </button>
+
+    </div>
 
     <div
       id="seoProducts"
@@ -306,11 +333,11 @@
 
   <!-- BLOG -->
 
-  <section class="max-w-6xl mx-auto px-6 pb-24">
+  <section class="max-w-6xl mx-auto px-5 pb-24">
 
     <div class="flex items-center justify-between mb-10">
 
-      <h2 class="text-4xl font-bold">
+      <h2 class="text-3xl sm:text-4xl font-bold">
         Parenting Guides & Support
       </h2>
 
@@ -388,19 +415,118 @@
 let products = [];
 let currentIndex = 0;
 
-const card = document.getElementById("card");
+const card =
+  document.getElementById("card");
 
 /* ---------------- AFFILIATE ---------------- */
 
-const DEFAULT_AFFILIATE_ID = "davidshort-21";
+const DEFAULT_AFFILIATE_ID =
+  "davidshort-21";
 
 function appendAffiliate(url){
 
   if(!url) return "#";
 
-  if(url.includes("tag=")) return url;
+  if(url.includes("tag=")){
+    return url;
+  }
 
-  return url + (url.includes("?") ? "&" : "?") + "tag=" + DEFAULT_AFFILIATE_ID;
+  return (
+    url +
+    (url.includes("?") ? "&" : "?") +
+    "tag=" +
+    DEFAULT_AFFILIATE_ID
+  );
+}
+
+/* ---------------- CLEANERS ---------------- */
+
+function cleanTitle(title){
+
+  if(!title){
+    return "Trending Baby Product";
+  }
+
+  return title
+    .replace(/Amazon\.com:?/gi,"")
+    .replace(/\(.*?\)/g,"")
+    .replace(/\|.*/g,"")
+    .replace(/-\s*Amazon.*/gi,"")
+    .trim()
+    .substring(0,90);
+}
+
+function cleanDescription(text){
+
+  if(!text){
+    return "Trending baby product parents are discovering right now.";
+  }
+
+  return text
+    .replace(/\s+/g," ")
+    .trim()
+    .substring(0,180);
+}
+
+/* ---------------- BABY FILTER ---------------- */
+
+function isBabyProduct(p){
+
+  const text = (
+    (p.title || "") +
+    " " +
+    (p.description || "")
+  ).toLowerCase();
+
+  const goodKeywords = [
+
+    "baby",
+    "newborn",
+    "toddler",
+    "nursery",
+    "feeding",
+    "stroller",
+    "diaper",
+    "mom",
+    "infant",
+    "bassinet",
+    "crib",
+    "pacifier",
+    "breastfeeding",
+    "teether",
+    "baby sleep",
+    "baby toy"
+
+  ];
+
+  const badKeywords = [
+
+    "gaming",
+    "laptop",
+    "keyboard",
+    "monitor",
+    "car parts",
+    "truck",
+    "men's fashion",
+    "bitcoin",
+    "supplement",
+    "weapon",
+    "drill",
+    "tool set"
+
+  ];
+
+  const hasGood =
+    goodKeywords.some(k =>
+      text.includes(k)
+    );
+
+  const hasBad =
+    badKeywords.some(k =>
+      text.includes(k)
+    );
+
+  return hasGood && !hasBad;
 }
 
 /* ---------------- LOAD PRODUCTS ---------------- */
@@ -409,28 +535,37 @@ async function loadProducts(){
 
   try{
 
-    const feedRes = await fetch("/api/feed");
-    const feedData = await feedRes.json();
+    const feedRes =
+      await fetch("/api/feed");
 
-    let feedProducts = Array.isArray(feedData)
+    const feedData =
+      await feedRes.json();
+
+    let feedProducts =
+      Array.isArray(feedData)
       ? feedData
       : (feedData.products || []);
-
-    /* SEARCH FALLBACK */
 
     let searchProducts = [];
 
     try{
 
-      const searchRes = await fetch("/api/search");
-      const searchData = await searchRes.json();
+      const searchRes =
+        await fetch("/api/search");
 
-      searchProducts = Array.isArray(searchData)
+      const searchData =
+        await searchRes.json();
+
+      searchProducts =
+        Array.isArray(searchData)
         ? searchData
         : (searchData.products || []);
 
     }catch(err){
-      console.log("Search fallback unavailable");
+
+      console.log(
+        "Search fallback unavailable"
+      );
     }
 
     const combined = [
@@ -438,50 +573,43 @@ async function loadProducts(){
       ...searchProducts
     ];
 
-    const seen = new Set();
+    const seen =
+      new Set();
 
     products = combined.filter(p => {
 
       if(!p) return false;
+
       if(!p.image) return false;
 
-      const text = (
-        (p.title || "") +
-        " " +
-        (p.description || "")
-      ).toLowerCase();
-
-      const isBaby = (
-
-        text.includes("baby") ||
-        text.includes("newborn") ||
-        text.includes("toddler") ||
-        text.includes("mom") ||
-        text.includes("nursery") ||
-        text.includes("feeding") ||
-        text.includes("stroller") ||
-        text.includes("diaper")
-
-      );
-
-      if(!isBaby) return false;
+      if(!isBabyProduct(p)){
+        return false;
+      }
 
       const id =
         p.id ||
         p.asin ||
         p.link;
 
-      if(seen.has(id)) return false;
+      if(seen.has(id)){
+        return false;
+      }
 
       seen.add(id);
 
       return true;
     });
 
+    products =
+      products.sort(() =>
+        Math.random() - 0.5
+      );
+
     if(!products.length){
 
       card.innerHTML = `
-        <div class="p-16 text-center min-h-[650px] flex flex-col items-center justify-center">
+
+        <div class="p-16 text-center min-h-[640px] flex flex-col items-center justify-center">
 
           <div class="text-7xl mb-6">
             👶
@@ -492,16 +620,18 @@ async function loadProducts(){
           </div>
 
           <div class="text-gray-400">
-            Check back later for fresh viral baby finds.
+            Check back later for fresh viral finds.
           </div>
 
         </div>
+
       `;
 
       return;
     }
 
     renderProduct();
+
     loadSeoProducts();
 
   }catch(err){
@@ -509,7 +639,8 @@ async function loadProducts(){
     console.log(err);
 
     card.innerHTML = `
-      <div class="p-16 text-center min-h-[650px] flex flex-col items-center justify-center">
+
+      <div class="p-16 text-center min-h-[640px] flex flex-col items-center justify-center">
 
         <div class="text-7xl mb-6">
           ⚠️
@@ -520,6 +651,7 @@ async function loadProducts(){
         </div>
 
       </div>
+
     `;
   }
 }
@@ -534,69 +666,88 @@ function getHook(){
     "🔥 Trending Across TikTok",
     "✨ Viral Parenting Find",
     "📈 This Product Is Taking Off",
-    "💡 Smart Baby Product Pick"
+    "💡 Smart Baby Product Pick",
+    "🍼 Parent Favorite Right Now"
 
   ];
 
   return hooks[
-    Math.floor(Math.random() * hooks.length)
+    Math.floor(
+      Math.random() * hooks.length
+    )
   ];
 }
 
-/* ---------------- RENDER ---------------- */
+/* ---------------- RENDER PRODUCT ---------------- */
 
 function renderProduct(){
 
-  const p = products[currentIndex];
+  const p =
+    products[currentIndex];
 
-  const affLink = appendAffiliate(
-    p.url || p.link
-  );
+  const affLink =
+    appendAffiliate(
+      p.url || p.link
+    );
 
   card.innerHTML = `
 
-    <div class="relative">
+    <div class="fade-in">
 
-      <div class="absolute top-6 left-6 z-10 bg-pink-500 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">
-        VIRAL BABY FIND 👶
+      <div class="relative">
+
+        <div class="absolute top-5 left-5 z-10 bg-pink-500 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg">
+          VIRAL BABY FIND 👶
+        </div>
+
+        <img
+          src="${p.image}"
+          alt="${cleanTitle(p.title)}"
+          class="w-full h-[340px] sm:h-[540px] object-cover"
+          loading="lazy"
+        >
+
       </div>
 
-      <img
-        src="${p.image}"
-        alt="${p.title}"
-        class="w-full h-[420px] sm:h-[560px] object-cover"
-      >
+      <div class="p-6 sm:p-10">
 
-      <div class="p-8 sm:p-10">
+        <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight mb-5 text-center">
 
-        <h2 class="text-4xl font-bold leading-tight mb-5 text-center">
-
-          ${p.title || "Trending Baby Product"}
+          ${cleanTitle(p.title)}
 
         </h2>
 
-        <div class="text-center text-pink-300 text-lg mb-8">
+        <div class="text-center text-pink-300 text-lg mb-7">
 
           ${getHook()}
 
         </div>
 
-        <div class="bg-white/5 border border-white/10 rounded-3xl p-6 text-lg text-gray-300 leading-8 mb-8">
+        <div class="bg-white/5 border border-white/10 rounded-3xl p-6 text-base sm:text-lg text-gray-300 leading-8 mb-8">
 
-          ${
-            p.description ||
-            "Trending baby product parents are discovering right now."
-          }
+          ${cleanDescription(p.description)}
 
         </div>
 
-        <a
-          href="${affLink}"
-          target="_blank"
-          class="block text-center py-6 rounded-3xl text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
-        >
-          👶 See Product On Amazon
-        </a>
+        <div class="grid sm:grid-cols-2 gap-4">
+
+          <a
+            href="${affLink}"
+            target="_blank"
+            rel="nofollow sponsored noopener"
+            class="block text-center py-5 rounded-3xl text-lg sm:text-xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-cyan-500 hover:scale-[1.02] transition-all glow-pink"
+          >
+            👶 View On Amazon
+          </a>
+
+          <a
+            href="/s.html?id=${p.id || p.asin}"
+            class="block text-center py-5 rounded-3xl text-lg sm:text-xl font-bold bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+          >
+            ✨ Product Details
+          </a>
+
+        </div>
 
       </div>
 
@@ -605,116 +756,154 @@ function renderProduct(){
   `;
 }
 
-/* ---------------- NEXT ---------------- */
+/* ---------------- NEXT PRODUCT ---------------- */
 
 function nextProduct(){
 
   currentIndex =
-    (currentIndex + 1) % products.length;
+    (currentIndex + 1) %
+    products.length;
 
   renderProduct();
 }
 
 document
 .getElementById("nextBtn")
-.addEventListener("click", nextProduct);
+.addEventListener(
+  "click",
+  nextProduct
+);
 
 /* ---------------- SEO GRID ---------------- */
 
 function loadSeoProducts(){
 
   const container =
-    document.getElementById("seoProducts");
+    document.getElementById(
+      "seoProducts"
+    );
 
   container.innerHTML = "";
 
-  products.slice(0,8).forEach((p,index)=>{
+  products
+    .slice(0,8)
+    .forEach((p,index)=>{
 
-    const id =
-      p.id ||
-      p.asin ||
-      index;
+      const id =
+        p.id ||
+        p.asin ||
+        index;
 
-    container.innerHTML += `
+      container.innerHTML += `
 
-      <a
-        href="/s.html?id=${id}"
-        class="bg-[#14141c] border border-white/10 rounded-3xl overflow-hidden card-hover"
-      >
-
-        <img
-          src="${p.image}"
-          class="w-full h-60 object-cover"
-          alt="${p.title}"
+        <a
+          href="/s.html?id=${id}"
+          class="bg-[#14141c] border border-white/10 rounded-3xl overflow-hidden card-hover"
         >
 
-        <div class="p-5">
+          <img
+            src="${p.image}"
+            class="w-full h-56 object-cover"
+            alt="${cleanTitle(p.title)}"
+            loading="lazy"
+          >
 
-          <div class="text-pink-300 text-sm mb-2">
-            Viral Baby Find 👶
+          <div class="p-5">
+
+            <div class="text-pink-300 text-sm mb-2">
+              Viral Baby Find 👶
+            </div>
+
+            <div class="font-bold leading-7 text-lg">
+
+              ${cleanTitle(p.title)}
+
+            </div>
+
           </div>
 
-          <div class="font-bold leading-7">
+        </a>
 
-            ${(p.title || "").substring(0,70)}
+      `;
+    });
+}
 
-          </div>
+/* ---------------- SHUFFLE GRID ---------------- */
 
-        </div>
+function shuffleSeoProducts(){
 
-      </a>
+  products =
+    products.sort(() =>
+      Math.random() - 0.5
+    );
 
-    `;
-  });
+  loadSeoProducts();
 }
 
 /* ---------------- PINTEREST SHARE ---------------- */
 
 function sharePinterest(){
 
-  if(!products.length) return;
+  if(!products.length){
+    return;
+  }
 
-  const p = products[currentIndex];
+  const p =
+    products[currentIndex];
 
-  const link = appendAffiliate(
-    p.url || p.link
-  );
+  const link =
+    appendAffiliate(
+      p.url || p.link
+    );
 
   const desc = `
+
 👶 Viral Baby Find
 
-${p.title}
+${cleanTitle(p.title)}
 
 Discover more trending baby products:
 https://floatrising.com
+
   `;
 
   const pinterestUrl =
     `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(link)}&media=${encodeURIComponent(p.image)}&description=${encodeURIComponent(desc)}`;
 
-  window.open(pinterestUrl, "_blank");
+  window.open(
+    pinterestUrl,
+    "_blank"
+  );
 }
 
 /* ---------------- COPY PINTEREST ---------------- */
 
 function copyPinterestDescription(){
 
-  if(!products.length) return;
+  if(!products.length){
+    return;
+  }
 
-  const p = products[currentIndex];
+  const p =
+    products[currentIndex];
 
   const text = `
+
 👶 Viral Baby Find
 
-${p.title}
+${cleanTitle(p.title)}
 
 Discover more trending baby products:
 https://floatrising.com
+
   `;
 
-  navigator.clipboard.writeText(text);
+  navigator.clipboard
+    .writeText(text);
 
-  alert("✅ Pinterest caption copied!");
+  alert(
+    "✅ Pinterest caption copied!"
+  );
 }
 
 /* ---------------- START ---------------- */
