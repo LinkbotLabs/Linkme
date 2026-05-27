@@ -1,0 +1,272 @@
+<!-- baby-sleep.html -->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>
+    Viral Baby Sleep Products 2026 | Float Rising
+  </title>
+
+  <meta
+    name="description"
+    content="Discover viral baby sleep products, trending sound machines, night lights, sleep soothers, swaddles, bassinets, and Amazon baby sleep finds."
+  />
+
+  <meta
+    name="keywords"
+    content="baby sleep products, baby sound machine, swaddle, bassinet, night light for baby, sleep soother, viral baby products"
+  />
+
+  <link rel="canonical" href="https://floatrising.com/baby-sleep.html"/>
+
+  <meta property="og:title" content="Viral Baby Sleep Products 2026"/>
+  <meta property="og:description" content="Trending Amazon baby sleep products parents are loving right now."/>
+  <meta property="og:image" content="https://floatrising.com/banner.jpg"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+
+    body{
+      font-family:'Inter',sans-serif;
+    }
+
+  </style>
+
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen">
+
+<header class="border-b border-white/10 bg-black/70 backdrop-blur-lg sticky top-0 z-50">
+
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <a href="/" class="flex items-center gap-3">
+
+      <img
+        src="/float-rising-logo.svg"
+        class="h-9"
+        alt="Float Rising"
+      >
+
+      <span class="font-bold text-xl">
+        Float Rising
+      </span>
+
+    </a>
+
+    <a
+      href="https://t.me/floatviral"
+      target="_blank"
+      class="bg-cyan-400 text-black px-5 py-2.5 rounded-2xl font-bold"
+    >
+      Join Telegram
+    </a>
+
+  </div>
+
+</header>
+
+<section class="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center">
+
+  <div class="inline-flex px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm mb-6">
+    🌙 Trending Sleep Finds
+  </div>
+
+  <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight mb-6">
+
+    Viral Baby Sleep Products
+
+  </h1>
+
+  <p class="text-xl text-gray-300 leading-8 max-w-3xl mx-auto">
+
+    Discover trending baby sleep products,
+    viral sound machines,
+    calming night lights,
+    swaddles,
+    bassinets,
+    and sleep gadgets parents are sharing online.
+
+  </p>
+
+</section>
+
+<section class="max-w-6xl mx-auto px-6 pb-20">
+
+  <div
+    id="products"
+    class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+  >
+  </div>
+
+</section>
+
+<script>
+
+function cleanTitle(title){
+
+  if(!title) return "Trending Baby Sleep Product";
+
+  return title
+    .replace(/Amazon\.com:?/gi,"")
+    .replace(/\(.*?\)/g,"")
+    .split("|")[0]
+    .trim()
+    .slice(0,80);
+}
+
+async function loadProducts(){
+
+  const container =
+    document.getElementById("products");
+
+  container.innerHTML = `
+    <div class="col-span-full text-center py-20">
+
+      <div class="text-6xl mb-5 animate-pulse">
+        🌙
+      </div>
+
+      <div class="text-2xl font-bold">
+        Loading Sleep Products...
+      </div>
+
+    </div>
+  `;
+
+  try{
+
+    const res =
+      await fetch("/api/feed");
+
+    const data =
+      await res.json();
+
+    const products =
+      Array.isArray(data)
+      ? data
+      : (data.products || []);
+
+    const sleepKeywords = [
+
+      "sleep",
+      "sound machine",
+      "night light",
+      "swaddle",
+      "bassinet",
+      "crib",
+      "soother",
+      "white noise",
+      "blanket",
+      "sleeping",
+      "baby monitor"
+
+    ];
+
+    const filtered =
+      products.filter(p => {
+
+        const title =
+          (p.title || "").toLowerCase();
+
+        return sleepKeywords.some(k =>
+          title.includes(k)
+        );
+      });
+
+    container.innerHTML = "";
+
+    filtered.slice(0,18).forEach((p,index)=>{
+
+      const id =
+        p.id ||
+        p.asin ||
+        index;
+
+      container.innerHTML += `
+
+        <a
+          href="/s.html?id=${id}"
+          class="bg-white/5 border border-white/10 rounded-[28px] overflow-hidden hover:scale-[1.02] transition block"
+        >
+
+          <img
+            src="${p.image}"
+            class="w-full h-72 object-cover"
+            alt="${cleanTitle(p.title)}"
+          >
+
+          <div class="p-6">
+
+            <div class="text-cyan-300 text-sm mb-3">
+              SLEEP FIND 🌙
+            </div>
+
+            <div class="font-bold text-2xl leading-tight mb-4">
+
+              ${cleanTitle(p.title)}
+
+            </div>
+
+            <div class="text-gray-400 leading-7 mb-6">
+
+              ${(p.description || "").substring(0,120)}
+
+            </div>
+
+            <div class="bg-white text-black py-4 rounded-2xl text-center font-bold">
+
+              See Product →
+
+            </div>
+
+          </div>
+
+        </a>
+
+      `;
+    });
+
+    if(filtered.length === 0){
+
+      container.innerHTML = `
+        <div class="col-span-full text-center py-20">
+
+          <div class="text-6xl mb-6">
+            🌙
+          </div>
+
+          <div class="text-3xl font-bold mb-4">
+            New Sleep Products Coming Soon
+          </div>
+
+          <div class="text-gray-400">
+            More viral baby sleep finds are being added daily.
+          </div>
+
+        </div>
+      `;
+    }
+
+  }catch(err){
+
+    console.log(err);
+  }
+}
+
+loadProducts();
+
+</script>
+
+</body>
+</html>
