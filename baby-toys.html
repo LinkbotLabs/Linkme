@@ -13,19 +13,44 @@
 
   <meta
     name="description"
-    content="Discover viral baby toys, Montessori toys, sensory toys, learning products, and trending Amazon baby toy finds parents are buying."
+    content="Discover viral baby toys, Montessori toys, sensory toys, learning products, developmental toys, and trending Amazon baby toy finds updated daily."
   />
 
   <meta
     name="keywords"
-    content="baby toys, montessori toys, sensory toys, learning toys, educational baby toys, amazon baby finds"
+    content="baby toys, montessori toys, sensory toys, educational toys, learning toys, amazon baby finds, developmental baby toys"
   />
+
+  <meta name="robots" content="index,follow"/>
 
   <link rel="canonical" href="https://floatrising.com/baby-toys.html"/>
 
+  <!-- OPEN GRAPH -->
+
+  <meta property="og:type" content="website"/>
   <meta property="og:title" content="Viral Baby Toys & Learning Products"/>
-  <meta property="og:description" content="Trending sensory toys, Montessori toys, and Amazon baby toy finds."/>
+  <meta property="og:description" content="Trending sensory toys, Montessori toys, developmental toys, and Amazon baby toy finds."/>
   <meta property="og:image" content="https://floatrising.com/banner.jpg"/>
+  <meta property="og:url" content="https://floatrising.com/baby-toys.html"/>
+
+  <!-- TWITTER -->
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Viral Baby Toys & Learning Products"/>
+  <meta name="twitter:description" content="Trending baby toys, sensory toys, Montessori products, and viral Amazon finds."/>
+  <meta name="twitter:image" content="https://floatrising.com/banner.jpg"/>
+
+  <!-- STRUCTURED DATA -->
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"CollectionPage",
+    "name":"Viral Baby Toys & Learning Products",
+    "url":"https://floatrising.com/baby-toys.html",
+    "description":"Trending baby toys, Montessori toys, sensory toys, and developmental learning products updated daily."
+  }
+  </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -34,19 +59,35 @@
     rel="stylesheet"
   />
 
+  <link rel="icon" href="/float-rising-logo.svg"/>
+
   <style>
 
     body{
       font-family:'Inter',sans-serif;
     }
 
+    .card-hover{
+      transition:all .25s ease;
+    }
+
+    .card-hover:hover{
+      transform:translateY(-6px);
+    }
+
+    .glow{
+      box-shadow:0 0 35px rgba(34,211,238,.18);
+    }
+
   </style>
 
 </head>
 
-<body class="bg-gray-950 text-white min-h-screen">
+<body class="bg-[#06070b] text-white min-h-screen">
 
-<header class="border-b border-white/10 bg-black/70 backdrop-blur-lg sticky top-0 z-50">
+<!-- HEADER -->
+
+<header class="sticky top-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
 
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 
@@ -54,37 +95,62 @@
 
       <img
         src="/float-rising-logo.svg"
-        class="h-9"
+        class="h-10"
         alt="Float Rising"
       >
 
-      <span class="font-bold text-xl">
-        Float Rising
-      </span>
+      <div>
+
+        <div class="font-bold text-xl">
+          Float Rising
+        </div>
+
+        <div class="text-xs text-gray-400">
+          Viral Baby Toy Finds
+        </div>
+
+      </div>
 
     </a>
 
-    <a
-      href="https://t.me/floatviral"
-      target="_blank"
-      class="bg-cyan-400 text-black px-5 py-2.5 rounded-2xl font-bold"
-    >
-      Join Telegram
-    </a>
+    <div class="flex items-center gap-3">
+
+      <a
+        href="/baby-products.html"
+        class="hidden sm:block px-5 py-3 rounded-2xl border border-white/10 hover:bg-white/5 transition"
+      >
+        All Baby Products
+      </a>
+
+      <a
+        href="https://t.me/floatviral"
+        target="_blank"
+        class="bg-cyan-400 text-black px-6 py-3 rounded-2xl font-bold hover:scale-105 transition"
+      >
+        Join Telegram
+      </a>
+
+    </div>
 
   </div>
 
 </header>
 
+<!-- HERO -->
+
 <section class="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center">
 
-  <div class="inline-flex px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm mb-6">
-    🧸 Trending Toy Finds
+  <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm mb-6">
+    🧸 Updated Daily • Trending Toy Finds
   </div>
 
   <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight mb-6">
 
-    Viral Baby Toys & Learning Products
+    Viral Baby Toys &<br>
+
+    <span class="bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+      Learning Products
+    </span>
 
   </h1>
 
@@ -94,11 +160,51 @@
     Montessori learning products,
     sensory toys,
     developmental play products,
-    and viral Amazon toy finds parents are loving.
+    and viral Amazon toy finds parents are loving online.
 
   </p>
 
 </section>
+
+<!-- CATEGORY LINKS -->
+
+<section class="max-w-5xl mx-auto px-6 pb-14">
+
+  <div class="flex flex-wrap gap-4 justify-center">
+
+    <a
+      href="/baby-products.html"
+      class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+    >
+      👶 Baby Products
+    </a>
+
+    <a
+      href="/baby-feeding.html"
+      class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+    >
+      🍼 Feeding
+    </a>
+
+    <a
+      href="/baby-sleep.html"
+      class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+    >
+      🌙 Sleep
+    </a>
+
+    <a
+      href="/baby-travel.html"
+      class="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+    >
+      ✈️ Travel
+    </a>
+
+  </div>
+
+</section>
+
+<!-- PRODUCTS -->
 
 <section class="max-w-6xl mx-auto px-6 pb-20">
 
@@ -110,7 +216,80 @@
 
 </section>
 
+<!-- SEO CONTENT -->
+
+<section class="max-w-4xl mx-auto px-6 pb-20">
+
+  <div class="bg-white/5 border border-white/10 rounded-3xl p-10 glow">
+
+    <h2 class="text-4xl font-bold mb-6">
+      Trending Educational & Sensory Baby Toys
+    </h2>
+
+    <div class="space-y-6 text-gray-300 leading-8 text-lg">
+
+      <p>
+        Float Rising tracks trending baby toys across TikTok,
+        Amazon, Pinterest, and social media to help parents
+        discover developmental toys, Montessori products,
+        sensory toys, and educational baby finds gaining traction online.
+      </p>
+
+      <p>
+        From teething toys and stacking blocks to sensory play mats,
+        activity gyms, and learning products,
+        we surface viral toy finds parents are sharing right now.
+      </p>
+
+      <p>
+        Our trending toy pages update daily with viral Amazon toy finds,
+        helping parents discover clever educational products
+        before they become mainstream trends.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- TELEGRAM CTA -->
+
+<section class="max-w-4xl mx-auto px-6 pb-24">
+
+  <div class="bg-gradient-to-br from-cyan-950 to-blue-950 border border-cyan-500/20 rounded-3xl p-12 text-center glow">
+
+    <div class="text-5xl mb-6">
+      🚀
+    </div>
+
+    <h2 class="text-4xl font-bold mb-4">
+      Get Viral Baby Toy Finds Daily
+    </h2>
+
+    <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+
+      Join the Float Rising Telegram feed for trending baby toys,
+      Montessori products, educational finds,
+      and viral Amazon baby products updated daily.
+
+    </p>
+
+    <a
+      href="https://t.me/floatviral"
+      target="_blank"
+      class="inline-block px-10 py-5 rounded-3xl bg-cyan-400 text-black font-bold text-xl hover:scale-105 transition"
+    >
+      Join @floatviral →
+    </a>
+
+  </div>
+
+</section>
+
 <script>
+
+/* ---------------- CLEAN TITLE ---------------- */
 
 function cleanTitle(title){
 
@@ -123,6 +302,8 @@ function cleanTitle(title){
     .trim()
     .slice(0,80);
 }
+
+/* ---------------- LOAD PRODUCTS ---------------- */
 
 async function loadProducts(){
 
@@ -145,16 +326,46 @@ async function loadProducts(){
 
   try{
 
-    const res =
+    /* LOAD BOTH SOURCES */
+
+    const feedRes =
       await fetch("/api/feed");
 
-    const data =
-      await res.json();
+    const feedData =
+      await feedRes.json();
 
-    const products =
-      Array.isArray(data)
-      ? data
-      : (data.products || []);
+    const feedProducts =
+      Array.isArray(feedData)
+      ? feedData
+      : (feedData.products || []);
+
+    let searchProducts = [];
+
+    try{
+
+      const searchRes =
+        await fetch("/api/search");
+
+      const searchData =
+        await searchRes.json();
+
+      searchProducts =
+        Array.isArray(searchData)
+        ? searchData
+        : (searchData.products || []);
+
+    }catch(err){
+
+      console.log("Search fallback unavailable");
+
+    }
+
+    const combined = [
+      ...feedProducts,
+      ...searchProducts
+    ];
+
+    /* FILTER */
 
     const toyKeywords = [
 
@@ -168,75 +379,50 @@ async function loadProducts(){
       "stacking",
       "play mat",
       "play gym",
-      "blocks"
+      "blocks",
+      "puzzle",
+      "developmental",
+      "baby toy"
 
     ];
 
+    const seen = new Set();
+
     const filtered =
-      products.filter(p => {
+      combined.filter(p => {
+
+        if(!p) return false;
+        if(!p.image) return false;
 
         const title =
           (p.title || "").toLowerCase();
 
-        return toyKeywords.some(k =>
-          title.includes(k)
-        );
+        const description =
+          (p.description || "").toLowerCase();
+
+        const text =
+          title + " " + description;
+
+        const matches =
+          toyKeywords.some(k =>
+            text.includes(k)
+          );
+
+        if(!matches) return false;
+
+        const id =
+          p.id ||
+          p.asin ||
+          p.link;
+
+        if(seen.has(id)) return false;
+
+        seen.add(id);
+
+        return true;
       });
 
-    container.innerHTML = "";
-
-    filtered.slice(0,18).forEach((p,index)=>{
-
-      const id =
-        p.id ||
-        p.asin ||
-        index;
-
-      container.innerHTML += `
-
-        <a
-          href="/s.html?id=${id}"
-          class="bg-white/5 border border-white/10 rounded-[28px] overflow-hidden hover:scale-[1.02] transition block"
-        >
-
-          <img
-            src="${p.image}"
-            class="w-full h-72 object-cover"
-            alt="${cleanTitle(p.title)}"
-          >
-
-          <div class="p-6">
-
-            <div class="text-cyan-300 text-sm mb-3">
-              TOY FIND 🧸
-            </div>
-
-            <div class="font-bold text-2xl leading-tight mb-4">
-
-              ${cleanTitle(p.title)}
-
-            </div>
-
-            <div class="text-gray-400 leading-7 mb-6">
-
-              ${(p.description || "").substring(0,120)}
-
-            </div>
-
-            <div class="bg-white text-black py-4 rounded-2xl text-center font-bold">
-
-              See Product →
-
-            </div>
-
-          </div>
-
-        </a>
-
-      `;
-    });
-
-    if(filtered.length === 0){
+    if(!filtered.length){
 
       container.innerHTML = `
         <div class="col-span-full text-center py-20">
@@ -255,11 +441,96 @@ async function loadProducts(){
 
         </div>
       `;
+
+      return;
     }
+
+    container.innerHTML = "";
+
+    filtered.slice(0,18).forEach((p,index)=>{
+
+      const id =
+        p.id ||
+        p.asin ||
+        index;
+
+      container.innerHTML += `
+
+        <a
+          href="/s.html?id=${id}"
+          class="group bg-white/5 border border-white/10 rounded-[28px] overflow-hidden card-hover block"
+        >
+
+          <div class="relative overflow-hidden">
+
+            <img
+              src="${p.image}"
+              class="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
+              alt="${cleanTitle(p.title)}"
+              loading="lazy"
+            >
+
+            <div class="absolute top-5 left-5 bg-cyan-400 text-black px-4 py-2 rounded-full text-sm font-bold">
+              TOY FIND 🧸
+            </div>
+
+          </div>
+
+          <div class="p-6">
+
+            <div class="text-cyan-300 text-sm mb-3">
+              Trending Learning Product
+            </div>
+
+            <div class="font-bold text-2xl leading-tight mb-4">
+
+              ${cleanTitle(p.title)}
+
+            </div>
+
+            <div class="text-gray-400 leading-7 mb-6">
+
+              ${(
+                p.description ||
+                "Trending developmental toy parents are discovering online."
+              ).substring(0,120)}
+
+            </div>
+
+            <div class="bg-white text-black py-4 rounded-2xl text-center font-bold group-hover:bg-cyan-300 transition">
+
+              See Product →
+
+            </div>
+
+          </div>
+
+        </a>
+
+      `;
+    });
 
   }catch(err){
 
     console.log(err);
+
+    container.innerHTML = `
+      <div class="col-span-full text-center py-20">
+
+        <div class="text-6xl mb-5">
+          ⚠️
+        </div>
+
+        <div class="text-2xl font-bold mb-3">
+          Failed To Load Products
+        </div>
+
+        <div class="text-gray-400">
+          Please try again later.
+        </div>
+
+      </div>
+    `;
   }
 }
 
