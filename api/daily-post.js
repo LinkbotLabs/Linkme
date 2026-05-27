@@ -2,180 +2,299 @@ export default async function handler(req, res) {
 
   const token = process.env.TELEGRAM_TOKEN;
 
-  console.log("Bot triggered");
+  console.log("Baby niche bot triggered");
 
   try {
 
-    /* -------- HELPER: CLEAN + AFFILIATE LINK -------- */
+    /* =========================================================
+       AMAZON AFFILIATE CLEANER
+    ========================================================= */
 
     function cleanAmazonUrl(url) {
+
       const tag = "davidshort-21";
 
       try {
+
         if (!url) return url;
 
         const match = url.match(/\/dp\/([A-Z0-9]{10})/);
 
         if (!match) {
+
           const u = new URL(url);
+
           u.searchParams.set("tag", tag);
+
           return u.toString();
         }
 
         const asin = match[1];
+
         return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
 
       } catch {
+
         return url;
       }
     }
 
-    /* -------- FETCH PRODUCTS (CAN SWITCH TO /api/feed LATER) -------- */
+    /* =========================================================
+       FETCH PRODUCTS
+    ========================================================= */
 
-    const apiRes = await fetch("https://floatrising.com/api/search");
+    const apiRes = await fetch(
+      "https://floatrising.com/api/search"
+    );
+
     const data = await apiRes.json();
 
-    if (!data.products || data.products.length === 0) {
-      return res.status(200).json({ message: "No products found" });
+    if (
+      !data.products ||
+      data.products.length === 0
+    ) {
+
+      return res.status(200).json({
+        message: "No baby products found"
+      });
     }
 
-    /* -------- VIRAL SCORING -------- */
+    /* =========================================================
+       BABY PRODUCT SCORE
+    ========================================================= */
 
-    const scored = data.products.map(p => {
+    const scored = data.products.map(product => {
 
-      const rating = p.rating || 4;
-      const reviews = p.reviews || 50;
-      const price = p.price || 20;
+      const rating = product.rating || 4;
+      const reviews = product.reviews || 100;
 
-      const viralScore =
-        (rating * 20) +
-        Math.log(reviews + 1) * 40 +
-        price * 0.5 +
-        Math.random() * 20;
+      let score = 0;
 
-      return { ...p, viralScore };
+      score += rating * 25;
 
+      score += Math.log(reviews + 1) * 35;
+
+      if (product.image) score += 25;
+
+      if (
+        product.title?.toLowerCase().includes("baby")
+      ) score += 20;
+
+      if (
+        product.title?.toLowerCase().includes("newborn")
+      ) score += 15;
+
+      score += Math.random() * 20;
+
+      return {
+        ...product,
+        viralScore: score
+      };
     });
 
-    const sorted = scored.sort((a, b) => b.viralScore - a.viralScore);
+    const sorted = scored.sort(
+      (a, b) => b.viralScore - a.viralScore
+    );
 
-    /* -------- SMART PICK -------- */
+    /* =========================================================
+       PICK PRODUCT
+    ========================================================= */
 
-    const pool = sorted.slice(0, 5);
-    const product = pool[Math.floor(Math.random() * pool.length)];
+    const topPool = sorted.slice(0, 6);
+
+    const product =
+      topPool[
+        Math.floor(Math.random() * topPool.length)
+      ];
 
     if (!product.image) {
-      console.log("Missing image, skipping");
-      return res.status(200).json({ message: "Skipped (no image)" });
+
+      console.log("Missing image");
+
+      return res.status(200).json({
+        message: "Skipped"
+      });
     }
 
-    /* -------- INJECT AFFILIATE -------- */
+    /* =========================================================
+       AFFILIATE LINK
+    ========================================================= */
 
     const productWithAffiliate = {
+
       ...product,
-      link: cleanAmazonUrl(product.url || product.link)
+
+      link: cleanAmazonUrl(
+        product.url || product.link
+      )
     };
 
-    /* -------- CREATE SHARE CARD (THIS FEEDS YOUR LOOP) -------- */
+    /* =========================================================
+       CREATE SHARE CARD
+    ========================================================= */
 
-    const shareRes = await fetch("https://floatrising.com/api/share", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(productWithAffiliate)
-    });
+    const shareRes = await fetch(
+      "https://floatrising.com/api/share",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(
+          productWithAffiliate
+        )
+      }
+    );
 
     const shareData = await shareRes.json();
 
     if (!shareData.id) {
+
       console.log("Share failed");
-      return res.status(200).json({ message: "Share failed" });
+
+      return res.status(200).json({
+        message: "Share failed"
+      });
     }
 
     const shareId = shareData.id;
 
-    /* -------- HOOK ENGINE -------- */
+    /* =========================================================
+       HOOK ENGINE
+    ========================================================= */
 
     const hooks = [
-      "🔥 This is blowing up right now",
-      "🚀 Creators are jumping on this",
-      "👀 This one is getting attention",
-      "💡 Trending product spotted",
-      "📈 People are sharing this fast",
-      "⚡ This just started trending"
+
+      "👶 Parents are loving this right now",
+
+      "🔥 Viral baby find spotted",
+
+      "🚀 TikTok moms are sharing this",
+
+      "💡 This parenting product is trending fast",
+
+      "👀 Amazon baby find going viral",
+
+      "🍼 Smart parents are buying this"
     ];
 
-    const hook = hooks[Math.floor(Math.random() * hooks.length)];
+    const hook =
+      hooks[
+        Math.floor(Math.random() * hooks.length)
+      ];
 
-    /* -------- CTA VARIATIONS -------- */
+    /* =========================================================
+       CTA ENGINE
+    ========================================================= */
 
     const ctas = [
-      "🔥 Post it. Test it. Repeat.",
-      "🚀 Try this in your next post",
-      "💡 Add this to your content loop",
-      "📈 This could convert well"
+
+      "✨ Definitely worth a look",
+
+      "💡 This could make parenting easier",
+
+      "🚀 Trending fast across TikTok",
+
+      "👶 One of today's most shared baby finds"
     ];
 
-    const cta = ctas[Math.floor(Math.random() * ctas.length)];
+    const cta =
+      ctas[
+        Math.floor(Math.random() * ctas.length)
+      ];
 
-    /* -------- PROMO BLOCK (THIS IS THE KEY ADDITION) -------- */
+    /* =========================================================
+       TELEGRAM PROMO
+    ========================================================= */
 
     const promo = `
 
-💰 Creator Opportunity
+━━━━━━━━━━━━━━━
 
-• Auto-add your Amazon affiliate ID  
-• Get your product cards featured  
-• Use the bot to generate viral content  
+🚀 Join The Viral Baby Feed
 
-👉 Start here: https://floatrising.com
-👉 Get products: https://t.me/FloatRisingBot
+Daily:
+• Viral baby finds
+• TikTok mom products
+• Parenting hacks
+• Amazon baby deals
+
+👉 https://floatrising.com
 `;
 
-    /* -------- FINAL CAPTION -------- */
+    /* =========================================================
+       DESCRIPTION
+    ========================================================= */
+
+    const description =
+      product.description
+        ? product.description.substring(0, 160)
+        : "Trending baby product parents are discovering right now.";
+
+    /* =========================================================
+       FINAL CAPTION
+    ========================================================= */
 
     const caption = `${hook}
 
-${product.title}
+🍼 ${product.title}
 
-${product.description || "Creators are sharing this trending product right now."}
+${description}
 
-🔎 View product card
-https://floatrising.com/s.html?id=${shareId}&utm_source=telegram&utm_campaign=channel&utm_content=${shareId}
+👀 View Product
+https://floatrising.com/s.html?id=${shareId}&utm_source=telegram&utm_campaign=babyfeed&utm_content=${shareId}
 
 ${cta}
 
 ${promo}`;
 
-    /* -------- POST TO TELEGRAM CHANNEL -------- */
+    /* =========================================================
+       TELEGRAM POST
+    ========================================================= */
 
-    const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        chat_id: "@floatviral",
-        photo: product.image,
-        caption: caption
-      })
-    });
+    const tgRes = await fetch(
+      `https://api.telegram.org/bot${token}/sendPhoto`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+          chat_id: "@floatviral",
+
+          photo: product.image,
+
+          caption: caption
+        })
+      }
+    );
 
     const tgData = await tgRes.json();
+
     console.log("Telegram response:", tgData);
 
     return res.status(200).json({
-      message: "Posted",
+
+      message: "Baby product posted",
+
       product: product.title
     });
 
   } catch (error) {
 
-    console.error("Daily post error:", error);
+    console.error(
+      "Daily baby post error:",
+      error
+    );
 
-    return res.status(500).json({ error: "Failed to post" });
+    return res.status(500).json({
 
+      error: "Failed to post"
+    });
   }
-
 }
