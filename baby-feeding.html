@@ -1,0 +1,243 @@
+<!-- baby-feeding.html -->
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>
+    Viral Baby Feeding Products 2026 | Float Rising
+  </title>
+
+  <meta
+    name="description"
+    content="Discover trending baby bottles, feeding gadgets, silicone feeding sets, formula tools, and viral TikTok baby feeding products."
+  />
+
+  <meta
+    name="keywords"
+    content="baby feeding products, baby bottles, formula tools, silicone feeding sets, viral baby products, tiktok baby finds"
+  />
+
+  <link rel="canonical" href="https://floatrising.com/baby-feeding.html"/>
+
+  <meta property="og:title" content="Viral Baby Feeding Products 2026"/>
+  <meta property="og:description" content="Trending baby feeding products and Amazon baby finds."/>
+  <meta property="og:image" content="https://floatrising.com/banner.jpg"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+
+    body{
+      font-family:'Inter',sans-serif;
+    }
+
+  </style>
+
+</head>
+
+<body class="bg-gray-950 text-white min-h-screen">
+
+<header class="border-b border-white/10 bg-black/70 backdrop-blur-lg sticky top-0 z-50">
+
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <a href="/" class="flex items-center gap-3">
+
+      <img src="/float-rising-logo.svg" class="h-9">
+
+      <span class="font-bold text-xl">
+        Float Rising
+      </span>
+
+    </a>
+
+    <a
+      href="https://t.me/floatviral"
+      target="_blank"
+      class="bg-cyan-400 text-black px-5 py-2.5 rounded-2xl font-bold"
+    >
+      Join Telegram
+    </a>
+
+  </div>
+
+</header>
+
+<section class="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center">
+
+  <div class="inline-flex px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm mb-6">
+    👶 Trending Baby Feeding Finds
+  </div>
+
+  <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight mb-6">
+
+    Viral Baby Feeding Products
+
+  </h1>
+
+  <p class="text-xl text-gray-300 leading-8 max-w-3xl mx-auto">
+
+    Discover trending baby bottles, feeding gadgets,
+    silicone feeding sets, formula tools,
+    and viral TikTok baby feeding products.
+
+  </p>
+
+</section>
+
+<section class="max-w-6xl mx-auto px-6 pb-20">
+
+  <div
+    id="products"
+    class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"
+  >
+  </div>
+
+</section>
+
+<script>
+
+function cleanTitle(title){
+
+  if(!title) return "Trending Baby Feeding Product";
+
+  return title
+    .replace(/Amazon\.com:?/gi,"")
+    .replace(/\(.*?\)/g,"")
+    .split("|")[0]
+    .trim()
+    .slice(0,80);
+}
+
+async function loadProducts(){
+
+  const container =
+    document.getElementById("products");
+
+  container.innerHTML = `
+    <div class="col-span-full text-center py-20">
+
+      <div class="text-6xl mb-5 animate-pulse">
+        🍼
+      </div>
+
+      <div class="text-2xl font-bold">
+        Loading Baby Feeding Products...
+      </div>
+
+    </div>
+  `;
+
+  try{
+
+    const res =
+      await fetch("/api/feed");
+
+    const data =
+      await res.json();
+
+    const products =
+      Array.isArray(data)
+      ? data
+      : (data.products || []);
+
+    const babyKeywords = [
+
+      "feeding",
+      "bottle",
+      "formula",
+      "bib",
+      "sippy",
+      "breast",
+      "milk",
+      "baby food",
+      "high chair",
+      "silicone"
+
+    ];
+
+    const filtered =
+      products.filter(p => {
+
+        const title =
+          (p.title || "").toLowerCase();
+
+        return babyKeywords.some(k =>
+          title.includes(k)
+        );
+      });
+
+    container.innerHTML = "";
+
+    filtered.slice(0,18).forEach((p,index)=>{
+
+      const id =
+        p.id ||
+        p.asin ||
+        index;
+
+      container.innerHTML += `
+
+        <a
+          href="/s.html?id=${id}"
+          class="bg-white/5 border border-white/10 rounded-[28px] overflow-hidden hover:scale-[1.02] transition block"
+        >
+
+          <img
+            src="${p.image}"
+            class="w-full h-72 object-cover"
+            alt="${cleanTitle(p.title)}"
+          >
+
+          <div class="p-6">
+
+            <div class="text-cyan-300 text-sm mb-3">
+              BABY FEEDING 🔥
+            </div>
+
+            <div class="font-bold text-2xl leading-tight mb-4">
+
+              ${cleanTitle(p.title)}
+
+            </div>
+
+            <div class="text-gray-400 leading-7 mb-6">
+
+              ${(p.description || "").substring(0,120)}
+
+            </div>
+
+            <div class="bg-white text-black py-4 rounded-2xl text-center font-bold">
+
+              See Product →
+
+            </div>
+
+          </div>
+
+        </a>
+
+      `;
+    });
+
+  }catch(err){
+
+    console.log(err);
+  }
+}
+
+loadProducts();
+
+</script>
+
+</body>
+</html>
