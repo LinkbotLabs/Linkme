@@ -10,27 +10,36 @@ export default async function handler(req, res) {
     token: process.env.UPSTASH_REDIS_REST_TOKEN,
   });
 
-  const id = Math.random().toString(36).substring(2, 8);
-
   try {
-    // We now expect a SINGLE product object
     const product = req.body;
 
     if (!product || !product.title || !product.link) {
       return res.status(400).json({ error: 'Invalid product data' });
     }
 
-    // Store under new FLOAT namespace
+    // 🔥 FORCE ID = ASIN (THIS IS THE FIX)
+    const id =
+      product.asin ||
+      product.id ||
+      product.link?.match(/\/dp\/([A-Z0-9]{10})/)?.[1];
+
+    if (!id) {
+      return res.status(400).json({ error: 'Missing ASIN' });
+    }
+
     await redis.set(
       `float:${id}`,
-      JSON.stringify(product),
-      { ex: 2592000 } // 30 days
+      JSON.stringify({
+        ...product,
+        id
+      }),
+      { ex: 2592000 }
     );
 
-    res.status(200).json({ id });
+    return res.status(200).json({ id });
 
   } catch (err) {
     console.error('Save error:', err);
-    res.status(500).json({ error: 'Failed to save product' });
+    return res.status(500).json({ error: 'Failed to save product' });
   }
 }
