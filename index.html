@@ -57,6 +57,7 @@
   <link rel="icon" href="/float-rising-logo.svg" />
 
   <style>
+
     body {
       font-family: 'Inter', sans-serif;
     }
@@ -64,6 +65,7 @@
     .glow {
       box-shadow: 0 0 30px rgba(34,211,238,.35);
     }
+
   </style>
 </head>
 
@@ -71,9 +73,11 @@
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10">
+
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
 
       <a href="/" class="flex items-center gap-3">
+
         <img
           src="/float-rising-logo.svg"
           alt="Float Rising"
@@ -83,6 +87,7 @@
         <span class="font-bold text-xl">
           Float Rising
         </span>
+
       </a>
 
       <button
@@ -93,6 +98,7 @@
       </button>
 
     </div>
+
   </header>
 
   <!-- HERO -->
@@ -124,7 +130,10 @@
     <!-- MAIN PRODUCT CARD -->
     <div class="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
 
-      <div id="card" class="min-h-[600px] flex items-center justify-center">
+      <div
+        id="card"
+        class="min-h-[600px] flex items-center justify-center"
+      >
         Loading products...
       </div>
 
@@ -165,6 +174,7 @@
     <div class="grid md:grid-cols-3 gap-8">
 
       <div class="bg-gray-900 border border-white/10 rounded-3xl p-8 text-center">
+
         <div class="text-5xl mb-4">🔍</div>
 
         <h3 class="text-2xl font-bold mb-3">
@@ -174,9 +184,11 @@
         <p class="text-gray-400">
           Find trending products gaining traction online.
         </p>
+
       </div>
 
       <div class="bg-gray-900 border border-white/10 rounded-3xl p-8 text-center">
+
         <div class="text-5xl mb-4">📌</div>
 
         <h3 class="text-2xl font-bold mb-3">
@@ -186,9 +198,11 @@
         <p class="text-gray-400">
           Post viral finds to Pinterest, TikTok, and social media.
         </p>
+
       </div>
 
       <div class="bg-gray-900 border border-cyan-400 rounded-3xl p-8 text-center">
+
         <div class="text-5xl mb-4">💰</div>
 
         <h3 class="text-2xl font-bold mb-3">
@@ -198,6 +212,7 @@
         <p class="text-gray-400">
           Use your affiliate links and keep your commissions.
         </p>
+
       </div>
 
     </div>
@@ -308,33 +323,74 @@
     let products = [];
     let currentIndex = 0;
 
-    const card = document.getElementById("card");
+    const card =
+      document.getElementById("card");
 
     async function loadProducts() {
 
       try {
 
-        const res = await fetch("/api/feed");
+        const res = await fetch("/api/feed", {
+          cache: "no-store"
+        });
+
         const data = await res.json();
+
+        console.log("API DATA:", data);
 
         products = Array.isArray(data)
           ? data
-          : (data.products || []);
+          : (
+              data.products ||
+              data.items ||
+              []
+            );
 
+        // FIX GOOGLE PROGRAMMABLE SEARCH FORMAT
+        products = products.map(p => ({
+
+          ...p,
+
+          image:
+            p.image ||
+            p.thumbnail ||
+            p.pagemap?.cse_image?.[0]?.src ||
+            p.pagemap?.cse_thumbnail?.[0]?.src,
+
+          link:
+            p.link ||
+            p.url
+
+        }));
+
+        console.log("NORMALIZED PRODUCTS:", products);
+
+        // REMOVE INVALID PRODUCTS
         products = products.filter(p =>
           p &&
           p.image &&
-          (p.link || p.url)
+          p.link
         );
+
+        console.log("VALID PRODUCTS:", products.length);
 
         if (!products.length) {
 
           card.innerHTML = `
             <div class="p-12 text-center">
-              <div class="text-5xl mb-4">📦</div>
+
+              <div class="text-5xl mb-4">
+                📦
+              </div>
+
               <div class="text-2xl font-bold mb-3">
                 No products available
               </div>
+
+              <div class="text-gray-400 mt-3">
+                Check /api/feed response
+              </div>
+
             </div>
           `;
 
@@ -346,14 +402,19 @@
 
       } catch (err) {
 
-        console.error(err);
+        console.error("LOAD ERROR:", err);
 
         card.innerHTML = `
           <div class="p-12 text-center">
-            <div class="text-5xl mb-4">⚠️</div>
+
+            <div class="text-5xl mb-4">
+              ⚠️
+            </div>
+
             <div class="text-2xl font-bold">
               Failed to load products
             </div>
+
           </div>
         `;
       }
@@ -365,7 +426,8 @@
 
       if (!p) return;
 
-      const productLink = p.url || p.link;
+      const productLink =
+        p.url || p.link;
 
       card.innerHTML = `
         <div class="relative">
@@ -392,7 +454,6 @@
 
             <div class="space-y-4">
 
-              <!-- MAIN CTA -->
               <a
                 href="${productLink}"
                 target="_blank"
@@ -401,7 +462,6 @@
                 👀 See Why It's Going Viral
               </a>
 
-              <!-- CREATOR TOOLS -->
               <div class="grid grid-cols-2 gap-4">
 
                 <button
@@ -450,7 +510,7 @@
       renderProduct();
     }
 
-    async function loadSeoProducts() {
+    function loadSeoProducts() {
 
       const container =
         document.getElementById("seoProducts");
@@ -494,33 +554,33 @@
 
     function sharePinterest() {
 
-  if (!products.length) return;
+      if (!products.length) return;
 
-  const p = products[currentIndex];
+      const p = products[currentIndex];
 
-  const id =
-    p.id ||
-    p.asin ||
-    currentIndex;
+      const id =
+        p.id ||
+        p.asin ||
+        currentIndex;
 
-  // SEND TO BRIDGE PAGE
-  const url = encodeURIComponent(
-    `https://floatrising.com/s.html?id=${id}`
-  );
+      const url = encodeURIComponent(
+        `https://floatrising.com/s.html?id=${id}`
+      );
 
-  const media = encodeURIComponent(
-    p.image
-  );
+      const media = encodeURIComponent(
+        p.image
+      );
 
-  const description = encodeURIComponent(
-    `${p.title} 🔥 Trending Amazon Find`
-  );
+      const description = encodeURIComponent(
+        `${p.title} 🔥 Trending Amazon Find`
+      );
 
-  window.open(
-    `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`,
-    "_blank"
-  );
-}
+      window.open(
+        `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`,
+        "_blank"
+      );
+    }
+
     function copyPinterestDescription() {
 
       if (!products.length) return;
@@ -556,20 +616,18 @@
 
     function openCapCut() {
 
-      // Replace with your actual template
-      const url =
-        "https://www.capcut.com/templates";
-
-      window.open(url, "_blank");
+      window.open(
+        "https://www.capcut.com/templates",
+        "_blank"
+      );
     }
 
     function openCanva() {
 
-      // Replace with your actual template
-      const url =
-        "https://www.canva.com/templates/";
-
-      window.open(url, "_blank");
+      window.open(
+        "https://www.canva.com/templates/",
+        "_blank"
+      );
     }
 
     document
