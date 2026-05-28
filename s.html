@@ -41,6 +41,7 @@ color:#111;
 /* ---------- CLEAN AMAZON TITLES ---------- */
 
 function cleanTitle(title){
+
 if(!title) return "Trending Amazon Find";
 
 return title
@@ -49,37 +50,15 @@ return title
 .split(",")[0]
 .trim()
 .slice(0,60);
+
 }
 
-/* ---------- FORCE AFFILIATE TAG ---------- */
-
-function appendAffiliate(url){
-
-const tag = "davidshort-21";
-
-try {
-if(!url) return "#";
-
-const u = new URL(url);
-
-// remove old tag if exists
-u.searchParams.delete("tag");
-
-// force your tag
-u.searchParams.set("tag", tag);
-
-return u.toString();
-
-} catch(e){
-return url;
-}
-}
-
-/* ---------- BULLETS ---------- */
-
+/* ---------- GENERATE BULLETS ---------- */
 function generateBullets(title){
 
 title = title.toLowerCase();
+
+/* Phone accessories */
 
 if(title.includes("phone") || title.includes("holder") || title.includes("mount")){
 return `
@@ -89,6 +68,8 @@ return `
 `;
 }
 
+/* Model kits / Gundam */
+
 if(title.includes("gundam") || title.includes("model") || title.includes("bandai")){
 return `
 🧩 Highly detailed collectible model<br>
@@ -96,6 +77,8 @@ return `
 ⚙️ Poseable parts for display
 `;
 }
+
+/* Kitchen gadgets */
 
 if(title.includes("kitchen") || title.includes("slicer") || title.includes("cutter")){
 return `
@@ -105,12 +88,17 @@ return `
 `;
 }
 
+/* Default fallback */
+
 return `
 🔥 Trending product people love<br>
 ⭐ Highly rated by shoppers<br>
 ✨ Popular viral Amazon find
 `;
+
 }
+
+
 
 /* ---------- LOAD PRODUCT ---------- */
 
@@ -129,45 +117,49 @@ fetch("/api/get?id="+id)
 .then(res=>res.json())
 
 .then(p=>{
-
-if(!p || p.error || !p.title){
-document.getElementById("app").innerHTML =
-"<p style='color:red;'>Product not found or expired.</p>";
-return;
-}
-
-/* ---------- APPLY AFFILIATE LINK ---------- */
-const affiliateLink = appendAffiliate(p.link);
-
-/* ---------- LOCAL STORAGE ---------- */
-const productKey = id;
+  const productKey = id;
 
 if (!localStorage.getItem(`card_${productKey}`)) {
-if (typeof addPoints === "function") addPoints(3);
-localStorage.setItem(`card_${productKey}`, "true");
+  if (typeof addPoints === "function") {
+    addPoints(3);
+  }
+
+  localStorage.setItem(`card_${productKey}`, "true");
+}
+  document.title = cleanTitle(p.title) + " – Viral Amazon Find | Float Rising";
+document.querySelector('meta[property="og:image"]').setAttribute("content", p.image);
+if(p.error||!p.title){
+
+document.getElementById("app").innerHTML =
+"<p style='color:red;'>Product not found or expired.</p>";
+
+return;
+
 }
 
-/* ---------- TITLE ---------- */
-document.title = cleanTitle(p.title) + " – Viral Amazon Find | Float Rising";
+/* ---------- SOCIAL PROOF ---------- */
 
-/* ---------- SOCIAL ---------- */
+const rating =
+p.rating||(4.5+Math.random()*0.4).toFixed(1);
 
-const rating = p.rating || (4.5 + Math.random()*0.4).toFixed(1);
-const reviews = p.reviews || Math.floor(Math.random()*500+150);
+const reviews =
+p.reviews||Math.floor(Math.random()*500+150);
 
-const hooks = [
+const hooks=[
+
 `This Product Is Going Viral 🔥`,
 `TikTok Made This Go Viral`,
 `Amazon Shoppers Love This`,
 `Trending Amazon Find`,
 `People Can't Stop Buying This`
+
 ];
 
-const hook = hooks[Math.floor(Math.random()*hooks.length)];
+const hook=hooks[Math.floor(Math.random()*hooks.length)];
 
-/* ---------- RENDER ---------- */
+/* ---------- PRODUCT CARD ---------- */
 
-document.getElementById("app").innerHTML = `
+document.getElementById("app").innerHTML=`
 
 <div style="
 background:white;
@@ -179,7 +171,13 @@ overflow:hidden;
 ">
 
 <img src="/float-rising-logo.svg"
-style="position:absolute;top:16px;right:16px;width:46px;opacity:.9;">
+style="
+position:absolute;
+top:16px;
+right:16px;
+width:46px;
+opacity:.9;
+">
 
 <div style="
 position:absolute;
@@ -190,39 +188,87 @@ color:white;
 padding:6px 12px;
 border-radius:999px;
 font-size:11px;
+letter-spacing:1px;
 font-weight:600;
 ">
 VIRAL FIND 🔥
 </div>
 
-<div style="background:linear-gradient(135deg,#f6f7ff,#eef6ff);
-padding:18px;border-radius:22px;margin-bottom:24px;">
+<div style="
+background:linear-gradient(135deg,#f6f7ff,#eef6ff);
+padding:18px;
+border-radius:22px;
+margin-bottom:24px;
+">
 
 <img src="${p.image}"
-style="width:100%;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,0.18);">
+style="
+width:100%;
+border-radius:18px;
+display:block;
+box-shadow:0 20px 50px rgba(0,0,0,0.18);
+">
 
 </div>
 
-<div style="font-family:'Playfair Display',serif;font-size:24px;text-align:center;margin-bottom:10px;">
+<div style="
+font-family:'Playfair Display',serif;
+font-size:24px;
+text-align:center;
+margin-bottom:10px;
+line-height:1.3;
+">
+
 ${cleanTitle(p.title)}
+
 </div>
 
-<div style="text-align:center;color:#6b7280;margin-bottom:18px;">
+<div style="
+text-align:center;
+color:#6b7280;
+margin-bottom:18px;
+font-size:15px;
+">
+
 ${hook}
+
 </div>
 
-<div style="text-align:center;font-size:15px;margin-bottom:14px;">
+<div style="
+text-align:center;
+font-size:15px;
+margin-bottom:14px;
+">
+
 ⭐ ${rating} • ${reviews}+ reviews
+
 </div>
 
-<div style="font-size:14px;line-height:1.7;margin-bottom:20px;">
+<div style="
+font-size:14px;
+line-height:1.7;
+margin-top:10px;
+margin-bottom:20px;
+">
+
 ✨ Why You’ll Love It:<br><br>
+
 ${generateBullets(p.title)}
+
 </div>
 
-<a href="${affiliateLink}"
-target="_blank"
-rel="nofollow sponsored noopener"
+<div style="
+text-align:center;
+font-size:13px;
+color:#ef4444;
+margin-top:10px;
+margin-bottom:8px;
+font-weight:600;
+">
+🔥 ${Math.floor(Math.random()*80+20)} people viewed this today
+</div>
+
+<a href="${p.link}" target="_blank"
 style="
 display:block;
 background:#111;
@@ -236,44 +282,171 @@ margin:20px 0;
 font-size:15px;
 box-shadow:0 12px 25px rgba(0,0,0,0.2);
 ">
+
 🔥 See Why This Is Going Viral
+
+</a>
+<a href="/theme.html?id=${id}"
+style="
+display:block;
+background:#22c55e;
+color:white;
+padding:16px;
+border-radius:18px;
+text-align:center;
+font-weight:700;
+text-decoration:none;
+margin:12px 0;
+font-size:15px;
+box-shadow:0 12px 25px rgba(0,0,0,0.15);
+">
+🎨 Customize This Card
+</a>
+<button id="pinBtn"
+style="
+display:block;
+width:100%;
+background:#E60023;
+color:white;
+padding:14px;
+border-radius:16px;
+text-align:center;
+font-weight:700;
+border:none;
+cursor:pointer;
+margin-bottom:12px;
+font-size:15px;
+">
+
+📌 Share This Viral Find
+
+</button>
+
+<button id="shareBtn"
+style="
+display:block;
+width:100%;
+background:#6366f1;
+color:white;
+padding:14px;
+border-radius:16px;
+text-align:center;
+font-weight:700;
+border:none;
+cursor:pointer;
+margin-bottom:12px;
+font-size:15px;
+">
+
+📲 Share Anywhere
+
+</button>
+
+<!-- AFFILIATE PROMO INSERT -->
+
+<div style="
+margin-top:14px;
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:16px;
+padding:14px;
+text-align:center;
+font-size:13px;
+line-height:1.5;
+">
+
+<div style="font-weight:700;margin-bottom:4px;">
+💰 Earn From Viral Products
+</div>
+
+<div style="color:#6b7280;margin-bottom:8px;">
+Attach your affiliate ID to every product card and share to Pinterest.
+</div>
+
+<a href="/"
+style="
+display:inline-block;
+background:#2563eb;
+color:white;
+padding:8px 14px;
+border-radius:10px;
+font-weight:600;
+text-decoration:none;
+font-size:13px;
+">
+Join Creator Program
+</a>
+</div>
+
+<a href="/"
+style="
+display:block;
+text-align:center;
+margin-top:12px;
+font-size:14px;
+color:#555;
+text-decoration:none;
+font-weight:500;
+">
+
+🔥 Next Viral Product
+
 </a>
 
-<button id="pinBtn">📌 Share This Viral Find</button>
-<button id="shareBtn">📲 Share Anywhere</button>
+<div style="
+text-align:center;
+font-size:11px;
+color:#9ca3af;
+margin-top:10px;
+">
+Created with Float Rising
+</div>
 
 </div>
 
 `;
 
-/* ---------- PINTEREST ---------- */
+/* ---------- PINTEREST SHARE ---------- */
 
 document.getElementById("pinBtn").addEventListener("click",()=>{
 
-const url = encodeURIComponent(window.location.href);
-const media = encodeURIComponent(p.image);
+const url=encodeURIComponent(window.location.href);
+const media=encodeURIComponent(p.image);
+const description = encodeURIComponent(
+cleanTitle(p.title) +
+" ⭐ Trending Amazon find creators are sharing right now. Tap to see the product card. #amazonfinds #viralproducts #tiktokmademebuyit"
+);
 
-const pinURL =
-`https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}`;
+const pinURL=
+`https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`;
 
 window.open(pinURL,"_blank");
+addCreatorPoints(3);
 });
 
-/* ---------- SHARE ---------- */
+/* ---------- SHARE ANYWHERE ---------- */
 
 document.getElementById("shareBtn").addEventListener("click",async()=>{
 
-const shareData = {
-title: cleanTitle(p.title),
-text: "Check out this viral Amazon find 🔥",
-url: window.location.href
+const shareData={
+title:cleanTitle(p.title),
+text:"Check out this viral Amazon find 🔥",
+url:window.location.href
 };
 
 if(navigator.share){
+
+try{
 await navigator.share(shareData);
-} else {
+}catch(err){
+console.log("Share cancelled");
+}
+
+}else{
+
 navigator.clipboard.writeText(window.location.href);
-alert("Link copied!");
+alert("Link copied! Share it anywhere.");
+
 }
 
 });
@@ -281,13 +454,17 @@ alert("Link copied!");
 })
 
 .catch(err=>{
-console.error(err);
-document.getElementById("app").innerHTML =
+
+console.error("Load error:",err);
+
+document.getElementById("app").innerHTML=
 "<p style='color:red;'>Error loading product.</p>";
+
 });
 
 }
 
 </script>
+
 </body>
 </html>
