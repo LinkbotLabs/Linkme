@@ -492,30 +492,7 @@
       });
     }
 
-    function sharePinterest() {
-
-      if (!products.length) return;
-
-      const p = products[currentIndex];
-
-      const url = encodeURIComponent(
-        p.url || p.link
-      );
-
-      const media = encodeURIComponent(
-        p.image
-      );
-
-      const description = encodeURIComponent(
-        `${p.title} 🔥 Trending Amazon Find`
-      );
-
-      window.open(
-        `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`,
-        "_blank"
-      );
-    }
-
+    
     function copyPinterestDescription() {
 
       if (!products.length) return;
