@@ -15,7 +15,6 @@ const intents = [
   "must have",
   "hidden gems",
   "problem solving",
-  "weird",
   "aesthetic",
   "smart",
   "portable",
@@ -45,6 +44,7 @@ function generateKeywords(count = 5) {
   const combos = [];
 
   for (const intent of intents) {
+
     for (const category of categories) {
 
       combos.push(
@@ -109,7 +109,6 @@ function cleanAmazonImage(url) {
   } catch {
 
     return null;
-
   }
 }
 
@@ -129,16 +128,18 @@ function getViralScore({
   if (t.includes("viral")) score += 30;
   if (t.includes("tiktok")) score += 25;
   if (t.includes("must have")) score += 20;
-  if (t.includes("gadgets")) score += 15;
+  if (t.includes("gadget")) score += 15;
   if (t.includes("smart")) score += 10;
   if (t.includes("portable")) score += 10;
   if (t.includes("amazon")) score += 10;
 
   if (image) score += 25;
 
-  if (source.includes("amazon")) score += 15;
-
-  score += Math.random() * 10;
+  if (
+    source.includes("amazon.com")
+  ) {
+    score += 15;
+  }
 
   return score;
 }
@@ -154,19 +155,25 @@ export default async function handler(req, res) {
 
   const now = Date.now();
 
-  /* ---------------- CACHE ---------------- */
+  /* ---------------- RETURN CACHE ---------------- */
 
   if (
     cache.data &&
     now - cache.timestamp < ONE_DAY
   ) {
 
+    console.log("SERVING CACHE");
+
     return res.status(200).json({
       products: cache.data
     });
   }
 
+  /* ---------------- PREVENT DUPLICATE FETCHES ---------------- */
+
   if (cache.fetching) {
+
+    console.log("FETCH IN PROGRESS");
 
     return res.status(200).json({
       products: cache.data || []
@@ -181,16 +188,21 @@ export default async function handler(req, res) {
       generateKeywords(5);
 
     const discovered = [];
-    const seenIds = new Set();
+
+    const seenIds =
+      new Set();
 
     /* ---------------- SEARCH ---------------- */
 
     for (const keyword of keywords) {
 
       const query =
-        `${keyword} site:amazon.com -book -kindle`;
+        `${keyword} site:amazon.com -book -kindle -manual -pdf`;
 
-      console.log("SEARCH:", query);
+      console.log(
+        "SEARCH:",
+        query
+      );
 
       const googleRes = await fetch(
         `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
@@ -199,12 +211,9 @@ export default async function handler(req, res) {
       const data =
         await googleRes.json();
 
-      console.log(
-        "GOOGLE RESPONSE:",
-        JSON.stringify(data).substring(0, 500)
-      );
-
-      if (!data.items) continue;
+      if (!data.items) {
+        continue;
+      }
 
       for (const item of data.items) {
 
@@ -213,22 +222,29 @@ export default async function handler(req, res) {
           const link =
             item.link || "";
 
-          let asin =
-            extractASIN(link);
+          /* ---------------- ONLY REAL AMAZON PRODUCTS ---------------- */
 
-          // fallback id
-          if (!asin) {
-
-            asin =
-              "viral-" +
-              Math.random()
-                .toString(36)
-                .substring(2, 10);
-          }
-
-          if (seenIds.has(asin)) {
+          if (
+            !link.includes("/dp/") &&
+            !link.includes("/gp/product/")
+          ) {
             continue;
           }
+
+          const asin =
+            extractASIN(link);
+
+          if (!asin) {
+            continue;
+          }
+
+          if (
+            seenIds.has(asin)
+          ) {
+            continue;
+          }
+
+          /* ---------------- IMAGE ---------------- */
 
           const rawImage =
             item.pagemap?.cse_image?.[0]?.src ||
@@ -242,6 +258,8 @@ export default async function handler(req, res) {
             continue;
           }
 
+          /* ---------------- TITLE ---------------- */
+
           if (
             !item.title ||
             item.title.length < 10
@@ -252,13 +270,13 @@ export default async function handler(req, res) {
           const lowerTitle =
             item.title.toLowerCase();
 
-          // remove junk
           const blocked = [
             "book",
             "manual",
             "guide",
             "pdf",
-            "kindle"
+            "kindle",
+            "ebook"
           ];
 
           if (
@@ -269,6 +287,8 @@ export default async function handler(req, res) {
             continue;
           }
 
+          /* ---------------- DESCRIPTION ---------------- */
+
           const description =
             item.snippet ||
             item.pagemap?.metatags?.[0]?.[
@@ -276,10 +296,12 @@ export default async function handler(req, res) {
             ] ||
             "Trending viral product.";
 
+          /* ---------------- CLEAN AMAZON LINK ---------------- */
+
           const cleanLink =
-            asin.startsWith("viral-")
-              ? link
-              : `https://www.amazon.com/dp/${asin}`;
+            `https://www.amazon.com/dp/${asin}`;
+
+          /* ---------------- SCORE ---------------- */
 
           const score =
             getViralScore({
@@ -288,14 +310,17 @@ export default async function handler(req, res) {
               source: link
             });
 
-          // LOWERED THRESHOLD
-          if (score < 15) {
+          if (score < 20) {
             continue;
           }
+
+          /* ---------------- PRODUCT ---------------- */
 
           const product = {
 
             id: asin,
+
+            asin,
 
             title:
               cleanTitle(item.title),
@@ -310,14 +335,16 @@ export default async function handler(req, res) {
             score
           };
 
-          console.log(
-            "PRODUCT ADDED:",
-            product.title
-          );
-
           discovered.push(product);
 
           seenIds.add(asin);
+
+          console.log(
+            "PRODUCT:",
+            product.title
+          );
+
+          /* ---------------- LIMIT ---------------- */
 
           if (
             discovered.length >= 50
@@ -341,9 +368,11 @@ export default async function handler(req, res) {
       }
     }
 
-    /* ---------------- FALLBACK ---------------- */
+    /* ---------------- NO PRODUCTS ---------------- */
 
     if (!discovered.length) {
+
+      cache.fetching = false;
 
       console.log(
         "NO PRODUCTS FOUND"
@@ -356,19 +385,20 @@ export default async function handler(req, res) {
 
     /* ---------------- SORT ---------------- */
 
-    const sorted =
-      discovered.sort(
-        (a, b) => b.score - a.score
-      );
-
     const finalProducts =
-      sorted.slice(0, 30);
+      discovered
+        .sort(
+          (a, b) =>
+            b.score - a.score
+        )
+        .slice(0, 30);
 
     /* ---------------- SAVE CACHE ---------------- */
 
     cache.timestamp = now;
 
-    cache.data = finalProducts;
+    cache.data =
+      finalProducts;
 
     cache.fetching = false;
 
@@ -396,7 +426,6 @@ export default async function handler(req, res) {
 
       details:
         error.message ||
-
         "Unknown error"
     });
   }
