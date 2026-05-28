@@ -391,7 +391,55 @@
             </p>
 
             <a
-              
+            <div class="space-y-4">
+
+  <!-- MAIN CTA -->
+  <a
+    href="${productLink}"
+    target="_blank"
+    class="block text-center py-6 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-xl font-bold hover:scale-[1.01] transition"
+  >
+    👀 See Why It's Going Viral
+  </a>
+
+  <!-- CREATOR TOOLS -->
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- CHATGPT -->
+    <button
+      onclick="openChatGPT('${encodeURIComponent(p.title || '')}')"
+      class="py-4 rounded-2xl bg-white/10 border border-white/10 hover:bg-white/20 transition font-semibold"
+    >
+      🧠 ChatGPT
+    </button>
+
+    <!-- CAPCUT -->
+    <button
+      onclick="openCapCut()"
+      class="py-4 rounded-2xl bg-white/10 border border-white/10 hover:bg-white/20 transition font-semibold"
+    >
+      🎬 CapCut
+    </button>
+
+    <!-- CANVA -->
+    <button
+      onclick="openCanva()"
+      class="py-4 rounded-2xl bg-white/10 border border-white/10 hover:bg-white/20 transition font-semibold"
+    >
+      🎨 Canva
+    </button>
+
+    <!-- PINTEREST -->
+    <button
+      onclick="sharePinterest()"
+      class="py-4 rounded-2xl bg-red-500/20 border border-red-500/20 hover:bg-red-500/30 transition font-semibold"
+    >
+      📌 Pinterest
+    </button>
+
+  </div>
+
+</div>  
 
           </div>
 
