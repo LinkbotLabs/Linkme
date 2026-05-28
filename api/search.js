@@ -9,86 +9,136 @@ const ONE_DAY = 1000 * 60 * 60 * 24;
 /* ---------------- KEYWORD ENGINE ---------------- */
 
 const intents = [
-  "trending", "viral", "best seller", "must have",
-  "hidden gems", "problem solving", "weird", "aesthetic",
-  "smart", "portable", "high tech"
+  "trending",
+  "viral",
+  "best seller",
+  "must have",
+  "hidden gems",
+  "problem solving",
+  "weird",
+  "aesthetic",
+  "smart",
+  "portable",
+  "high tech"
 ];
 
 const categories = [
-  "kitchen gadgets", "home gadgets", "tech gadgets",
-  "beauty products", "car accessories", "travel gadgets",
-  "desk gadgets", "cleaning tools", "organization tools",
-  "bedroom gadgets", "bathroom gadgets",
-  "pet gadgets", "baby products", "fitness gadgets", "outdoor gear"
+  "kitchen gadgets",
+  "home gadgets",
+  "tech gadgets",
+  "beauty products",
+  "car accessories",
+  "travel gadgets",
+  "desk gadgets",
+  "cleaning tools",
+  "organization tools",
+  "bedroom gadgets",
+  "bathroom gadgets",
+  "pet gadgets",
+  "baby products",
+  "fitness gadgets",
+  "outdoor gear"
 ];
 
-const platforms = [
-  "", "tiktok", "amazon", "tiktok made me buy it", "viral finds"
-];
+function generateKeywords(count = 5) {
 
-function generateKeywords(count = 4) {
   const combos = [];
 
-  for (const i of intents) {
-    for (const c of categories) {
-      for (const p of platforms) {
-        combos.push(`${p} ${i} ${c} 2026`.trim());
-      }
+  for (const intent of intents) {
+    for (const category of categories) {
+
+      combos.push(
+        `${intent} ${category} amazon 2026`
+      );
+
+      combos.push(
+        `${intent} ${category} tiktok amazon finds`
+      );
     }
   }
 
-  return combos.sort(() => 0.5 - Math.random()).slice(0, count);
+  return combos
+    .sort(() => 0.5 - Math.random())
+    .slice(0, count);
 }
 
 /* ---------------- IMAGE CLEANER ---------------- */
 
 function cleanAmazonImage(url) {
+
   if (!url) return null;
 
   try {
-    // strip everything after .jpg
-    const clean = url.split(".jpg")[0] + ".jpg";
 
-    // reject garbage / overlays
+    let clean = url;
+
+    clean = clean.replace(/\._.*_\./, ".");
+
+    clean = clean.split("?")[0];
+
+    const bad = [
+      "sprite",
+      "icon",
+      "logo",
+      "loading",
+      "spinner",
+      "transparent",
+      "aplus-media",
+      "awareness"
+    ];
+
     if (
-      clean.includes("aplus-media") ||
-      clean.includes("PIBSS") ||
-      clean.includes("awareness") ||
-      clean.includes("deal") ||
-      clean.includes("sprite") ||
-      clean.includes("icon")
-    ) return null;
+      bad.some(word =>
+        clean.toLowerCase().includes(word)
+      )
+    ) {
+      return null;
+    }
+
+    if (
+      !clean.includes(".jpg") &&
+      !clean.includes(".jpeg") &&
+      !clean.includes(".png") &&
+      !clean.includes(".webp")
+    ) {
+      return null;
+    }
 
     return clean;
 
   } catch {
+
     return null;
+
   }
 }
 
-/* ---------------- VIRAL SCORE ENGINE ---------------- */
+/* ---------------- VIRAL SCORE ---------------- */
 
-function getViralScore({ title, image, source }) {
-  const t = title.toLowerCase();
+function getViralScore({
+  title,
+  image,
+  source
+}) {
+
+  const t =
+    (title || "").toLowerCase();
 
   let score = 0;
 
-  if (t.includes("tiktok")) score += 40;
-  if (t.includes("viral")) score += 40;
-  if (t.includes("must have")) score += 25;
-  if (t.includes("amazon find")) score += 20;
+  if (t.includes("viral")) score += 30;
+  if (t.includes("tiktok")) score += 25;
+  if (t.includes("must have")) score += 20;
   if (t.includes("gadgets")) score += 15;
   if (t.includes("smart")) score += 10;
   if (t.includes("portable")) score += 10;
+  if (t.includes("amazon")) score += 10;
 
   if (image) score += 25;
-  else score -= 50;
 
-  if (source.includes("tiktok")) score += 25;
-  if (source.includes("pinterest")) score += 15;
-  if (source.includes("amazon")) score += 10;
+  if (source.includes("amazon")) score += 15;
 
-  score += Math.random() * 15;
+  score += Math.random() * 10;
 
   return score;
 }
@@ -97,184 +147,300 @@ function getViralScore({ title, image, source }) {
 
 export default async function handler(req, res) {
 
-  res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate");
+  res.setHeader(
+    "Cache-Control",
+    "s-maxage=86400, stale-while-revalidate"
+  );
 
   const now = Date.now();
 
-  if (cache.data && now - cache.timestamp < ONE_DAY) {
-    return res.status(200).json({ products: cache.data });
+  /* ---------------- CACHE ---------------- */
+
+  if (
+    cache.data &&
+    now - cache.timestamp < ONE_DAY
+  ) {
+
+    return res.status(200).json({
+      products: cache.data
+    });
   }
 
   if (cache.fetching) {
-    return res.status(200).json({ products: cache.data || [] });
+
+    return res.status(200).json({
+      products: cache.data || []
+    });
   }
 
   try {
 
     cache.fetching = true;
 
-    const shuffledKeywords = generateKeywords(4);
+    const keywords =
+      generateKeywords(5);
 
     const discovered = [];
-    const seenASIN = new Set();
+    const seenIds = new Set();
 
-    for (const keyword of shuffledKeywords) {
+    /* ---------------- SEARCH ---------------- */
 
-      const query = `${keyword} (site:amazon.com OR site:pinterest.com OR site:tiktok.com) -book -kindle`;
+    for (const keyword of keywords) {
 
-      const starts = Math.random() > 0.5 ? [1, 11] : [1];
+      const query =
+        `${keyword} site:amazon.com -book -kindle`;
 
-      for (const start of starts) {
+      console.log("SEARCH:", query);
 
-        const googleRes = await fetch(
-          `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10&start=${start}`
-        );
+      const googleRes = await fetch(
+        `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_KEY}&cx=${process.env.CX_ID}&q=${encodeURIComponent(query)}&num=10`
+      );
 
-        const data = await googleRes.json();
-        if (!data.items) continue;
+      const data =
+        await googleRes.json();
 
-        for (const item of data.items) {
+      console.log(
+        "GOOGLE RESPONSE:",
+        JSON.stringify(data).substring(0, 500)
+      );
 
-          const link = item.link || "";
-          const asin = extractASIN(link);
-          if (!asin || seenASIN.has(asin)) continue;
+      if (!data.items) continue;
 
-          let rawImage =
+      for (const item of data.items) {
+
+        try {
+
+          const link =
+            item.link || "";
+
+          let asin =
+            extractASIN(link);
+
+          // fallback id
+          if (!asin) {
+
+            asin =
+              "viral-" +
+              Math.random()
+                .toString(36)
+                .substring(2, 10);
+          }
+
+          if (seenIds.has(asin)) {
+            continue;
+          }
+
+          const rawImage =
             item.pagemap?.cse_image?.[0]?.src ||
-            item.pagemap?.cse_thumbnail?.[0]?.src;
+            item.pagemap?.cse_thumbnail?.[0]?.src ||
+            item.thumbnail;
 
-          const image = cleanAmazonImage(rawImage);
+          const image =
+            cleanAmazonImage(rawImage);
 
-          // ❌ HARD FILTERS
-          if (!image) continue;
-          if (!image.includes("images/I/")) continue;
-          if (!item.title || item.title.length < 25) continue;
-
-          const lowerTitle = item.title.toLowerCase();
+          if (!image) {
+            continue;
+          }
 
           if (
-            lowerTitle.includes("book") ||
-            lowerTitle.includes("manual") ||
-            lowerTitle.includes("guide")
-          ) continue;
+            !item.title ||
+            item.title.length < 10
+          ) {
+            continue;
+          }
 
-          // ❌ REMOVE BORING LOW-VIRAL ITEMS
-          const badWords = ["organizer", "storage", "tray", "case"];
-          if (badWords.some(w => lowerTitle.includes(w))) continue;
+          const lowerTitle =
+            item.title.toLowerCase();
+
+          // remove junk
+          const blocked = [
+            "book",
+            "manual",
+            "guide",
+            "pdf",
+            "kindle"
+          ];
+
+          if (
+            blocked.some(word =>
+              lowerTitle.includes(word)
+            )
+          ) {
+            continue;
+          }
 
           const description =
             item.snippet ||
-            item.pagemap?.metatags?.[0]?.["og:description"] ||
-            "Trending product people are buying right now.";
+            item.pagemap?.metatags?.[0]?.[
+              "og:description"
+            ] ||
+            "Trending viral product.";
 
-          const cleanLink = `https://www.amazon.com/dp/${asin}`;
+          const cleanLink =
+            asin.startsWith("viral-")
+              ? link
+              : `https://www.amazon.com/dp/${asin}`;
 
-          const score = getViralScore({
-            title: item.title,
-            image,
-            source: link
-          });
+          const score =
+            getViralScore({
+              title: item.title,
+              image,
+              source: link
+            });
 
-          if (score < 40) continue;
+          // LOWERED THRESHOLD
+          if (score < 15) {
+            continue;
+          }
 
-          discovered.push({
+          const product = {
+
             id: asin,
-            title: cleanTitle(item.title),
-            description: description.substring(0, 140),
+
+            title:
+              cleanTitle(item.title),
+
+            description:
+              description.substring(0, 160),
+
             image,
+
             link: cleanLink,
+
             score
-          });
+          };
 
-          seenASIN.add(asin);
+          console.log(
+            "PRODUCT ADDED:",
+            product.title
+          );
 
-          if (discovered.length >= 60) break;
+          discovered.push(product);
+
+          seenIds.add(asin);
+
+          if (
+            discovered.length >= 50
+          ) {
+            break;
+          }
+
+        } catch (err) {
+
+          console.log(
+            "ITEM ERROR:",
+            err.message
+          );
         }
-
-        if (discovered.length >= 60) break;
       }
 
-      if (discovered.length >= 60) break;
+      if (
+        discovered.length >= 50
+      ) {
+        break;
+      }
     }
 
-    /* ---------------- MERGE + DEDUPE ---------------- */
+    /* ---------------- FALLBACK ---------------- */
 
-    const DAILY_LIMIT = 30;
-    const MAX_POOL = 90;
+    if (!discovered.length) {
 
-    let existing = cache.data || [];
-    let pool = [...existing, ...discovered];
+      console.log(
+        "NO PRODUCTS FOUND"
+      );
 
-    const uniquePool = [];
-    const seenIds = new Set();
-
-    for (const p of pool) {
-      if (!seenIds.has(p.id)) {
-        seenIds.add(p.id);
-        uniquePool.push(p);
-      }
+      return res.status(200).json({
+        products: []
+      });
     }
 
     /* ---------------- SORT ---------------- */
 
-    const sortedPool = uniquePool.sort((a, b) => b.score - a.score);
+    const sorted =
+      discovered.sort(
+        (a, b) => b.score - a.score
+      );
 
-    const trimmedPool = sortedPool.slice(0, MAX_POOL);
-
-    /* ---------------- SMART DISPLAY ---------------- */
-
-    const top = trimmedPool.slice(0, 50);
-    const finalProducts = [];
-
-    while (finalProducts.length < DAILY_LIMIT && top.length > 0) {
-      const pickIndex = Math.floor(Math.random() * Math.min(10, top.length));
-      const pick = top.splice(pickIndex, 1)[0];
-      finalProducts.push(pick);
-    }
+    const finalProducts =
+      sorted.slice(0, 30);
 
     /* ---------------- SAVE CACHE ---------------- */
 
     cache.timestamp = now;
+
     cache.data = finalProducts;
+
     cache.fetching = false;
 
-    return res.status(200).json({ products: finalProducts });
+    console.log(
+      "FINAL PRODUCTS:",
+      finalProducts.length
+    );
+
+    return res.status(200).json({
+      products: finalProducts
+    });
 
   } catch (error) {
 
     cache.fetching = false;
 
-    return res.status(500).json({
-      error: "Search failed",
-      details: error.message
-    });
+    console.error(
+      "API ERROR:",
+      error
+    );
 
+    return res.status(500).json({
+
+      error: "Search failed",
+
+      details:
+        error.message ||
+
+        "Unknown error"
+    });
   }
 }
 
 /* ---------------- HELPERS ---------------- */
 
 function cleanTitle(title) {
+
   return title
     .replace("Amazon.com:", "")
     .replace("- Amazon.com", "")
     .replace("| Amazon", "")
     .replace(/\bAmazon\b/gi, "")
     .split("|")[0]
-    .substring(0, 70)
+    .substring(0, 80)
     .trim();
 }
 
 function extractASIN(url) {
+
   try {
-    const parsed = new URL(url);
 
-    const dpMatch = parsed.pathname.match(/\/dp\/([A-Z0-9]{10})/);
-    const gpMatch = parsed.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/);
+    const parsed =
+      new URL(url);
 
-    return dpMatch?.[1] || gpMatch?.[1] || null;
+    const dpMatch =
+      parsed.pathname.match(
+        /\/dp\/([A-Z0-9]{10})/
+      );
+
+    const gpMatch =
+      parsed.pathname.match(
+        /\/gp\/product\/([A-Z0-9]{10})/
+      );
+
+    return (
+      dpMatch?.[1] ||
+      gpMatch?.[1] ||
+      null
+    );
 
   } catch {
+
     return null;
   }
 }
