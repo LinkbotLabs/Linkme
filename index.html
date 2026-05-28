@@ -2,7 +2,10 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  />
 
   <!-- PRIMARY SEO -->
   <title>
@@ -11,32 +14,57 @@
 
   <meta
     name="description"
-    content="Discover viral Amazon finds, trending TikTok products, creator tools, gadgets, and affiliate-ready products updated daily. Browse shareable viral product cards before they explode online."
+    content="Discover viral Amazon finds, trending TikTok products, creator tools, gadgets, and affiliate-ready products updated daily."
   />
 
   <meta
     name="keywords"
-    content="viral amazon finds, trending tiktok products, amazon gadgets, creator tools, viral products, amazon must haves, pinterest products, tiktok made me buy it"
+    content="viral amazon finds, trending tiktok products, amazon gadgets, creator tools, viral products, amazon must haves, pinterest products"
   />
 
-  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta
+    name="robots"
+    content="index, follow, max-image-preview:large"
+  />
 
   <link rel="canonical" href="https://floatrising.com/" />
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Float Rising – Viral Amazon Finds & TikTok Products">
-  <meta property="og:description" content="Trending TikTok gadgets, viral Amazon finds, and creator-ready affiliate products updated daily.">
-  <meta property="og:image" content="https://floatrising.com/banner.jpg">
-  <meta property="og:url" content="https://floatrising.com">
+  <!-- OPEN GRAPH -->
+  <meta property="og:type" content="website" />
+  <meta
+    property="og:title"
+    content="Float Rising – Viral Amazon Finds & TikTok Products"
+  />
+  <meta
+    property="og:description"
+    content="Trending TikTok gadgets, viral Amazon finds, and creator-ready affiliate products updated daily."
+  />
+  <meta
+    property="og:image"
+    content="https://floatrising.com/banner.jpg"
+  />
+  <meta property="og:url" content="https://floatrising.com/" />
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Float Rising – Viral Amazon Finds">
-  <meta name="twitter:description" content="Discover viral TikTok products, trending Amazon finds, and creator tools updated daily.">
-  <meta name="twitter:image" content="https://floatrising.com/banner.jpg">
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta
+    name="twitter:title"
+    content="Float Rising – Viral Amazon Finds"
+  />
+  <meta
+    name="twitter:description"
+    content="Discover viral TikTok products, trending Amazon finds, and creator tools updated daily."
+  />
+  <meta
+    name="twitter:image"
+    content="https://floatrising.com/banner.jpg"
+  />
 
-  <!-- Structured Data -->
+  <!-- IOS -->
+  <meta name="theme-color" content="#030712" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <!-- STRUCTURED DATA -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -46,72 +74,122 @@
     "description":"Discover viral Amazon finds and trending TikTok products updated daily.",
     "potentialAction":{
       "@type":"SearchAction",
-      "target":"https://floatrising.com/viral.html?q={search_term_string}",
+      "target":"https://floatrising.com/s.html?q={search_term_string}",
       "query-input":"required name=search_term_string"
     }
   }
   </script>
 
-  <!-- Google Fonts -->
+  <!-- GOOGLE FONTS -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
 
-  <!-- Tailwind -->
+  <!-- TAILWIND -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- ICONS -->
+  <script
+    defer
+    src="https://unpkg.com/lucide@latest"
+  ></script>
 
+  <!-- FAVICON -->
   <link rel="icon" href="/float-rising-logo.svg" />
 
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #030712;
+
+    *{
+      box-sizing:border-box;
     }
 
-    .glow {
-      box-shadow: 0 0 35px rgba(34,211,238,.25);
+    html{
+      overflow-x:hidden;
     }
 
-    .glass {
-      background: rgba(255,255,255,.05);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,.08);
+    body{
+      font-family:'Inter',sans-serif;
+      background:#030712;
+      overflow-x:hidden;
+      margin:0;
+      -webkit-font-smoothing:antialiased;
     }
 
-    .gradient-text {
-      background: linear-gradient(to right,#67e8f9,#60a5fa,#818cf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    img{
+      max-width:100%;
+      display:block;
     }
+
+    .glow{
+      box-shadow:0 0 35px rgba(34,211,238,.25);
+    }
+
+    .glass{
+      background:rgba(255,255,255,.05);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .gradient-text{
+      background:linear-gradient(to right,#67e8f9,#60a5fa,#818cf8);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .line-clamp-2{
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .safe-padding{
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+
   </style>
 </head>
 
-<body class="text-white min-h-screen overflow-x-hidden">
+<body class="text-white min-h-screen">
 
   <!-- HEADER -->
   <header class="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-xl">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-      <a href="/" class="flex items-center gap-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+
+      <a href="/" class="flex items-center gap-3 min-w-0">
+
         <img
           src="/float-rising-logo.svg"
           alt="Float Rising Logo"
-          class="h-10"
-        >
+          class="h-10 w-10 object-contain shrink-0"
+        />
 
-        <div>
-          <div class="font-extrabold text-xl tracking-tight">
+        <div class="min-w-0">
+
+          <div class="font-extrabold text-xl tracking-tight truncate">
             Float Rising
           </div>
 
           <div class="text-xs text-gray-400">
             Viral Products Daily
           </div>
+
         </div>
+
       </a>
 
       <div class="flex items-center gap-3">
@@ -119,6 +197,7 @@
         <a
           href="https://t.me/floatviral"
           target="_blank"
+          rel="noopener noreferrer"
           class="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
         >
           <i data-lucide="send"></i>
@@ -127,7 +206,7 @@
 
         <button
           onclick="openUnlock()"
-          class="px-5 py-2.5 rounded-2xl bg-white text-black font-semibold hover:bg-gray-100 transition"
+          class="px-4 sm:px-5 py-2.5 rounded-2xl bg-white text-black font-semibold hover:bg-gray-100 transition"
         >
           Creator Toolkit
         </button>
@@ -135,6 +214,7 @@
       </div>
 
     </div>
+
   </header>
 
   <!-- HERO -->
@@ -142,15 +222,16 @@
 
     <div class="absolute inset-0 opacity-20 blur-3xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500"></div>
 
-    <div class="relative max-w-7xl mx-auto px-6 pt-16 pb-14">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 pt-14 pb-14">
 
+      <!-- HERO TEXT -->
       <div class="text-center max-w-5xl mx-auto mb-14">
 
         <div class="inline-flex items-center gap-2 glass rounded-full px-5 py-2 text-sm mb-6">
           🔥 Updated Daily • Viral TikTok & Amazon Finds
         </div>
 
-        <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight tracking-tight">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
 
           Discover Viral Products
 
@@ -160,7 +241,7 @@
 
         </h1>
 
-        <p class="text-xl text-gray-300 mt-7 leading-8 max-w-3xl mx-auto">
+        <p class="text-lg sm:text-xl text-gray-300 mt-7 leading-8 max-w-3xl mx-auto">
           Trending TikTok gadgets, viral Amazon finds,
           creator tools, and affiliate-ready products
           updated daily.
@@ -168,30 +249,35 @@
 
       </div>
 
-      <!-- PRODUCT FIRST -->
+      <!-- MAIN GRID -->
       <div class="grid lg:grid-cols-[1.3fr_.7fr] gap-8 items-start">
 
-        <!-- MAIN PRODUCT -->
+        <!-- PRODUCT CARD -->
         <div class="glass rounded-[2rem] overflow-hidden shadow-2xl">
 
-          <div id="card" class="min-h-[700px] flex items-center justify-center">
+          <div
+            id="card"
+            class="min-h-[700px] flex items-center justify-center"
+          >
             Loading products...
           </div>
 
         </div>
 
-        <!-- SIDE PANEL -->
+        <!-- SIDEBAR -->
         <div class="space-y-6">
 
           <!-- TOOLKIT -->
           <div class="glass rounded-[2rem] p-7">
 
             <div class="flex items-center gap-3 mb-5">
+
               <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center">
                 <i data-lucide="sparkles"></i>
               </div>
 
               <div>
+
                 <h2 class="text-2xl font-bold">
                   Creator Toolkit
                 </h2>
@@ -199,7 +285,9 @@
                 <p class="text-sm text-gray-400">
                   Turn products into content fast
                 </p>
+
               </div>
+
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -209,13 +297,15 @@
                 class="group p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
               >
                 <div class="flex flex-col items-center gap-3">
-                  <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+
+                  <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-2xl">
                     🤖
                   </div>
 
                   <div class="font-semibold">
                     ChatGPT
                   </div>
+
                 </div>
               </button>
 
@@ -224,13 +314,15 @@
                 class="group p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
               >
                 <div class="flex flex-col items-center gap-3">
-                  <div class="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center">
+
+                  <div class="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center text-2xl">
                     🎬
                   </div>
 
                   <div class="font-semibold">
                     CapCut
                   </div>
+
                 </div>
               </button>
 
@@ -239,13 +331,15 @@
                 class="group p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
               >
                 <div class="flex flex-col items-center gap-3">
-                  <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center">
+
+                  <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-2xl">
                     🎨
                   </div>
 
                   <div class="font-semibold">
                     Canva
                   </div>
+
                 </div>
               </button>
 
@@ -254,13 +348,15 @@
                 class="group p-5 rounded-2xl bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition"
               >
                 <div class="flex flex-col items-center gap-3">
-                  <div class="w-14 h-14 rounded-2xl bg-red-500/20 flex items-center justify-center">
+
+                  <div class="w-14 h-14 rounded-2xl bg-red-500/20 flex items-center justify-center text-2xl">
                     📌
                   </div>
 
                   <div class="font-semibold">
                     Pinterest
                   </div>
+
                 </div>
               </button>
 
@@ -287,6 +383,7 @@
             <a
               href="https://t.me/floatviral"
               target="_blank"
+              rel="noopener noreferrer"
               class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 font-bold text-lg hover:scale-105 transition"
             >
               <i data-lucide="send"></i>
@@ -312,7 +409,7 @@
   </section>
 
   <!-- SEO PRODUCTS -->
-  <section class="max-w-7xl mx-auto px-6 py-20">
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
 
     <div class="text-center mb-14">
 
@@ -320,7 +417,7 @@
         TRENDING NOW
       </div>
 
-      <h2 class="text-5xl font-extrabold">
+      <h2 class="text-4xl sm:text-5xl font-extrabold">
         Viral Product Picks
       </h2>
 
@@ -334,13 +431,12 @@
     <div
       id="seoProducts"
       class="grid sm:grid-cols-2 lg:grid-cols-4 gap-7"
-    >
-    </div>
+    ></div>
 
   </section>
 
   <!-- HOW IT WORKS -->
-  <section class="max-w-6xl mx-auto px-6 pb-24">
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 pb-24">
 
     <div class="text-center mb-14">
 
@@ -348,7 +444,7 @@
         HOW IT WORKS
       </div>
 
-      <h2 class="text-5xl font-extrabold">
+      <h2 class="text-4xl sm:text-5xl font-extrabold">
         Build Once. Share Everywhere.
       </h2>
 
@@ -438,7 +534,7 @@
   </footer>
 
   <!-- FLOATING BUTTONS -->
-  <div class="fixed right-5 bottom-24 flex flex-col gap-3 z-50">
+  <div class="fixed right-4 bottom-24 flex flex-col gap-3 z-50 safe-padding">
 
     <button
       onclick="sharePinterest()"
@@ -463,13 +559,20 @@
 
   </div>
 
-  <!-- CREATOR MODAL -->
+  <!-- MODAL -->
   <div
     id="unlockModal"
     class="fixed inset-0 hidden items-center justify-center bg-black/80 z-50 px-4"
   >
 
-    <div class="glass rounded-[2rem] p-8 max-w-md w-full text-center">
+    <div class="glass rounded-[2rem] p-8 max-w-md w-full text-center relative">
+
+      <button
+        onclick="closeUnlock()"
+        class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl"
+      >
+        ×
+      </button>
 
       <h3 class="text-3xl font-bold mb-5">
         Unlock Creator Mode
@@ -482,12 +585,13 @@
       <a
         href="https://wise.com/pay/me/davids14542"
         target="_blank"
+        rel="noopener noreferrer"
         class="block w-full py-5 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 font-bold text-lg hover:opacity-90"
       >
         Pay with Wise
       </a>
 
-      <p class="text-gray-400 mt-5 text-sm">
+      <p class="text-gray-400 mt-5 text-sm break-all">
         Email screenshot to:
         omnistall70@gmail.com
       </p>
@@ -502,18 +606,21 @@
     let products = [];
     let currentIndex = 0;
 
-    const card =
-      document.getElementById("card");
+    const card = document.getElementById("card");
 
     async function loadProducts() {
 
       try {
 
-        const res =
-          await fetch("/api/feed");
+        const res = await fetch("/api/feed", {
+          cache: "no-store"
+        });
 
-        const data =
-          await res.json();
+        if (!res.ok) {
+          throw new Error("Feed failed");
+        }
+
+        const data = await res.json();
 
         products = Array.isArray(data)
           ? data
@@ -529,7 +636,11 @@
 
           card.innerHTML = `
             <div class="p-12 text-center">
-              <div class="text-6xl mb-5">📦</div>
+
+              <div class="text-6xl mb-5">
+                📦
+              </div>
+
               <div class="text-3xl font-bold mb-4">
                 No products available
               </div>
@@ -537,6 +648,7 @@
               <p class="text-gray-400">
                 New viral products are loading.
               </p>
+
             </div>
           `;
 
@@ -552,11 +664,19 @@
 
         card.innerHTML = `
           <div class="p-12 text-center">
-            <div class="text-6xl mb-5">⚠️</div>
 
-            <div class="text-3xl font-bold">
+            <div class="text-6xl mb-5">
+              ⚠️
+            </div>
+
+            <div class="text-3xl font-bold mb-4">
               Failed to load products
             </div>
+
+            <p class="text-gray-400">
+              Check your /api/feed response.
+            </p>
+
           </div>
         `;
       }
@@ -566,9 +686,7 @@
 
       const p = products[currentIndex];
 
-      return encodeURIComponent(
-        p?.title || ""
-      );
+      return p?.title || "Trending Product";
     }
 
     function renderProduct() {
@@ -577,8 +695,7 @@
 
       if (!p) return;
 
-      const productLink =
-        p.url || p.link;
+      const productLink = p.url || p.link;
 
       card.innerHTML = `
         <div class="relative">
@@ -589,19 +706,21 @@
 
           <img
             src="${p.image}"
-            alt="${p.title || 'Trending Product'}"
-            class="w-full h-[540px] object-cover"
+            alt="${escapeHtml(p.title || 'Trending Product')}"
+            class="w-full h-[320px] sm:h-[540px] object-cover"
             loading="lazy"
+            referrerpolicy="no-referrer"
+            onerror="this.src='/banner.jpg'"
           >
 
-          <div class="p-8 sm:p-10">
+          <div class="p-6 sm:p-10">
 
             <div class="text-cyan-300 text-sm font-semibold mb-3">
               Trending Amazon Find
             </div>
 
-            <h2 class="text-4xl font-extrabold text-center leading-tight mb-5">
-              ${p.title || "Trending Product"}
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-center leading-tight mb-5">
+              ${escapeHtml(p.title || "Trending Product")}
             </h2>
 
             <p class="text-center text-gray-400 text-lg mb-9">
@@ -613,6 +732,7 @@
               <a
                 href="${productLink}"
                 target="_blank"
+                rel="nofollow sponsored noopener noreferrer"
                 class="block text-center py-6 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-xl font-bold hover:scale-[1.01] transition"
               >
                 👀 See Why It's Going Viral
@@ -635,13 +755,15 @@
 
     function nextProduct() {
 
+      if (!products.length) return;
+
       currentIndex =
         (currentIndex + 1) % products.length;
 
       renderProduct();
     }
 
-    async function loadSeoProducts() {
+    function loadSeoProducts() {
 
       const container =
         document.getElementById("seoProducts");
@@ -651,9 +773,9 @@
       products.slice(0, 8).forEach((p, index) => {
 
         const id =
-          p.id ||
-          p.asin ||
-          index;
+          encodeURIComponent(
+            p.id || p.asin || index
+          );
 
         container.innerHTML += `
           <a
@@ -663,9 +785,11 @@
 
             <img
               src="${p.image}"
-              alt="${p.title || 'Trending Product'}"
+              alt="${escapeHtml(p.title || 'Trending Product')}"
               class="w-full h-60 object-cover"
               loading="lazy"
+              referrerpolicy="no-referrer"
+              onerror="this.src='/banner.jpg'"
             >
 
             <div class="p-6">
@@ -674,8 +798,10 @@
                 Viral Find 🔥
               </div>
 
-              <div class="font-bold text-lg leading-7">
-                ${(p.title || "Trending Product").substring(0, 80)}
+              <div class="font-bold text-lg leading-7 line-clamp-2">
+                ${escapeHtml(
+                  (p.title || "Trending Product").substring(0, 100)
+                )}
               </div>
 
             </div>
@@ -692,9 +818,9 @@
       const p = products[currentIndex];
 
       const id =
-        p.id ||
-        p.asin ||
-        currentIndex;
+        encodeURIComponent(
+          p.id || p.asin || currentIndex
+        );
 
       const url = encodeURIComponent(
         `https://floatrising.com/s.html?id=${id}`
@@ -705,7 +831,7 @@
       );
 
       const description = encodeURIComponent(
-        `${p.title} 🔥 Trending Amazon Find`
+        `${p.title || 'Trending Product'} 🔥 Trending Amazon Find`
       );
 
       window.open(
@@ -714,17 +840,25 @@
       );
     }
 
-    function copyPinterestDescription() {
+    async function copyPinterestDescription() {
 
       if (!products.length) return;
 
       const p = products[currentIndex];
 
-      navigator.clipboard.writeText(
-        `🔥 Viral Amazon Find\n\n${p.title}\n\nhttps://floatrising.com`
-      );
+      try {
 
-      alert("Pinterest caption copied!");
+        await navigator.clipboard.writeText(
+          `🔥 Viral Amazon Find\n\n${p.title}\n\nhttps://floatrising.com`
+        );
+
+        alert("Pinterest caption copied!");
+
+      } catch {
+
+        alert("Copy failed");
+
+      }
     }
 
     function openUnlock() {
@@ -736,10 +870,19 @@
       modal.classList.add("flex");
     }
 
+    function closeUnlock() {
+
+      const modal =
+        document.getElementById("unlockModal");
+
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
     function openChatGPT(title) {
 
       const prompt =
-        `Create a viral Pinterest caption and TikTok hook for this product: ${decodeURIComponent(title)}`;
+        `Create a viral Pinterest caption and TikTok hook for this product: ${title}`;
 
       const url =
         `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
@@ -763,13 +906,38 @@
       );
     }
 
+    function escapeHtml(text) {
+
+      const div = document.createElement("div");
+
+      div.innerText = text;
+
+      return div.innerHTML;
+    }
+
     document
       .getElementById("nextBtn")
       .addEventListener("click", nextProduct);
 
+    document
+      .getElementById("unlockModal")
+      .addEventListener("click", (e) => {
+
+        if (e.target.id === "unlockModal") {
+          closeUnlock();
+        }
+
+      });
+
     loadProducts();
 
-    lucide.createIcons();
+    window.addEventListener("load", () => {
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+
+    });
 
   </script>
 
