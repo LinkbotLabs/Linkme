@@ -492,7 +492,35 @@
       });
     }
 
-    
+    function sharePinterest() {
+
+  if (!products.length) return;
+
+  const p = products[currentIndex];
+
+  const id =
+    p.id ||
+    p.asin ||
+    currentIndex;
+
+  // SEND TO BRIDGE PAGE
+  const url = encodeURIComponent(
+    `https://floatrising.com/s.html?id=${id}`
+  );
+
+  const media = encodeURIComponent(
+    p.image
+  );
+
+  const description = encodeURIComponent(
+    `${p.title} 🔥 Trending Amazon Find`
+  );
+
+  window.open(
+    `https://www.pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`,
+    "_blank"
+  );
+}
     function copyPinterestDescription() {
 
       if (!products.length) return;
