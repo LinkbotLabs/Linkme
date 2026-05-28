@@ -542,7 +542,34 @@
       modal.classList.remove("hidden");
       modal.classList.add("flex");
     }
+function openChatGPT(title) {
 
+  const prompt =
+    `Create a viral Pinterest caption and TikTok hook for this product: ${decodeURIComponent(title)}`;
+
+  const url =
+    `https://chat.openai.com/?prompt=${encodeURIComponent(prompt)}`;
+
+  window.open(url, "_blank");
+}
+
+function openCapCut() {
+
+  // Replace with your real template link
+  const url =
+    "https://www.capcut.com/templates";
+
+  window.open(url, "_blank");
+}
+
+function openCanva() {
+
+  // Replace with your real template link
+  const url =
+    "https://www.canva.com/templates/";
+
+  window.open(url, "_blank");
+}
     document
       .getElementById("nextBtn")
       .addEventListener("click", nextProduct);
