@@ -70,14 +70,8 @@ body{
 }
 
 @keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
 </style>
@@ -86,27 +80,19 @@ body{
 
 <body class="text-white min-h-screen">
 
-<!-- Floating Pinterest Tools -->
-
+<!-- FLOATING TOOLS -->
 <div id="floatingTools"
 class="fixed right-4 bottom-24 z-50 flex flex-col gap-3">
 
-<button
-onclick="sharePinterest()"
-class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">
-📌
-</button>
+<button onclick="sharePinterest()"
+class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">📌</button>
 
-<button
-onclick="copyPinterestCaption()"
-class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">
-📋
-</button>
+<button onclick="copyPinterestCaption()"
+class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">📋</button>
 
 </div>
 
-<!-- Hero -->
-
+<!-- HERO -->
 <section class="hero-gradient py-24 px-6">
 
 <div class="max-w-5xl mx-auto text-center">
@@ -116,32 +102,69 @@ class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale
 </div>
 
 <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight">
-
 Rev Up
-
 </h1>
 
 <p class="mt-8 text-xl text-gray-300 max-w-3xl mx-auto">
-
 Discover ideas, resources and inspiration to help you work better,
 think deeper, create more and enjoy life.
-
 </p>
 
-<button
-onclick="scrollToCollections()"
+<button onclick="scrollToCollections()"
 class="mt-10 px-8 py-4 bg-teal-500 hover:bg-teal-600 rounded-2xl font-semibold transition">
-
 Explore Collections →
-
 </button>
 
 </div>
 
 </section>
 
-<!-- Collections -->
+<!-- SEO HUB (IMPORTANT) -->
+<section class="max-w-6xl mx-auto px-6 py-16">
 
+<div class="text-center mb-10">
+
+<h2 class="text-3xl font-bold">
+Explore Curated Categories
+</h2>
+
+<p class="text-gray-400 mt-2">
+Deep-dive guides designed to help you discover tools, ideas and inspiration.
+</p>
+
+</div>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<a href="/remote-work-starter-kit.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">💻 Remote Work</h3>
+<p class="text-gray-400">Setup, tools and productivity systems.</p>
+</a>
+
+<a href="/meditation-books.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">📚 Meditation Books</h3>
+<p class="text-gray-400">Build focus and mental clarity.</p>
+</a>
+
+<a href="/meditation-accessories.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">🧘 Meditation Tools</h3>
+<p class="text-gray-400">Accessories for daily practice.</p>
+</a>
+
+<a href="/fine-dining-at-home.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">🍽️ Fine Dining</h3>
+<p class="text-gray-400">Luxury experience at home.</p>
+</a>
+
+<a href="/surreal-art-prints.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">🎨 Surreal Art</h3>
+<p class="text-gray-400">Creative home inspiration.</p>
+</a>
+
+</div>
+
+</section>
+<!-- TRENDING FEED -->
 <section id="collections"
 class="max-w-5xl mx-auto px-4 py-12">
 
@@ -159,10 +182,7 @@ Fresh curated ideas rotating daily from our collection engine
 
 <div class="glass rounded-3xl overflow-hidden card-shadow min-h-[600px]">
 
-<!-- This stays your dynamic API system -->
-<div
-id="cardContainer"
-class="min-h-[600px]">
+<div id="cardContainer" class="min-h-[600px]">
 
 <div class="flex items-center justify-center h-[600px] text-gray-400">
 Loading discoveries...
@@ -173,262 +193,107 @@ Loading discoveries...
 </div>
 
 </section>
-<!-- Next Button -->
 
-<button
-id="nextBtn"
+<!-- NEXT BUTTON -->
+<button id="nextBtn"
 class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-full font-semibold shadow-xl transition">
 
 Next Collection →
 
 </button>
+
 <script>
 
 let collections = [];
 let currentIndex = 0;
 
-/* ---------------- LOAD COLLECTIONS ---------------- */
-
 async function loadCollections() {
-
-  const container =
-    document.getElementById("cardContainer");
+  const container = document.getElementById("cardContainer");
 
   try {
+    const res = await fetch("/api/search");
+    const data = await res.json();
 
-    const res =
-      await fetch("/api/search");
-
-    const data =
-      await res.json();
-
-    collections =
-      data.collections || [];
+    collections = data.collections || [];
 
     if (!collections.length) {
-
-      container.innerHTML = `
-      <div class="h-[600px] flex items-center justify-center text-center p-8">
-        <div>
-          <div class="text-5xl mb-4">🌿</div>
-          <h2 class="text-2xl font-bold mb-2">
-            No collections available
-          </h2>
-          <p class="text-gray-400">
-            Check back shortly.
-          </p>
-        </div>
-      </div>
-      `;
-
+      container.innerHTML = `<div class="h-[600px] flex items-center justify-center text-gray-400">No collections available</div>`;
       return;
     }
 
     renderCollection();
 
   } catch (err) {
-
-    console.error(err);
-
-    container.innerHTML = `
-    <div class="h-[600px] flex items-center justify-center text-center p-8">
-      <div>
-        <div class="text-5xl mb-4">⚠️</div>
-        <h2 class="text-2xl font-bold mb-2">
-          Unable to load collections
-        </h2>
-        <p class="text-gray-400">
-          Please refresh the page.
-        </p>
-      </div>
-    </div>
-    `;
+    container.innerHTML = `<div class="h-[600px] flex items-center justify-center text-gray-400">Error loading</div>`;
   }
 }
 
-/* ---------------- RENDER ---------------- */
-
 function renderCollection() {
-
   const c = collections[currentIndex];
 
-  const container =
-    document.getElementById("cardContainer");
-
-  container.innerHTML = `
+  document.getElementById("cardContainer").innerHTML = `
   <div class="fade-in">
-
-    <img
-  src="${c.image}"
-  alt="${c.title}"
-  class="w-full max-h-[600px] object-contain bg-slate-950 p-2">
+    <img src="${c.image}" class="w-full max-h-[600px] object-contain bg-slate-950 p-2">
     <div class="p-8">
 
-      <div class="inline-flex px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-sm mb-4">
-        Curated Collection
-      </div>
+      <h2 class="text-3xl font-bold mb-4">${c.title}</h2>
+      <p class="text-gray-300 mb-8">${c.description}</p>
 
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">
-        ${c.title}
-      </h2>
-
-      <p class="text-gray-300 text-lg mb-8">
-        ${c.description}
-      </p>
-
-      <a
-        href="${c.url}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="block text-center py-5 rounded-2xl bg-teal-500 hover:bg-teal-600 font-semibold transition">
-
-        Explore Collection →
-
+      <a href="${c.url}" target="_blank"
+      class="block text-center py-5 rounded-2xl bg-teal-500 hover:bg-teal-600 font-semibold">
+      Explore Collection →
       </a>
 
     </div>
-
-  </div>
-  `;
+  </div>`;
 }
 
-/* ---------------- NEXT ---------------- */
-
 function nextCollection() {
-
   if (!collections.length) return;
-
-  currentIndex++;
-
-  if (
-    currentIndex >= collections.length
-  ) {
-    currentIndex = 0;
-  }
-
+  currentIndex = (currentIndex + 1) % collections.length;
   renderCollection();
 }
 
-document
-.getElementById("nextBtn")
-.addEventListener(
-  "click",
-  nextCollection
-);
-
-/* ---------------- HERO BUTTON ---------------- */
+document.getElementById("nextBtn").addEventListener("click", nextCollection);
 
 function scrollToCollections() {
-
-  document
-  .getElementById("collections")
-  .scrollIntoView({
-    behavior:"smooth"
-  });
+  document.getElementById("collections").scrollIntoView({behavior:"smooth"});
 }
 
-/* ---------------- PINTEREST ---------------- */
-
+/* Pinterest */
 function generatePinterestCaption(c) {
-
   return `✨ ${c.title}
 
 ${c.description}
 
-Explore the collection:
-${c.url}
-
-#mindfulness #books #inspiration #remotework #lifestyle #benable`;
+${c.url}`;
 }
 
 function copyPinterestCaption() {
-
-  if (!collections.length) return;
-
-  const c =
-    collections[currentIndex];
-
-  navigator.clipboard.writeText(
-    generatePinterestCaption(c)
-  );
-
-  alert(
-    "Pinterest caption copied ✅"
-  );
+  const c = collections[currentIndex];
+  navigator.clipboard.writeText(generatePinterestCaption(c));
+  alert("Copied");
 }
 
 function sharePinterest() {
-
-  if (!collections.length) return;
-
-  const c =
-    collections[currentIndex];
-
-  const pinterestUrl =
-    "https://www.pinterest.com/pin/create/button/?" +
-    "url=" +
-    encodeURIComponent(c.url) +
-    "&media=" +
-    encodeURIComponent(c.image) +
-    "&description=" +
-    encodeURIComponent(
-      generatePinterestCaption(c)
-    );
-
-  window.open(
-    pinterestUrl,
-    "_blank"
-  );
+  const c = collections[currentIndex];
+  const url = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(c.url)}&media=${encodeURIComponent(c.image)}&description=${encodeURIComponent(generatePinterestCaption(c))}`;
+  window.open(url, "_blank");
 }
 
-/* ---------------- SWIPE ---------------- */
-
 let startX = 0;
+const cardContainer = document.getElementById("cardContainer");
 
-const cardContainer =
-  document.getElementById(
-    "cardContainer"
-  );
+cardContainer.addEventListener("touchstart", e => startX = e.touches[0].clientX);
 
-cardContainer.addEventListener(
-  "touchstart",
-  e => {
-    startX =
-      e.touches[0].clientX;
-  }
-);
-
-cardContainer.addEventListener(
-  "touchend",
-  e => {
-
-    const endX =
-      e.changedTouches[0].clientX;
-
-    const diff =
-      startX - endX;
-
-    if (
-      Math.abs(diff) < 60
-    ) return;
-
-    nextCollection();
-  }
-);
-
-/* ---------------- AUTO ROTATE ---------------- */
+cardContainer.addEventListener("touchend", e => {
+  const diff = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 60) nextCollection();
+});
 
 setInterval(() => {
-
-  if (
-    collections.length > 1
-  ) {
-    nextCollection();
-  }
-
+  if (collections.length > 1) nextCollection();
 }, 12000);
-
-/* ---------------- START ---------------- */
 
 loadCollections();
 
@@ -438,19 +303,13 @@ loadCollections();
 
 <div class="max-w-3xl mx-auto px-4">
 
-<h3 class="text-xl font-semibold text-white mb-4">
-Rev Up
-</h3>
+<h3 class="text-xl font-semibold text-white mb-4">Rev Up</h3>
 
 <p class="mb-6">
 Curated discoveries for a better life.
-Mindfulness, creativity, books, remote work,
-food, football and inspiration.
 </p>
 
-<p>
-© 2026 Rev Up
-</p>
+<p>© 2026 Rev Up</p>
 
 </div>
 
