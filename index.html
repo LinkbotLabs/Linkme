@@ -1,407 +1,460 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Tomorrows news Today</title>
-<meta name="theme-color" content="#000000" />
 
-<script src="https://js.puter.com/v2/"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-:root{
-  --bg1:#0a0e17;
-  --bg2:#000;
-  --card:rgba(20,25,40,.6);
-  --stroke:rgba(100,150,255,.2);
-  --text:#f0f4ff;
-  --muted:#9fb0d0;
-  --accent:#00eaff;
-  --user:#2b6cff;
-  --ai:#1a243f;
-}
+<title>Rev Up | Curated Discoveries for a Better Life</title>
 
-*{box-sizing:border-box;margin:0;padding:0}
+<meta name="description" content="Discover hand-picked collections covering mindfulness, books, creativity, remote work, food, football and everyday inspiration.">
 
-body{
-  background:radial-gradient(ellipse at top left,var(--bg1),var(--bg2));
-  font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  color:var(--text);
-  padding:14px;
-  padding-bottom:90px;
-}
+<meta property="og:title" content="Rev Up | Curated Discoveries">
+<meta property="og:description" content="Ideas, resources and inspiration for a more balanced life.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yourdomain.com">
+<meta property="og:image" content="https://yourdomain.com/og-image.jpg">
 
-.header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:rgba(10,15,30,.85);
-  backdrop-filter:blur(14px);
-  padding:14px;
-  border-bottom:1px solid var(--stroke);
-}
+<meta name="robots" content="index,follow">
 
-.header h1{
-  font-size:1.6rem;
-  background:linear-gradient(90deg,var(--accent),#a78bfa);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
+<link rel="canonical" href="https://yourdomain.com">
 
-.grid{
-  max-width:1200px;
-  margin:18px auto;
-  display:grid;
-  gap:20px;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-.card{
-  background:var(--card);
-  border:1px solid var(--stroke);
-  border-radius:20px;
-  padding:18px;
-}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-details summary{font-weight:600;cursor:pointer}
-
-label{
-  font-size:.9rem;
-  color:var(--muted);
-  display:block;
-  margin-top:12px;
-}
-
-input,select{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--stroke);
-  background:rgba(255,255,255,.07);
-  color:var(--text);
-  margin-top:6px;
-}
-
-button{
-  padding:14px;
-  border:none;
-  border-radius:14px;
-  font-weight:600;
-  cursor:pointer;
-}
-
-.primary{
-  background:linear-gradient(135deg,var(--accent),#00b8d9);
-  color:#000;
-  width:100%;
-  margin-top:12px;
-}
-
-.article{
-  background:rgba(0,0,0,.3);
-  border:1px solid var(--stroke);
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:16px;
-}
-
-.article img{
-  width:100%;
-  border-radius:12px;
-  margin:10px 0;
-}
-
-.article-tools{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-  flex-wrap:wrap;
-}
-
-.article-tools button{
-  flex:1 1 100%;
-  background:rgba(0,234,255,.15);
-  color:var(--accent);
-}
-
-.confidence{
-  margin-top:8px;
-  font-size:.85rem;
-  color:var(--muted);
-  cursor:pointer;
-}
-
-.chat{
-  margin-top:12px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.bubble{
-  max-width:85%;
-  padding:12px 14px;
-  border-radius:16px;
-  line-height:1.45;
-  font-size:.95rem;
-}
-
-.bubble.user{
-  background:linear-gradient(135deg,#3b82f6,#2563eb);
-  color:#fff;
-  align-self:flex-end;
-  border-bottom-right-radius:6px;
-}
-
-.bubble.ai{
-  background:var(--ai);
-  align-self:flex-start;
-  border-bottom-left-radius:6px;
-}
-
-.followup{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.followup button{
-  background:rgba(0,234,255,.25);
-  color:var(--accent);
-}
-
-.topic-feed{
-  background:rgba(0,0,0,.35);
-  border-radius:16px;
-  padding:14px;
-  margin-top:14px;
-}
-
-.chips{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:8px 0 12px;
-  flex-wrap:wrap;
-}
-.chips span{
-  white-space:nowrap;
-  padding:8px 14px;
-  border-radius:999px;
-  background:rgba(0,234,255,.15);
-  border:1px solid var(--stroke);
-  color:var(--accent);
-  font-size:.85rem;
-  cursor:pointer;
-}
-
-.more-hints {
-  margin-top:20px;
-  padding:12px;
-  background:rgba(0,0,0,.4);
-  border-radius:12px;
-}
-
-.more-hints h4 {
-  margin-bottom:10px;
-  color:var(--accent);
-  font-size:1.1rem;
-}
-
-.more-hints ul {
-  list-style:none;
-  padding-left:0;
-}
-
-.more-hints li {
-  margin-bottom:8px;
-  line-height:1.4;
-}
-</style>
-</head>
-
-<body>
-
-<div class="header">
-  <h1>AI News Hub</h1>
-</div>
-
-<div class="grid">
-
-<details class="card" open>
-  <summary>⚙️ Settings</summary>
-  <label>AI Model</label>
-  <select id="model">
-    <option value="gpt-5-nano">GPT-5 nano</option>
-    <option value="claude-sonnet-4">Claude Sonnet 4</option>
-    <option value="gpt-4.1-nano">GPT-4.1 nano</option>
-  </select>
-</details>
-
-<!-- TOPIC AI FEED -->
-<div class="card">
-  <h2>🧠 Topic AI Feed</h2>
-
-  <div class="chips">
-    <span onclick="useTopic('AI')">🤖 AI</span>
-    <span onclick="useTopic('World')">🌍 World</span>
-    <span onclick="useTopic('Crypto')">₿ Crypto</span>
-    <span onclick="useTopic('Markets')">📈 Markets</span>
-    <span onclick="useTopic('Science')">🔬 Science</span>
-  </div>
-
-  <input id="topic-feed" placeholder="e.g. AI regulation, crypto ETFs" />
-  <button class="primary" onclick="runTopic()">Generate Topic Feed</button>
-  <div id="topic-out" class="topic-feed"></div>
-</div>
-
-<!-- NEWS section -->
-<div class="card">
-  <h2>📰 News</h2>
-
-  <div class="chips">
-    <span onclick="useTopic('Technology')">💻 Tech</span>
-    <span onclick="useTopic('Finance')">💰 Finance</span>
-    <span onclick="useTopic('Politics')">🏛 Politics</span>
-    <span onclick="useTopic('Sports')">⚽ Sports</span>
-    <span onclick="useTopic('Entertainment')">🎥 Entertainment</span>
-    <span onclick="useTopic('Science')">🔬 Science</span>
-    <span onclick="useTopic('Health')">🩺 Health</span>
-    <span onclick="useTopic('Conspiracy Stories')">🕵️‍♂️ Conspiracy Stories</span>
-  </div>
-
-  <input id="topic" placeholder="Search news topic" />
-  <button class="primary" onclick="loadNews()">Fetch News</button>
-
-  <div id="news"></div>
-
-  <div class="more-hints">
-    <h4>More News Hints</h4>
-    <ul>
-      <li>🔥 <strong>BREAKING:</strong> Scientists discover potential new particle in CERN experiments</li>
-      <li>📈 <strong>MARKETS:</strong> Tech stocks surge after latest AI regulation announcement</li>
-      <li>🏛 <strong>POLITICS:</strong> Surprise coalition government formed after election deadlock</li>
-      <li>🌍 <strong>WORLD:</strong> Naval tensions escalate in South China Sea following joint drills</li>
-      <li>💉 <strong>HEALTH:</strong> Promising early results for new vaccine against emerging variant</li>
-    </ul>
-  </div>
-</div>
-
-</div>
+<script src="https://cdn.tailwindcss.com"></script>
 
 <script>
-const API_KEY="pub_9cd3ff6f032a4336add5c9ff280d095e";
-const getModel=()=>document.getElementById("model").value;
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#14b8a6',
+        secondary: '#0f172a',
+        accent: '#f59e0b'
+      }
+    }
+  }
+}
+</script>
 
-function useTopic(t){
-  document.getElementById("topic-feed").value=t;
-  document.getElementById("topic").value=t;
+<style>
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#020617;
 }
 
-function explainScore(score){
-  puter.ui.alert(`
-🧠 AI Confidence Score: ${score}%
-
-Calculated using:
-• Source credibility
-• Cross-article agreement
-• Language certainty
-• Bias signals
-
-⚠️ Not a fact guarantee.
-`);
+.hero-gradient{
+  background:
+  radial-gradient(circle at top left,#0f766e 0%,transparent 40%),
+  radial-gradient(circle at top right,#1e293b 0%,transparent 40%),
+  #020617;
 }
 
-function chatBubble(t,c){
-  const d=document.createElement("div");
-  d.className="bubble "+c;
-  d.innerHTML=t.replace(/\n/g,"<br>");
-  return d;
+.glass{
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
 }
 
-async function runAI(chat,prompt){
-  chat.appendChild(chatBubble("🤖 Thinking…","ai"));
-  const r=await puter.ai.chat(prompt,{model:getModel()});
-  chat.lastChild.remove();
-  chat.appendChild(chatBubble("🤖 "+(r.message?.content||r.text||r),"ai"));
+.card-shadow{
+  box-shadow:
+  0 10px 30px rgba(0,0,0,.25);
 }
 
-function renderArticle(a){
-  const score=Math.floor(70+Math.random()*25);
-  const d=document.createElement("div");
-  d.className="article";
-  d.innerHTML=`
-    <h3>${a.title}</h3>
-    ${a.image_url?`<img src="${a.image_url}">`:""}
-    <p>${a.description||""}</p>
-
-    <div class="confidence" onclick="explainScore(${score})">
-      AI confidence score: ${score}% ⓘ
-    </div>
-
-    <div class="article-tools">
-      <button onclick="preset(this,'why')">🤔 Why it matters</button>
-      <button onclick="preset(this,'bias')">⚖️ Bias</button>
-      <button onclick="preset(this,'next')">🔮 What next</button>
-      <button onclick="window.open('${a.link}','_blank')">🔗 View source</button>
-    </div>
-
-    <div class="chat"></div>
-    <div class="followup">
-      <input placeholder="Ask your AI friend…" />
-      <button onclick="sendChat(this)">▶️</button>
-    </div>
-  `;
-  return d;
+.fade-in{
+  animation:fadeIn .4s ease;
 }
 
-window.preset=async(btn,type)=>{
-  const art=btn.closest(".article");
-  const chat=art.querySelector(".chat");
-  const t=art.querySelector("h3").textContent;
-  const p=art.querySelector("p").textContent;
-  const q={
-    why:`Why does this matter?\n${t}\n${p}`,
-    bias:`Is there bias?\n${t}\n${p}`,
-    next:`What happens next?\n${t}\n${p}`
-  };
-  chat.appendChild(chatBubble(btn.textContent,"user"));
-  await runAI(chat,q[type]);
-};
-
-window.sendChat=async(btn)=>{
-  const art=btn.closest(".article");
-  const i=art.querySelector("input");
-  const chat=art.querySelector(".chat");
-  const q=i.value.trim();
-  if(!q)return;
-  i.value="";
-  chat.appendChild(chatBubble("🧑 "+q,"user"));
-  await runAI(chat,q);
-};
-
-async function loadNews(){
-  const q=document.getElementById("topic").value.trim() || "world";
-  const r=await fetch(`https://newsdata.io/api/1/latest?language=en&apikey=${API_KEY}&q=${encodeURIComponent(q)}`);
-  const j=await r.json();
-  const out=document.getElementById("news");
-  out.innerHTML="";
-  if (j.results && j.results.length > 0) {
-    j.results.forEach(a=>out.appendChild(renderArticle(a)));
-  } else {
-    out.innerHTML = "<p>No results found for '" + q + "'. Try a different term or check your API key.</p>";
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
   }
 }
 
-async function runTopic(){
-  const t=document.getElementById("topic-feed").value;
-  const o=document.getElementById("topic-out");
-  o.innerHTML="🧠 Thinking…";
-  const r=await puter.ai.chat(`Create a topic AI news feed with trends, risks and insights about ${t}`,{model:getModel()});
-  o.innerHTML="🤖 "+(r.message?.content||r.text||r);
+</style>
+
+</head>
+
+<body class="text-white min-h-screen">
+
+<!-- Floating Pinterest Tools -->
+
+<div id="floatingTools"
+class="fixed right-4 bottom-24 z-50 flex flex-col gap-3">
+
+<button
+onclick="sharePinterest()"
+class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">
+📌
+</button>
+
+<button
+onclick="copyPinterestCaption()"
+class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">
+📋
+</button>
+
+</div>
+
+<!-- Hero -->
+
+<section class="hero-gradient py-24 px-6">
+
+<div class="max-w-5xl mx-auto text-center">
+
+<div class="inline-flex px-4 py-2 rounded-full glass text-sm mb-8">
+✨ Curated discoveries for everyday life
+</div>
+
+<h1 class="text-5xl sm:text-7xl font-extrabold leading-tight">
+
+Rev Up
+
+</h1>
+
+<p class="mt-8 text-xl text-gray-300 max-w-3xl mx-auto">
+
+Discover ideas, resources and inspiration to help you work better,
+think deeper, create more and enjoy life.
+
+</p>
+
+<button
+onclick="scrollToCollections()"
+class="mt-10 px-8 py-4 bg-teal-500 hover:bg-teal-600 rounded-2xl font-semibold transition">
+
+Explore Collections →
+
+</button>
+
+</div>
+
+</section>
+
+<!-- Collections -->
+
+<section id="collections"
+class="max-w-5xl mx-auto px-4 py-12">
+
+<div class="text-center mb-8">
+
+<h2 class="text-3xl font-bold">
+Featured Collections
+</h2>
+
+<p class="text-gray-400 mt-2">
+Mindfulness • Books • Creativity • Remote Work • Food • Football
+</p>
+
+</div>
+
+<div
+id="cardContainer"
+class="glass rounded-3xl overflow-hidden card-shadow min-h-[600px]">
+
+<div
+class="flex items-center justify-center h-[600px] text-gray-400">
+
+Loading collections...
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Next Button -->
+
+<button
+id="nextBtn"
+class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-full font-semibold shadow-xl transition">
+
+Next Collection →
+
+</button>
+<script>
+
+let collections = [];
+let currentIndex = 0;
+
+/* ---------------- LOAD COLLECTIONS ---------------- */
+
+async function loadCollections() {
+
+  const container =
+    document.getElementById("cardContainer");
+
+  try {
+
+    const res =
+      await fetch("/api/search");
+
+    const data =
+      await res.json();
+
+    collections =
+      data.collections || [];
+
+    if (!collections.length) {
+
+      container.innerHTML = `
+      <div class="h-[600px] flex items-center justify-center text-center p-8">
+        <div>
+          <div class="text-5xl mb-4">🌿</div>
+          <h2 class="text-2xl font-bold mb-2">
+            No collections available
+          </h2>
+          <p class="text-gray-400">
+            Check back shortly.
+          </p>
+        </div>
+      </div>
+      `;
+
+      return;
+    }
+
+    renderCollection();
+
+  } catch (err) {
+
+    console.error(err);
+
+    container.innerHTML = `
+    <div class="h-[600px] flex items-center justify-center text-center p-8">
+      <div>
+        <div class="text-5xl mb-4">⚠️</div>
+        <h2 class="text-2xl font-bold mb-2">
+          Unable to load collections
+        </h2>
+        <p class="text-gray-400">
+          Please refresh the page.
+        </p>
+      </div>
+    </div>
+    `;
+  }
 }
 
-window.onload=loadNews;
+/* ---------------- RENDER ---------------- */
+
+function renderCollection() {
+
+  const c = collections[currentIndex];
+
+  const container =
+    document.getElementById("cardContainer");
+
+  container.innerHTML = `
+  <div class="fade-in">
+
+    <img
+      src="${c.image}"
+      alt="${c.title}"
+      class="w-full h-[350px] sm:h-[500px] object-cover">
+
+    <div class="p-8">
+
+      <div class="inline-flex px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-sm mb-4">
+        Curated Collection
+      </div>
+
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+        ${c.title}
+      </h2>
+
+      <p class="text-gray-300 text-lg mb-8">
+        ${c.description}
+      </p>
+
+      <a
+        href="${c.url}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block text-center py-5 rounded-2xl bg-teal-500 hover:bg-teal-600 font-semibold transition">
+
+        Explore Collection →
+
+      </a>
+
+    </div>
+
+  </div>
+  `;
+}
+
+/* ---------------- NEXT ---------------- */
+
+function nextCollection() {
+
+  if (!collections.length) return;
+
+  currentIndex++;
+
+  if (
+    currentIndex >= collections.length
+  ) {
+    currentIndex = 0;
+  }
+
+  renderCollection();
+}
+
+document
+.getElementById("nextBtn")
+.addEventListener(
+  "click",
+  nextCollection
+);
+
+/* ---------------- HERO BUTTON ---------------- */
+
+function scrollToCollections() {
+
+  document
+  .getElementById("collections")
+  .scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+/* ---------------- PINTEREST ---------------- */
+
+function generatePinterestCaption(c) {
+
+  return `✨ ${c.title}
+
+${c.description}
+
+Explore the collection:
+${c.url}
+
+#mindfulness #books #inspiration #remotework #lifestyle #benable`;
+}
+
+function copyPinterestCaption() {
+
+  if (!collections.length) return;
+
+  const c =
+    collections[currentIndex];
+
+  navigator.clipboard.writeText(
+    generatePinterestCaption(c)
+  );
+
+  alert(
+    "Pinterest caption copied ✅"
+  );
+}
+
+function sharePinterest() {
+
+  if (!collections.length) return;
+
+  const c =
+    collections[currentIndex];
+
+  const pinterestUrl =
+    "https://www.pinterest.com/pin/create/button/?" +
+    "url=" +
+    encodeURIComponent(c.url) +
+    "&media=" +
+    encodeURIComponent(c.image) +
+    "&description=" +
+    encodeURIComponent(
+      generatePinterestCaption(c)
+    );
+
+  window.open(
+    pinterestUrl,
+    "_blank"
+  );
+}
+
+/* ---------------- SWIPE ---------------- */
+
+let startX = 0;
+
+const cardContainer =
+  document.getElementById(
+    "cardContainer"
+  );
+
+cardContainer.addEventListener(
+  "touchstart",
+  e => {
+    startX =
+      e.touches[0].clientX;
+  }
+);
+
+cardContainer.addEventListener(
+  "touchend",
+  e => {
+
+    const endX =
+      e.changedTouches[0].clientX;
+
+    const diff =
+      startX - endX;
+
+    if (
+      Math.abs(diff) < 60
+    ) return;
+
+    nextCollection();
+  }
+);
+
+/* ---------------- AUTO ROTATE ---------------- */
+
+setInterval(() => {
+
+  if (
+    collections.length > 1
+  ) {
+    nextCollection();
+  }
+
+}, 12000);
+
+/* ---------------- START ---------------- */
+
+loadCollections();
+
 </script>
+
+<footer class="py-12 text-center text-gray-500">
+
+<div class="max-w-3xl mx-auto px-4">
+
+<h3 class="text-xl font-semibold text-white mb-4">
+Rev Up
+</h3>
+
+<p class="mb-6">
+Curated discoveries for a better life.
+Mindfulness, creativity, books, remote work,
+food, football and inspiration.
+</p>
+
+<p>
+© 2026 Rev Up
+</p>
+
+</div>
+
+</footer>
 
 </body>
 </html>
