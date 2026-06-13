@@ -281,21 +281,6 @@ function sharePinterest() {
   window.open(url, "_blank");
 }
 
-let startX = 0;
-const cardContainer = document.getElementById("cardContainer");
-
-cardContainer.addEventListener("touchstart", e => startX = e.touches[0].clientX);
-
-cardContainer.addEventListener("touchend", e => {
-  const diff = startX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 60) nextCollection();
-});
-
-setInterval(() => {
-  if (collections.length > 1) nextCollection();
-}, 12000);
-
-loadCollections();
 
 </script>
 
