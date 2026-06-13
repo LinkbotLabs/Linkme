@@ -281,7 +281,41 @@ function sharePinterest() {
   window.open(url, "_blank");
 }
 
+let startX = 0;
 
+const cardContainer = document.getElementById("cardContainer");
+
+function nextSafe() {
+  if (collections && collections.length > 1) {
+    nextCollection();
+  }
+}
+
+if (cardContainer) {
+
+  cardContainer.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
+
+  cardContainer.addEventListener("touchend", e => {
+    const diff = startX - e.changedTouches[0].clientX;
+
+    if (Math.abs(diff) > 60) {
+      nextSafe();
+    }
+  });
+
+}
+
+// auto rotate (only if data exists)
+setInterval(() => {
+  if (collections && collections.length > 1) {
+    nextCollection();
+  }
+}, 12000);
+
+// start app
+loadCollections();
 </script>
 
 <footer class="py-12 text-center text-gray-500">
