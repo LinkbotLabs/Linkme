@@ -1,247 +1,338 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="9Z0AqsKQpCxYk815nzq_RHJbBepD_axjrEMI12UuLUU">
-    <meta name="keywords" content="curated collections, mindfulness, meditation books, remote work tools, surreal art prints, fine dining at home, football resources, lifestyle inspiration">
-    <link rel="canonical" href="https://www.floatrising.com">
 
-    <title>Rev Up - Curated Discoveries for a Better Life</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Rev Up | Curated Discoveries for a Better Life</title>
 
-    <script>
-        tailwind.config = {
-            content: [],
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif']
-                    },
-                    colors: {
-                        primary: '#14b8a6',
-                        secondary: '#0f172a',
-                        accent: '#f59e0b'
-                    }
-                }
-            }
-        }
-    </script>
+<meta name="description" content="Discover hand-picked collections covering mindfulness, books, creativity, remote work, food, football and everyday inspiration.">
 
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #020617;
-        }
+<meta property="og:title" content="Rev Up | Curated Discoveries">
+<meta property="og:description" content="Ideas, resources and inspiration for a more balanced life.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://floatrising.com">
+<meta property="og:image" content="https://floatrising.com/og-image.jpg">
 
-        .hero-gradient {
-            background: radial-gradient(circle at top left, #0f766e 0%, transparent 40%),
-                        radial-gradient(circle at top right, #1e293b 0%, transparent 40%),
-                        #020617;
-        }
+<meta name="robots" content="index,follow">
 
-        .glass {
-            backdrop-filter: blur(14px);
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
+<link rel="canonical" href="https://floatrising.com">
 
-        .card-shadow {
-            box-shadow: 0 10px 30px rgba(0,0,0,.25);
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        .fade-in {
-            animation: fadeIn 0.4s ease;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#14b8a6',
+        secondary: '#0f172a',
+        accent: '#f59e0b'
+      }
+    }
+  }
+}
+</script>
+
+<style>
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#020617;
+}
+
+.hero-gradient{
+  background:
+  radial-gradient(circle at top left,#0f766e 0%,transparent 40%),
+  radial-gradient(circle at top right,#1e293b 0%,transparent 40%),
+  #020617;
+}
+
+.glass{
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.card-shadow{
+  box-shadow:
+  0 10px 30px rgba(0,0,0,.25);
+}
+
+.fade-in{
+  animation:fadeIn .4s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+</style>
+
 </head>
 
 <body class="text-white min-h-screen">
-    <!-- FLOATING TOOLS -->
-    <div id="floatingTools" class="fixed right-4 bottom-24 z-50 flex flex-col gap-3">
-        <button onclick="sharePinterest()" 
-                class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all">📌</button>
-        <button onclick="copyPinterestCaption()" 
-                class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition-all">📋</button>
+
+<!-- FLOATING TOOLS -->
+<div id="floatingTools"
+class="fixed right-4 bottom-24 z-50 flex flex-col gap-3">
+
+<button onclick="sharePinterest()"
+class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">📌</button>
+
+<button onclick="copyPinterestCaption()"
+class="glass w-12 h-12 rounded-full flex items-center justify-center hover:scale-110 transition">📋</button>
+
+</div>
+
+<!-- HERO -->
+<section class="hero-gradient py-24 px-6">
+
+<div class="max-w-5xl mx-auto text-center">
+
+<div class="inline-flex px-4 py-2 rounded-full glass text-sm mb-8">
+✨ Curated discoveries for everyday life
+</div>
+
+<h1 class="text-5xl sm:text-7xl font-extrabold leading-tight">
+Rev Up
+</h1>
+
+<p class="mt-8 text-xl text-gray-300 max-w-3xl mx-auto">
+Discover ideas, resources and inspiration to help you work better,
+think deeper, create more and enjoy life.
+</p>
+
+<button onclick="scrollToCollections()"
+class="mt-10 px-8 py-4 bg-teal-500 hover:bg-teal-600 rounded-2xl font-semibold transition">
+Explore Collections →
+</button>
+
+</div>
+
+</section>
+
+<!-- SEO HUB (IMPORTANT) -->
+<section class="max-w-6xl mx-auto px-6 py-16">
+
+<div class="text-center mb-10">
+
+<h2 class="text-3xl font-bold">
+Explore Curated Categories
+</h2>
+
+<p class="text-gray-400 mt-2">
+Deep-dive guides designed to help you discover tools, ideas and inspiration.
+</p>
+
+</div>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<a href="/remote-work-starter-kit.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">💻 Remote Work</h3>
+<p class="text-gray-400">Setup, tools and productivity systems.</p>
+</a>
+
+<a href="/meditation-books.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">📚 Meditation Books</h3>
+<p class="text-gray-400">Build focus and mental clarity.</p>
+</a>
+
+<a href="/meditation-accessories.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">🧘 Meditation Tools</h3>
+<p class="text-gray-400">Accessories for daily practice.</p>
+</a>
+
+<a href="/fine-dining-at-home.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">🍽️ Fine Dining</h3>
+<p class="text-gray-400">Luxury experience at home.</p>
+</a>
+
+<a href="/surreal-art-prints.html" class="glass p-6 rounded-2xl block hover:scale-105 transition">
+<h3 class="text-xl font-bold mb-2">🎨 Surreal Art</h3>
+<p class="text-gray-400">Creative home inspiration.</p>
+</a>
+
+</div>
+
+</section>
+<!-- TRENDING FEED -->
+<section id="collections"
+class="max-w-5xl mx-auto px-4 py-12">
+
+<div class="text-center mb-8">
+
+<h2 class="text-3xl font-bold">
+Trending Discoveries
+</h2>
+
+<p class="text-gray-400 mt-2">
+Fresh curated ideas rotating daily from our collection engine
+</p>
+
+</div>
+
+<div class="glass rounded-3xl overflow-hidden card-shadow min-h-[600px]">
+
+<div id="cardContainer" class="min-h-[600px]">
+
+<div class="flex items-center justify-center h-[600px] text-gray-400">
+Loading discoveries...
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- NEXT BUTTON -->
+<button id="nextBtn"
+class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-full font-semibold shadow-xl transition">
+
+Next Collection →
+
+</button>
+
+<script>
+
+let collections = [];
+let currentIndex = 0;
+
+async function loadCollections() {
+  const container = document.getElementById("cardContainer");
+
+  try {
+    const res = await fetch("/api/search");
+    const data = await res.json();
+
+    collections = data.collections || [];
+
+    if (!collections.length) {
+      container.innerHTML = `<div class="h-[600px] flex items-center justify-center text-gray-400">No collections available</div>`;
+      return;
+    }
+
+    renderCollection();
+
+  } catch (err) {
+    container.innerHTML = `<div class="h-[600px] flex items-center justify-center text-gray-400">Error loading</div>`;
+  }
+}
+
+function renderCollection() {
+  const c = collections[currentIndex];
+
+  document.getElementById("cardContainer").innerHTML = `
+  <div class="fade-in">
+    <img src="${c.image}" class="w-full max-h-[600px] object-contain bg-slate-950 p-2">
+    <div class="p-8">
+
+      <h2 class="text-3xl font-bold mb-4">${c.title}</h2>
+      <p class="text-gray-300 mb-8">${c.description}</p>
+
+      <a href="${c.url}" target="_blank"
+      class="block text-center py-5 rounded-2xl bg-teal-500 hover:bg-teal-600 font-semibold">
+      Explore Collection →
+      </a>
+
     </div>
+  </div>`;
+}
 
-    <!-- HERO -->
-    <section class="hero-gradient py-24 px-6">
-        <div class="max-w-5xl mx-auto text-center">
-            <div class="inline-flex px-4 py-2 rounded-full glass text-sm mb-8">
-                ✨ Curated discoveries for everyday life
-            </div>
+function nextCollection() {
+  if (!collections.length) return;
+  currentIndex = (currentIndex + 1) % collections.length;
+  renderCollection();
+}
 
-            <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight tracking-tight">
-                Rev Up
-            </h1>
+document.getElementById("nextBtn").addEventListener("click", nextCollection);
 
-            <p class="mt-8 text-xl text-gray-300 max-w-3xl mx-auto">
-                Discover ideas, resources and inspiration to help you work better,
-                think deeper, create more and enjoy life.
-            </p>
+function scrollToCollections() {
+  document.getElementById("collections").scrollIntoView({behavior:"smooth"});
+}
 
-            <button onclick="scrollToCollections()" 
-                    class="mt-10 px-8 py-4 bg-teal-500 hover:bg-teal-600 rounded-2xl font-semibold transition-all text-lg">
-                Explore Collections →
-            </button>
-        </div>
-    </section>
+/* Pinterest */
+function generatePinterestCaption(c) {
+  return `✨ ${c.title}
 
-    <!-- ABOUT -->
-    <section class="max-w-5xl mx-auto px-6 py-16">
-        <h2 class="text-4xl font-bold mb-6">Discover Resources That Improve Everyday Life</h2>
-        <div class="prose prose-invert max-w-none text-gray-300 space-y-4 text-lg">
-            <p>Rev Up is a curated discovery platform created to help people find useful products, books, tools, ideas and inspiration without spending hours searching online.</p>
-            <p>Our collections cover mindfulness, meditation, remote work, productivity, football, food, creativity, and lifestyle improvement.</p>
-            <p>New collections are added regularly.</p>
-        </div>
-    </section>
+${c.description}
 
-    <!-- CATEGORIES -->
-    <section class="max-w-6xl mx-auto px-6 py-16">
-        <div class="text-center mb-10">
-            <h2 class="text-3xl font-bold">Explore Curated Categories</h2>
-            <p class="text-gray-400 mt-2">Deep-dive guides designed to help you discover tools, ideas and inspiration.</p>
-        </div>
+${c.url}`;
+}
 
-        <div class="grid md:grid-cols-3 gap-6">
-            <a href="/remote-work-starter-kit.html" class="glass p-6 rounded-2xl block hover:scale-105 transition-all group">
-                <h3 class="text-xl font-bold mb-2">💻 Remote Work</h3>
-                <p class="text-gray-400 group-hover:text-gray-300">Setup, tools and productivity systems.</p>
-            </a>
-            <!-- Add more category cards as needed -->
-        </div>
-    </section>
+function copyPinterestCaption() {
+  const c = collections[currentIndex];
+  navigator.clipboard.writeText(generatePinterestCaption(c));
+  alert("Copied");
+}
 
-    <!-- TRENDING FEED -->
-    <section id="collections" class="max-w-5xl mx-auto px-4 py-12">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold">Trending Discoveries</h2>
-            <p class="text-gray-400 mt-2">Fresh curated ideas rotating daily</p>
-        </div>
+function sharePinterest() {
+  const c = collections[currentIndex];
+  const url = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(c.url)}&media=${encodeURIComponent(c.image)}&description=${encodeURIComponent(generatePinterestCaption(c))}`;
+  window.open(url, "_blank");
+}
 
-        <div class="glass rounded-3xl overflow-hidden card-shadow min-h-[600px]">
-            <div id="cardContainer" class="min-h-[600px]"></div>
-        </div>
-    </section>
+let startX = 0;
 
-    <!-- NEXT BUTTON -->
-    <button id="nextBtn" 
-            class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 rounded-full font-semibold shadow-2xl transition-all text-lg">
-        Next Collection →
-    </button>
+const cardContainer = document.getElementById("cardContainer");
 
-    <script>
-        // Sample data (replace with real API later)
-        let collections = [
-            {
-                title: "The Ultimate Remote Work Setup",
-                description: "Best ergonomic furniture, noise-cancelling headphones, and productivity tools for deep work.",
-                image: "https://picsum.photos/id/1015/1200/800",
-                url: "https://example.com/remote-work"
-            },
-            {
-                title: "Meditation Books That Actually Work",
-                description: "Transform your mind with these timeless and modern meditation classics.",
-                image: "https://picsum.photos/id/201/1200/800",
-                url: "https://example.com/meditation-books"
-            },
-            {
-                title: "Surreal Art Prints for Your Home",
-                description: "Stunning wall art that sparks conversation and elevates any space.",
-                image: "https://picsum.photos/id/870/1200/800",
-                url: "https://example.com/surreal-art"
-            }
-        ];
+function nextSafe() {
+  if (collections && collections.length > 1) {
+    nextCollection();
+  }
+}
 
-        let currentIndex = 0;
+if (cardContainer) {
 
-        function renderCollection() {
-            const c = collections[currentIndex];
-            const container = document.getElementById("cardContainer");
+  cardContainer.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
 
-            container.innerHTML = `
-                <div class="fade-in">
-                    <img src="${c.image}" class="w-full max-h-[420px] object-cover bg-slate-950" alt="${c.title}">
-                    <div class="p-8">
-                        <h2 class="text-3xl font-bold mb-4">${c.title}</h2>
-                        <p class="text-gray-300 mb-8 leading-relaxed">${c.description}</p>
-                        <a href="${c.url}" target="_blank" 
-                           class="block text-center py-5 rounded-2xl bg-teal-500 hover:bg-teal-600 font-semibold transition-all">
-                            Explore Collection →
-                        </a>
-                    </div>
-                </div>`;
-        }
+  cardContainer.addEventListener("touchend", e => {
+    const diff = startX - e.changedTouches[0].clientX;
 
-        function nextCollection() {
-            currentIndex = (currentIndex + 1) % collections.length;
-            renderCollection();
-        }
+    if (Math.abs(diff) > 60) {
+      nextSafe();
+    }
+  });
 
-        // Event Listeners
-        document.getElementById("nextBtn").addEventListener("click", nextCollection);
+}
 
-        function scrollToCollections() {
-            document.getElementById("collections").scrollIntoView({ behavior: "smooth" });
-        }
+// auto rotate (only if data exists)
+setInterval(() => {
+  if (collections && collections.length > 1) {
+    nextCollection();
+  }
+}, 12000);
 
-        // Pinterest functions
-        function generatePinterestCaption(c) {
-            return `✨ ${c.title}\n\n${c.description}\n\n${c.url}`;
-        }
+// start app
+loadCollections();
+</script>
 
-        function copyPinterestCaption() {
-            const c = collections[currentIndex];
-            navigator.clipboard.writeText(generatePinterestCaption(c)).then(() => {
-                alert("✅ Pinterest caption copied!");
-            });
-        }
+<footer class="py-12 text-center text-gray-500">
 
-        function sharePinterest() {
-            const c = collections[currentIndex];
-            const url = `https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(c.url)}&media=${encodeURIComponent(c.image)}&description=${encodeURIComponent(generatePinterestCaption(c))}`;
-            window.open(url, "_blank");
-        }
+<div class="max-w-3xl mx-auto px-4">
 
-        // Touch swipe support
-        let startX = 0;
-        const cardContainer = document.getElementById("cardContainer");
+<h3 class="text-xl font-semibold text-white mb-4">Rev Up</h3>
 
-        cardContainer.addEventListener("touchstart", e => {
-            startX = e.touches[0].clientX;
-        });
+<p class="mb-6">
+Curated discoveries for a better life.
+</p>
 
-        cardContainer.addEventListener("touchend", e => {
-            const diff = startX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 60) nextCollection();
-        });
+<p>© 2026 Rev Up</p>
 
-        // Auto-rotate
-        setInterval(() => {
-            if (collections.length > 1) nextCollection();
-        }, 10000);
+</div>
 
-        // Initialize
-        renderCollection();
-    </script>
+</footer>
 
-    <footer class="py-12 text-center text-gray-500 border-t border-white/10">
-        <div class="max-w-3xl mx-auto px-4">
-            <h3 class="text-xl font-semibold text-white mb-4">Rev Up</h3>
-            <p class="mb-6">Curated discoveries for a better life.</p>
-            <p>© 2026 Rev Up</p>
-        </div>
-    </footer>
 </body>
 </html>
