@@ -3,147 +3,323 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SquareBox IPTV Player</title>
+
+<title>SquareBox IPTV</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-body {
-  background: #0a0f1f;
-  color: white;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+body{
+background:#0d1117;
+color:white;
+line-height:1.6;
 }
 
-/* Background logo */
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("squarebox.PNG") center center no-repeat;
-  background-size: 60%;
-  opacity: 0.08;
-  z-index: 0;
+/* HERO SECTION */
+
+header{
+background:
+linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),
+url('squarebox.PNG');
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
 }
 
-.container {
-  position: relative;
-  z-index: 1;
-  width: 90%;
-  max-width: 900px;
-  text-align: center;
+header h1{
+font-size:4rem;
+margin-bottom:15px;
+text-shadow:0 0 20px rgba(0,0,0,.8);
 }
 
-h1 {
-  margin-bottom: 20px;
-  color: #4da3ff;
-  letter-spacing: 2px;
+header p{
+font-size:1.4rem;
+margin-bottom:20px;
+text-shadow:0 0 10px rgba(0,0,0,.8);
 }
 
-.input-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.btn{
+display:inline-block;
+margin:10px;
+padding:15px 30px;
+background:#1e90ff;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:bold;
+transition:.3s;
 }
 
-input {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  outline: none;
+.btn:hover{
+transform:scale(1.05);
 }
 
-button {
-  padding: 12px 20px;
-  background: #4da3ff;
-  border: none;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 6px;
+/* SECTIONS */
+
+section{
+padding:60px 20px;
+max-width:1200px;
+margin:auto;
 }
 
-button:hover {
-  background: #1f7de0;
+h2{
+text-align:center;
+margin-bottom:30px;
+font-size:2.2rem;
 }
 
-video {
-  width: 100%;
-  max-height: 500px;
-  background: black;
-  border-radius: 10px;
-  margin-top: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+/* PRICING */
+
+.pricing{
+background:#111827;
 }
 
-.note {
-  font-size: 12px;
-  opacity: 0.6;
-  margin-top: 10px;
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
 }
+
+.card{
+background:#161b22;
+padding:25px;
+border-radius:12px;
+text-align:center;
+border:1px solid #1e90ff;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h3{
+color:#4db8ff;
+margin-bottom:15px;
+}
+
+.price{
+font-size:2.5rem;
+font-weight:bold;
+color:#ffd700;
+margin:10px 0;
+}
+
+.highlight{
+border:2px solid gold;
+box-shadow:0 0 20px rgba(255,215,0,.3);
+}
+
+/* SERVICES */
+
+.services{
+background:#0d1117;
+}
+
+.service-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.service{
+background:#161b22;
+padding:25px;
+border-radius:12px;
+}
+
+.service h3{
+color:#4db8ff;
+margin-bottom:10px;
+}
+
+/* PLAYER */
+
+.player{
+background:#161b22;
+padding:20px;
+border-radius:12px;
+}
+
+video{
+width:100%;
+border-radius:10px;
+}
+
+/* FOOTER */
+
+footer{
+background:#090c10;
+padding:40px;
+text-align:center;
+color:#aaa;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>SQUAREBOX IPTV</h1>
+<header>
 
-  <div class="input-box">
-    <input type="text" id="m3uUrl" placeholder="Paste your .m3u8 stream URL here">
-    <button onclick="playStream()">PLAY</button>
-  </div>
+<h1>SQUAREBOX IPTV</h1>
 
-  <video id="video" controls></video>
+<p>
+Premium Entertainment • Smart TV Ready • Easy Setup
+</p>
 
-  <div class="note">
-    Supports HLS (.m3u8) streams via HLS.js
-  </div>
+<p>
+🚀 Early Bird Pre-Launch Offer
+</p>
+
+<a class="btn"
+href="https://wa.me/message/MFBRSC2GTQ6JG1"
+target="_blank">
+Register via WhatsApp
+</a>
+
+<a class="btn"
+href="https://line.me/R/ti/p/~davidthai100"
+target="_blank">
+LINE: davidthai100
+</a>
+
+</header>
+
+<section class="pricing">
+
+<h2>🔥 Early Bird Pricing</h2>
+
+<div class="cards">
+
+<div class="card highlight">
+<h3>First 50 Customers</h3>
+<div class="price">฿200</div>
+<p>Per Month</p>
+<p>Limited Pre-Launch Offer</p>
 </div>
 
+<div class="card">
+<h3>Standard Monthly</h3>
+<div class="price">฿350</div>
+<p>Per Month</p>
+</div>
+
+<div class="card">
+<h3>6 Month Package</h3>
+<div class="price">฿1,200</div>
+<p>Save ฿900</p>
+</div>
+
+<div class="card">
+<h3>1 Year Package</h3>
+<div class="price">฿1,999</div>
+<p>Best Value Package</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="services">
+
+<h2>Our Services</h2>
+
+<div class="service-grid">
+
+<div class="service">
+<h3>📺 Smart TV Setup</h3>
+<p>Direct installation on compatible Smart TVs.</p>
+</div>
+
+<div class="service">
+<h3>⚡ IPTV Activation</h3>
+<p>Fast activation and simple setup instructions.</p>
+</div>
+
+<div class="service">
+<h3>🛠 Remote Assistance</h3>
+<p>Support via WhatsApp and remote access tools.</p>
+</div>
+
+<div class="service">
+<h3>🎬 Premium Entertainment</h3>
+<p>Movies, series, sports and international channels.</p>
+</div>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Live Demo Stream</h2>
+
+<div class="player">
+
+<video id="video" controls autoplay></video>
+
+</div>
+
+</section>
+
+<section style="text-align:center;">
+
+<h2>Ready To Join?</h2>
+
+<p style="margin-bottom:20px;">
+Register now and secure one of the first 50 Early Bird places.
+</p>
+
+<a class="btn"
+href="https://wa.me/message/MFBRSC2GTQ6JG1"
+target="_blank">
+📲 Register Now
+</a>
+
+</section>
+
+<footer>
+
+<p><strong>SquareBox IPTV</strong></p>
+
+<p>WhatsApp Support Available Daily</p>
+
+<p>LINE ID: davidthai100</p>
+
+</footer>
+
 <script>
-function playStream() {
-  const video = document.getElementById('video');
-  const url = document.getElementById('m3uUrl').value;
 
-  if (!url) {
-    alert("Please enter a stream URL");
-    return;
-  }
+var video = document.getElementById('video');
 
-  // If HLS supported
-  if (Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      video.play();
-    });
-  }
-  // Native support (Safari)
-  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = url;
-    video.addEventListener('loadedmetadata', function () {
-      video.play();
-    });
-  } else {
-    alert("Your browser does not support HLS playback");
-  }
+if(Hls.isSupported()) {
+
+var hls = new Hls();
+
+hls.loadSource(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+);
+
+hls.attachMedia(video);
+
 }
+
 </script>
 
 </body>
