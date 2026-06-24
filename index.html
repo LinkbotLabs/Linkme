@@ -233,6 +233,71 @@ nav {
     font-size: 0.95rem;
 }
 
+/* Sports Channels */
+.sports-channels {
+    background: #0a1220;
+}
+
+.channels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.channel-card {
+    background: #0b1220;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #1e3a8a;
+    transition: all 0.4s;
+}
+
+.channel-card:hover {
+    transform: translateY(-10px);
+    border-color: #1e90ff;
+    box-shadow: 0 15px 30px rgba(30,144,255,0.2);
+}
+
+.channel-card img {
+    width: 120px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    filter: brightness(1.1);
+}
+
+.channel-card h4 {
+    color: #facc15;
+    margin-bottom: 8px;
+}
+
+/* Screenshots */
+.screenshots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.screenshot-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #1e3a8a;
+}
+
+.screenshot-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s;
+}
+
+.screenshot-card:hover img {
+    transform: scale(1.08);
+}
+
 /* Features & Steps */
 .features, .steps {
     display: grid;
@@ -377,16 +442,68 @@ footer {
 </div>
 </section>
 
-<!-- Posters Section - TMDB Integration -->
+<!-- Trending Posters -->
 <section class="section posters-section">
 <div class="container">
     <h2 class="title">Trending Now on SquareBox</h2>
     <p class="subtitle">Popular movies &amp; series available in your IPTV library</p>
     
     <div id="posters-grid" class="posters-grid">
-        <!-- Posters loaded by JavaScript -->
+        <!-- Loaded by JS -->
     </div>
     <div id="loading" class="loading">Loading trending posters...</div>
+</div>
+</section>
+
+<!-- New Sports Channels Section -->
+<section class="section sports-channels">
+<div class="container">
+    <h2 class="title">Premium Sports Channels</h2>
+    <p class="subtitle">Watch all major leagues live in HD &amp; 4K — No buffering</p>
+    
+    <div class="channels-grid">
+        <div class="channel-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Premier_League_Logo.svg/512px-Premier_League_Logo.svg.png" alt="Premier League">
+            <h4>Premier League</h4>
+        </div>
+        <div class="channel-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/ESPN_logo.svg/512px-ESPN_logo.svg.png" alt="ESPN">
+            <h4>ESPN</h4>
+        </div>
+        <div class="channel-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/BeIN_Sports_logo.svg/512px-BeIN_Sports_logo.svg.png" alt="beIN Sports">
+            <h4>beIN Sports</h4>
+        </div>
+        <div class="channel-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Sky_Sports_logo.svg/512px-Sky_Sports_logo.svg.png" alt="Sky Sports">
+            <h4>Sky Sports</h4>
+        </div>
+        <div class="channel-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/TNT_Sports_logo.svg/512px-TNT_Sports_logo.svg.png" alt="TNT Sports">
+            <h4>TNT Sports</h4>
+        </div>
+        <div class="channel-card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/DAZN_Logo.svg/512px-DAZN_Logo.svg.png" alt="DAZN">
+            <h4>DAZN</h4>
+        </div>
+    </div>
+
+    <!-- Screenshots -->
+    <h3 style="text-align:center; margin:60px 0 30px; font-size:2rem;">Live Sports Screenshots</h3>
+    <div class="screenshots-grid">
+        <div class="screenshot-card">
+            <img src="https://picsum.photos/id/1015/600/340" alt="Football Match">
+        </div>
+        <div class="screenshot-card">
+            <img src="https://picsum.photos/id/201/600/340" alt="Basketball">
+        </div>
+        <div class="screenshot-card">
+            <img src="https://picsum.photos/id/237/600/340" alt="Tennis">
+        </div>
+        <div class="screenshot-card">
+            <img src="https://picsum.photos/id/870/600/340" alt="UFC">
+        </div>
+    </div>
 </div>
 </section>
 
@@ -435,7 +552,7 @@ footer {
 </footer>
 
 <script>
-// Your TMDB API key
+// TMDB API for posters
 const API_KEY = '8b40722d20457323fd119a31e5363313';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
@@ -451,11 +568,9 @@ async function fetchTrendingPosters() {
         loadingEl.style.display = 'none';
         gridEl.innerHTML = '';
         
-        // Take first 12 items
         data.results.slice(0, 12).forEach(item => {
             const title = item.title || item.name;
             const posterPath = item.poster_path;
-            
             if (!posterPath) return;
             
             const posterHTML = `
@@ -470,14 +585,12 @@ async function fetchTrendingPosters() {
             `;
             gridEl.innerHTML += posterHTML;
         });
-        
     } catch (error) {
         console.error('Error fetching posters:', error);
-        loadingEl.textContent = 'Failed to load posters. Please try again later.';
+        loadingEl.textContent = 'Failed to load posters.';
     }
 }
 
-// Load posters when page loads
 window.onload = fetchTrendingPosters;
 </script>
 
