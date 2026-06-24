@@ -3,489 +3,378 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SquareBox Entertainment</title>
-
+<title>SquareBox Entertainment - Premium IPTV</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #030813;
+    color: #fff;
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
-body{
-font-family:Segoe UI,Arial,sans-serif;
-background:#030813;
-color:#fff;
-overflow-x:hidden;
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(3,8,19,.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #1e3a8a;
 }
 
-nav{
-position:fixed;
-top:0;
-width:100%;
-z-index:1000;
-background:rgba(3,8,19,.95);
-backdrop-filter:blur(10px);
-border-bottom:1px solid #0f3c8f;
+.nav-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
 }
 
-.nav-container{
-max-width:1200px;
-margin:auto;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 20px;
+.logo {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #2f8fff;
+    text-shadow: 0 0 10px rgba(47,143,255,.5);
 }
 
-.logo{
-font-size:2rem;
-font-weight:800;
-color:#2f8fff;
+.btn {
+    display: inline-block;
+    padding: 14px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: all .3s;
+    margin: 0 8px;
 }
 
-.btn{
-display:inline-block;
-padding:15px 30px;
-border-radius:50px;
-text-decoration:none;
-font-weight:700;
-transition:.3s;
+.btn-whatsapp { background: #25d366; color: white; }
+.btn-line { background: #00c300; color: white; }
+.btn-blue {
+    background: linear-gradient(135deg, #1e90ff, #4da6ff);
+    color: white;
 }
 
-.btn-whatsapp{
-background:#25d366;
-color:white;
+.btn:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(30,144,255,.3); }
+
+/* Hero */
+.hero {
+    background: linear-gradient(rgba(0,0,0,.8), rgba(0,0,0,.85)),
+                url('squarebox.PNG') center/cover no-repeat;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 140px 20px 100px;
 }
 
-.btn-line{
-background:#00c300;
-color:white;
+.hero-content { max-width: 1100px; }
+
+.hero h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1.1;
 }
 
-.btn-blue{
-background:linear-gradient(135deg,#1e90ff,#4da6ff);
-color:white;
+.blue { color: #1e90ff; }
+.gold { color: #facc15; }
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #dbeafe;
 }
 
-.btn:hover{
-transform:translateY(-3px);
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 50px 0;
 }
 
-.hero{
-background:
-linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.85)),
-url('squarebox.PNG');
-background-size:cover;
-background-position:center;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:120px 20px 80px;
+.stat {
+    background: rgba(11,18,32,.9);
+    padding: 20px 30px;
+    border-radius: 16px;
+    min-width: 180px;
+    border: 1px solid #1e3a8a;
+    transition: transform .3s;
 }
 
-.hero-content{
-max-width:1000px;
+.stat:hover { transform: translateY(-8px); }
+
+.stat h3 {
+    font-size: 2.4rem;
+    color: #1e90ff;
+    margin-bottom: 8px;
 }
 
-.hero h1{
-font-size:5rem;
-font-weight:900;
-margin-bottom:20px;
+/* Sections */
+.section { padding: 100px 20px; }
+.container { max-width: 1200px; margin: auto; }
+
+.title {
+    text-align: center;
+    font-size: 3.2rem;
+    margin-bottom: 20px;
 }
 
-.blue{
-color:#1e90ff;
+.subtitle {
+    text-align: center;
+    color: #94a3b8;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    font-size: 1.2rem;
 }
 
-.gold{
-color:#facc15;
+/* Pricing - Titan style */
+.pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 }
 
-.hero p{
-font-size:1.4rem;
-margin-bottom:20px;
-color:#dbeafe;
+.price-card {
+    background: #0b1220;
+    padding: 40px 30px;
+    border-radius: 24px;
+    border: 2px solid #1e3a8a;
+    text-align: center;
+    transition: all .4s;
+    position: relative;
 }
 
-.stats{
-display:flex;
-justify-content:center;
-gap:40px;
-flex-wrap:wrap;
-margin:40px 0;
+.price-card.highlight {
+    border-color: #facc15;
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(250,204,21,.25);
 }
 
-.stat{
-background:#0b1220;
-padding:20px;
-border-radius:15px;
-min-width:180px;
-border:1px solid #1e3a8a;
+.price-card:hover { transform: translateY(-12px); }
+
+.price {
+    font-size: 3.8rem;
+    font-weight: 900;
+    color: #facc15;
+    margin: 20px 0 8px;
 }
 
-.stat h3{
-font-size:2rem;
-color:#1e90ff;
+.most-popular {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #facc15;
+    color: #030813;
+    padding: 6px 24px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 0.95rem;
 }
 
-.section{
-padding:90px 20px;
+.price-card ul {
+    list-style: none;
+    text-align: left;
+    margin-top: 30px;
 }
 
-.container{
-max-width:1200px;
-margin:auto;
+.price-card li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-.title{
-text-align:center;
-font-size:3rem;
-margin-bottom:20px;
+.price-card li:before {
+    content: "✔ ";
+    color: #22c55e;
 }
 
-.subtitle{
-text-align:center;
-color:#94a3b8;
-max-width:700px;
-margin:0 auto 50px;
+/* Features & Steps */
+.features, .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
 }
 
-.features{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
+.card, .step {
+    background: #0b1220;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid #1e3a8a;
+    transition: .4s;
 }
 
-.card{
-background:#0b1220;
-padding:35px;
-border-radius:20px;
-text-align:center;
-border:1px solid #1e3a8a;
-transition:.3s;
+.card:hover, .step:hover {
+    transform: translateY(-10px);
+    border-color: #1e90ff;
 }
 
-.card:hover{
-transform:translateY(-8px);
+.card i, .step-number {
+    font-size: 3.2rem;
+    color: #1e90ff;
+    margin-bottom: 20px;
 }
 
-.card i{
-font-size:3rem;
-color:#1e90ff;
-margin-bottom:20px;
+.step-number {
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 50%;
+    background: #1e90ff;
+    margin: auto;
+    font-size: 1.8rem;
+    font-weight: bold;
 }
 
-.pricing{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
+/* CTA */
+.cta {
+    background: linear-gradient(135deg, #08111f, #10264d);
+    text-align: center;
+    padding: 120px 20px;
 }
 
-.price-card{
-background:#0b1220;
-padding:40px 25px;
-border-radius:20px;
-border:2px solid #1e3a8a;
-text-align:center;
+/* Footer */
+footer {
+    padding: 60px 20px;
+    background: #01040b;
+    text-align: center;
+    color: #94a3b8;
 }
 
-.highlight{
-border:2px solid #facc15;
-box-shadow:0 0 30px rgba(250,204,21,.2);
+@media(max-width:768px) {
+    .hero h1 { font-size: 3rem; }
+    .title { font-size: 2.4rem; }
+    .stats { gap: 20px; }
 }
-
-.price{
-font-size:4rem;
-font-weight:900;
-color:#facc15;
-margin:20px 0;
-}
-
-.price-card ul{
-list-style:none;
-text-align:left;
-margin-top:25px;
-}
-
-.price-card li{
-padding:10px 0;
-border-bottom:1px solid rgba(255,255,255,.1);
-}
-
-.price-card li:before{
-content:"✔ ";
-color:#22c55e;
-}
-
-.steps{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-}
-
-.step{
-background:#0b1220;
-padding:35px;
-border-radius:20px;
-text-align:center;
-}
-
-.step-number{
-width:60px;
-height:60px;
-line-height:60px;
-border-radius:50%;
-background:#1e90ff;
-margin:auto;
-font-size:1.5rem;
-font-weight:bold;
-margin-bottom:20px;
-}
-
-.cta{
-background:linear-gradient(135deg,#08111f,#10264d);
-text-align:center;
-padding:100px 20px;
-}
-
-.cta h2{
-font-size:3rem;
-margin-bottom:20px;
-}
-
-footer{
-padding:40px 20px;
-background:#01040b;
-text-align:center;
-color:#94a3b8;
-}
-
-@media(max-width:768px){
-
-.hero h1{
-font-size:3rem;
-}
-
-.title{
-font-size:2.2rem;
-}
-
-}
-
 </style>
 </head>
 <body>
 
 <nav>
 <div class="nav-container">
-<div class="logo">SQUAREBOX</div>
-
-<div>
-<a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-whatsapp">WhatsApp</a>
-<a href="https://line.me/R/ti/p/~davidthai100" class="btn btn-line">LINE</a>
-</div>
+    <div class="logo">SQUAREBOX</div>
+    <div>
+        <a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-whatsapp">WhatsApp</a>
+        <a href="https://line.me/R/ti/p/~davidthai100" class="btn btn-line">LINE</a>
+    </div>
 </div>
 </nav>
 
 <section class="hero">
 <div class="hero-content">
+    <h1>PREMIUM<br><span class="blue">ENTERTAINMENT</span></h1>
+    <p>HD+ &amp; 4K IPTV for Smart TVs, Mobile &amp; More</p>
 
-<h1>.<br><span class="blue">.</span></h1>
+    <div class="stats">
+        <div class="stat"><h3>23K+</h3><p>Live Channels</p></div>
+        <div class="stat"><h3>80K+</h3><p>Movies &amp; Series</p></div>
+        <div class="stat"><h3>24/7</h3><p>Support</p></div>
+        <div class="stat"><h3>ALL</h3><p>Devices Supported</p></div>
+    </div>
 
-<p>
-Premium entertainment experience designed for modern devices.
-</p>
-
-<div class="stats">
-
-<div class="stat">
-<h3>HD+</h3>
-<p>High Quality Content</p>
-</div>
-
-<div class="stat">
-<h3>24/7</h3>
-<p>Customer Support</p>
-</div>
-
-<div class="stat">
-<h3>ALL</h3>
-<p>Major Devices Supported</p>
-</div>
-
-</div>
-
-<a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-whatsapp">
-<i class="fab fa-whatsapp"></i> Contact on WhatsApp
-</a>
-
-<a href="https://line.me/R/ti/p/~davidthai100" class="btn btn-line">
-LINE: davidthai100
-</a>
-
+    <a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-whatsapp" style="font-size:1.2rem;padding:18px 40px;">
+        <i class="fab fa-whatsapp"></i> Get Started on WhatsApp
+    </a>
 </div>
 </section>
 
 <section class="section">
 <div class="container">
+    <h2 class="title">Early Bird Pricing</h2>
+    <p class="subtitle">One subscription. All devices. No contracts.</p>
 
-<h2 class="title">Early Bird Pricing</h2>
-<p class="subtitle">
-Special launch pricing for our first customers.
-</p>
+    <div class="pricing">
+        <div class="price-card">
+            <h3>Monthly</h3>
+            <div class="price">฿350</div>
+            <p>Per Month</p>
+            <ul>
+                <li>Full HD+ Access</li>
+                <li>All Devices</li>
+                <li>24/7 Support</li>
+            </ul>
+            <a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-blue" style="margin-top:25px;">Order Now</a>
+        </div>
 
-<div class="pricing">
+        <div class="price-card highlight">
+            <div class="most-popular">MOST POPULAR</div>
+            <h3>6 Months</h3>
+            <div class="price">฿1,200</div>
+            <p>฿200 / Month</p>
+            <ul>
+                <li>Best Value</li>
+                <li>Priority Activation</li>
+                <li>Multi-Device</li>
+                <li>Full Support</li>
+            </ul>
+            <a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-blue" style="margin-top:25px;">Order on WhatsApp</a>
+        </div>
 
-<div class="price-card highlight">
-<h3>Early Bird</h3>
-<div class="price">฿200</div>
-<p>Per Month</p>
-<ul>
-<li>Priority Activation</li>
-<li>Multi Device Support</li>
-<li>Customer Assistance</li>
-<li>Limited Launch Offer</li>
-</ul>
+        <div class="price-card">
+            <h3>1 Year</h3>
+            <div class="price">฿1,999</div>
+            <p>฿166 / Month</p>
+            <ul>
+                <li>Lowest Monthly Rate</li>
+                <li>Priority Support</li>
+                <li>Full Library Access</li>
+            </ul>
+            <a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-blue" style="margin-top:25px;">Order Now</a>
+        </div>
+    </div>
 </div>
+</section>
 
-<div class="price-card">
-<h3>Monthly</h3>
-<div class="price">฿350</div>
-<p>Per Month</p>
-<ul>
-<li>Flexible Subscription</li>
-<li>Full Access</li>
-<li>Support Included</li>
-</ul>
-</div>
-
-<div class="price-card">
-<h3>6 Months</h3>
-<div class="price">฿1,200</div>
-<p>6 Month Plan</p>
-<ul>
-<li>Discounted Pricing</li>
-<li>Priority Support</li>
-<li>Great Value</li>
-</ul>
-</div>
-
-<div class="price-card">
-<h3>1 Year</h3>
-<div class="price">฿1,999</div>
-<p>Annual Plan</p>
-<ul>
-<li>Best Value</li>
-<li>Lowest Monthly Cost</li>
-<li>Priority Assistance</li>
-</ul>
-</div>
-
-</div>
-
+<!-- New: Content Highlights (Titan-style) -->
+<section class="section" style="background:#0a1220;">
+<div class="container">
+    <h2 class="title">Unlimited Entertainment</h2>
+    <div class="features">
+        <div class="card">
+            <i class="fas fa-film"></i>
+            <h3>Movies &amp; Series</h3>
+            <p>80,000+ titles updated daily in HD/4K.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-futbol"></i>
+            <h3>Live Sports</h3>
+            <p>Premier League, Champions League, FIFA &amp; more in 4K.</p>
+        </div>
+    </div>
 </div>
 </section>
 
 <section class="section">
 <div class="container">
-
-<h2 class="title">How It Works</h2>
-
-<div class="steps">
-
-<div class="step">
-<div class="step-number">1</div>
-<h3>Contact Us</h3>
-<p>Message us on WhatsApp or LINE.</p>
-</div>
-
-<div class="step">
-<div class="step-number">2</div>
-<h3>Choose A Plan</h3>
-<p>Select the package that suits you.</p>
-</div>
-
-<div class="step">
-<div class="step-number">3</div>
-<h3>Receive Setup Details</h3>
-<p>We provide simple setup guidance.</p>
-</div>
-
-<div class="step">
-<div class="step-number">4</div>
-<h3>Enjoy</h3>
-<p>Start using the service on your device.</p>
-</div>
-
-</div>
-
-</div>
-</section>
-
-<section class="section">
-<div class="container">
-
-<h2 class="title">Why Choose SquareBox?</h2>
-
-<div class="features">
-
-<div class="card">
-<i class="fas fa-tv"></i>
-<h3>Works On Smart TVs</h3>
-<p>Compatible with modern television platforms.</p>
-</div>
-
-<div class="card">
-<i class="fas fa-mobile-screen"></i>
-<h3>Mobile Friendly</h3>
-<p>Use on phones and tablets.</p>
-</div>
-
-<div class="card">
-<i class="fas fa-shield"></i>
-<h3>Reliable Service</h3>
-<p>Designed for a smooth experience.</p>
-</div>
-
-<div class="card">
-<i class="fas fa-headset"></i>
-<h3>Support</h3>
-<p>Help available when needed.</p>
-</div>
-
-</div>
-
+    <h2 class="title">How It Works</h2>
+    <div class="steps">
+        <div class="step"><div class="step-number">1</div><h3>Contact Us</h3><p>Message on WhatsApp or LINE</p></div>
+        <div class="step"><div class="step-number">2</div><h3>Choose Plan</h3><p>Select your package</p></div>
+        <div class="step"><div class="step-number">3</div><h3>Get Setup</h3><p>Receive login details in minutes</p></div>
+        <div class="step"><div class="step-number">4</div><h3>Enjoy</h3><p>Watch on any device</p></div>
+    </div>
 </div>
 </section>
 
 <section class="cta">
-
-<h2>Ready To Get Started?</h2>
-
-<p style="font-size:1.3rem;margin-bottom:30px;">
-Contact SquareBox today.
-</p>
-
-<a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-whatsapp">
-<i class="fab fa-whatsapp"></i> WhatsApp
-</a>
-
-<a href="https://line.me/R/ti/p/~davidthai100" class="btn btn-line">
-LINE
-</a>
-
+    <h2>Ready for Premium Entertainment?</h2>
+    <p style="font-size:1.4rem;margin:30px 0;">Fast activation • Reliable streaming • Real support</p>
+    <a href="https://wa.me/message/MFBRSC2GTQ6JG1" class="btn btn-whatsapp" style="font-size:1.3rem;padding:20px 45px;">
+        <i class="fab fa-whatsapp"></i> Contact on WhatsApp
+    </a>
 </section>
 
 <footer>
-<p><strong>SquareBox Entertainment</strong></p>
-<p>WhatsApp & LINE Support Available</p>
-<p style="margin-top:20px;">© 2026 SquareBox. All Rights Reserved.</p>
+    <p><strong>SquareBox Entertainment</strong></p>
+    <p>WhatsApp &amp; LINE Support Available</p>
+    <p style="margin-top:25px;">© 2026 SquareBox. All Rights Reserved.</p>
 </footer>
 
 </body>
