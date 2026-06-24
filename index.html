@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SquareBox </title>
+<title>SquareBox IPTV</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -24,11 +23,8 @@ line-height:1.6;
 }
 
 /* HERO SECTION */
-
 header{
-background:
-linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)),
-url('squarebox.PNG');
+background: linear-gradient(rgba(0,0,0,0.65),rgba(0,0,0,0.65)), url('squarebox.PNG');
 background-size:cover;
 background-position:center;
 background-repeat:no-repeat;
@@ -70,7 +66,6 @@ transform:scale(1.05);
 }
 
 /* SECTIONS */
-
 section{
 padding:60px 20px;
 max-width:1200px;
@@ -83,243 +78,205 @@ margin-bottom:30px;
 font-size:2.2rem;
 }
 
-/* PRICING */
-
-.pricing{
-background:#111827;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-.card{
-background:#161b22;
-padding:25px;
-border-radius:12px;
-text-align:center;
-border:1px solid #1e90ff;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-}
-
-.card h3{
-color:#4db8ff;
-margin-bottom:15px;
-}
-
-.price{
-font-size:2.5rem;
-font-weight:bold;
-color:#ffd700;
-margin:10px 0;
-}
-
-.highlight{
-border:2px solid gold;
-box-shadow:0 0 20px rgba(255,215,0,.3);
-}
-
-/* SERVICES */
-
-.services{
-background:#0d1117;
-}
-
-.service-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-.service{
-background:#161b22;
-padding:25px;
-border-radius:12px;
-}
-
-.service h3{
-color:#4db8ff;
-margin-bottom:10px;
-}
-
 /* PLAYER */
-
-.player{
+.player-section{
 background:#161b22;
-padding:20px;
+padding:30px;
 border-radius:12px;
+margin:20px auto;
+}
+
+.controls{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+margin-bottom:20px;
+align-items:center;
+justify-content:center;
+}
+
+select, input, button{
+padding:12px;
+border-radius:8px;
+border:none;
+background:#0d1117;
+color:white;
+}
+
+select, input{
+min-width:280px;
+}
+
+button{
+background:#1e90ff;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#4da6ff;
 }
 
 video{
 width:100%;
+max-width:1000px;
+margin:0 auto;
+display:block;
+background:#000;
 border-radius:10px;
 }
 
-/* FOOTER */
-
-footer{
-background:#090c10;
-padding:40px;
-text-align:center;
-color:#aaa;
-}
-
+/* Other styles remain the same */
+.pricing{background:#111827;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.card{background:#161b22;padding:25px;border-radius:12px;text-align:center;border:1px solid #1e90ff;transition:.3s;}
+.card:hover{transform:translateY(-5px);}
+.card h3{color:#4db8ff;margin-bottom:15px;}
+.price{font-size:2.5rem;font-weight:bold;color:#ffd700;margin:10px 0;}
+.highlight{border:2px solid gold;box-shadow:0 0 20px rgba(255,215,0,.3);}
+.services{background:#0d1117;}
+.service-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.service{background:#161b22;padding:25px;border-radius:12px;}
+.service h3{color:#4db8ff;margin-bottom:10px;}
+footer{background:#090c10;padding:40px;text-align:center;color:#aaa;}
 </style>
 </head>
 
 <body>
 
 <header>
-
 <h1>SQUAREBOX IPTV</h1>
+<p>Premium Entertainment • Smart TV Ready • Easy Setup</p>
+<p>🚀 Early Bird Pre-Launch Offer</p>
 
-<p>
-Premium Entertainment • Smart TV Ready • Easy Setup
-</p>
-
-<p>
-🚀 Early Bird Pre-Launch Offer
-</p>
-
-<a class="btn"
-href="https://wa.me/message/MFBRSC2GTQ6JG1"
-target="_blank">
-Register via WhatsApp
-</a>
-
-<a class="btn"
-href="https://line.me/R/ti/p/~davidthai100"
-target="_blank">
-LINE: davidthai100
-</a>
-
+<a class="btn" href="https://wa.me/message/MFBRSC2GTQ6JG1" target="_blank">Register via WhatsApp</a>
+<a class="btn" href="https://line.me/R/ti/p/~davidthai100" target="_blank">LINE: davidthai100</a>
 </header>
 
+<section class="player-section">
+<h2>🎥 Live Demo Player</h2>
+<p style="text-align:center; margin-bottom:20px;">Try different accounts below</p>
+
+<div class="controls">
+    <select id="accountSelect">
+        <option value="">Select Account...</option>
+        <option value="http://myxpanel.pro:80/get.php?username=1111&password=1111&type=m3u_plus">myxpanel.pro - 1111</option>
+        <option value="http://myxpanel.pro:80/get.php?username=1234567&password=7654321&type=m3u_plus">myxpanel.pro - 1234567</option>
+        <option value="http://myxpanel.pro:80/get.php?username=demo1&password=demo1&type=m3u_plus">myxpanel.pro - demo1</option>
+        <!-- Add more from your list as needed -->
+    </select>
+    
+    <input type="text" id="customUrl" placeholder="Or paste any M3U / HLS URL here" style="flex:1; min-width:300px;">
+    
+    <button onclick="loadStream()">▶ Load Stream</button>
+</div>
+
+<div class="player">
+    <video id="video" controls autoplay></video>
+</div>
+
+<p style="text-align:center; margin-top:15px; font-size:0.9rem; color:#aaa;">
+Note: Some streams may take a few seconds to load. Not all accounts work 24/7.
+</p>
+</section>
+
+<!-- Rest of your original sections -->
 <section class="pricing">
-
 <h2>🔥 Early Bird Pricing</h2>
-
 <div class="cards">
-
-<div class="card highlight">
-<h3>First 50 Customers</h3>
-<div class="price">฿200</div>
-<p>Per Month</p>
-<p>Limited Pre-Launch Offer</p>
+    <div class="card highlight">
+        <h3>First 50 Customers</h3>
+        <div class="price">฿200</div>
+        <p>Per Month</p>
+        <p>Limited Pre-Launch Offer</p>
+    </div>
+    <div class="card">
+        <h3>Standard Monthly</h3>
+        <div class="price">฿350</div>
+        <p>Per Month</p>
+    </div>
+    <div class="card">
+        <h3>6 Month Package</h3>
+        <div class="price">฿1,200</div>
+        <p>Save ฿900</p>
+    </div>
+    <div class="card">
+        <h3>1 Year Package</h3>
+        <div class="price">฿1,999</div>
+        <p>Best Value Package</p>
+    </div>
 </div>
-
-<div class="card">
-<h3>Standard Monthly</h3>
-<div class="price">฿350</div>
-<p>Per Month</p>
-</div>
-
-<div class="card">
-<h3>6 Month Package</h3>
-<div class="price">฿1,200</div>
-<p>Save ฿900</p>
-</div>
-
-<div class="card">
-<h3>1 Year Package</h3>
-<div class="price">฿1,999</div>
-<p>Best Value Package</p>
-</div>
-
-</div>
-
 </section>
 
 <section class="services">
-
 <h2>Our Services</h2>
-
 <div class="service-grid">
-
-<div class="service">
-<h3>📺 Smart TV Setup</h3>
-<p>Direct installation on compatible Smart TVs.</p>
+    <div class="service"><h3>📺 Smart TV Setup</h3><p>Direct installation on compatible Smart TVs.</p></div>
+    <div class="service"><h3>⚡ IPTV Activation</h3><p>Fast activation and simple setup instructions.</p></div>
+    <div class="service"><h3>🛠 Remote Assistance</h3><p>Support via WhatsApp and remote access tools.</p></div>
+    <div class="service"><h3>🎬 Premium Entertainment</h3><p>Movies, series, sports and international channels.</p></div>
 </div>
-
-<div class="service">
-<h3>⚡ IPTV Activation</h3>
-<p>Fast activation and simple setup instructions.</p>
-</div>
-
-<div class="service">
-<h3>🛠 Remote Assistance</h3>
-<p>Support via WhatsApp and remote access tools.</p>
-</div>
-
-<div class="service">
-<h3>🎬 Premium Entertainment</h3>
-<p>Movies, series, sports and international channels.</p>
-</div>
-
-</div>
-
-</section>
-
-<section>
-
-<h2>Live Demo Stream</h2>
-
-<div class="player">
-
-<video id="video" controls autoplay></video>
-
-</div>
-
 </section>
 
 <section style="text-align:center;">
-
 <h2>Ready To Join?</h2>
-
-<p style="margin-bottom:20px;">
-Register now and secure one of the first 50 Early Bird places.
-</p>
-
-<a class="btn"
-href="https://wa.me/message/MFBRSC2GTQ6JG1"
-target="_blank">
-📲 Register Now
-</a>
-
+<p style="margin-bottom:20px;">Register now and secure one of the first 50 Early Bird places.</p>
+<a class="btn" href="https://wa.me/message/MFBRSC2GTQ6JG1" target="_blank">📲 Register Now</a>
 </section>
 
 <footer>
-
-<p><strong>SquareBox </strong></p>
-
+<p><strong>SquareBox IPTV</strong></p>
 <p>WhatsApp Support Available Daily</p>
-
 <p>LINE ID: davidthai100</p>
-
 </footer>
 
 <script>
-
 var video = document.getElementById('video');
+var hls = null;
 
-if(Hls.isSupported()) {
+function loadStream() {
+    var url = document.getElementById('customUrl').value.trim();
+    if (!url) {
+        url = document.getElementById('accountSelect').value;
+    }
+    if (!url) {
+        alert("Please select an account or paste a URL");
+        return;
+    }
 
-var hls = new Hls();
+    // Destroy previous HLS instance
+    if (hls) {
+        hls.destroy();
+        hls = null;
+    }
+    video.pause();
 
-hls.loadSource(
-'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
-);
-
-hls.attachMedia(video);
-
+    if (Hls.isSupported()) {
+        hls = new Hls({
+            enableWorker: true,
+            lowLatencyMode: true
+        });
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('loadedmetadata', function() {
+            video.play();
+        });
+    } else {
+        alert("Your browser does not support HLS playback.");
+    }
 }
 
+// Load first account automatically when page loads
+window.onload = function() {
+    document.getElementById('accountSelect').selectedIndex = 1; // Select first real account
+    // loadStream(); // Uncomment if you want auto-play on load
+};
 </script>
 
 </body>
