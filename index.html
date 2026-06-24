@@ -134,7 +134,7 @@ nav {
     font-size: 1.2rem;
 }
 
-/* Pricing - Titan style */
+/* Pricing */
 .pricing {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -195,6 +195,44 @@ nav {
     color: #22c55e;
 }
 
+/* Posters Grid */
+.posters-section {
+    background: #0a1220;
+}
+
+.posters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.poster-card {
+    background: #0b1220;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s;
+    border: 1px solid #1e3a8a;
+}
+
+.poster-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(30,144,255,0.3);
+}
+
+.poster-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.poster-info {
+    padding: 12px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
 /* Features & Steps */
 .features, .steps {
     display: grid;
@@ -248,10 +286,17 @@ footer {
     color: #94a3b8;
 }
 
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+}
+
 @media(max-width:768px) {
     .hero h1 { font-size: 3rem; }
     .title { font-size: 2.4rem; }
     .stats { gap: 20px; }
+    .posters-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
 }
 </style>
 </head>
@@ -332,7 +377,19 @@ footer {
 </div>
 </section>
 
-<!-- New: Content Highlights (Titan-style) -->
+<!-- Posters Section - TMDB Integration -->
+<section class="section posters-section">
+<div class="container">
+    <h2 class="title">Trending Now on SquareBox</h2>
+    <p class="subtitle">Popular movies &amp; series available in your IPTV library</p>
+    
+    <div id="posters-grid" class="posters-grid">
+        <!-- Posters loaded by JavaScript -->
+    </div>
+    <div id="loading" class="loading">Loading trending posters...</div>
+</div>
+</section>
+
 <section class="section" style="background:#0a1220;">
 <div class="container">
     <h2 class="title">Unlimited Entertainment</h2>
@@ -376,6 +433,53 @@ footer {
     <p>WhatsApp &amp; LINE Support Available</p>
     <p style="margin-top:25px;">© 2026 SquareBox. All Rights Reserved.</p>
 </footer>
+
+<script>
+// Your TMDB API key
+const API_KEY = '8b40722d20457323fd119a31e5363313';
+const BASE_URL = 'https://api.themoviedb.org/3';
+const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
+async function fetchTrendingPosters() {
+    const loadingEl = document.getElementById('loading');
+    const gridEl = document.getElementById('posters-grid');
+    
+    try {
+        const response = await fetch(`${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=en-US`);
+        const data = await response.json();
+        
+        loadingEl.style.display = 'none';
+        gridEl.innerHTML = '';
+        
+        // Take first 12 items
+        data.results.slice(0, 12).forEach(item => {
+            const title = item.title || item.name;
+            const posterPath = item.poster_path;
+            
+            if (!posterPath) return;
+            
+            const posterHTML = `
+                <div class="poster-card">
+                    <img src="${IMAGE_BASE_URL}${posterPath}" 
+                         alt="${title}"
+                         onerror="this.src='https://via.placeholder.com/500x750?text=No+Image'">
+                    <div class="poster-info">
+                        <strong>${title}</strong>
+                    </div>
+                </div>
+            `;
+            gridEl.innerHTML += posterHTML;
+        });
+        
+    } catch (error) {
+        console.error('Error fetching posters:', error);
+        loadingEl.textContent = 'Failed to load posters. Please try again later.';
+    }
+}
+
+// Load posters when page loads
+window.onload = fetchTrendingPosters;
+</script>
 
 </body>
 </html>
